@@ -135,7 +135,7 @@
 		
 		<div class="submenu-wrap">
 			<ul class="submenu">
-			    <li><a href="#">식품3-1</a></li>
+			    <li><a href="${contextPath}/goods/goodsList.do"">식품3-1</a></li>
 			    <li><a href="#">식품3-2</a></li>
 			    <li><a href="#">식품3-3</a></li>
 			  </ul>

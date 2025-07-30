@@ -24,6 +24,16 @@ public class OrderVO {
 	
 	private int final_total_price;
 	private String goods_fileName;
+	private int order_goods_qty;
+
+	public int getOrder_goods_qty() {
+	    return order_goods_qty;
+	}
+
+	public void setOrder_goods_qty(int order_goods_qty) {
+	    this.order_goods_qty = order_goods_qty;
+	}
+
 	public int getOrder_num() {
 		return order_num;
 	}
