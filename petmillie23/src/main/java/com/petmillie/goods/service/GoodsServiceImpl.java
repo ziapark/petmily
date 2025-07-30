@@ -31,11 +31,12 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsMap;
 	}
 	
-	public Map goodsDetail(String _goods_id) throws Exception {
+	public Map goodsDetail(int goods_num) throws Exception {
 		Map goodsMap=new HashMap();
-		GoodsVO goodsVO = goodsDAO.selectGoodsDetail(_goods_id);
+		GoodsVO goodsVO = goodsDAO.selectGoodsDetail(goods_num);
+		System.out.println("서비스에서 받은 dao 결과: " + goodsVO);
 		goodsMap.put("goodsVO", goodsVO);
-		List<ImageFileVO> imageList =goodsDAO.selectGoodsDetailImage(_goods_id);
+		List<ImageFileVO> imageList =goodsDAO.selectGoodsDetailImage(goods_num);
 		goodsMap.put("imageList", imageList);
 		return goodsMap;
 	}
@@ -50,5 +51,13 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsList;
 	}
 	
-	
+
+	 // --- 추가해야 할 부분 시작 ---
+    @Override
+    public List<GoodsVO> listAllGoods() throws Exception {
+        // DAO를 호출하여 모든 상품 목록을 가져옵니다.
+        return goodsDAO.selectAllGoodsList(); // 새로운 DAO 메서드 호출
+    }
+    // --- 추가해야 할 부분 끝 ---
+
 }

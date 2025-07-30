@@ -6,9 +6,12 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petmillie.board.vo.BoardVO;
+import com.petmillie.board.vo.CommentVO;
+import com.petmillie.board.vo.LikeVO;
 
 @Repository("BoardDAO")
 public class BoardDAOImpl implements BoardDAO {
@@ -20,10 +23,10 @@ public class BoardDAOImpl implements BoardDAO {
 
     
     private static final String NAMESPACE = "mapper.board";
-
     @Override
     public List<BoardVO> selectBoardList(int page, int limit, String items, String text) {
         int start = (page - 1) * limit;
+        System.out.println("selectBoardList 호출 - start: " + start + ", limit: " + limit + ", items: " + items + ", text: " + text);
 
         Map<String, Object> params = new HashMap<>();
         params.put("start", start);
@@ -31,8 +34,11 @@ public class BoardDAOImpl implements BoardDAO {
         params.put("items", items);
         params.put("text", "%" + text + "%");
 
-        return sqlSession.selectList(NAMESPACE + ".selectBoardList", params);
+        List<BoardVO> list = sqlSession.selectList(NAMESPACE + ".selectBoardList", params);
+        
+        return list;
     }
+
 
     @Override
     public int getTotalCount(String items, String text) {
@@ -53,8 +59,8 @@ public class BoardDAOImpl implements BoardDAO {
     	 return sqlSession.selectOne("mapper.board.getBoardByNum", num);
     
     };
-    public void updateHit(int num) {
-    	
+    public void updateViews(int comu_id) {
+    	sqlSession.update("mapper.board.updateViews", comu_id);
     };
     public void updateBoard(BoardVO board) {
     	sqlSession.update("mapper.board.updateBoard", board); 
@@ -65,5 +71,79 @@ public class BoardDAOImpl implements BoardDAO {
     	sqlSession.delete("mapper.board.deleteBoard", num); 
     };
     
+    public void insertComment(CommentVO vo) {
+    	sqlSession.insert("mapper.board.insertComment",vo);
+    };
     
+    public List<CommentVO> selectComment(int comu_id) {
+    	
+    	List<CommentVO> vo1 = sqlSession.selectList("mapper.board.selectComment",comu_id);
+    	
+    	return vo1;
+    }
+
+	@Override
+	public void deleteComment(int comment_id) throws DataAccessException {
+		System.out.println("dao 진입 , comment_id :" +comment_id);
+		sqlSession.delete("mapper.board.deleteComment", comment_id);
+		
+	}
+
+	@Override
+	public String getWriterId(String session_id) {
+		String writer_id = sqlSession.selectOne("mapper.board.getWriterId", session_id); 
+		return writer_id;
+	}
+
+	@Override
+	public void updateComment(CommentVO commentVO) throws DataAccessException {
+		sqlSession.update("mapper.board.updateComment", commentVO);
+		
+	}
+
+	@Override
+	public CommentVO selectCommentOne(int comment_id) throws DataAccessException {
+		CommentVO vo = sqlSession.selectOne("mapper.board.selectCommentOne", comment_id);
+		return vo;
+	}
+
+
+	@Override
+	public LikeVO selectLike(String member_id, int comu_id) throws DataAccessException {
+		LikeVO like = new LikeVO();
+	    like.setMember_id(member_id);
+	    like.setComu_id(comu_id);
+		
+	    LikeVO result= sqlSession.selectOne("mapper.board.selectLike", like);
+	    return result;
+	}
+
+
+	@Override
+	public int insertLike(String member_id, int comu_id) throws DataAccessException {
+
+		LikeVO like = new LikeVO();
+	    like.setMember_id(member_id);
+	    like.setComu_id(comu_id);
+	    
+	    return sqlSession.insert("mapper.board.insertLike", like);
+	
+	}
+
+
+	@Override
+	public int deleteLike(String member_id, int comu_id) throws DataAccessException {
+		LikeVO like = new LikeVO();
+	    like.setMember_id(member_id);
+	    like.setComu_id(comu_id);
+	    
+		return sqlSession.delete("mapper.board.deleteLike", like);
+	}
+
+
+	@Override
+	public int countLikes(int comu_id) {
+	    return sqlSession.selectOne("mapper.board.countLikes", comu_id);
+	}
+
 }

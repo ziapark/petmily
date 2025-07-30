@@ -2,12 +2,14 @@ package com.petmillie.goods.vo;
 
 import java.sql.Date; // java.util.Date 대신 java.sql.Date 사용
 
+import org.springframework.stereotype.Component;
+@Component("GoodsVO")
 public class GoodsVO {
 	private int goods_num; // 상품 고유 번호
 	private String goods_name; // 상품 이름 (이전 goods_title)
 	private String goods_maker; // 제조사/저자 (이전 goods_writer)
 	private String goods_publisher; // 출판사 (새로 추가, 만약 DB에 없다면 필요에 따라 추가 또는 제거)
-	private String goods_price; // 상품 정가
+
 	private String goods_category; // 상품 분류 (이전 goods_sort)
 	private String goods_sales_price; // 상품 판매 가격
 	private String goods_point; // 상품 구매 포인트
@@ -21,12 +23,7 @@ public class GoodsVO {
 	private String goods_goods_writer_intro; // 저자/제조사 소개 (이전 goods_writer_intro)
 	private String goods_contents_order; // 상품 목차
 	private Date goods_credate; // 상품 등록일 (기존 필드)
-	private Date goods_published_date; // 상품 출판일 (새로 추가)
-	private String goods_total_page; // 상품 총 페이지 수 (새로 추가)
-	private String goods_isbn; // ISBN (새로 추가)
 	private String goods_intro; // 상품 소개 (새로 추가)
-	private String goods_publisher_comment; // 출판사 상품 평가 (새로 추가)
-	private String goods_recommendation; // 추천사 (새로 추가)
 
 	private String del_yn; // 'Y' 또는 'N' 값을 저장할 필드
 
@@ -74,12 +71,8 @@ public class GoodsVO {
 		this.goods_publisher = goods_publisher;
 	}
 
-	public String getGoods_price() {
-		return goods_price;
-	}
-	public void setGoods_price(String goods_price) {
-		this.goods_price = goods_price;
-	}
+	
+	
 
 	public String getGoods_category() {
 		return goods_category;
@@ -159,26 +152,21 @@ public class GoodsVO {
 	}
 
 	// 새로 추가된 필드들
-	public Date getGoods_published_date() {
-		return goods_published_date;
-	}
-	public void setGoods_published_date(Date goods_published_date) {
-		this.goods_published_date = goods_published_date;
-	}
+//	public Date getGoods_published_date() {
+//		return goods_published_date;
+//	}
+//	public void setGoods_published_date(Date goods_published_date) {
+//		this.goods_published_date = goods_published_date;
+//	}
+//
+//	public String getGoods_total_page() {
+//		return goods_total_page;
+//	}
+//	public void setGoods_total_page(String goods_total_page) {
+//		this.goods_total_page = goods_total_page;
+//	}
 
-	public String getGoods_total_page() {
-		return goods_total_page;
-	}
-	public void setGoods_total_page(String goods_total_page) {
-		this.goods_total_page = goods_total_page;
-	}
-
-	public String getGoods_isbn() {
-		return goods_isbn;
-	}
-	public void setGoods_isbn(String goods_isbn) {
-		this.goods_isbn = goods_isbn;
-	}
+	
 
 	public String getGoods_intro() {
 		return goods_intro;
@@ -187,17 +175,5 @@ public class GoodsVO {
 		this.goods_intro = goods_intro;
 	}
 
-	public String getGoods_publisher_comment() {
-		return goods_publisher_comment;
-	}
-	public void setGoods_publisher_comment(String goods_publisher_comment) {
-		this.goods_publisher_comment = goods_publisher_comment;
-	}
-
-	public String getGoods_recommendation() {
-		return goods_recommendation;
-	}
-	public void setGoods_recommendation(String goods_recommendation) {
-		this.goods_recommendation = goods_recommendation;
-	}
+	
 }

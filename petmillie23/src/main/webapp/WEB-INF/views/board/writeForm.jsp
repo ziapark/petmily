@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/common.css">
 <script src="js/validation.js"></script>
 <title>펫밀리</title>
+
 </head>
 <body>
 
@@ -24,8 +25,8 @@
 	</div>
 	<div class="row row-cols-1">
 
-		<div class="col">
-	<form name="" action="${contextPath}/board/write.do" method="post">
+	<div class="col">
+	<form name="writeForm" action="${contextPath}/board/write.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
 	    <input type="hidden" name="id" value="${param.id}" />
 		<div class="mb-3 row">
@@ -47,7 +48,13 @@
 			</div>
 		</div>	
 		<div class="mb-3 row">
-			<p><input type="submit" value="전송" class="btn btn-primary"></p>
+			<label for="" class="col-sm-2 col-form-label">사진첨부</label>
+			<div class="col-sm-10">
+				<input type="file" name="uploadFile" class="form-control">
+			</div>
+		</div>
+		<div class="mb-3 row">
+			<p><input type="button" onclick="write_check();" value="전송" class="btn btn-primary"></p>
 		</div>
 		
 	</form>
@@ -55,7 +62,24 @@
 	</div>
 	</div>
 	</div>
-	
+	<script>
+		//게시글 등록 유효성검사
+		function write_check(){
+		    var subject = document.writeForm.subject.value.trim();
+		    var content = document.writeForm.content.value.trim();
+		
+		    if(subject === "") {
+		        alert("제목을 입력하세요.");
+		        return false;
+		    }
+		    if(content === "") {
+		        alert("내용을 입력하세요.");
+		        return false;
+		    }
+		
+		    document.writeForm.submit();
+		}
+</script>
 	
 </body>
 </html>

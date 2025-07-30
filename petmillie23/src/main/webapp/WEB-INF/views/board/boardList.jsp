@@ -29,7 +29,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/basic.css">
 
-<title>펫밀리</title>
+<title>펫밀리펫밀리</title>
 <script type="text/javascript">
 	function checkForm() {	
 	var sessionId = "${sessionScope.memberInfo.member_id}"; 
@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div class="row row-cols-1">
-	<form action="<c:url value="./BoardListAction.do"/>" method="post">
+	<form action="${contextPath}/boardList.do" method="get">
 
 		<div class="text-end"> 
 			<span class="badge text-bg-success" style="padding:10px;">전체 <%=total_record%>건	</span>
@@ -67,6 +67,7 @@
 					<th>조회</th>
 					<th>글쓴이</th>
 				</tr>
+
 				<%
 				    List<BoardVO> boardList = (List<BoardVO>) request.getAttribute("boardList");
 				    if (boardList == null) {
@@ -91,7 +92,7 @@
 		<div align="center">
 			<c:set var="currentPage" value="<%=pageNum%>" />
 			<c:forEach var="i" begin="1" end="<%=total_page%>">
-				<a href="<c:url value="./BoardListAction.do?pageNum=${i}" /> ">
+				<a href="<c:url value="boardList.do?pageNum=${i}" /> ">
 					<c:choose>
 						<c:when test="${currentPage==i}">
 							<font color='4C5317'><b style="color:#0d6efd;"> [${i}]</b></font>
@@ -108,14 +109,16 @@
 		<div class="py-3" align="right">							
 			<a href="#" onclick="checkForm(); return false;" class="btn btn-primary">글쓰기</a>				
 		</div>			
-		<div align="left">				
+		<!-- 검색 전용 폼 -->
+		<form action="${contextPath}/boardList.do" method="get" class="d-flex justify-content-start align-items-center gap-2">
 			<select name="items" class="txt search_select">
 				<option value="subject">제목에서</option>
 				<option value="content">본문에서</option>
-				<option value="name">글쓴이에서</option>
-			</select> <input name="text" type="text" class="search_input"/> <input type="submit" id="btnAdd" class="btn btn-primary btn-sm" value="검색" />				
-		</div>
-		
+				<option value="member_id">글쓴이에서</option>
+			</select>
+			<input name="text" type="text" class="search_input"/>
+			<input type="submit" class="btn btn-primary btn-sm" value="검색"/>
+		</form>
 	</form>	
 	</div>		
 </div>

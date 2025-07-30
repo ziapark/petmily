@@ -44,7 +44,7 @@ public class CartControllerImpl extends BaseController implements CartController
 		return mav;
 	}
 	@RequestMapping(value="/addGoodsInCart.do" ,method = RequestMethod.POST,produces = "application/text; charset=utf8")
-	public  @ResponseBody String addGoodsInCart(@RequestParam("goods_id") int goods_id,
+	public  @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num,
 			                    HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		
 		System.out.println("카트인메소드진입");
@@ -57,8 +57,8 @@ public class CartControllerImpl extends BaseController implements CartController
 		 
 		CartVO cartVO = new CartVO(); // 이렇게 직접 생성
 	    cartVO.setMember_id(member_id);
-	    cartVO.setGoods_name(goods_id);
-		
+	    cartVO.setgoods_num(goods_num);
+	    cartVO.setCart_goods_qty(1);
 		System.out.println(memberVO);
 		System.out.println(cartVO);
 		boolean isAreadyExisted=cartService.findCartGoods(cartVO);
@@ -75,14 +75,14 @@ public class CartControllerImpl extends BaseController implements CartController
 	}
 	
 	@RequestMapping(value="/modifyCartQty.do" ,method = RequestMethod.POST)
-	public @ResponseBody String  modifyCartQty(@RequestParam("goods_id") int goods_id,
+	public @ResponseBody String  modifyCartQty(@RequestParam("goods_num") int goods_num,
 			                                   @RequestParam("cart_goods_qty") int cart_goods_qty,
 			                                    HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		HttpSession session=request.getSession();
 		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
 		String member_id=memberVO.getMember_id();
 		CartVO cartVO = new CartVO(); 
-		cartVO.setGoods_name(goods_id);
+		cartVO.setgoods_num(goods_num);
 		cartVO.setMember_id(member_id);
 		cartVO.setCart_goods_qty(cart_goods_qty);
 		boolean result=cartService.modifyCartQty(cartVO);

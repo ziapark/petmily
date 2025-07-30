@@ -11,7 +11,7 @@ public class BoardVO {
 	private String subject;
 	private String content;
 	private String category;
-	private String file_url;
+	private String file_name;
 	private Date reg_date;
 	private Date update_date;
 	private int views;
@@ -47,11 +47,12 @@ public class BoardVO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getFile_url() {
-		return file_url;
+
+	public String getFile_name() {
+		return file_name;
 	}
-	public void setFile_url(String file_url) {
-		this.file_url = file_url;
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
 	}
 	public Date getReg_date() {
 		return reg_date;

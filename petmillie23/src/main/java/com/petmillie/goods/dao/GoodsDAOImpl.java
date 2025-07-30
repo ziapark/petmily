@@ -35,15 +35,26 @@ public class GoodsDAOImpl  implements GoodsDAO{
 	}
 	
 	@Override
-	public GoodsVO selectGoodsDetail(String goods_id) throws DataAccessException{
-		GoodsVO goodsVO=(GoodsVO)sqlSession.selectOne("mapper.goods.selectGoodsDetail",goods_id);
+	public GoodsVO selectGoodsDetail(int goods_num) throws DataAccessException{
+		System.out.println("dao 진입");
+		System.out.println("전달받은 goods_num = " + goods_num);
+		GoodsVO goodsVO=(GoodsVO)sqlSession.selectOne("mapper.goods.selectGoodsDetail",goods_num);
+		System.out.println("dao 결과: " + goodsVO);
 		return goodsVO;
 	}
 	
 	@Override
-	public List<ImageFileVO> selectGoodsDetailImage(String goods_id) throws DataAccessException{
-		List<ImageFileVO> imageList=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsDetailImage",goods_id);
+	public List<ImageFileVO> selectGoodsDetailImage(int goods_num) throws DataAccessException{
+		List<ImageFileVO> imageList=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsDetailImage",goods_num);
 		return imageList;
 	}
-	
+	 // --- 추가해야 할 부분 시작 ---
+    @Override
+    public List<GoodsVO> selectAllGoodsList() throws DataAccessException {
+        // "mapper.goods.selectAllGoodsList"는 MyBatis SQL Mapper 파일에 정의된 ID
+        // 이 쿼리는 모든 상품을 조회합니다.
+        List<GoodsVO> goodsList = sqlSession.selectList("mapper.goods.selectAllGoodsList");
+        return goodsList;
+    }
+    // --- 추가해야 할 부분 끝 ---
 }
