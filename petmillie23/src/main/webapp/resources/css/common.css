@@ -143,3 +143,33 @@ position:relative;
 #like.like_off #likeBtn {background:url(/petmillie/resources/image/like.png) left center no-repeat; background-size: 20px; padding: 3px 3px 3px 25px;}
 
 #like input[type="button"] {border:0;}
+
+
+/* 로그인 */
+
+.login_wrap {width:100%; max-width:500px; margin:0 auto;}
+.login_wrap form , .login_wrap h3{width:75%; margin: 0 auto;}
+.login_wrap h3 {font-size:20px; margin:20px auto;}
+.login_wrap form input.login_input {height: 58px; padding:16px 12px; box-sizing:border-box; }
+.login_wrap form input.login_input:first-child {border-radius:0.375rem 0.375rem 0 0;}
+.login_wrap form input.login_input:nth-child(2) {border-radius:0 0 0.375rem 0.375rem;}
+.login_btns {margin:20px 0;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

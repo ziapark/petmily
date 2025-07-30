@@ -23,38 +23,33 @@ function result(){
 </c:if>
 </head>
 <body>
-	<H3>회원 로그인 창</H3>
-	<DIV id="detail_table">
-	<form action="${contextPath}/member/login.do" method="post" onsubmit="return Checklogin();">
-		<TABLE>
-			<TBODY>
-				<TR class="dot_line">
-					<TD class="fixed_join">아이디</TD>
-					<TD><input name="member_id" type="text" size="20" required/></TD>
-				</TR>
-				<TR class="solid_line">
-					<TD class="fixed_join">비밀번호</TD>
-					<TD><input name="member_pw" type="password" size="20" required/></TD>
-				</TR>
-			</TBODY>
-		</TABLE>
-		<br><br>
-		<INPUT	type="submit" value="로그인"> 
-		<INPUT type="button" value="초기화">
-		<br>
-		<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
-&client_id=69cca3f6669288cd3162c12fa845a93d
-&redirect_uri=http://localhost:8090/petmillie/member/kakaoLogin.do">
-    <img alt="카카오로그인" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
-</a>
+	<div class="login_wrap">
 		
-		<Br><br>
-		   <a href="#">아이디 찾기</a>  | 
-		   <a href="#">비밀번호 찾기</a> | 
-		   <a href="${contextPath}/member/memberForm.do">회원가입</a>    |
-		   <a href="#">고객 센터</a>
-					   
-	</form>	
-	</DIV>	
+	<H3>회원 로그인 창</H3>
+	<form action="${contextPath}/member/login.do" method="post" onsubmit="return Checklogin();">
+	
+	
+		<input name="member_id" type="text" size="20" class="form-control login_input" placeholder="id" required/>
+		<input name="member_pw" type="password" class="form-control login_input" placeholder="password" size="20" required/>
+		<div class="login_btns">
+			<INPUT	type="submit" value="로그인" class="btn btn-primary"> 
+			<a href="${contextPath}/member/memberForm.do" class="btn btn-secondary">회원가입</a> 
+		</div>
+		
+		<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
+		&client_id=69cca3f6669288cd3162c12fa845a93d
+		&redirect_uri=http://localhost:8090/petmillie/member/kakaoLogin.do">
+		    <img alt="카카오로그인" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
+		</a>
+				
+				<Br><br>
+				   <a href="#">아이디 찾기</a>  | 
+				   <a href="#">비밀번호 찾기</a> |
+				   <a href="#">고객 센터</a>
+							   
+			</form>	
+	
+	</div>
+	
 </body>
 </html>
