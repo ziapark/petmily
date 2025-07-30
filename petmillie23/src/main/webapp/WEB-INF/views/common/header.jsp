@@ -87,7 +87,7 @@
 			   <li><a href="${contextPath}/member/logout.do" class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 			 </c:when>
 			 <c:otherwise>
-			   <li><a href="${contextPath}/member/loginForm.do" class="btn-sm btn btn-outline-dark">로그인인인인인</a></li>
+			   <li><a href="${contextPath}/member/loginForm.do" class="btn-sm btn btn-outline-dark">로그인인인인인인인</a></li>
 			   <li><a href="${contextPath}/member/memberForm.do" class="btn-sm btn btn-outline-dark">회원가입</a></li>
 			   <li><a href="${contextPath}/business/loginForm.do" class="btn-sm btn btn-outline-dark">사업자 로그인</a></li>
 			   <li><a href="${contextPath}/business/businessForm.do" class="btn-sm btn btn-outline-dark">사업자 회원가입</a></li>
