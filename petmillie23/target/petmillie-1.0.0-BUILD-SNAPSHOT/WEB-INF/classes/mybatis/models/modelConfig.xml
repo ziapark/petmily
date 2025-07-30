@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <typeAliases>
+    <typeAlias type="com.petmillie.goods.vo.GoodsVO" alias="GoodsVO" />
+    <typeAlias type="com.petmillie.goods.vo.ImageFileVO" alias="imageFileVO" />
+    <typeAlias type="com.petmillie.member.vo.MemberVO" alias="memberVO" />
+    <typeAlias type="com.petmillie.cart.vo.CartVO" alias="cartVO" />
+    <typeAlias type="com.petmillie.order.vo.OrderVO" alias="orderVO" />
+    <typeAlias type="com.petmillie.mypage.vo.MyPageVO" alias="mypageVO" />
+    <typeAlias type="com.petmillie.coupon.vo.CouponVO" alias="CouponVO" />
+    <typeAlias type="com.petmillie.coupon.vo.UserCouponVO" alias="UserCouponVO" />
+    <typeAlias type="com.petmillie.business.vo.BusinessVO" alias="BusinessVO" />
+    <typeAlias type="com.petmillie.business.vo.PensionVO" alias="PensionVO" />
+    <typeAlias type="com.petmillie.business.vo.RoomVO" alias="RoomVO" />
+    <typeAlias type="com.petmillie.comunity.vo.ComunityVO" alias="ComunityVO" />
+    <typeAlias type="com.petmillie.board.vo.BoardVO" alias="BoardVO" />
+    
+    
+    
+  </typeAliases>
+</configuration>
+
+
+

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.mypage">
+	
+	<!-- 리절트 맵 정의 -->
+<resultMap id="goodsResult" type="goodsVO">
+    <result property="goods_num" column="goods_num"/>
+    <result property="goods_name" column="goods_name"/>
+    <result property="goods_maker" column="goods_maker"/>
+    <result property="goods_category" column="goods_category"/>
+    <result property="goods_price" column="goods_price"/>
+    <result property="goods_sales_price" column="goods_sales_price"/>
+    <result property="goods_point" column="goods_point"/>
+    <result property="goods_stock" column="goods_stock"/>
+    <result property="goods_delivery_price" column="goods_delivery_price"/>
+    <result property="goods_fileName" column="goods_fileName"/>
+    <result property="goods_status" column="goods_status"/>
+    <result property="goods_goods_writer_intro" column="goods_goods_writer_intro"/>
+    <result property="goods_contents_order" column="goods_contents_order"/>
+    <result property="goods_credate" column="goods_credate"/>
+</resultMap>
+
+	
+	<select id="selectMyOrderGoodsList" resultMap="goodsResult" parameterType="String">
+	    <![CDATA[
+			select * from userorder
+            where member_id=#{member_id}
+            order by pay_order_time desc
+		]]>
+	</select>
+	
+	<select id="selectMyOrderInfo" resultMap="goodsResult" parameterType="String">
+	    <![CDATA[
+		    select * from userorder
+            where order_id=#{order_id}
+    	]]>
+	</select>
+	
+	<select id="selectMyOrderHistoryList" resultMap="goodsResult" parameterType="java.util.Map">
+	    <![CDATA[
+		  select * from userorder
+          where member_id=#{member_id}
+          and DATE_FORMAT(pay_order_time,'%Y-%m-%d') between #{beginDate} and #{endDate}
+          order by pay_order_time desc
+    	]]>
+	</select>	
+	
+	<update id="updateMyInfo" parameterType="java.util.HashMap">
+	    update member
+			   <set>
+			      <if test="member_pw != '' and member_pw != null">
+			        member_pw=#{member_pw},
+			      </if>
+			      <if test="member_gender != '' and member_gender != null">
+			         member_gender=#{member_gender},
+			      </if>
+			      <if test="member_birth_y != '' and member_birth_y != null">
+			         member_birth_y=#{member_birth_y},
+			      </if>
+			      <if test="member_birth_m != '' and member_birth_m != null">
+			         member_birth_m=#{member_birth_m},
+			      </if>
+			      <if test="member_birth_d != '' and member_birth_d != null">
+			         member_birth_d=#{member_birth_d},
+			      </if>
+			      <if test="member_birth_gn != '' and member_birth_gn != null">
+			      	 member_birth_gn=#{member_birth_gn},
+			      </if>
+			      <if test="tel1 != '' and tel1 != null">
+			         tel1=#{tel1},
+			      </if>
+			      <if test="tel2 != '' and tel2 != null">
+			         tel2=#{tel2},
+			      </if>
+			      <if test="tel3 != '' and tel3 != null">
+			         tel3=#{tel3},
+			      </if>
+			      <if test="smssts_yn != '' and smssts_yn != null">
+			         smssts_yn=#{smssts_yn},
+			      </if>
+			      <if test="email1 != '' and email1 != null">
+			         email1=#{email1},
+			      </if>
+			      <if test="email2 != '' and email2 != null">
+			         email2=#{email2},
+			      </if>
+			      <if test="emailsts_yn != '' and emailsts_yn != null">
+			         emailsts_yn=#{emailsts_yn},
+			      </if>
+			      <if test="zipcode != '' and zipcode != null">
+			         zipcode=#{zipcode},
+			      </if>
+			      <if test="roadAddress != '' and roadAddress != null">
+			         roadAddress=#{roadAddress},
+			      </if>			     	
+			      <if test="jibunAddress != '' and jibunAddress != null">
+			         jibunAddress=#{jibunAddress},
+			      </if>
+			      <if test="namujiAddress != '' and namujiAddress != null">
+			         namujiAddress=#{namujiAddress}
+			      </if>
+			   </set>
+		where member_id=#{member_id}
+	</update>
+	
+	<select id="selectMyDetailInfo" resultType="memberVO" parameterType="String">
+	    <![CDATA[
+			select * from member 
+			where member_id=#{member_id}
+    	]]>
+	</select>	
+	
+	<update id="updateMyOrderCancel" parameterType="String">
+	   update order
+	 	  set delivery_state='cancel_order'
+	   where order_id=#{order_id}
+	</update>
+	
+</mapper>

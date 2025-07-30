@@ -1,0 +1,121 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+/* 초기화 */
+*{margin:0;padding:0;}
+ul, li {margin: 0;padding: 0;list-style: none;}
+
+html,body {width:100%;heigh:100%;}
+body{ font-family: "Noto Sans KR", sans-serif;
+	  font-optical-sizing: auto;
+	  font-weight: normal;
+	  font-style: 0.9em; }
+.header_wrap {width:100%; max-width:1200px; margin:0 auto;  }
+header {width:100%; background:#fff; box-sizing:border-box; padding-top:10px;}
+header #logo {display:inline-block; margin-left:10px;}
+header #logo a {display:inline-block; }
+header #logo a img {width:200px;}
+
+header #head_link li {float:left; margin-right:5px;}
+header #head_link li a {font-size:13px;}
+
+article { width:100%; margin:0 auto; }
+
+/*****nav*************************************/
+
+.nav_inner {width:100%; max-width:1200px; margin:0 auto; position:relative; }
+.nav-area {background:#37c5f7;}
+/* 1depth 메뉴 */
+.gnb {
+  display: flex;
+  padding: 0;
+}
+
+.gnb > li {
+  position: relative;
+  width:120px;
+}
+
+.gnb > li > a {
+  display: block;
+  padding: 15px 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.gnb > li > a:hover {
+  background-color: #eee;
+  color:#000;
+}
+
+/* 초기 숨김 설정 */
+.submenu-wrap {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  
+  background-color: #eee;
+  z-index: 100;
+  display: flex;
+  padding: 15px 0;
+
+  visibility: hidden;
+  opacity: 10;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* hover 시 보이게 설정 */
+.nav-area:hover .submenu-wrap {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.submenu-wrap {width:100%;}
+
+/* 각 서브메뉴 블럭 */
+.submenu {margin: 0px;padding-left:0;}
+.submenu li {width:120px;}
+.submenu li a {
+  display: inline-block;
+  width:100%;
+  padding: 10px;
+  color:#000;;
+  text-decoration: none;
+  padding:10px 0px 10px 20px;
+}
+
+.submenu li a:hover {color:#0080ff;}
+
+
+
+/* 1depth에 hover 시 전체 서브메뉴 보이기 */
+.gnb:hover + .submenu-wrap,
+.submenu-wrap:hover {
+  display: flex;
+}
+/* 헤더 검색창 */
+#search {float:right;margin-bottom: 20px;}
+#search .search_input{display:inline; width:300px;}
+
+/* 본문 */
+#wrap {width:100%;}
+.mainbanner_wrap {width:100%; height:300px;}
+.contents_wrap {width:100%; max-width:1200px; margin:0 auto;}
+.carousel-item {background:#676767 !important;}
+
+.weather_wrap {width:100%;}
+
+.weather_goods .goods_item {background:#eee; height:100px;}
+
+
+
+
+
+
+
+
+
+
+
+

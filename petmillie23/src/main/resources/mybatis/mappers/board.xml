@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.board">
+
+<resultMap id="comunityResult" type="BoardVO">
+    <result property="comu_id" column="comu_id"/>
+    <result property="member_id" column="member_id"/>
+    <result property="subject" column="subject"/>
+    <result property="content" column="content"/>
+    <result property="category" column="category"/>
+    <result property="file_url" column="file_url"/>
+    <result property="views" column="views"/>
+    <result property="likes" column="likes"/>
+    <result property="reg_date" column="reg_date"/>
+    <result property="update_date" column="update_date"/>
+    <result property="del_yn" column="del_yn"/>
+</resultMap>
+
+
+
+	<select id="selectBoardList" resultType="com.petmillie.board.vo.BoardVO">
+        SELECT comu_id, member_id, subject, reg_date, views
+        FROM comunity
+        <where>
+            <if test="text != null and text != ''">
+                <choose>
+                    <when test="items == 'subject'">
+                        subject LIKE #{text}
+                    </when>
+                    <when test="items == 'content'">
+                        content LIKE #{text}
+                    </when>
+                    <when test="items == 'member_id'">
+                        member_id LIKE #{text}
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY comu_id DESC
+        LIMIT #{start}, #{limit}
+    </select>
+    
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM comunity
+        <where>
+            <if test="text != null and text != ''">
+                <choose>
+                    <when test="items == 'subject'">
+                        subject LIKE #{text}
+                    </when>
+                    <when test="items == 'content'">
+                        content LIKE #{text}
+                    </when>
+                    <when test="items == 'member_id'">
+                        member_id LIKE #{text}
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </select>
+
+    
+    <select id="getListCount" resultType="int">
+        SELECT COUNT(*) FROM comunity
+    </select>
+
+    <select id="getBoardList" resultType="com.petmillie.board.vo.BoardVO">
+        SELECT * FROM comunity
+        <where>
+            <if test="items != null and text != null and text != ''">
+                <choose>
+                    <when test="items == 'subject'">
+                        subject LIKE CONCAT('%', #{text}, '%')
+                    </when>
+                    <when test="items == 'content'">
+                        content LIKE CONCAT('%', #{text}, '%')
+                    </when>
+                    <when test="items == 'member_id'">
+                        member_id LIKE CONCAT('%', #{text}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY comu_id DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <insert id="insertBoard" parameterType="BoardVO">
+        INSERT INTO comunity (member_id, subject, content)
+        VALUES (#{member_id}, #{subject}, #{content})
+    </insert>
+
+    <select id="getBoardByNum" parameterType="int" resultType="BoardVO">
+        SELECT * FROM comunity WHERE comu_id = #{num}
+    </select>
+
+    <update id="updateHit" parameterType="int">
+        UPDATE comunity SET views = views + 1 WHERE comu_id = #{comu_id}
+    </update>
+
+    <update id="updateBoard" parameterType="BoardVO">
+        UPDATE comunity
+        SET member_id = #{member_id}, subject = #{subject}, content = #{content}
+        WHERE comu_id = #{comu_id}
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM comunity WHERE comu_id = #{comu_id}
+    </delete> 
+
+</mapper>

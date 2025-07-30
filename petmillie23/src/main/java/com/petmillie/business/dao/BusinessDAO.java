@@ -1,0 +1,29 @@
+package com.petmillie.business.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.dao.DataAccessException;
+
+import com.petmillie.business.vo.BusinessVO;
+import com.petmillie.business.vo.PensionVO;
+import com.petmillie.business.vo.RoomVO;
+
+public interface BusinessDAO {
+
+	public void addSeller(BusinessVO businessVO) throws DataAccessException;
+	public int selectOverlappedID(String id) throws DataAccessException;
+	public BusinessVO login(Map loginMap) throws DataAccessException;
+	public BusinessVO mypension(String business_number) throws DataAccessException;
+	public BusinessVO businessDetailInfo(String business_number)throws DataAccessException;
+	public void modifyInfo(Map businessMap) throws DataAccessException;
+	public void addpension(PensionVO pensionVO)throws DataAccessException;
+	public void addpension2(RoomVO roomVO)throws DataAccessException;
+	public PensionVO pensionList(String business_id)throws DataAccessException;
+	public List<RoomVO> roomList(String p_num);
+	public void modifyroom(Map roomMap)throws DataAccessException;
+	public RoomVO roomDetailInfo(String room_id)throws DataAccessException;
+	public int removeroom(int room_id) throws DataAccessException;
+	public int updatepension(PensionVO pensionVO) throws DataAccessException;
+	public int removepension(int id) throws DataAccessException;
+}
