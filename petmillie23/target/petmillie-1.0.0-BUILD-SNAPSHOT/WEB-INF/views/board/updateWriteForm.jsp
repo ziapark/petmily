@@ -45,6 +45,12 @@
 			</div>
 		</div>	
 		<div class="mb-3 row">
+			<label for="" class="col-sm-2 col-form-label">사진첨부</label>
+			<div class="col-sm-10">
+				<input type="file" name="uploadFile" class="form-control" value="${vo.file_name}">
+			</div>
+		</div>
+		<div class="mb-3 row">
 			<p><input type="submit" value="전송" class="btn btn-primary"></p>
 		</div>
 		

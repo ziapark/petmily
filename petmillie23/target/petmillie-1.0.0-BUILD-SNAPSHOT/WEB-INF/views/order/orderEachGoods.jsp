@@ -96,15 +96,15 @@ function imagePopup(type) {
 function fn_show_order_detail(){
     var f = document.form_order;
     // 상품 정보
-    var goods_id = '', goods_title = '', goods_fileName = '';
-    var hidIds = f['h_goods_id'];
-    var hidTitles = f['h_goods_title'];
+    var goods_num = '', goods_name = '', goods_fileName = '';
+    var hidIds = f['h_goods_num'];
+    var hidTitles = f['h_goods_name'];
     var hidFiles = f['h_goods_fileName'];
     if(Array.isArray(hidIds)) {
-        hidIds.forEach(function(e){ goods_id += e.value + '<br>'; });
-        hidTitles.forEach(function(e){ goods_title += e.value + '<br>'; });
+        hidIds.forEach(function(e){ goods_num += e.value + '<br>'; });
+        hidTitles.forEach(function(e){ goods_name += e.value + '<br>'; });
         hidFiles.forEach(function(e){ goods_fileName += '<br>'; });
-    } else { goods_id = hidIds.value; goods_title = hidTitles.value; goods_fileName = hidFiles.value; }
+    } else { goods_num = hidIds.value; goods_name = hidTitles.value; goods_fileName = hidFiles.value; }
     var qty = f.h_order_goods_qty.value;
     var totalQty = f.h_total_order_goods_qty.value;
     var eachPrice = f.h_each_goods_price.value;
@@ -134,8 +134,8 @@ function fn_show_order_detail(){
         pay_method += '<br>결제 휴대폰:'+ f.pay_order_tel1.value+'-'+f.pay_order_tel2.value+'-'+f.pay_order_tel3.value;
     }
     // 팝업 내용 세팅
-    document.getElementById('p_order_goods_id').innerHTML = goods_id;
-    document.getElementById('p_order_goods_title').innerHTML = goods_title;
+    document.getElementById('p_order_goods_num').innerHTML = goods_num;
+    document.getElementById('p_order_goods_name').innerHTML = goods_name;
     document.getElementById('p_total_order_goods_qty').innerHTML = totalQty+'개';
     document.getElementById('p_total_order_goods_price').innerHTML = total_order_goods_price+'원';
     document.getElementById('p_orderer_name').innerHTML = orderer_name;
@@ -181,15 +181,15 @@ function fn_process_pay_order(){
       <c:forEach var="item" items="${myOrderList}">
       <tr>
         <td class="goods_image">
-          <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id}">
-            <img width="75" alt="" src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}" />
-            <input type="hidden" id="h_goods_id" name="h_goods_id" value="${item.goods_id}" />
+          <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">
+            <img width="75" alt="" src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}" />
+            <input type="hidden" id="h_goods_num" name="h_goods_num" value="${item.goods_num}" />
             <input type="hidden" id="h_goods_fileName" name="h_goods_fileName" value="${item.goods_fileName}" />
           </a>
         </td>
         <td>
-          <h2><a href="${contextPath}/goods/goods.do?goods_id=${item.goods_id}">${item.goods_title}</a>
-            <input type="hidden" id="h_goods_title" name="h_goods_title" value="${item.goods_title}" />
+          <h2><a href="${contextPath}/goods/goods.do?goods_num=${item.goods_num}">${item.goods_name}</a>
+            <input type="hidden" id="h_goods_name" name="h_goods_name" value="${item.goods_name}" />
           </h2>
         </td>
         <td>
@@ -231,8 +231,8 @@ function fn_process_pay_order(){
       <h1>최종 주문 사항</h1>
       <table>
         <tbody>
-          <tr><td>주문상품번호:</td><td><p id="p_order_goods_id"></p></td></tr>
-          <tr><td>주문상품명:</td><td><p id="p_order_goods_title"></p></td></tr>
+          <tr><td>주문상품번호:</td><td><p id="p_order_goods_num"></p></td></tr>
+          <tr><td>주문상품명:</td><td><p id="p_order_goods_name"></p></td></tr>
           <tr><td>주문상품개수:</td><td><p id="p_total_order_goods_qty"></p></td></tr>
           <tr><td>주문금액합계:</td><td><p id="p_total_order_goods_price"></p></td></tr>
           <tr><td>주문자:</td><td><p id="p_orderer_name"></p></td></tr>

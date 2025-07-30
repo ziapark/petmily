@@ -135,7 +135,7 @@
 		
 		<div class="submenu-wrap">
 			<ul class="submenu">
-			    <li><a href="#">식품3-1</a></li>
+			    <li><a href="${contextPath}/goods/goodsList.do"">식품3-1</a></li>
 			    <li><a href="#">식품3-2</a></li>
 			    <li><a href="#">식품3-3</a></li>
 			  </ul>
@@ -162,8 +162,7 @@
 			  <c:if test="${isLogOn==true and not empty businessInfo}">
 			  <ul class="submenu">
 			  	<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a>
-			  	<li><a href="#">예약 일정 등록</a>
-			  	<li><a href="#">예약 확인</a>
+			  	<li><a href="${contextPath}/reservation/reservationListForm.do">예약 확인</a>
 			  	<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a>
 			  </ul>
 			  </c:if>
