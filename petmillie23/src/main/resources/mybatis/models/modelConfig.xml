@@ -18,7 +18,7 @@
     <typeAlias type="com.petmillie.comunity.vo.ComunityVO" alias="ComunityVO" />
     <typeAlias type="com.petmillie.board.vo.BoardVO" alias="BoardVO" />
     <typeAlias type="com.petmillie.board.vo.CommentVO" alias="CommentVO" />
-    <typeAlias type="com.petmillie.board.vo.LikeVO" alias="LikeVO" />
+    <typeAlias type="com.petmillie.board.vo.LikeVO" alias="LikeVO" />1
   </typeAliases>
 </configuration>
 
