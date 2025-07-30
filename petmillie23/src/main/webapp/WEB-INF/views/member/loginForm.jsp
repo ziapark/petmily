@@ -33,7 +33,7 @@ function result(){
 		<input name="member_pw" type="password" class="form-control login_input" placeholder="password" size="20" required/>
 		<div class="login_btns">
 			<INPUT	type="submit" value="로그인" class="btn btn-primary"> 
-			<a href="${contextPath}/member/memberForm.do" class="btn btn-secondary">회원가입aaa</a> 
+			<a href="${contextPath}/member/memberForm.do" class="btn btn-secondary">회원가입</a> 
 		</div>
 		
 		<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
