@@ -29,7 +29,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/basic.css">
 
-<title>펫밀리</title>
+<title>펫밀리펫밀리</title>
 <script type="text/javascript">
 	function checkForm() {	
 	var sessionId = "${sessionScope.memberInfo.member_id}"; 
@@ -38,9 +38,8 @@
         alert("로그인 해주세요.");
         return false;
     }
-    var board_type = document.getElementById("board_type").value;
-    location.href = "${contextPath}/board/writeForm.do?id=" + sessionId + "&board_type=" + board_type;
 
+    location.href = "${contextPath}/board/writeForm.do?id=" + sessionId;
 }
 </script>
 </head>
@@ -53,7 +52,7 @@
 		</div>
 	</div>
 	<div class="row row-cols-1">
-	
+	<form action="${contextPath}/boardList.do" method="get">
 
 		<div class="text-end"> 
 			<span class="badge text-bg-success" style="padding:10px;">전체 <%=total_record%>건	</span>
@@ -80,7 +79,7 @@
 				%>
 				<tr>
 					<td><%=notice.getComu_id()%></td>
-					<td><a href="${contextPath}/board/view.do?num=<%=notice.getComu_id()%>&page=<%=pageNum%>&board_type=${param.board_type}"><%=notice.getSubject()%></a></td>
+					<td><a href="${contextPath}/board/view.do?num=<%=notice.getComu_id()%>&page=<%=pageNum%>"><%=notice.getSubject()%></a></td>
 					<td><%=notice.getReg_date()%></td>
 					<td><%=notice.getViews()%></td>
 					<td><%=notice.getMember_id()%></td>
@@ -93,7 +92,7 @@
 		<div align="center">
 			<c:set var="currentPage" value="<%=pageNum%>" />
 			<c:forEach var="i" begin="1" end="<%=total_page%>">
-				<a href="<c:url value='boardList.do?pageNum=${i}&board_type=${param.board_type}' /> ">
+				<a href="<c:url value="boardList.do?pageNum=${i}" /> ">
 					<c:choose>
 						<c:when test="${currentPage==i}">
 							<font color='4C5317'><b style="color:#0d6efd;"> [${i}]</b></font>
@@ -111,8 +110,7 @@
 			<a href="#" onclick="checkForm(); return false;" class="btn btn-primary">글쓰기</a>				
 		</div>			
 		<!-- 검색 전용 폼 -->
-		<form action="${contextPath}/board/boardList.do" method="get" class="d-flex justify-content-start align-items-center gap-2">
-			<input type="hidden" id="board_type" value="${param.board_type}">
+		<form action="${contextPath}/boardList.do" method="get" class="d-flex justify-content-start align-items-center gap-2">
 			<select name="items" class="txt search_select">
 				<option value="subject">제목에서</option>
 				<option value="content">본문에서</option>
@@ -121,7 +119,7 @@
 			<input name="text" type="text" class="search_input"/>
 			<input type="submit" class="btn btn-primary btn-sm" value="검색"/>
 		</form>
-	
+	</form>	
 	</div>		
 </div>
 

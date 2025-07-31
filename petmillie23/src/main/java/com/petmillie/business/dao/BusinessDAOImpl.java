@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.reservation.vo.ReservaionVO;
 
 @Repository("businessDAO")
 public class BusinessDAOImpl implements BusinessDAO {
@@ -99,5 +100,11 @@ public class BusinessDAOImpl implements BusinessDAO {
 	@Override
 	public int removepension(int id) throws DataAccessException {
 		return sqlSession.update("mapper.business.removepension", id);
+	}
+
+	@Override
+	public List<ReservaionVO> reservationList(String business_id) {
+		List<ReservaionVO> list = (List)sqlSession.selectList("mapper.reser.reservationList", business_id);
+		return null;
 	}
 }

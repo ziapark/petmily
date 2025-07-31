@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.reservation.vo.ReservaionVO;
 
 public interface BusinessDAO {
 
@@ -26,4 +27,5 @@ public interface BusinessDAO {
 	public int removeroom(int room_id) throws DataAccessException;
 	public int updatepension(PensionVO pensionVO) throws DataAccessException;
 	public int removepension(int id) throws DataAccessException;
+	public List<ReservaionVO> reservationList(String business_id);
 }

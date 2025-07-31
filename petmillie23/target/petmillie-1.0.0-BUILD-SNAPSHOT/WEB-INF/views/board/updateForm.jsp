@@ -24,7 +24,7 @@
 	<div class="row row-cols-1">
 
 		<div class="col">
-	<form name="" action="${contextPath}/board/update.do?num=${vo.comu_id}&board_type=${param.board_type}" method="post" enctype="multipart/form-data">
+	<form name="" action="${contextPath}/board/update.do?num=${vo.comu_id}" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
 		<input type="hidden" name="originalFileName" value="${vo.file_name}" />
 		<input type="hidden" name="comu_id" value="${vo.comu_id}">

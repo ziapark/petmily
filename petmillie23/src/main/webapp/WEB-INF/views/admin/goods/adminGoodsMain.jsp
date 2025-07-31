@@ -157,8 +157,10 @@ function search_goods_list(fixedSearchPeriod) {
     formObj.cur_page.value = "1";
     formObj.chapter.value = "1";
 
-    // 검색 타입 라디오 버튼도 'period'로 설정
+    // 검색 타입 라디오 버튼을 'period'로 설정하고 hidden 필드에 반영
     document.querySelector('input[name="search_type"][value="period"]').checked = true;
+    updateSearchTypeHidden('period'); // Hidden 필드 업데이트
+
     toggleSearchFields(true); // 필드 활성화/비활성화 업데이트
 
     formObj.method = "get"; // GET 방식으로 변경
@@ -170,7 +172,7 @@ function search_goods_list(fixedSearchPeriod) {
 function submit_detail_search() {
     var formObj = document.frm_search_goods;
 
-    // 상세 검색 시에는 날짜 필드를 비워줍니다.
+    // 상세 검색 시에는 날짜 필드를 비워줍니다. (컨트롤러에서 period와 detail을 명확히 구분)
     formObj.begin_date.value = "";
     formObj.end_date.value = "";
     formObj.fixedSearchPeriod.value = ""; // 고정 검색 기간도 초기화
@@ -179,10 +181,28 @@ function submit_detail_search() {
     formObj.cur_page.value = "1";
     formObj.chapter.value = "1";
 
+    // 검색 타입 라디오 버튼을 'detail'로 설정하고 hidden 필드에 반영
+    document.querySelector('input[name="search_type"][value="detail"]').checked = true;
+    updateSearchTypeHidden('detail'); // Hidden 필드 업데이트
+
     formObj.method = "get";
     formObj.action = "${contextPath}/admin/goods/adminGoodsMain.do";
     formObj.submit();
 }
+
+// search_type hidden 필드 값을 업데이트하는 함수
+function updateSearchTypeHidden(type) {
+    var hiddenField = document.getElementById('search_type_hidden');
+    if (!hiddenField) {
+        hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.id = 'search_type_hidden';
+        hiddenField.name = 'search_type';
+        document.frm_search_goods.appendChild(hiddenField);
+    }
+    hiddenField.value = type;
+}
+
 
 // 라디오 버튼 선택에 따라 상세 검색/기간 검색 필드 활성화/비활성화
 function toggleSearchFields(isPeriodSearch) {
@@ -212,12 +232,22 @@ function toggleSearchFields(isPeriodSearch) {
 window.onload = function() {
     // 컨트롤러에서 넘어온 search_type 파라미터에 따라 초기 상태 설정
     var searchType = "${param.search_type}"; // 컨트롤러에서 넘어온 search_type 값
+    var currentFixedSearchPeriod = "${param.fixedSearchPeriod}"; // 현재 고정 검색 기간
+
     if (searchType === 'detail') {
         document.querySelector('input[name="search_type"][value="detail"]').checked = true;
         toggleSearchFields(false);
-    } else {
+        updateSearchTypeHidden('detail'); // Hidden 필드 업데이트
+    } else { // 기본값 또는 period 검색
         document.querySelector('input[name="search_type"][value="period"]').checked = true;
         toggleSearchFields(true);
+        updateSearchTypeHidden('period'); // Hidden 필드 업데이트
+        
+        // fixedSearchPeriod가 있는 경우 해당 날짜 선택 버튼 활성화 (선택된 것처럼 보이게)
+        if (currentFixedSearchPeriod) {
+             // 여기에 해당 fixedSearchPeriod 이미지 버튼에 CSS 클래스 추가 등으로 시각적 표시 가능
+             // 예: $('#period_search_buttons img[alt="' + currentFixedSearchPeriod + '"]').addClass('selected-period');
+        }
     }
 };
 </script>
@@ -231,8 +261,14 @@ window.onload = function() {
                 <TR>
                     <TD>
                         <%-- 라디오 버튼 선택에 따라 하단 검색 필드 활성화/비활성화 --%>
-                        <input type="radio" name="search_type" value="period" onclick="toggleSearchFields(true)"/> 등록일로 조회 &nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="search_type" value="detail" onclick="toggleSearchFields(false)"/> 상세 조회 &nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="search_type" value="period" onclick="toggleSearchFields(true); updateSearchTypeHidden('period');"
+                            <c:if test="${param.search_type eq 'period' or empty param.search_type}">checked</c:if>
+                        /> 등록일로 조회 &nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="search_type" value="detail" onclick="toggleSearchFields(false); updateSearchTypeHidden('detail');"
+                            <c:if test="${param.search_type eq 'detail'}">checked</c:if>
+                        /> 상세 조회 &nbsp;&nbsp;&nbsp;
+                        
+                        <input type="hidden" id="search_type_hidden" name="search_type" value="${param.search_type}"/>
                     </TD>
                 </TR>
                 <TR>
@@ -243,22 +279,31 @@ window.onload = function() {
                         <c:set var="currentMonth"><fmt:formatDate value="${now}" pattern="MM" /></c:set>
                         <c:set var="currentDay"><fmt:formatDate value="${now}" pattern="dd" /></c:set>
 
-                        <select name="beginYear">
+                        <select name="beginYear" <c:if test="${param.search_type eq 'detail'}">disabled</c:if>>
                             <c:forEach var="i" begin="0" end="5">
                                 <c:set var="yearOption" value="${currentYear - i}" />
-                                <option value="${yearOption}" ${currentYear eq yearOption ? 'selected' : ''}>${yearOption}</option>
+                                <option value="${yearOption}"
+                                    <c:if test="${not empty param.beginYear and param.beginYear eq yearOption}">selected</c:if>
+                                    <c:if test="${empty param.beginYear and currentYear eq yearOption}">selected</c:if>
+                                >${yearOption}</option>
                             </c:forEach>
                         </select>년
-                        <select name="beginMonth">
+                        <select name="beginMonth" <c:if test="${param.search_type eq 'detail'}">disabled</c:if>>
                             <c:forEach var="i" begin="1" end="12">
                                 <c:set var="monthOption" value="${i < 10 ? '0' : ''}${i}" />
-                                <option value="${monthOption}" ${currentMonth eq monthOption ? 'selected' : ''}>${i}</option>
+                                <option value="${monthOption}"
+                                    <c:if test="${not empty param.beginMonth and param.beginMonth eq monthOption}">selected</c:if>
+                                    <c:if test="${empty param.beginMonth and currentMonth eq monthOption}">selected</c:if>
+                                >${i}</option>
                             </c:forEach>
                         </select>월
-                        <select name="beginDay">
+                        <select name="beginDay" <c:if test="${param.search_type eq 'detail'}">disabled</c:if>>
                             <c:forEach var="i" begin="1" end="31">
                                 <c:set var="dayOption" value="${i < 10 ? '0' : ''}${i}" />
-                                <option value="${dayOption}" ${currentDay eq dayOption ? 'selected' : ''}>${i}</option>
+                                <option value="${dayOption}"
+                                    <c:if test="${not empty param.beginDay and param.beginDay eq dayOption}">selected</c:if>
+                                    <c:if test="${empty param.beginDay and currentDay eq dayOption}">selected</c:if>
+                                >${i}</option>
                             </c:forEach>
                         </select>일 &nbsp;이전&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -277,7 +322,7 @@ window.onload = function() {
                                 <img src="${contextPath}/resources/image/btn_search_1_month.jpg" alt="1개월">
                             </a>
                             <a href="javascript:search_goods_list('two_month')">
-                                <img src="${contextPath}/resources/image/btn_search_2_month.jpg" alt="2개월">
+                                <img src="${contextPath}/resources/image/btn_search_2_week.jpg" alt="2개월">
                             </a>
                             <a href="javascript:search_goods_list('three_month')">
                                 <img src="${contextPath}/resources/image/btn_search_3_month.jpg" alt="3개월">
@@ -292,27 +337,32 @@ window.onload = function() {
                 <tr>
                     <td>
                         <%-- 상세 검색 필드 (초기에는 비활성화) --%>
-                        <select name="search_condition" disabled>
-                            <option value="all" selected>전체</option>
-                            <option value="goods_num">상품번호</option>
-                            <option value="goods_name">상품이름</option>
-                            <option value="goods_maker">제조사</option>
+                        <select name="search_condition" <c:if test="${param.search_type ne 'detail'}">disabled</c:if>>
+                            <option value="all" <c:if test="${param.search_condition eq 'all'}">selected</c:if>>전체</option>
+                            <option value="goods_num" <c:if test="${param.search_condition eq 'goods_num'}">selected</c:if>>상품번호</option>
+                            <option value="goods_name" <c:if test="${param.search_condition eq 'goods_name'}">selected</c:if>>상품이름</option>
+                            <option value="goods_maker" <c:if test="${param.search_condition eq 'goods_maker'}">selected</c:if>>제조사</option>
                         </select>
-                        <input type="text" name="search_word" size="30" disabled value="${param.search_word}"/>
-                        <input type="button" value="조회" onclick="submit_detail_search()" disabled />
+                        <input type="text" name="search_word" size="30" value="${param.search_word}"
+                            <c:if test="${param.search_type ne 'detail'}">disabled</c:if>/>
+                        <input type="button" value="조회" onclick="submit_detail_search()"
+                            <c:if test="${param.search_type ne 'detail'}">disabled</c:if>/>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <%-- 현재 조회 기간 표시 (날짜 값은 컨트롤러에서 Model에 담아 전달해야 함) --%>
                         조회한 기간:
-                        <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="yyyy"/>" readonly />년
-                        <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="MM"/>" readonly />월
-                        <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="dd"/>" readonly />일
-                        &nbsp; ~
-                        <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="yyyy"/>" readonly />년
-                        <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="MM"/>" readonly />월
-                        <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="dd"/>" readonly />일
+                        <%-- beginDate와 endDate가 null이 아닐 때만 표시. 상세 검색 시에는 비어있음 --%>
+                        <c:if test="${not empty beginDate}">
+                            <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="yyyy"/>" readonly />년
+                            <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="MM"/>" readonly />월
+                            <input type="text" size="4" value="<fmt:formatDate value="${beginDate}" pattern="dd"/>" readonly />일
+                            &nbsp; ~
+                            <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="yyyy"/>" readonly />년
+                            <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="MM"/>" readonly />월
+                            <input type="text" size="4" value="<fmt:formatDate value="${endDate}" pattern="dd"/>" readonly />일
+                        </c:if>
 
                         <%-- 실제 서버로 전송될 hidden 필드 --%>
                         <input type="hidden" name="begin_date" value="<fmt:formatDate value="${beginDate}" pattern="yyyy-MM-dd"/>" />
@@ -388,8 +438,11 @@ window.onload = function() {
                             <c:if test="${not empty param.fixedSearchPeriod}">
                                 &fixedSearchPeriod=${param.fixedSearchPeriod}
                             </c:if>
+                            <c:if test="${not empty param.search_type}">
+                                &search_type=${param.search_type}
+                            </c:if>
                             <c:if test="${not empty param.search_condition}">
-                                &search_condition=${param.search_condition}&search_word=${param.search_word}&search_type=detail
+                                &search_condition=${param.search_condition}&search_word=${param.search_word}
                             </c:if>
                             ">&lt;&lt; 이전</a>
                     </c:if>
@@ -402,12 +455,18 @@ window.onload = function() {
                                 <c:if test="${not empty param.fixedSearchPeriod}">
                                     &fixedSearchPeriod=${param.fixedSearchPeriod}
                                 </c:if>
+                                <c:if test="${not empty param.search_type}">
+                                    &search_type=${param.search_type}
+                                </c:if>
                                 <c:if test="${not empty param.search_condition}">
-                                    &search_condition=${param.search_condition}&search_word=${param.search_word}&search_type=detail
+                                    &search_condition=${param.search_condition}&search_word=${param.search_word}
                                 </c:if>
                                 ">
                                 <c:choose>
-                                    <c:when test="${param.pageNum eq currentPageNum or (empty param.pageNum and currentPageNum eq 1)}">
+                                    <c:when test="${(param.pageNum eq currentPageNum) or (empty param.pageNum and currentPageNum eq 1 and (empty param.search_type or param.search_type eq 'period'))}">
+                                        <b>${currentPageNum}</b>
+                                    </c:when>
+                                    <c:when test="${(param.pageNum eq currentPageNum) and (not empty param.search_type and param.search_type eq 'detail')}">
                                         <b>${currentPageNum}</b>
                                     </c:when>
                                     <c:otherwise>
@@ -424,8 +483,11 @@ window.onload = function() {
                             <c:if test="${not empty param.fixedSearchPeriod}">
                                 &fixedSearchPeriod=${param.fixedSearchPeriod}
                             </c:if>
+                            <c:if test="${not empty param.search_type}">
+                                &search_type=${param.search_type}
+                            </c:if>
                             <c:if test="${not empty param.search_condition}">
-                                &search_condition=${param.search_condition}&search_word=${param.search_word}&search_type=detail
+                                &search_condition=${param.search_condition}&search_word=${param.search_word}
                             </c:if>
                             ">다음 &gt;&gt;</a>
                     </c:if>

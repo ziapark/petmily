@@ -47,7 +47,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	public  @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num,
 			                    HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		
-		System.out.println("카트인메소드진입");
+		
 		HttpSession session=request.getSession();
 		
 		MemberVO memberVO = (MemberVO)session.getAttribute("memberInfo");	
@@ -59,8 +59,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	    cartVO.setMember_id(member_id);
 	    cartVO.setgoods_num(goods_num);
 	    cartVO.setCart_goods_qty(1);
-		System.out.println(memberVO);
-		System.out.println(cartVO);
+		
 		boolean isAreadyExisted=cartService.findCartGoods(cartVO);
 		System.out.println("isAreadyExisted:"+isAreadyExisted);
 		if(isAreadyExisted==true){

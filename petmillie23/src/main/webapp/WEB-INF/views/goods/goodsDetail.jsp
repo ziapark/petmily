@@ -11,9 +11,37 @@
 <html>
 <head>
 <style>
+#layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#popup {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
 /* 스타일 생략, 필요하면 넣으세요 */
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 상단은 그대로 유지됨 -->
 <script type="text/javascript">
 
 var contextPath = "${pageContext.request.contextPath}";
@@ -21,17 +49,21 @@ var contextPath = "${pageContext.request.contextPath}";
 function add_cart(goods_num) {
     $.ajax({
         type: "post",
-        async: false,
         url: contextPath + "/cart/addGoodsInCart.do",
         data: { goods_num: goods_num },
         success: function(data) {
-            if(data == 'add_success'){
-                imagePopup('open');  
-            } else if(data == 'already_existed'){
+            console.log("서버 응답:", data);
+
+            if (data === 'add_success' || data === 'plus_success') {
+                imagePopup('open');
+            } else if (data === 'already_existed') {
                 alert("이미 카트에 등록된 상품입니다."); 
+            } else {
+                alert("서버에서 예상하지 못한 응답을 받았습니다: " + data);
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error("Ajax 에러:", error);
             alert("에러가 발생했습니다.");
         }
     });
@@ -87,6 +119,8 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
     formObj.submit();
 }
 </script>
+<!-- 이하 코드 동일 (HTML 구조, 상품 정보 출력 등) -->
+
 </head>
 <body>
     <hgroup>
@@ -161,7 +195,7 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
         </table>
         <ul>
             <li><a class="buy" href="javascript:fn_order_each_goods('${goods.goods_num}', '${goods.goods_name}', '${goods.goods_sales_price}', '${goods.goods_fileName}');">구매하기</a></li>
-            <li><a class="cart" href="javascript:add_cart('${goods.goods_num}')">장바구니</a></li>
+            <li><a class="cart" href="javascript:add_cart('${goods.goods_num}');">장바구니</a></li>
             <li><a class="wish" href="#">위시리스트</a></li>
         </ul>
     </div>
