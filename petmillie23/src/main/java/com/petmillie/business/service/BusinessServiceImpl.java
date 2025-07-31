@@ -10,15 +10,12 @@ import com.petmillie.business.dao.BusinessDAO;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
-import com.petmillie.reservation.dao.ReservaionDAO;
 import com.petmillie.reservation.vo.ReservaionVO;
 
 @Service("businessService")
 public class BusinessServiceImpl implements BusinessService {
 	@Autowired
 	private BusinessDAO businessDAO;
-	@Autowired
-	private ReservaionDAO reservaionDAO;
 
 	@Override
 	public void addSeller(BusinessVO businessVO) throws Exception {
@@ -103,7 +100,7 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public List<ReservaionVO> reservationList(String business_id) throws Exception {
+	public List<ReservaionVO> reservationList(String business_id) {
 		List<ReservaionVO> list = businessDAO.reservationList(business_id);
 		return list;
 	}

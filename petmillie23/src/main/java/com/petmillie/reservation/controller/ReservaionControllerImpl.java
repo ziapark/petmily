@@ -35,15 +35,14 @@ public class ReservaionControllerImpl implements ReservaionController {
 
 	    String business_id = businessVO.getBusiness_id();
 	    System.out.println("가져온 비즈니스 아이디 : " + business_id);
-	    
-	    List<ReservaionVO> list = businessService.reservationList(business_id);
-	    System.out.println("lis1t : " + list);
+
+	    List<ReservaionVO> reserlist = businessService.reservationList(business_id);
 		String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("title", "예약 내역");
 	    mav.addObject("body", "/WEB-INF/views/"+viewName+".jsp"); // 뷰 경로 확인
-	    mav.addObject("reservation", list); // 뷰에 전달
-	    
+	    mav.addObject("reservation", reserlist); // 뷰에 전달
+
 	    return mav;
 	}
 

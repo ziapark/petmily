@@ -19,7 +19,6 @@
     <typeAlias type="com.petmillie.board.vo.BoardVO" alias="BoardVO" />
     <typeAlias type="com.petmillie.board.vo.CommentVO" alias="CommentVO" />
     <typeAlias type="com.petmillie.board.vo.LikeVO" alias="LikeVO" />
-    <typeAlias type="com.petmillie.reservation.vo.ReservaionVO" alias="ReservaionVO" />
   </typeAliases>
 </configuration>
 

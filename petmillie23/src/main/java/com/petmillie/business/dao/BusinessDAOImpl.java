@@ -102,9 +102,9 @@ public class BusinessDAOImpl implements BusinessDAO {
 		return sqlSession.update("mapper.business.removepension", id);
 	}
 
-
-    @Override
-    public List<ReservaionVO> reservationList(String business_id) throws Exception {
-        return sqlSession.selectList("mapper.reser.reservationList", business_id);
-    }
+	@Override
+	public List<ReservaionVO> reservationList(String business_id) {
+		List<ReservaionVO> list = (List)sqlSession.selectList("mapper.reser.reservationList", business_id);
+		return null;
+	}
 }

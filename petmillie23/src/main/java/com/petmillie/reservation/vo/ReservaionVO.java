@@ -10,16 +10,6 @@ public class ReservaionVO {
 	private String end_date;
 	private String reg_date;
 	private String status;
-	private String member_id;
-	
-	
-	
-	public String getMember_id() {
-		return member_id;
-	}
-	public void setMember_id(String member_id) {
-		this.member_id = member_id;
-	}
 	public String getReservaion_id() {
 		return reservaion_id;
 	}
@@ -56,6 +46,7 @@ public class ReservaionVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 	
+	
+
 }

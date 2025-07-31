@@ -29,13 +29,13 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/basic.css">
 
-<title>펫밀리</title>
+<title>펫밀리펫밀리</title>
 <script type="text/javascript">
 	function checkForm() {	
 	var sessionId = "${sessionScope.memberInfo.member_id}"; 
   
     if (sessionId == null || sessionId == "") {
-        alert("로그인 해주세요");
+        alert("로그인 해주세요.");
         return false;
     }
 
@@ -47,7 +47,7 @@
   <div class="container text-center mt-3 mb-3">
   	<div class="row row-cols-1 mb-3">
 		<div class="col bg-light p-5 text-start">
-			<h2 class="fw-bold">게시판rpt</h2>
+			<h2 class="fw-bold">게시판</h2>
 			<p>게시판입니다.</p>	
 		</div>
 	</div>
