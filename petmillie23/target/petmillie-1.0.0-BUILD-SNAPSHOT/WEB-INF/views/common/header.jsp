@@ -168,7 +168,7 @@
 			  <c:if test="${isLogOn==true and not empty businessInfo}">
 			  <ul class="submenu">
 			  	<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a>
-			  	<li><a href="${contextPath}/reservation/reservationListForm.do">예약 확인</a>
+			  	<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a>
 			  	<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a>
 			  </ul>
 			  </c:if>
