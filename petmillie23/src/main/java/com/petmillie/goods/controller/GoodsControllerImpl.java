@@ -167,7 +167,7 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 
 	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
 	    List<GoodsVO> goodsList = goodsService.listAllGoods();
-
+	    
 	    mav.addObject("goodsList", goodsList); // JSP로 전달
 	    return mav;
 	}

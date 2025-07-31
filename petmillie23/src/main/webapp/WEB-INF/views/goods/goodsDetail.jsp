@@ -132,8 +132,8 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
 
     <div id="goods_image">
         <figure>
-            <img alt="${goods.goods_name}"
-                src="${contextPath}/thumbnails.do?goods_num=${goods.goods_num}&fileName=${goods.goods_fileName}">
+            <img alt="${goods.goods_name}" src="${contextPath}/goods/thumbnails.do?goods_num=${goods.goods_num}
+            &fileName=${goods.goods_fileName}">
         </figure>
     </div>
 

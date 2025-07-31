@@ -29,7 +29,7 @@
 	            <c:forEach var="goods" items="${goodsList}">
 	                <div class="col">
 	                    <div class="goods-item">
-	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}">
+	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}&fileName=${goods.goods_fileName}">
 	                            <img src="http://localhost:8090/petupload/goods/${goods.goods_num}/${goods.goods_fileName}" alt="대표 이미지">
 	                        </a>
 	                        <div class="goods-name">${goods.goods_name}</div>
