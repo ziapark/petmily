@@ -146,9 +146,9 @@
 	<insert id="insertpension" parameterType="pensionVO">
 	<![CDATA[
 		insert into pension(
-		p_num, business_id, p_name, tel1, tel2, tel3, room_count, facilities, description, reg_date, del_yn)
+		p_num, business_id, p_name, tel1, tel2, tel3, room_count, facilities, description)
 		values(
-		#{p_num}, #{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{room_count},  #{facilities}, #{description},  #{reg_date},  #{del_yn})
+		#{p_num}, #{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{room_count}, #{facilities}, #{description})
 	]]>
 </insert>
 <!-- 펜션 정보 조회 -->
