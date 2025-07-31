@@ -6,14 +6,14 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>회원탈퇴</title>
+<title>사업자 탈퇴</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
-    <h2>회원탈퇴</h2>
+    <h2> 사업자 탈퇴</h2>
     <form id="deleteForm" onsubmit="event.preventDefault(); submitdelete();">
-    	<input type="hidden" id="member_id" name="member_id" value="${memberInfo.member_id}">
+    	<input type="hidden" id="seller_id" name="seller_id" value="${businessInfo.seller_id}">
         <p>정말로 회원을 탈퇴하시겠습니까?</p>
         <p>회원 탈퇴 시 모든 정보가 삭제되며 복구가 불가능합니다.</p>
         <input type="submit" value="탈퇴하기">
@@ -21,14 +21,14 @@
     </form>
     <script>
 function submitdelete() {
-	var _id = $("#member_id").val()
-	console.log("탈퇴요청 member_id:", _id);
+	var _id = $("#seller_id").val()
+	console.log("탈퇴요청 seller_id:", _id);
     console.log("submitDeleteForm 호출됨"); // 디버깅용
     if (confirm("정말로 회원탈퇴 하시겠습니까?\n(탈퇴 후 복구가 불가능합니다.)")) {
         console.log("탈퇴 요청 전송 시도"); // 디버깅용
         $.ajax({
             type: "POST",
-            url: "${contextPath}/mypage/removeMember.do",
+            url: "${contextPath}/bus/removeMember.do",
             data: {id:_id},
             dataType: "text",
             beforeSend: function(xhr) {

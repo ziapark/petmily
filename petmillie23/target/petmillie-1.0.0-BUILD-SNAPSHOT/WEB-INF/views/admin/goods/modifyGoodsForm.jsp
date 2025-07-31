@@ -53,8 +53,7 @@
 			value = frm_mod_goods.goods_maker.value;
 		} else if (attribute == 'goods_publisher') {
 			value = frm_mod_goods.goods_publisher.value;
-		} else if (attribute == 'goods_price') {
-			value = frm_mod_goods.goods_price.value;
+	
 		} else if (attribute == 'goods_sales_price') {
 			value = frm_mod_goods.goods_sales_price.value;
 		} else if (attribute == 'goods_point') {
@@ -86,7 +85,7 @@
 		}
 
 		// 유효성 검사 (필요에 따라 추가)
-		if (attribute === 'goods_price' || attribute === 'goods_sales_price'
+		if ( attribute === 'goods_sales_price'
 				|| attribute === 'goods_point'
 				|| attribute === 'goods_delivery_price'
 				|| attribute === 'goods_stock') {
@@ -435,18 +434,8 @@ table td {
 							</td>
 
 						</tr>
-						<%-- 				<td><input name="goods_publisher" type="text" size="40" value="${goods.goods_publisher }" /></td> --%>
-						<%-- 				  <input  type="button" value="수정반영"  onClick="fn_modify_goods('${goods.goods_num }','goods_publisher')"/> --%>
-						<tr>
-							<td>상품정가</td>
-							<td><input name="goods_price" type="text" size="40"
-								value="${goods.goods_price }" /></td>
-							<td><input type="button" value="수정반영"
-								onClick="fn_modify_goods('${goods.goods_num }','goods_price')" />
-							</td>
-
-						</tr>
-
+					
+					
 						<tr>
 							<td>상품판매가격</td>
 							<td><input name="goods_sales_price" type="text" size="40"

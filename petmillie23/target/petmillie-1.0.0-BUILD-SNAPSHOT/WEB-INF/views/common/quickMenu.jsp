@@ -11,14 +11,14 @@
 	function fn_show_next_goods(){
 		var img_sticky=document.getElementById("img_sticky");
 		var cur_goods_num=document.getElementById("cur_goods_num");
-		var _h_goods_id=document.frm_sticky.h_goods_id;
+		var _h_goods_num=document.frm_sticky.h_goods_num;
 		var _h_goods_fileName=document.frm_sticky.h_goods_fileName;
-		if(array_index <_h_goods_id.length-1)
+		if(array_index <_h_goods_num.length-1)
 			array_index++;
 		 	
-		var goods_id=_h_goods_id[array_index].value;
+		var goods_num=_h_goods_num[array_index].value;
 		var fileName=_h_goods_fileName[array_index].value;
-		img_sticky.src=SERVER_URL+"?goods_id="+goods_id+"&fileName="+fileName;
+		img_sticky.src=SERVER_URL+"?goods_num="+goods_num+"&fileName="+fileName;
 		cur_goods_num.innerHTML=array_index+1;
 	}
 
@@ -26,15 +26,15 @@
  function fn_show_previous_goods(){
 	var img_sticky=document.getElementById("img_sticky");
 	var cur_goods_num=document.getElementById("cur_goods_num");
-	var _h_goods_id=document.frm_sticky.h_goods_id;
+	var _h_goods_num=document.frm_sticky.h_goods_num;
 	var _h_goods_fileName=document.frm_sticky.h_goods_fileName;
 	
 	if(array_index >0)
 		array_index--;
 	
-	var goods_id=_h_goods_id[array_index].value;
+	var goods_num=_h_goods_num[array_index].value;
 	var fileName=_h_goods_fileName[array_index].value;
-	img_sticky.src=SERVER_URL+"?goods_id="+goods_id+"&fileName="+fileName;
+	img_sticky.src=SERVER_URL+"?goods_num="+goods_num+"&fileName="+fileName;
 	cur_goods_num.innerHTML=array_index+1;
 }
 
@@ -43,26 +43,26 @@ function goodsDetail(){
 	arrIdx=cur_goods_num.innerHTML-1;
 	
 	var img_sticky=document.getElementById("img_sticky");
-	var h_goods_id=document.frm_sticky.h_goods_id;
-	var len=h_goods_id.length;
+	var h_goods_num=document.frm_sticky.h_goods_num;
+	var len=h_goods_num.length;
 	
 	if(len>1){
-		goods_id=h_goods_id[arrIdx].value;
+		goods_num=h_goods_num[arrIdx].value;
 	}else{
-		goods_id=h_goods_id.value;
+		goods_num=h_goods_num.value;
 	}
 	
 	
 	var formObj=document.createElement("form");
-	var i_goods_id = document.createElement("input"); 
+	var i_goods_num = document.createElement("input"); 
     
-	i_goods_id.name="goods_id";
-	i_goods_id.value=goods_id;
+	i_goods_num.name="goods_num";
+	i_goods_num.value=goods_num;
 	
-    formObj.appendChild(i_goods_id);
+    formObj.appendChild(i_goods_num);
     document.body.appendChild(formObj); 
     formObj.method="get";
-    formObj.action="${contextPath}/goods/goodsDetail.do?goods_id="+goods_id;
+    formObj.action="${contextPath}/goods/goodsDetail.do?goods_num="+goods_num;
     formObj.submit();
 	
 	
@@ -100,14 +100,14 @@ function goodsDetail(){
 		           <c:when test="${itemNum.count==1 }">
 			      <a href="javascript:goodsDetail();">
 			  	         <img width="75" height="95" id="img_sticky"  
-			                 src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}">
+			                 src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}">
 			      </a>
-			        <input type="hidden"  name="h_goods_id" value="${item.goods_id}" />
+			        <input type="hidden"  name="h_goods_num" value="${item.goods_num}" />
 			        <input type="hidden" name="h_goods_fileName" value="${item.goods_fileName}" />
 			      <br>
 			      </c:when>
 			      <c:otherwise>
-			        <input type="hidden"  name="h_goods_id" value="${item.goods_id}" />
+			        <input type="hidden"  name="h_goods_num" value="${item.goods_num}" />
 			        <input type="hidden" name="h_goods_fileName" value="${item.goods_fileName}" />
 			      </c:otherwise>
 			      </c:choose>

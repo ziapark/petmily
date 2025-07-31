@@ -77,12 +77,9 @@ input[type="text"], input[type="file"] {
 				<td>카테고리</td>
 				<td><input type="text" name="goods_category" required></td>
 			</tr>
+			
 			<tr>
-				<td>정가</td>
-				<td><input type="text" name="goods_price" required></td>
-			</tr>
-			<tr>
-				<td>할인된 가격</td>
+				<td>판매 가격</td>
 				<td><input type="text" name="goods_sales_price" required></td>
 			</tr>
 			<tr>

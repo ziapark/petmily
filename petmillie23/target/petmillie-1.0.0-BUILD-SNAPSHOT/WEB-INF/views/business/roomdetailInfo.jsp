@@ -145,6 +145,9 @@ function fn_modify_business_info(attribute){
 					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('amenities')" />
 					</td>
 				</tr>
+				<tr>
+					<td>
+						<a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"><input type="button" value="사업자 페이지 돌아가기"></a>
 			</tbody>
 		</table>
 	</div>

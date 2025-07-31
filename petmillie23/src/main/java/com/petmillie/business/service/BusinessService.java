@@ -24,4 +24,5 @@ public interface BusinessService {
 	public int removeroom(int id) throws Exception;
 	public int updatepension(PensionVO pensionVO) throws Exception;
 	public int removepension(int id) throws Exception;
+	public List reservationList(String business_id);
 }

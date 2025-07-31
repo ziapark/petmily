@@ -156,7 +156,18 @@
 	<![CDATA[
 		select * from pension where business_id = #{business_id}
 	]]>
-</select>
+</select>	
+<update id="updatepension" parameterType="pensionVO">
+	<![CDATA[
+	update pension set p_name = #{p_name}, tel1 = #{tel1}, tel2 = #{tel2}, tel3 = #{tel3}, room_count = #{room_count},
+	facilities = #{facilities}, description = #{description}
+	]]>
+</update>
+<update id="removepension" parameterType="int">
+	<![CDATA[
+	update pension set del_yn = 'Y' where p_num = #{p_num}
+	]]>
+</update>
 
 <resultMap id="roomResult" type="roomVO">
 	<result property="room_id" column="room_id"/>
@@ -224,7 +235,7 @@
 			   </set>
 		where room_id=#{room_id}
 	</update>
-	<delete id="removeroom" parameterType="String" resultType="int">
+	<delete id="removeroom" parameterType="int">
 		<![CDATA[
 			delete from room where room_id = #{room_id}
 		]]>
