@@ -18,25 +18,27 @@ public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 @Autowired
 private SqlSession sqlSession;
 
+
 @Override
 public int insertNewGoods(Map newGoodsMap) throws DataAccessException {
 sqlSession.insert("mapper.admin.goods.insertNewGoods", newGoodsMap);
 
 Object goodsIdObj = newGoodsMap.get("goods_num");
-if (goodsIdObj != null && !goodsIdObj.toString().isBlank()) {
-return Integer.parseInt(goodsIdObj.toString());
-} else {
-throw new RuntimeException("goods_num가 null이거나 빈 문자열입니다. insertNewGoods 실패");
-}
+	if (goodsIdObj != null && !goodsIdObj.toString().isBlank()) {
+		return Integer.parseInt(goodsIdObj.toString());
+	} else {
+		throw new RuntimeException("goods_num가 null이거나 빈 문자열입니다. insertNewGoods 실패");
+	}
 }
 
 @Override
 public void insertGoodsImageFile(List fileList)  throws DataAccessException {
-for(int i=0; i<fileList.size();i++){
-ImageFileVO imageFileVO=(ImageFileVO)fileList.get(i);
-sqlSession.insert("mapper.admin.goods.insertGoodsImageFile",imageFileVO);
+	for(int i=0; i<fileList.size();i++){
+		ImageFileVO imageFileVO=(ImageFileVO)fileList.get(i);
+		sqlSession.insert("mapper.admin.goods.insertGoodsImageFile",imageFileVO);
+	}
 }
-}
+
 
 @Override
 public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException {

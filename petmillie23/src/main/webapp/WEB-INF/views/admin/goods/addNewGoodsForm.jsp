@@ -7,17 +7,8 @@
 <meta charset="UTF-8">
 <title>상품 등록</title>
 <style>
-body {
-	font-family: Arial, sans-serif;
-	padding: 40px;
-	background-color: #f9f9f9;
-}
 
-h1 {
-	margin-bottom: 20px;
-}
-
-form {
+form.add_new_goods_form {
 	background: white;
 	padding: 20px;
 	border-radius: 10px;
@@ -26,81 +17,38 @@ form {
 	margin: 0 auto;
 }
 
-table {
-	width: 100%;
-}
 
-td {
-	padding: 10px;
-}
 
-input[type="text"], input[type="file"] {
-	width: 100%;
-	padding: 8px;
-	box-sizing: border-box;
-}
+table tr td {padding:10px;}
 
-.btn-submit {
-	display: block;
-	width: 100%;
-	padding: 12px;
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	font-size: 16px;
-	border-radius: 5px;
-	margin-top: 20px; /* 테이블 바깥으로 나오면서 상단 여백 추가 */
-	cursor: pointer;
-}
 
-.btn-submit:hover {
-	background-color: #45a049;
-}
+
 </style>
 </head>
 <body>
+<div class="container mt-3 mb-3">
+	
+	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold h2h2">상품 등록</h2>
+			<p class="h2p"></p>
+		</div>
+	</div>	
 
-	<h1>상품 등록</h1>
 
-	<form action="${contextPath}/admin/goods/addNewGoods.do" method="post"
-		enctype="multipart/form-data">
+	<form class="add_new_goods_form" action="${contextPath}/admin/goods/addNewGoods.do" method="post"enctype="multipart/form-data">
 		<table>
 			<tr>
-				<td>상품명</td>
-				<td><input type="text" name="goods_name" required></td>
+				<td><label class="form-label">상품명</label></td>
+				<td><input type="text" class="form-control" name="goods_name" required></td>
 			</tr>
 			<tr>
-				<td>제조사</td>
-				<td><input type="text" name="goods_maker" required></td>
+				<td><label class="form-label">판매자</td>
+				<td><input type="text" class="form-control" name="goods_maker" required></td>
 			</tr>
 			<tr>
-				<td>카테고리</td>
-				<td><input type="text" name="goods_category" required></td>
-			</tr>
-			
-			<tr>
-				<td>판매 가격</td>
-				<td><input type="text" name="goods_sales_price" required></td>
-			</tr>
-			<tr>
-				<td>포인트</td>
-				<td><input type="text" name="goods_point" required></td>
-			</tr>
-			<tr>
-				<td>재고</td>
-				<td><input type="text" name="goods_stock" required></td>
-			</tr>
-			<tr>
-				<td>배송비</td>
-				<td><input type="text" name="goods_delivery_price" required></td>
-			</tr>
-			<tr>
-				<td>파일 첨부</td>
-				<td><input type="file" name="goods_fileName" required></td>
-			</tr>
-			<tr>
-				<td>판매 상태</td>
-				<td><select name="goods_status">
+				<td><label class="form-label">카테고리</td>
+				<td><select name="goods_category" class="form-control">
 						<option value="bestseller">베스트셀러</option>
 						<option value="steadyseller">스테디셀러</option>
 						<option value="newbook" selected>신간</option>
@@ -110,28 +58,35 @@ input[type="text"], input[type="file"] {
 				</select></td>
 			</tr>
 			<tr>
-				<td>작성자 소개</td>
-				<td><input type="text" name="goods_goods_writer_intro" required></td>
+				<td><label class="form-label">판매 가격</td>
+				<td><input type="text" class="form-control" name="goods_sales_price" required></td>
+			</tr>
 			<tr>
-				<td>제품소개</td>
-    <td>
-        <textarea rows="10" cols="50" name="goods_contents_order"></textarea>
-    </td>
-</tr>
-            
-			
-            
-
-            
-            
-            
-            <tr>
-                <td colspan="2"> <%-- 두 컬럼을 합쳐서 버튼이 가운데 오도록 --%>
-                    <button type="submit" class="btn-submit">상품 등록</button>
-                </td>
-            </tr>
-        </table>
-    </form>
-
+				<td><label class="form-label">포인트</td>
+				<td><input type="text" class="form-control" name="goods_point" required></td>
+			</tr>
+			<tr>
+				<td><label class="form-label">재고</td>
+				<td><input type="text" class="form-control" name="goods_stock" required></td>
+			</tr>
+			<tr>
+				<td><label class="form-label">배송비</td>
+				<td><input type="text" class="form-control" name="goods_delivery_price" readonly value="무료배송"></td>
+			</tr>
+			<tr>
+				<td><label class="form-label">대표이미지</td>
+				<td><input type="file" class="form-control" name="goods_fileName" required></td>
+			</tr>
+				<td><label class="form-label">제품상세이미지</label></td> 
+		        <td><input type="file" class="form-control" name="goods_fileName" required></td>
+			</tr>  
+           <tr>
+               <td colspan="2" style="text-align:center;">
+                   <button type="submit" class="btn btn-primary">상품 등록</button>
+               </td>
+           </tr>
+       </table>
+   </form>
+</div>
 </body>
 </html>

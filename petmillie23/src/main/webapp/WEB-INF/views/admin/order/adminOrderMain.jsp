@@ -5,6 +5,24 @@
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <html>
 <head>
+<style>
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+  
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table td, table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+       
+    }
+    table th {
+        background-color: #f2f2f2;
+    }
+</style>
 <meta  charset="utf-8">
 <c:choose>
 <c:when test='${not empty order_goods_list}'>
@@ -267,9 +285,15 @@ function fn_detail_search(){
 </script>
 </head>
 <body>
-	<H3>주문 조회</H3>
+	<div class="container text-center mt-3 mb-3">
+  	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold h2h2">주문조회</h2>
+			<p class="h2p"></p>
+		</div>
+	</div>
 	<form name="frm_delivery_list" action="${contextPath }/admin/admin.do" method="post">	
-		<table   >
+		<table class="table" >
 			<tbody>
 				<tr>
 					<td>
@@ -466,9 +490,9 @@ function fn_detail_search(){
 	</div>
 	
 <div class="clear"></div>
-<table class="list_view">
+<table class="table">
 		<tbody align=center >
-			<tr style="background:#33ff00" >
+			<tr>
 				<td class="fixed" >주문번호</td>
 				<td class="fixed">주문일자</td>
 				<td>주문내역</td>
@@ -586,7 +610,8 @@ function fn_detail_search(){
         </tr>  		   
 		</tbody>
 	</table>
-  </form>   	
+  </form> 
+  </div>  	
 	<div class="clear"></div>
 </body>
 </html>

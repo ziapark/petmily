@@ -14,21 +14,11 @@
 <title>관리자 상품 조회</title>
 <style>
     /* 기본적인 스타일링을 추가하여 페이지 가독성을 높입니다. */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #f4f4f4;
-    }
-    h3 {
-        color: #333;
-        border-bottom: 2px solid #ddd;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
+
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
+  
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
@@ -40,17 +30,7 @@
     table th {
         background-color: #f2f2f2;
     }
-    .list_view {
-        margin-top: 30px;
-    }
-    .list_view th, .list_view td {
-        text-align: center;
-        vertical-align: middle;
-    }
-    .list_view tr.fixed td {
-        padding: 15px;
-        font-weight: bold;
-    }
+
     .clear {
         clear: both;
         height: 10px;
@@ -253,10 +233,16 @@ window.onload = function() {
 </script>
 </head>
 <body>
-    <H3>상품 조회</H3>
-    <%-- form 태그에 name 속성 추가 --%>
-    <form name="frm_search_goods" method="get" action="${contextPath}/admin/goods/adminGoodsMain.do">
-        <TABLE cellpadding="10" cellspacing="10">
+    <div class="container">
+	
+	<div class="row row-cols-1">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold h2h2">상품 조회</h2>
+			<p class="h2p"></p>
+		</div>
+	</div>	
+    <form name="frm_search_goods" method="get" action="${contextPath}/admin/goods/adminGoodsMain.do" style="margin-top:20px;">
+        <TABLE class="table" cellpadding="10">
             <TBODY>
                 <TR>
                     <TD>
@@ -377,8 +363,8 @@ window.onload = function() {
         <DIV class="clear"></DIV>
     </form>
     <DIV class="clear"></DIV>
-
-    <TABLE class="list_view">
+	
+		<TABLE class="table">
         <TBODY align="center">
             <tr style="background:#33cc00; color:white;">
                 <td>상품번호</td>
@@ -495,13 +481,9 @@ window.onload = function() {
             </tr>
         </TBODY>
     </TABLE>
-    <DIV class="clear"></DIV>
-    <br><br><br>
-    <H3>상품등록하기</H3>
-    <DIV id="search">
-        <form action="${contextPath}/admin/goods/addNewGoodsForm.do">
-            <input type="submit" value="상품 등록하기">
-        </form>
-    </DIV>
+    <form action="${contextPath}/admin/goods/addNewGoodsForm.do" style="width:100%; text-align:right;">
+        <input type="submit" value="상품 등록하기" >
+    </form>
+	</div>
 </body>
 </html>

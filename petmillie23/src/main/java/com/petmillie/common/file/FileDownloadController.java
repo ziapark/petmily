@@ -17,7 +17,7 @@ import net.coobird.thumbnailator.Thumbnails;
 @Controller
 public class FileDownloadController {
 	private static String CURR_BOARD_REPO_PATH = "C:\\petupload"; // 게시판 전용 경로
-	private static String CURR_IMAGE_REPO_PATH = "C:\\shopping\\file_repo";
+	private static String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
@@ -42,12 +42,12 @@ public class FileDownloadController {
 	}
 	
 	
-	@RequestMapping("/thumbnails.do")
+	@RequestMapping("/goods/thumbnails.do")
 	protected void thumbnails(@RequestParam("fileName") String fileName,
-                            	@RequestParam("goods_id") String goods_id,
+                            	@RequestParam("goods_num") int goods_num,
 			                 HttpServletResponse response) throws Exception {
 		OutputStream out = response.getOutputStream();
-		String filePath=CURR_IMAGE_REPO_PATH+"\\"+goods_id+"\\"+fileName;
+		String filePath=CURR_IMAGE_REPO_PATH+"\\"+goods_num+"\\"+fileName;
 		File image=new File(filePath);
 		
 		if (image.exists()) { 

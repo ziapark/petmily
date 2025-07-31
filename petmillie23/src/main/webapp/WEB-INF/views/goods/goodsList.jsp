@@ -11,45 +11,7 @@
 <html>
 <head>
 <title>상품 리스트</title>
-<style>
-    .goods-item {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 20px;
-        text-align: center;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    }
-    .goods-item img {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-        border-radius: 5px;
-    }
-    .goods-item .goods-name {
-        font-weight: bold;
-        margin-bottom: 5px;
-        font-size: 1.1em;
-        color: #333;
-    }
-    .goods-item .goods-price {
-        color: #e67e22;
-        font-size: 1.3em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .goods-item input[type="button"] {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .goods-item input[type="button"]:hover {
-        background-color: #218838;
-    }
-</style>
+
 </head>
 <body>
 
@@ -68,13 +30,17 @@
 	                <div class="col">
 	                    <div class="goods-item">
 	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}">
-	                            <img src="${contextPath}/goodsImages/${goods.goods_fileName}" alt="${goods.goods_name} 대표 이미지">
+	                            <img src="${contextPath}/goodsImages/thumbnails.do?fileName=${goods.goods_fileName}&goods_num=${goods.goods_num}" alt="${goods.goods_name} 대표 이미지">
 	                        </a>
 	                        <div class="goods-name">${goods.goods_name}</div>
 	                        <div class="goods-price">
 	                            <fmt:formatNumber value="${goods.goods_sales_price}" type="number" pattern="#,###원"/>
 	                        </div>
-	                        <input type="button" value="장바구니 담기" onclick="AddToCart('${goods.goods_num}')">
+	                        <div class="cartAndLike_wrap">
+	                        	<input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')">
+	                        	<input type="button" class="like_icon_btn" onclick="addLikeGoods('${goods.goods_num}')">
+	                        </div>
+
 	                    </div>
 	                </div>
 	            </c:forEach>
@@ -91,7 +57,7 @@
 <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>	
 
 <script>
-function AddToCart(goodsNum) {
+function addToCart(goodsNum) {
     var isLogOnElement = document.getElementById('isLogOn');
     var isLogOn = isLogOnElement ? isLogOnElement.value : 'false';
 
