@@ -29,10 +29,11 @@
 	<form name="writeForm" action="${contextPath}/board/write.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
 	    <input type="hidden" name="id" value="${param.id}" />
+	    <input type="hidden" name="board_type" value="${param.board_type}">
 		<div class="mb-3 row">
-			<label for="name" class="col-sm-2 col-form-label">이름 </label>
+			<label for="name" class="col-sm-2 col-form-label">작성자 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" placeholder="이름을 입력하세요">
+			     <input type="text" name="member_id" class="form-control" value="${param.id}" readonly>
 			  </div>
 		</div>
 		<div class="mb-3 row">

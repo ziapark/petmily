@@ -23,26 +23,43 @@ public class BoardServiceImpl implements BoardService {
     public Map<String, Object> getBoardList(HttpServletRequest request) {
         int page = 1;
         int limit = 10;
-
+        
         if (request.getParameter("pageNum") != null) {
             page = Integer.parseInt(request.getParameter("pageNum"));
         }
-
+        int start = (page - 1) * limit; 
         String items = request.getParameter("items");
         if (items == null) items = "subject";
 
         String text = request.getParameter("text");
         if (text == null) text = "";
 
-        List<BoardVO> boardList = boardDAO.selectBoardList(page, limit, items, text);
-        int totalRecord = boardDAO.getTotalCount(items, text);
+        String boardType = request.getParameter("board_type");
+        if (boardType == null || boardType.equals("")) {
+            boardType = "notice";
+        }
+
+        //  DAO에 넘길 파라미터들을 Map에 담음
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("page", page);
+        paramMap.put("limit", limit);
+        paramMap.put("items", items);
+        paramMap.put("text", text);
+        paramMap.put("board_type", boardType);
+        paramMap.put("start", start);
+
+        //  DAO 호출
+        List<BoardVO> boardList = boardDAO.selectBoardList(paramMap);
+        int totalRecord = boardDAO.getTotalCount(paramMap);
         int totalPage = (int) Math.ceil((double) totalRecord / limit);
-        System.out.println("boardList.size = " + boardList.size());
+
+        //  결과 담기
         Map<String, Object> result = new HashMap<>();
         result.put("boardList", boardList);
         result.put("total_record", totalRecord);
         result.put("pageNum", page);
         result.put("total_page", totalPage);
+
         return result;
     }
 
@@ -66,6 +83,7 @@ public class BoardServiceImpl implements BoardService {
         vo.setSubject(boardVO.getSubject());
         vo.setContent(boardVO.getContent());
         vo.setFile_name(boardVO.getFile_name());
+        vo.setBoard_type(boardVO.getBoard_type());
         boardDAO.updateBoard(vo);
     }
 

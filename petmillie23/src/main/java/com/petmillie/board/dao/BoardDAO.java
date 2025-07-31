@@ -1,6 +1,7 @@
 package com.petmillie.board.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
@@ -9,8 +10,8 @@ import com.petmillie.board.vo.CommentVO;
 import com.petmillie.board.vo.LikeVO;
 
 public interface BoardDAO {
-	List<BoardVO> selectBoardList(int page, int limit, String items, String text);
-    int getTotalCount(String items, String text);
+	List<BoardVO> selectBoardList(Map<String, Object> paramMap);
+	int getTotalCount(Map<String, Object> paramMap);
 
     void insertBoard(BoardVO board) throws DataAccessException;
     BoardVO getBoardByNum(int num) throws DataAccessException;
@@ -27,4 +28,6 @@ public interface BoardDAO {
     int insertLike(String member_id, int comu_id) throws DataAccessException;
     int deleteLike(String member_id, int comu_id) throws DataAccessException;
     int countLikes(int comu_id);
+    
+
 }

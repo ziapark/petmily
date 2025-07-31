@@ -23,32 +23,21 @@ public class BoardDAOImpl implements BoardDAO {
 
     
     private static final String NAMESPACE = "mapper.board";
-    @Override
-    public List<BoardVO> selectBoardList(int page, int limit, String items, String text) {
-        int start = (page - 1) * limit;
-        System.out.println("selectBoardList 호출 - start: " + start + ", limit: " + limit + ", items: " + items + ", text: " + text);
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("start", start);
-        params.put("limit", limit);
-        params.put("items", items);
-        params.put("text", "%" + text + "%");
-
-        List<BoardVO> list = sqlSession.selectList(NAMESPACE + ".selectBoardList", params);
-        
-        return list;
-    }
-
-
-    @Override
-    public int getTotalCount(String items, String text) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("items", items);
-        params.put("text", "%" + text + "%");
-
-        return sqlSession.selectOne(NAMESPACE + ".getTotalCount", params);
-    }
-
+    
+    
+	
+    @Override 
+    public List<BoardVO> selectBoardList(Map<String, Object> paramMap){ 
+		System.out.println("selectBoardList 호출 - " + paramMap); 
+		return sqlSession.selectList("mapper.board.selectBoardList", paramMap); 
+	}
+  
+	@Override 
+	public int getTotalCount(Map<String, Object> paramMap) { 	  
+		return sqlSession.selectOne("mapper.board.getTotalCount", paramMap); 
+	}
+ 
+   
     
     public void insertBoard(BoardVO board) {
        

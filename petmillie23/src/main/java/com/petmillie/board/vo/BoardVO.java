@@ -10,7 +10,7 @@ public class BoardVO {
 	private String member_id;
 	private String subject;
 	private String content;
-	private String category;
+	private String board_type;
 	private String file_name;
 	private Date reg_date;
 	private Date update_date;
@@ -41,13 +41,13 @@ public class BoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
 
+	public String getBoard_type() {
+		return board_type;
+	}
+	public void setBoard_type(String board_type) {
+		this.board_type = board_type;
+	}
 	public String getFile_name() {
 		return file_name;
 	}

@@ -10,7 +10,7 @@
     <result property="member_id" column="member_id"/>
     <result property="subject" column="subject"/>
     <result property="content" column="content"/>
-    <result property="category" column="category"/>
+    <result property="board_type" column="board_type"/>
     <result property="file_url" column="file_url"/>
     <result property="views" column="views"/>
     <result property="likes" column="likes"/>
@@ -26,46 +26,48 @@
     <result property="reg_date" column="reg_date"/>
 </resultMap>
     
-    <select id="selectBoardList" parameterType="map" resultType="com.petmillie.board.vo.BoardVO">
-    SELECT comu_id, member_id, subject, reg_date, views
-    FROM comunity
-    <where>
-        <if test="text != null and text != ''">
-            <choose>
-                <when test="items == 'subject'">
-                    subject LIKE #{text}
-                </when>
-                <when test="items == 'content'">
-                    content LIKE #{text}
-                </when>
-                <when test="items == 'member_id'">
-                    member_id LIKE #{text}
-                </when>
-            </choose>
-        </if>
-    </where>
-    ORDER BY comu_id DESC
-    LIMIT #{start}, #{limit}
-</select>
+	<select id="selectBoardList" parameterType="map" resultType="com.petmillie.board.vo.BoardVO">
+	    SELECT comu_id, member_id, subject, reg_date, views
+	    FROM comunity
+	    <where>
+	        board_type = #{board_type}
+	        <if test="text != null and text != ''">
+	            <choose>
+	                <when test="items == 'subject'">
+                    	AND subject LIKE CONCAT('%', #{text}, '%')
+	                </when>
+	                <when test="items == 'content'">
+	                    AND content LIKE CONCAT('%', #{text}, '%')
+	                </when>
+	                <when test="items == 'member_id'">
+	                    AND member_id LIKE CONCAT('%', #{text}, '%')
+	                </when>
+	            </choose>
+	        </if>
+	    </where>
+	    ORDER BY comu_id DESC
+	    LIMIT #{start}, #{limit}
+	</select>
     
-    <select id="getTotalCount" resultType="int">
-        SELECT COUNT(*) FROM comunity
-        <where>
-            <if test="text != null and text != ''">
-                <choose>
-                    <when test="items == 'subject'">
-                        subject LIKE #{text}
-                    </when>
-                    <when test="items == 'content'">
-                        content LIKE #{text}
-                    </when>
-                    <when test="items == 'member_id'">
-                        member_id LIKE #{text}
-                    </when>
-                </choose>
-            </if>
-        </where>
-    </select>
+    <select id="getTotalCount" parameterType="map" resultType="int">
+	    SELECT COUNT(*) FROM comunity
+	    <where>
+	        board_type = #{board_type}
+	        <if test="text != null and text != ''">
+	            <choose>
+	                <when test="items == 'subject'">
+	                    AND subject LIKE #{text}
+	                </when>
+	                <when test="items == 'content'">
+	                    AND content LIKE #{text}
+	                </when>
+	                <when test="items == 'member_id'">
+	                    AND member_id LIKE #{text}
+	                </when>
+	            </choose>
+	        </if>
+	    </where>
+	</select>
 
     
     <select id="getListCount" resultType="int">
@@ -94,8 +96,8 @@
     </select>
 
     <insert id="insertBoard" parameterType="BoardVO">
-        INSERT INTO comunity (member_id, subject, content,file_name)
-        VALUES (#{member_id}, #{subject}, #{content},#{file_name})
+        INSERT INTO comunity (member_id, subject, content,file_name,board_type)
+        VALUES (#{member_id}, #{subject}, #{content},#{file_name},#{board_type})
     </insert>
 
     <select id="getBoardByNum" parameterType="int" resultType="BoardVO">
@@ -108,7 +110,7 @@
 
     <update id="updateBoard" parameterType="BoardVO">
         UPDATE comunity
-        SET member_id = #{member_id}, subject = #{subject}, content = #{content}, file_name =#{file_name}
+        SET member_id = #{member_id}, subject = #{subject}, content = #{content}, file_name =#{file_name},board_type=#{board_type}
         WHERE comu_id = #{comu_id}
     </update>
 

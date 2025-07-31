@@ -24,14 +24,14 @@
 	<div class="row row-cols-1">
 
 		<div class="col">
-	<form name="" action="${contextPath}/board/update.do?num=${vo.comu_id}" method="post" enctype="multipart/form-data">
+	<form name="" action="${contextPath}/board/update.do?num=${vo.comu_id}&board_type=${param.board_type}" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
 		<input type="hidden" name="originalFileName" value="${vo.file_name}" />
 		<input type="hidden" name="comu_id" value="${vo.comu_id}">
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">이름 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${vo.member_id}">
+			     <input type="text" name="member_id" class="form-control" value="${vo.member_id}" readonly>
 			  </div>
 		</div>
 		<div class="mb-3 row">

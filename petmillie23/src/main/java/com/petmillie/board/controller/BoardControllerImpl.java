@@ -34,8 +34,15 @@ public class BoardControllerImpl implements BoardController{
 
 	@RequestMapping("/boardList.do")
 	public ModelAndView boardList(HttpServletRequest request) {
+		
+		
 	    String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
+
+	    String boardType = request.getParameter("board_type");
+	    if (boardType == null || boardType.equals("")) {
+	        boardType = "notice"; // 기본 게시판
+	    }
 
 	    Map<String, Object> result = boardService.getBoardList(request);
 	    
@@ -45,7 +52,7 @@ public class BoardControllerImpl implements BoardController{
 	    mav.addObject("pageNum", result.get("pageNum"));
 	    mav.addObject("total_page", result.get("total_page"));
 
-	    System.out.println("viewName = " + viewName);
+	   
 	    return mav;
 	}
 
@@ -53,7 +60,7 @@ public class BoardControllerImpl implements BoardController{
 	public ModelAndView boardView(HttpServletRequest request, HttpSession session) {
 	    String viewName = (String) request.getAttribute("viewName");
 	    int comu_id = Integer.parseInt(request.getParameter("num"));
-
+	    
 	    BoardVO vo = boardService.getBoardView(comu_id);
 
 	    
@@ -95,10 +102,11 @@ public class BoardControllerImpl implements BoardController{
 	    if (memberInfo == null) {
 	        return new ModelAndView("redirect:/member/loginForm.do");
 	    }
-
+	    String board_type = boardVO.getBoard_type();
+	    
 	    String memberId = memberInfo.getMember_id();
 	    boardVO.setMember_id(memberId);
-
+	    boardVO.setBoard_type(board_type);
 	    // **C드라이브에 저장할 경로 설정** 
 	    String saveDir = "C:\\petupload\\";
 	    File uploadPath = new File(saveDir);
@@ -116,7 +124,7 @@ public class BoardControllerImpl implements BoardController{
 
 	    boardService.writeBoard(boardVO);
 
-	    return new ModelAndView("redirect:/board/boardList.do");
+	    return new ModelAndView("redirect:/board/boardList.do?board_type=" + board_type);
 	}
 	
 	@RequestMapping("/updateForm.do")
@@ -128,7 +136,9 @@ public class BoardControllerImpl implements BoardController{
 
 	    String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
-
+	    
+	    String board_type = request.getParameter("board_type");
+	    
 	    mav.addObject("vo", board); // 수정할 글 정보
 	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 	    return mav;
@@ -162,9 +172,12 @@ public class BoardControllerImpl implements BoardController{
 	        // 파일 안 바꿨으면 기존 파일 유지
 	        boardVO.setFile_name(originalFileName);
 	    }
-
+	    String board_type = request.getParameter("board_type");
+	    
+	    boardVO.setBoard_type(board_type);
+	    
 	    boardService.updateBoard(boardVO);
-	    return new ModelAndView("redirect:/board/boardList.do");
+	    return new ModelAndView("redirect:/board/boardList.do?board_type=" + board_type);
 	}
 
 	@RequestMapping("/delete.do")

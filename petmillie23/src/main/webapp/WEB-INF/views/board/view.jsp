@@ -63,11 +63,14 @@
     		</div>
     	</div>
     	<!-- 하단 버튼부 -->
-    	<div style="padding-top:10px;">
-	    	<a href="#" class="btn btn-sm btn-secondary">이전</a>
-	    	<a href="${contextPath}/board/updateForm.do?num=${vo.comu_id}" class="btn btn-sm btn-primary">수정</a>
-	    	<a href="${contextPath}/board/delete.do?num=${vo.comu_id}" class="btn btn-sm btn-danger">삭제</a>
-    	</div>
+		<div style="padding-top:10px;">
+		    <a href="#" class="btn btn-sm btn-secondary">이전</a>
+		
+		    <c:if test="${vo.member_id == sessionScope.memberInfo.member_id}">
+		        <a href="${contextPath}/board/updateForm.do?num=${vo.comu_id}&board_type=${param.board_type}" class="btn btn-sm btn-primary">수정</a>
+		        <a href="${contextPath}/board/delete.do?num=${vo.comu_id}" class="btn btn-sm btn-danger">삭제</a>
+		    </c:if>
+		</div>
     	
    	</div>
 </div>
