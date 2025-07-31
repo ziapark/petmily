@@ -1,5 +1,11 @@
 package com.petmillie.reservation.service;
 
-public interface ReservaionService {
+import java.util.List;
 
+import com.petmillie.reservation.vo.ReservaionVO;
+
+public interface ReservaionService {
 }
+
+
+

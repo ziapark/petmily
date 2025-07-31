@@ -254,7 +254,7 @@ function fn_order_all_cart_goods(){
 								</a>
 							</td>
 				</tr>
-				<c:set var="totalGoodsPrice" value="${totalGoodsPrice+item.goods_sales_price*0.9*cart_goods_qty }" />
+				<c:set var="totalGoodsPrice" value="${totalGoodsPrice+item.goods_sales_price*cart_goods_qty }" />
 				<c:set var="totalGoodsNum" value="${totalGoodsNum+1 }" />
 				</c:forEach>
 	</tbody>
