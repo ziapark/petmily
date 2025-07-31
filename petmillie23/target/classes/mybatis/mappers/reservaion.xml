@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.reser">
+<resultMap id="reserResult" type="ReservaionVO">
+    <result property="reservation_id" column="reservation_id"/>
+    <result property="business_id" column="business_id"/>
+    <result property="member_id" column="member_id"/>
+    <result property="reservation_date" column="reservation_date"/>
+    <result property="end_date" column="end_date"/>
+    <result property="reg_date" column="reg_date"/>
+    <result property="status" column="status"/>
+</resultMap>
+<select id="reservationList" resultMap="reserResult"  parameterType="orderVO">
+<![CDATA[
+	select * from reservation where DATE(reg_date) = CURDATE()
+]]>
+</select>
+
+
+</mapper>
