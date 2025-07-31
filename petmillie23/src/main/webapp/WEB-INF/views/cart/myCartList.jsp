@@ -81,7 +81,8 @@ function modify_cart_qty(goods_num,bookPrice,index){
 		success : function(data, textStatus) {
 			//alert(data);
 			if(data.trim()=='modify_success'){
-				alert("수량을 변경했습니다!!");	
+				alert("수량을 변경했습니다!!");
+				window.location.href = "${contextPath}/cart/myCartList.do";
 			}else{
 				alert("다시 시도해 주세요!!");	
 			}

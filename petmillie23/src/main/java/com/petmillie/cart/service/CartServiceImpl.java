@@ -31,7 +31,7 @@ public class CartServiceImpl  implements CartService{
 		return cartMap;
 	}
 	
-	public boolean findCartGoods(CartVO cartVO) throws Exception{
+	public int findCartGoods(CartVO cartVO) throws Exception{
 		 return cartDAO.selectCountInCart(cartVO);
 		
 	}	
@@ -46,6 +46,17 @@ public class CartServiceImpl  implements CartService{
 	}
 	public void removeCartGoods(int cart_id) throws Exception{
 		cartDAO.deleteCartGoods(cart_id);
+	}
+	
+	public String addOrIncreaseGoodsInCart(CartVO cartVO) throws Exception {
+	    int count = cartDAO.selectCountInCart(cartVO);
+	    if (count > 0) {
+	        cartDAO.increaseCartQty(cartVO);
+	        return "increase_success";
+	    } else {
+	        cartDAO.insertGoodsInCart(cartVO);
+	        return "add_success";
+	    }
 	}
 	
 }

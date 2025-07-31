@@ -3,8 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 
+
+<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <c:set var="goodsList"  value="${goodsList}"  /> 
 
 <html>
@@ -73,7 +74,7 @@
 	                        <div class="goods-price">
 	                            <fmt:formatNumber value="${goods.goods_sales_price}" type="number" pattern="#,###원"/>
 	                        </div>
-	                        <input type="button" value="장바구니 담기" onclick="addToCart('${goods.goods_num}')">
+	                        <input type="button" value="장바구니 담기" onclick="AddToCart('${goods.goods_num}')">
 	                    </div>
 	                </div>
 	            </c:forEach>
@@ -90,38 +91,40 @@
 <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>	
 
 <script>
-    function addToCart(goodsNum) {
-        var isLogOnElement = document.getElementById('isLogOn');
-        var isLogOn = isLogOnElement ? isLogOnElement.value : 'false';
+function AddToCart(goodsNum) {
+    var isLogOnElement = document.getElementById('isLogOn');
+    var isLogOn = isLogOnElement ? isLogOnElement.value : 'false';
 
-        if (isLogOn === 'true' || isLogOn === 'Y') {
-            fetch('${contextPath}/cart/addGoodsInCart.do', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'goods_num=' + encodeURIComponent(goodsNum)
-            })
-            .then(response => response.text())
-            .then(result => {
-                if (result === 'add_success') {
-                    alert('장바구니에 담겼습니다!');
-                } else if (result === 'already_existed') {
-                    alert('이미 장바구니에 있는 상품입니다.');
-                } else {
-                    alert('장바구니 추가 실패: ' + result);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버 오류로 장바구니 추가 실패');
-            });
-        } else {
-            if (confirm('로그인 후 장바구니를 이용할 수 있습니다. 로그인 페이지로 이동하시겠습니까?')) {
-                window.location.href = '${contextPath}/member/loginForm.do';
+    if (isLogOn === 'true' || isLogOn === 'Y') {
+        fetch('${contextPath}/cart/addGoodsInCart.do', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'goods_num=' + encodeURIComponent(goodsNum)
+        })
+        .then(response => response.text())
+        .then(result => {
+            console.log("서버 응답:", result);  // 디버깅용
+            if (result.trim() === 'add_success') {
+                alert('장바구니에 담겼습니다!');
+            } else if (result.trim() === 'increase_success') {
+                alert('이미 장바구니에 있는 상품입니다. 수량이 1 증가했습니다.');
+            } else {
+                alert('장바구니 추가 실패: ' + result);
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('서버 오류로 장바구니 추가 실패');
+        });
+    } else {
+        if (confirm('로그인 후 장바구니를 이용할 수 있습니다. 로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '${contextPath}/member/loginForm.do';
         }
     }
+}
+
 </script>
 
 </body>

@@ -60,17 +60,10 @@ public class CartControllerImpl extends BaseController implements CartController
 	    cartVO.setgoods_num(goods_num);
 	    cartVO.setCart_goods_qty(1);
 		
-		boolean isAreadyExisted=cartService.findCartGoods(cartVO);
-		System.out.println("isAreadyExisted:"+isAreadyExisted);
-		if(isAreadyExisted==true){
-			return "already_existed";
-		}else{
-			cartService.addGoodsInCart(cartVO);
-			return "add_success";
-		}
-		
-		
-		
+	    String result = cartService.addOrIncreaseGoodsInCart(cartVO);
+	    System.out.println("result:" + result);
+	    return result;
+				
 	}
 	
 	@RequestMapping(value="/modifyCartQty.do" ,method = RequestMethod.POST)
