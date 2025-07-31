@@ -57,7 +57,7 @@
 
 <select id="selectAllGoodsList" resultMap="goodsResult">
   <![CDATA[
-    SELECT * FROM goods ORDER BY goods_creDate DESC
+    SELECT * FROM goods  WHERE del_yn = 'n' ORDER BY goods_creDate DESC
   ]]>
 </select>
 <select id="selectGoodsDetail" resultMap="goodsResult"   parameterType="int"  >
