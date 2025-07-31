@@ -1,10 +1,13 @@
 package com.petmillie.admin.goods.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +37,7 @@ import com.petmillie.member.vo.MemberVO;
 @Controller("adminGoodsController")
 @RequestMapping(value="/admin/goods")
 public class AdminGoodsControllerImpl extends BaseController implements AdminGoodsController{
-	private static final String CURR_IMAGE_REPO_PATH = "C:\\shopping\\file_repo";
+	private static final String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
 	@Autowired
 	private AdminGoodsService adminGoodsService;
 
@@ -99,71 +103,111 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	}
 
 
-	@RequestMapping(value="/addNewGoods.do" ,method={RequestMethod.POST})
+	@RequestMapping(value="/addNewGoods.do", method={RequestMethod.POST})
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
-		multipartRequest.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=UTF-8");
-		String imageFileName=null;
+	    multipartRequest.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html; charset=UTF-8");
+	    String imageFileName = null;
 
-		Map newGoodsMap = new HashMap();
-		Enumeration enu=multipartRequest.getParameterNames();
-		while(enu.hasMoreElements()){
-			String name=(String)enu.nextElement();
-			String value=multipartRequest.getParameter(name);
-			newGoodsMap.put(name,value);
-		}
+	    Map<String, Object> newGoodsMap = new HashMap<>();
+	    Enumeration<?> enu = multipartRequest.getParameterNames();
+	    while (enu.hasMoreElements()) {
+	        String name = (String) enu.nextElement();
+	        String value = multipartRequest.getParameter(name);
+	        newGoodsMap.put(name, value);
+	    }
 
-		HttpSession session = multipartRequest.getSession();
-		MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
-		String reg_id = memberVO.getMember_id();
+	    HttpSession session = multipartRequest.getSession();
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+	    String reg_id = memberVO.getMember_id();
 
-		List<ImageFileVO> imageFileList =upload(multipartRequest);
-		if(imageFileList!= null && imageFileList.size()!=0) {
-            String mainImageFileName = imageFileList.get(0).getFileName();
-            newGoodsMap.put("goods_fileName", mainImageFileName);
+	    // ✅ 이미지 업로드 처리
+	    List<ImageFileVO> imageFileList = new ArrayList<>();
+	    Iterator<String> fileNames = multipartRequest.getFileNames();
 
-			for(ImageFileVO imageFileVO : imageFileList) {
-				imageFileVO.setReg_id(reg_id);
-			}
-			newGoodsMap.put("imageFileList", imageFileList);
-		}
+	    while (fileNames.hasNext()) {
+	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
 
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-		try {
-			int goods_num = adminGoodsService.addNewGoods(newGoodsMap);
-			if(imageFileList!=null && imageFileList.size()!=0) {
-				for(ImageFileVO imageFileVO:imageFileList) {
-					imageFileName = imageFileVO.getFileName();
-					File srcFile = new File(CURR_IMAGE_REPO_PATH+"\\"+"temp"+"\\"+imageFileName);
-					File destDir = new File(CURR_IMAGE_REPO_PATH+"\\"+goods_num);
-					FileUtils.moveFileToDirectory(srcFile, destDir,true);
-				}
-			}
-			message= "<script>";
-			message += " alert('등록성공.');";
-			message += " location.href='" + multipartRequest.getContextPath() + "/admin/goods/adminGoodsMain.do';";
-			message +=("</script>");
-		}catch(Exception e) {
-			if(imageFileList!=null && imageFileList.size()!=0) {
-				for(ImageFileVO imageFileVO:imageFileList) {
-					imageFileName = imageFileVO.getFileName();
-					File srcFile = new File(CURR_IMAGE_REPO_PATH+"\\"+"temp"+"\\"+imageFileName);
-					srcFile.delete();
-				}
-			}
+	        if (multipartFile != null && !multipartFile.isEmpty()) {
+	            String originalName = multipartFile.getOriginalFilename();
+	            String ext = originalName.substring(originalName.lastIndexOf("."));
+	            String newFileName = UUID.randomUUID().toString() + ext;
 
-			message= "<script>";
-			message += " alert('등록실패라고');";
-			message +=" location.href='" + multipartRequest.getContextPath() + "/admin/goods/addNewGoodsForm.do';";
-			message +=("</script>");
-			e.printStackTrace();
-		}
-		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
+	            File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	            if (!tempDir.exists()) {
+	                tempDir.mkdirs();
+	            }
+
+	            File destFile = new File(tempDir, newFileName);
+	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
+
+	            ImageFileVO imageFileVO = new ImageFileVO();
+	            imageFileVO.setFileName(newFileName);
+	            imageFileVO.setReg_id(reg_id);
+
+	            String extension = ext.toLowerCase();
+	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
+	                imageFileVO.setFileType("image");
+	            } else {
+	                imageFileVO.setFileType("etc");
+	            }
+
+	            imageFileList.add(imageFileVO);
+	        }
+	    }
+
+	    if (!imageFileList.isEmpty()) {
+	        String mainImageFileName = imageFileList.get(0).getFileName();
+	        newGoodsMap.put("goods_fileName", mainImageFileName);
+	        newGoodsMap.put("imageFileList", imageFileList);
+	    }
+
+	    String message = null;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+	    try {
+	        int goods_num = adminGoodsService.addNewGoods(newGoodsMap);
+
+	        if (!imageFileList.isEmpty()) {
+	            for (ImageFileVO imageFileVO : imageFileList) {
+	                imageFileName = imageFileVO.getFileName();
+	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
+	            }
+	        }
+
+	        message = "<script>";
+	        message += " alert('등록성공.');";
+	        message += " location.href='" + multipartRequest.getContextPath() + "/admin/goods/adminGoodsMain.do';";
+	        message += "</script>";
+
+	    } catch (Exception e) {
+	        if (!imageFileList.isEmpty()) {
+	            for (ImageFileVO imageFileVO : imageFileList) {
+	                imageFileName = imageFileVO.getFileName();
+	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                if (srcFile.exists()) srcFile.delete();
+	            }
+	        }
+
+	        message = "<script>";
+	        message += " alert('등록실패');";
+	        message += " location.href='" + multipartRequest.getContextPath() + "/admin/goods/addNewGoodsForm.do';";
+	        message += "</script>";
+
+	        e.printStackTrace();
+	    }
+
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
 	}
+
+
+		
+	
 
 	@RequestMapping(value="/modifyGoodsForm.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView modifyGoodsForm(@RequestParam("goods_num") int goods_num,
@@ -313,8 +357,8 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
             adminGoodsService.addNewGoodsImage(imageFileList);
 				for(ImageFileVO imageFileVO:imageFileList) {
 					imageFileName = imageFileVO.getFileName();
-					File srcFile = new File(CURR_IMAGE_REPO_PATH+"\\"+"temp"+"\\"+imageFileName);
-					File destDir = new File(CURR_IMAGE_REPO_PATH+"\\"+goods_num);
+					File srcFile = new File(CURR_IMAGE_REPO_PATH+"//"+"temp"+"//"+imageFileName);
+					File destDir = new File(CURR_IMAGE_REPO_PATH+"//"+goods_num);
 					FileUtils.moveFileToDirectory(srcFile, destDir,true);
 				}
 			}
