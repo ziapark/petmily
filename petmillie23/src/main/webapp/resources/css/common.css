@@ -168,7 +168,7 @@ position:relative;
 .goods-item input[type="button"].like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie23/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
 
 .cartAndLike_wrap {position:absolute;left:0;}
-
+.goods-item a img {width:100%;}
 
 
 

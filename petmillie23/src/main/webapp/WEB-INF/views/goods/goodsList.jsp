@@ -7,7 +7,7 @@
 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <c:set var="goodsList"  value="${goodsList}"  /> 
-<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="${contextPath}/css/common.css">
 <html>
 <head>
 <title>상품 리스트</title>
@@ -40,7 +40,6 @@
 	                        	<input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')">
 	                        	<input type="button" class="like_icon_btn" onclick="addLikeGoods('${goods.goods_num}')">
 	                        </div>
-
 	                    </div>
 	                </div>
 	            </c:forEach>

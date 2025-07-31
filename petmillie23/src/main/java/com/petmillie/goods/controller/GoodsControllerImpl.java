@@ -27,6 +27,8 @@ import net.sf.json.JSONObject;
 public class GoodsControllerImpl extends BaseController implements GoodsController {
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private GoodsVO goodsVO;
 	
 	@RequestMapping(value="/goodsDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView goodsDetail(@RequestParam("goods_num") int goods_num,
@@ -167,7 +169,9 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 
 	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
 	    List<GoodsVO> goodsList = goodsService.listAllGoods();
-	    
+	    for (GoodsVO goodsVO : goodsList) {
+	        System.out.println(goodsVO.getGoods_fileName());  // 각 상품의 이미지 파일명 출력
+	    }
 	    mav.addObject("goodsList", goodsList); // JSP로 전달
 	    return mav;
 	}
