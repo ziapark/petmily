@@ -7,7 +7,7 @@
 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <c:set var="goodsList"  value="${goodsList}"  /> 
-
+<link rel="stylesheet" href="css/common.css">
 <html>
 <head>
 <title>상품 리스트</title>
@@ -30,7 +30,7 @@
 	                <div class="col">
 	                    <div class="goods-item">
 	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}">
-	                            <img src="${contextPath}/goodsImages/thumbnails.do?fileName=${goods.goods_fileName}&goods_num=${goods.goods_num}" alt="${goods.goods_name} 대표 이미지">
+	                            <img src="http://localhost:8090/petupload/goods/${goods.goods_num}/${goods.goods_fileName}" alt="대표 이미지">
 	                        </a>
 	                        <div class="goods-name">${goods.goods_name}</div>
 	                        <div class="goods-price">
