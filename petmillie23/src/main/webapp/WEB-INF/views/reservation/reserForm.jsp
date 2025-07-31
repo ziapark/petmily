@@ -21,7 +21,7 @@
 	</tr>
 <c:choose>
 <c:when test="${not empty reservation}">
-	<c:forEach var="vation" items="reservaion">	
+	<c:forEach var="vation" items="reservation">	
 	<tr>
 		<td>
 			<th>${vation.reservation_id}</th>
