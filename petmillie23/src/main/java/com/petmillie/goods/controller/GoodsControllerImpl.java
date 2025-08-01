@@ -172,6 +172,7 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	    for (GoodsVO goodsVO : goodsList) {
 	        System.out.println(goodsVO.getGoods_fileName());  // 각 상품의 이미지 파일명 출력
 	    }
+	    
 	    mav.addObject("goodsList", goodsList); // JSP로 전달
 	    return mav;
 	}

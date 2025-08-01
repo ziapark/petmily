@@ -130,12 +130,16 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
         <h4>${goods.goods_maker} &nbsp; 저 | ${goods.goods_publisher}</h4>
     </hgroup>
 
-    <div id="goods_image">
-        <figure>
-            <img alt="${goods.goods_name}" src="${contextPath}/goods/thumbnails.do?goods_num=${goods.goods_num}
-            &fileName=${goods.goods_fileName}">
-        </figure>
-    </div>
+<div id="goods_image">
+    <figure>
+        <c:forEach var="image" items="${imageList}" varStatus="status">
+            <c:if test="${status.index == 0}">
+                <img alt="${goods.goods_name}"
+                     src="${contextPath}/goods/thumbnails.do?goods_num=${goods.goods_num}&fileName=${image.fileName}">
+            </c:if>
+        </c:forEach>
+    </figure>
+</div>
 
     <div id="detail_table">
         <table>
