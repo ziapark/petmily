@@ -13,27 +13,92 @@ public class OrderVO {
 	private int goods_qty;
 	private String order_name;
 	private String receiver_name;
-	private String receiver_tel;
-	
-	private String delivery_address;
+	private String tel1;
+	private String tel2;
+	private String tel3;
+	private String total_price;
+	private String zipcode;
+	private String roadAddress;
+	private String jibunAddress;
+	private String namujiAddress;
+	private String delivery_method;
+	private String pay_order_tel;
 	private String delivery_message;
 	private String pay_method;
 	private String card_com_name;
 	private String card_pay_month;
 	private String delivery_state; //기본값 배송준비중
-	
 	private int final_total_price;
 	private String goods_fileName;
-	private int order_goods_qty;
+	private String pay_order_time;
 
-	public int getOrder_goods_qty() {
-	    return order_goods_qty;
+	
+	public String getTotal_price() {
+		return total_price;
 	}
-
-	public void setOrder_goods_qty(int order_goods_qty) {
-	    this.order_goods_qty = order_goods_qty;
+	public void setTotal_price(String total_price) {
+		this.total_price = total_price;
 	}
-
+	public String getTel1() {
+		return tel1;
+	}
+	public void setTel1(String tel1) {
+		this.tel1 = tel1;
+	}
+	public String getTel2() {
+		return tel2;
+	}
+	public void setTel2(String tel2) {
+		this.tel2 = tel2;
+	}
+	public String getTel3() {
+		return tel3;
+	}
+	public void setTel3(String tel3) {
+		this.tel3 = tel3;
+	}
+	public String getZipcode() {
+		return zipcode;
+	}
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+	public String getRoadAddress() {
+		return roadAddress;
+	}
+	public void setRoadAddress(String roadAddress) {
+		this.roadAddress = roadAddress;
+	}
+	public String getJibunAddress() {
+		return jibunAddress;
+	}
+	public void setJibunAddress(String jibunAddress) {
+		this.jibunAddress = jibunAddress;
+	}
+	public String getNamujiAddress() {
+		return namujiAddress;
+	}
+	public void setNamujiAddress(String namujiAddress) {
+		this.namujiAddress = namujiAddress;
+	}
+	public String getDelivery_method() {
+		return delivery_method;
+	}
+	public void setDelivery_method(String delivery_method) {
+		this.delivery_method = delivery_method;
+	}
+	public String getPay_order_tel() {
+		return pay_order_tel;
+	}
+	public void setPay_order_tel(String pay_order_tel) {
+		this.pay_order_tel = pay_order_tel;
+	}
+	public String getPay_order_time() {
+		return pay_order_time;
+	}
+	public void setPay_order_time(String pay_order_time) {
+		this.pay_order_time = pay_order_time;
+	}
 	public int getOrder_num() {
 		return order_num;
 	}
@@ -87,18 +152,6 @@ public class OrderVO {
 	}
 	public void setReceiver_name(String receiver_name) {
 		this.receiver_name = receiver_name;
-	}
-	public String getReceiver_tel() {
-		return receiver_tel;
-	}
-	public void setReceiver_tel(String receiver_tel) {
-		this.receiver_tel = receiver_tel;
-	}
-	public String getDelivery_address() {
-		return delivery_address;
-	}
-	public void setDelivery_address(String delivery_address) {
-		this.delivery_address = delivery_address;
 	}
 	public String getDelivery_message() {
 		return delivery_message;

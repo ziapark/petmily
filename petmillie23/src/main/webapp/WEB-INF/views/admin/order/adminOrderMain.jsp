@@ -531,15 +531,15 @@ function fn_detail_search(){
 				 <strong>${item.pay_order_time }</strong> 
 				</td>
 				<td width=50% align=left >
-				    <strong>주문자:${item.orderer_name}</strong><br>
-				  <strong>주문자 번화번호:${item.orderer_hp}</strong><br>
+				    <strong>주문자:${item.order_name}</strong><br>
+				  <strong>주문자 번화번호:${item.pay_order_tel}</strong><br>
 				  <strong>수령자:${item.receiver_name}</strong><br>
 				  <strong>수령자 번화번호:${item.tel1}-${item.tel2}-${item.tel3}</strong><br>
-				  <strong>주문상품명(수량):${item.goods_title}(${item.order_goods_qty})</strong><br>
+				  <strong>주문상품명(수량):${item.goods_name}(${item.goods_qty})</strong><br>
 				     <c:forEach var="item2" items="${newOrderList}" varStatus="j">
 				       <c:if test="${j.index > i.index }" >
 				          <c:if  test="${item.order_id ==item2.order_id}" >
-				            <strong>주문상품명(수량):${item2.goods_title}(${item2.order_goods_qty})</strong><br>
+				            <strong>주문상품명(수량):${item2.goods_name}(${item2.goods_qty})</strong><br>
 				      </c:if>   
 				       </c:if>
 				    </c:forEach> 
