@@ -18,10 +18,10 @@ body{ font-family: "Noto Sans KR", sans-serif;
 	  font-weight: normal;
 	  font-style: 0.9em; }
 .header_wrap {width:100%; max-width:1200px; margin:0 auto;  }
-header {width:100%; background:#fff; box-sizing:border-box; padding-top:10px;}
-header #logo {display:inline-block; margin-left:10px;}
+header {width:100%; background:#fff; box-sizing:border-box; padding-top:10px; position:relative;}
+header #logo {display:inline-block;position: absolute;top:30px;left: 50%;transform: translateX(-50%);}
 header #logo a {display:inline-block; }
-header #logo a img {width:200px;}
+header #logo a img {width:230px;}
 
 header #head_link li {float:left; margin-right:5px;}
 header #head_link li a {font-size:13px;}
@@ -103,7 +103,7 @@ article { width:100%; margin:0 auto; }
   display: flex;
 }
 /* 헤더 검색창 */
-#search {float:right;margin-bottom: 20px;}
+#search {float:right;margin: 50px 0 20px 0;}
 #search .search_input{display:inline; width:300px;}
 
 /* 본문 */
@@ -112,9 +112,23 @@ article { width:100%; margin:0 auto; }
 .contents_wrap {width:100%; max-width:1200px; margin:0 auto;}
 .carousel-item {background:#676767 !important;}
 
-.weather_wrap {width:100%;}
 
+/* 본문 : 날씨 */
+
+.weather_wrap {width:100%;}
+.weather_wrap h2 {font-size: 1.4rem;}
+.weather_api_box {overflow:hidden;}
+.weater_box {   width: 250px;
+			    float: left;
+			    border: 1px solid #eee;
+			    border-radius: 5px;
+			    box-sizing: border-box;
+			    padding: 10px;
+			    margin: 5px;
+			    background: #fff;
+			    box-shadow: 2px 3px 7px #b5b5b58f;}
 .weather_goods .goods_item {background:#eee; height:100px;}
+
 
 
 /* 게시판 */
@@ -125,7 +139,7 @@ article { width:100%; margin:0 auto; }
 .contents_box {width:100%; min-height:300px; border: 1px solid #eee; box-sizing:border-box; padding:10px;}
 .contents_box .imgbox {width:100%; text-align:center;}
 .contents_box img {max-width:500px; margin:0 auto;}
-/* 댓글 */
+/* 게시판 : 댓글 */
 .commentlist_box {width:100%;  box-sizing:border-box; padding:10px; text-align:left;}
 .comment_box {padding:10px; margin-top: 10px; border-bottom:1px dashed #eee;
 position:relative;
@@ -135,7 +149,7 @@ position:relative;
 
 .commenter {}
 
-/* 조아용 */
+/* 게시판 : 조아용 */
 
 #like {color:#ccc; text-align:left; margin-bottom:10px; cursor: pointer;}
 
@@ -169,7 +183,6 @@ position:relative;
 
 .cartAndLike_wrap {position:absolute;left:0;}
 .goods-item a img {width:100%;}
-
 
 
 

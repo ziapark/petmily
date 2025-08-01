@@ -34,7 +34,7 @@
 <select id="listMember" resultMap="memberResult" parameterType="java.util.HashMap">
     SELECT *
     FROM member
-    WHERE DATE_FORMAT(joinDate, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+    WHERE DATE_FORMAT(member_join, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
     <if test="search_type == 'member_id'">
         AND member_id = #{search_word}
     </if>

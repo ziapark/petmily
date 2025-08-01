@@ -4,6 +4,7 @@
 
 <configuration>
   <typeAliases>
+  <typeAlias type="com.petmillie.weather.vo.WeatherVO" alias="WeatherVO" />
     <typeAlias type="com.petmillie.goods.vo.GoodsVO" alias="GoodsVO" />
     <typeAlias type="com.petmillie.goods.vo.ImageFileVO" alias="imageFileVO" />
     <typeAlias type="com.petmillie.member.vo.MemberVO" alias="memberVO" />
