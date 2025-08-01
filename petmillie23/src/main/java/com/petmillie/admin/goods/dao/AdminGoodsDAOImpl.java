@@ -16,7 +16,7 @@ import com.petmillie.order.vo.OrderVO;
 @Repository("adminGoodsDAO")
 public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 @Autowired
-private SqlSession sqlSession;1
+private SqlSession sqlSession;
 
 
 @Override

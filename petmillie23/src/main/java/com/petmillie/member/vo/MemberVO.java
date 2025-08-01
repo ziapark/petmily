@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component("memberVO")
 public class MemberVO {
+	private String member_num;
 	private String member_id;
 	private String member_pw;
 	private String member_name;
@@ -29,6 +30,13 @@ public class MemberVO {
 	private String role;
 	private String kakao_id;
 	private String social_type;
+	
+	public String getMember_num() {
+		return member_num;
+	}
+	public void setMember_num(String member_num) {
+		this.member_num = member_num;
+	}
 	public String getMember_id() {
 		return member_id;
 	}
