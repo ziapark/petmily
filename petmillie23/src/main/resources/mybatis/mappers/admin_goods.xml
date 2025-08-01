@@ -49,14 +49,11 @@
 		INSERT INTO goods (
 		goods_name, goods_maker, goods_category,goods_sales_price,
 		goods_point, goods_stock,
-		goods_delivery_price, goods_fileName, goods_status, goods_goods_writer_intro,
-		goods_contents_order
+		goods_delivery_price, goods_fileName
 		) VALUES (
 		#{goods_name}, #{goods_maker}, #{goods_category}, 
 		#{goods_sales_price}, #{goods_point}, #{goods_stock},
-		#{goods_delivery_price}, #{goods_fileName}, #{goods_status},
-		#{goods_goods_writer_intro}, #{goods_contents_order}
-		)
+		#{goods_delivery_price}, #{goods_fileName})
 		<selectKey resultType="int" keyProperty="goods_num"
 			order="AFTER">
 			SELECT LAST_INSERT_ID()

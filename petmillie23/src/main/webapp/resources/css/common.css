@@ -161,11 +161,11 @@ position:relative;
 .goods-item {position:relative;}
 .goods-item .goods-name {font-weight:bold; border-top:1px solid #ddd; text-align:left;}
 .goods-item .goods-price {color:#ff2727; font-weight:bold; text-align:right;}
-.goods-item input[type="button"].cart_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/cart.png) no-repeat; background-size:cover;border:none;}
-.goods-item input[type="button"].cart_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/cart_on.png) no-repeat;background-size:cover;border:none; }
+.goods-item input[type="button"].cart_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie23/resources/image/cart.png) no-repeat; background-size:cover;border:none;}
+.goods-item input[type="button"].cart_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie23/resources/image/cart_on.png) no-repeat;background-size:cover;border:none; }
 
-.goods-item input[type="button"].like_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;border:none;}
-.goods-item input[type="button"].like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
+.goods-item input[type="button"].like_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie23/resources/image/like.png) no-repeat; background-size:cover;border:none;}
+.goods-item input[type="button"].like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie23/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
 
 .cartAndLike_wrap {position:absolute;left:0;}
 .goods-item a img {width:100%;}

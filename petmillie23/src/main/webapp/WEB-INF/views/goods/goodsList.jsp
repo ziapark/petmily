@@ -7,7 +7,7 @@
 
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <c:set var="goodsList"  value="${goodsList}"  /> 
-<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="${contextPath}/css/common.css">
 <html>
 <head>
 <title>상품 리스트</title>
@@ -29,7 +29,7 @@
 	            <c:forEach var="goods" items="${goodsList}">
 	                <div class="col">
 	                    <div class="goods-item">
-	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}">
+	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}&fileName=${goods.goods_fileName}">
 	                            <img src="http://localhost:8090/petupload/goods/${goods.goods_num}/${goods.goods_fileName}" alt="대표 이미지">
 	                        </a>
 	                        <div class="goods-name">${goods.goods_name}</div>
@@ -40,7 +40,6 @@
 	                        	<input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')">
 	                        	<input type="button" class="like_icon_btn" onclick="addLikeGoods('${goods.goods_num}')">
 	                        </div>
-
 	                    </div>
 	                </div>
 	            </c:forEach>
