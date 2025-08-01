@@ -53,7 +53,7 @@ function fn_cancel_order(order_id){
 				<td>주문취소</td>
 			</tr>
       <c:choose>
-         <c:when test="${ empty myOrderList  }">
+         <c:when test="${empty myOrderList}">
 		  <tr>
 		    <td colspan=5 class="fixed">
 				  <strong>주문한 상품이 없습니다.</strong>
@@ -63,7 +63,7 @@ function fn_cancel_order(order_id){
         <c:otherwise>
 	      <c:forEach var="item" items="${myOrderList }"  varStatus="i">
 	       <c:choose> 
-              <c:when test="${ pre_order_id != item.order_id}">
+              <c:when test="${order_id == item.order_id}">
                 <c:choose>
 	              <c:when test="${item.delivery_state=='delivery_prepared' }">
 	                <tr  bgcolor="lightgreen">    
@@ -84,7 +84,7 @@ function fn_cancel_order(order_id){
 			   <strong>
 			      <c:forEach var="item2" items="${myOrderList}" varStatus="j">
 			          <c:if  test="${item.order_id ==item2.order_id}" >
-			            <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item2.goods_id }">${item2.goods_title }/${item.order_goods_qty }개</a><br>
+			            <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item2.goods_num }">${item2.goods_name }/${item.goods_qty}개</a><br>
 			         </c:if>   
 				 </c:forEach>
 				</strong></td>
