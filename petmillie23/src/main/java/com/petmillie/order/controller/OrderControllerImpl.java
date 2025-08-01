@@ -76,7 +76,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	public ModelAndView orderAllCartGoods( @RequestParam("cart_goods_qty")  String[] cart_goods_qty,
 			                 HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		ModelAndView mav = new ModelAndView("/common/layout");
-		mav.addObject("body", "/WEB-INF/views/order/orderEachGoods.jsp");
+		mav.addObject("body", "/WEB-INF/views/order/orderEachGoods2.jsp");
 		HttpSession session=request.getSession();
 		Map cartMap=(Map)session.getAttribute("cartMap");
 		List myOrderList=new ArrayList<OrderVO>();
@@ -133,15 +133,20 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 			orderVO.setMember_id(member_id);
 			orderVO.setOrder_name(orderer_name);
 			orderVO.setReceiver_name(receiverMap.get("receiver_name"));
-			
-			orderVO.setReceiver_tel(receiverMap.get("receiver_tel"));
-
-			
-			orderVO.setDelivery_address(receiverMap.get("delivery_address"));
-			orderVO.setDelivery_message(receiverMap.get("delivery_message"));
+			orderVO.setTel1(receiverMap.get("tel1"));
+			orderVO.setTel2(receiverMap.get("tel2"));
+			orderVO.setTel3(receiverMap.get("tel3"));
+			orderVO.setTotal_price(receiverMap.get("total_price"));
+			orderVO.setZipcode(receiverMap.get("zipcode"));
+			orderVO.setRoadAddress(receiverMap.get("roadAddress"));
+			orderVO.setJibunAddress(receiverMap.get("jibunAddress"));
+			orderVO.setNamujiAddress(receiverMap.get("namujiAddress"));
+			orderVO.setDelivery_method(receiverMap.get("delivery_method"));
+			orderVO.setDelivery_message(receiverMap.get("namujiAddress"));
 			orderVO.setPay_method(receiverMap.get("pay_method"));
 			orderVO.setCard_com_name(receiverMap.get("card_com_name"));
 			orderVO.setCard_pay_month(receiverMap.get("card_pay_month"));
+			orderVO.setPay_order_tel(receiverMap.get("pay_order_tel"));
 			
 			int sales_price = Integer.parseInt(orderVO.getGoods_sales_price());
 			

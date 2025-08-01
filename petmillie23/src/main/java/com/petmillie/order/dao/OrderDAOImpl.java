@@ -23,10 +23,10 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 	
 	public void insertNewOrder(List<OrderVO> myOrderList) throws DataAccessException{
-		int order_id=selectOrderID();
+	//	int order_id=selectOrderID();
 		for(int i=0; i<myOrderList.size();i++){
 			OrderVO orderVO =(OrderVO)myOrderList.get(i);
-			orderVO.setOrder_id(order_id);
+		//	orderVO.setOrder_id(order_id);
 			sqlSession.insert("mapper.order.insertNewOrder",orderVO);
 		}
 		
@@ -47,12 +47,12 @@ public class OrderDAOImpl implements OrderDAO {
 			sqlSession.delete("mapper.order.deleteGoodsFromCart",orderVO);		
 		}
 	}	
-	private int selectOrderID() throws DataAccessException{
+/*	private int selectOrderID() throws DataAccessException{
 		 OrderIDVO orderIDVO = new OrderIDVO();
 		 
 	    sqlSession.insert("mapper.order.insertOrderID", orderIDVO);
 	    return orderIDVO.getId();  // MySQL이 AUTO_INCREMENT 값 자동으로 채워줌
 		
-	}
+	} */
 }
 

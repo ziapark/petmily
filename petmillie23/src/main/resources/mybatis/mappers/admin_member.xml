@@ -44,7 +44,7 @@
     <if test="search_type == 'member_hp_num'">
         AND CONCAT(tel1, tel2, tel3) = #{search_word}
     </if>
-    ORDER BY joinDate DESC
+    ORDER BY member_join DESC
     LIMIT #{offset}, 10
 </select>
 
