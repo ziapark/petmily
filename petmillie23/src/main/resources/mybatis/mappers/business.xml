@@ -182,14 +182,15 @@
 	<result property="amenities" column="amenities"/>
 	<result property="reg_date" column="reg_date"/>
 	<result property="del_yn" column="del_yn"/>
+	<result property="fileimage" column="fileimage"/>
 </resultMap>
 <!-- 펜션 세부 등록 -->
 	<insert id="insertroom" parameterType="roomVO">
 		<![CDATA[
 		insert into room(
-		room_id, p_num, room_name, room_type, price, max_capacity, bed_type, room_size, room_description, amenities)
+		room_id, p_num, room_name, room_type, price, max_capacity, bed_type, room_size, room_description, amenities, fileimage)
 		values(
-		#{room_id}, #{p_num}, #{room_name}, #{room_type}, #{price}, #{max_capacity}, #{bed_type}, #{room_size}, #{room_description}, #{amenities})
+		#{room_id}, #{p_num}, #{room_name}, #{room_type}, #{price}, #{max_capacity}, #{bed_type}, #{room_size}, #{room_description}, #{amenities}, #{fileimage})
 		]]>
 	</insert>
 	<!-- 펜션 세부정보 조회 -->
@@ -231,6 +232,9 @@
 			      </if>
 			      <if test="amenities != '' and amenities != null">
 			         amenities=#{amenities},
+			      </if>
+			      <if test="image != '' and image != null">
+			      	 image = #{image},
 			      </if>
 			   </set>
 		where room_id=#{room_id}
