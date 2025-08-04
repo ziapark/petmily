@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
+
 <%
   request.setCharacterEncoding("UTF-8");
 %>  
@@ -54,11 +55,24 @@
 
 <!-- 날씨정보 start -->
 <div class="weather_wrap">
-	<h2>날씨정보</h2>
 	<div class="weather_api_box container">
 		<div class="row">
-			<div class="col">날씨정보 표시란 </div>
-			<div class="weather_comment col">코멘트 출력 ex) 오늘은 자외선 지수가 높아요! 저녁에 산책해보시는건 어떨까요?</div>
+			<div class="col">
+				<c:if test="${empty weatherSummaries}">
+				  <p>날씨 정보가 없습니다.</p>
+				</c:if>
+				<c:forEach var="summary" items="${weatherSummaries}">
+					<div class="weater_box">
+						<h3>🌤${summary.period}</h3>
+						  <p>
+						    평균기온: ${summary.avgTmp} ℃<br/>
+						    하늘상태: ${summary.mainSky}<br/>
+						    강수형태: ${summary.mainPrecipitation}
+						  </p>
+					</div>
+				</c:forEach>		
+			</div>
+			<div class="weather_comment col">낮 최고온도가 매우 높아요. 저녁에 산책해보시는건 어떨까요?</div>
 		</div>
 	</div>
 

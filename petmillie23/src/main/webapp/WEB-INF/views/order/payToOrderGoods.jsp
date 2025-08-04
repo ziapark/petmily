@@ -27,20 +27,20 @@
             <tr>
                 <td>${item.order_id}</td>
                 <td class="goods_image">
-                    <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id}">
-                        <img width="75" alt="" src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}"/>
+                    <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">
+                        <img width="75" alt="" src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}"/>
                     </a>
                 </td>
                 <td>
                     <h2>
-                        <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id}">${item.goods_title}</a>
+                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">${item.goods_name}</a>
                     </h2>
                 </td>
-                <td><h2>${item.order_goods_qty}개</h2></td>
-                <td><h2>${item.order_goods_qty * item.goods_sales_price}원 (10% 할인)</h2></td>
+                <td><h2>${item.goods_qty}개</h2></td>
+                <td><h2>${item.goods_qty * item.goods_sales_price}원 (10% 할인)</h2></td>
                 <td><h2>0원</h2></td>
-                <td><h2>${1500 * item.order_goods_qty}원</h2></td>
-                <td><h2>${item.order_goods_qty * item.goods_sales_price}원</h2></td>
+                <td><h2>${1500 * item.goods_qty}원</h2></td>
+                <td><h2>${item.goods_qty * item.goods_sales_price}원</h2></td>
             </tr>
             </c:forEach>
         </tbody>
@@ -63,11 +63,7 @@
                     </tr>
                     <tr class="dot_line">
                         <td class="fixed_join">휴대폰번호</td>
-                        <td>${myOrderInfo.receiver_tel1}-${myOrderInfo.receiver_tel2}-${myOrderInfo.receiver_tel3}</td>
-                    </tr>
-                    <tr class="dot_line">
-                        <td class="fixed_join">유선전화(선택)</td>
-                        <td>${myOrderInfo.receiver_tel1}-${myOrderInfo.receiver_tel2}-${myOrderInfo.receiver_tel3}</td>
+                        <td>${myOrderInfo.tel1}-${myOrderInfo.tel2}-${myOrderInfo.tel3}</td>
                     </tr>
                     <tr class="dot_line">
                         <td class="fixed_join">주소</td>
@@ -76,10 +72,6 @@
                     <tr class="dot_line">
                         <td class="fixed_join">배송 메시지</td>
                         <td>${myOrderInfo.delivery_message}</td>
-                    </tr>
-                    <tr class="dot_line">
-                        <td class="fixed_join">선물 포장</td>
-                        <td>${myOrderInfo.gift_wrapping}</td>
                     </tr>
                 </tbody>
             </table>

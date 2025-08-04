@@ -36,6 +36,13 @@ public class MemberVO {
 	}
 	private String kakao_id;
 	private String social_type;
+	
+	public String getMember_num() {
+		return member_num;
+	}
+	public void setMember_num(String member_num) {
+		this.member_num = member_num;
+	}
 	public String getMember_id() {
 		return member_id;
 	}

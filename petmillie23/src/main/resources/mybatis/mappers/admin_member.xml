@@ -50,6 +50,8 @@
     <if test="begin != null and begin != ''">
         LIMIT #{begin}, 10
     </if>
+    ORDER BY member_join DESC
+    LIMIT #{offset}, 10
 </select>
 
 

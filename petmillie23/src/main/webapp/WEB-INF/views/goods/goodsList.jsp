@@ -36,6 +36,7 @@
 	                        <div class="goods-price">
 	                            <fmt:formatNumber value="${goods.goods_sales_price}" type="number" pattern="#,###원"/>
 	                        </div>
+	                        
 	                        <div class="cartAndLike_wrap">
 	                        	<input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')">
 	                        	<input type="button" class="like_icon_btn" onclick="addLikeGoods('${goods.goods_num}')">
