@@ -28,12 +28,7 @@ public class MemberVO {
 	private String member_join;
 	private String del_yn;
 	private String role;
-	public String getMember_num() {
-		return member_num;
-	}
-	public void setMember_num(String member_num) {
-		this.member_num = member_num;
-	}
+	
 	private String kakao_id;
 	private String social_type;
 	
