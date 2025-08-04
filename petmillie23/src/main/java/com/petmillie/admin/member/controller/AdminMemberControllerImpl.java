@@ -56,10 +56,9 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	    condMap.put("beginDate",beginDate);
 	    condMap.put("endDate", endDate);
 
-	    // === 여기서 offset 계산 ===
 	    int sectionInt = Integer.parseInt(section);
 	    int pageNumInt = Integer.parseInt(pageNum);
-	    int offset = Math.max(0, (sectionInt - 1) * 100 + (pageNumInt - 1) * 10); // 음수 방지!
+	    int offset = Math.max(0, (sectionInt - 1) * 100 + (pageNumInt - 1) * 10);
 	    condMap.put("offset", offset);
 
 	    ArrayList<MemberVO> member_list=adminMemberService.listMember(condMap);
@@ -100,46 +99,45 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 		String member_id=request.getParameter("member_id");
 		String mod_type=request.getParameter("mod_type");
 		String value =request.getParameter("value");
+		
 		if(mod_type.equals("member_pw")) {
 			memberMap.put("member_pw", value);
-			}else if(mod_type.equals("member_birth")){
+		} else if(mod_type.equals("member_gender")) { // 성별 수정 로직 추가
+			memberMap.put("member_gender", value);
+		} else if(mod_type.equals("member_birth")){
 			val=value.split(",");
 			memberMap.put("member_birth_y",val[0]);
 			memberMap.put("member_birth_m",val[1]);
 			memberMap.put("member_birth_d",val[2]);
 			memberMap.put("member_birth_gn",val[3]);
-		}else if(mod_type.equals("tel")){
+		} else if(mod_type.equals("tel")){
 			val=value.split(",");
 			memberMap.put("tel1",val[0]);
 			memberMap.put("tel2",val[1]);
 			memberMap.put("tel3",val[2]);
-			
-		}else if(mod_type.equals("hp")){
-			val=value.split(",");
-			memberMap.put("hp1",val[0]);
-			memberMap.put("hp2",val[1]);
-			memberMap.put("hp3",val[2]);
-			memberMap.put("smssts_yn", val[3]);
-		}else if(mod_type.equals("email")){
+		} else if(mod_type.equals("smssts_yn")){ // JSP에서 수정한 smssts_yn에 맞게 수정
+			memberMap.put("smssts_yn", value);
+		} else if(mod_type.equals("email")){ // 이메일 수정 로직 추가
 			val=value.split(",");
 			memberMap.put("email1",val[0]);
 			memberMap.put("email2",val[1]);
 			memberMap.put("emailsts_yn", val[2]);
-		}else if(mod_type.equals("address")){
+		} else if(mod_type.equals("address")){
 			val=value.split(",");
 			memberMap.put("zipcode",val[0]);
 			memberMap.put("roadAddress",val[1]);
 			memberMap.put("jibunAddress", val[2]);
 			memberMap.put("namujiAddress", val[3]);
 		}
+		
 		memberMap.put("member_id", member_id);		
+		
 		System.out.println("mod_type: " + mod_type);
 		System.out.println("value: " + value);
 		
 		adminMemberService.modifyMemberInfo(memberMap);
 		pw.print("mod_success");
 		pw.close();		
-		
 	}
 	
 	@RequestMapping(value="/deleteMember.do" ,method={RequestMethod.POST})
@@ -154,7 +152,6 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 		adminMemberService.modifyMemberInfo(memberMap);
 		mav.setViewName("redirect:/admin/member/adminMemberMain.do");
 		return mav;
-		
 	}
 		
 }
