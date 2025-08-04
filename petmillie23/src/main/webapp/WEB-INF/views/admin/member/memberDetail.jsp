@@ -95,7 +95,7 @@
 
     function selectBoxInit(){
     
-     var tel1='${memberInfo.tel1 }';
+     var tel1='${member_info.tel1 }';
      var selTel1 = document.getElementById('tel1');
      var optionTel1 = selTel1.options;
      var val;
@@ -131,7 +131,7 @@
             var member_birth_gn = frm_mod_member.member_birth_gn;
             for(var i=0; i<member_birth_gn.length; i++){
                 if(member_birth_gn[i].checked){
-                    value_gn = member_birth_gn[i].value;
+                    value_gn = member_birth_gn[i].nextSibling.textContent.trim();
                     break;
                 }
             }
@@ -176,6 +176,64 @@
         });
     }
 
+//     // 회원 탈퇴/복구 기능을 위한 JavaScript 함수
+//     function fn_delete_member(member_id, del_yn) {
+//         if (confirm("정말 " + (del_yn === 'Y' ? "탈퇴" : "복구") + "하시겠습니까?")) {
+//             // AJAX를 사용하여 서버에 회원 탈퇴/복구 요청
+//             $.ajax({
+//                 type: "post",
+//                 url: "${contextPath}/admin/member/deleteMember.do",
+//                 data: {
+//                     member_id: member_id,
+//                     del_yn: del_yn
+//                 },
+//                 success: function(data, textStatus) {
+//                     alert("처리가 완료되었습니다.");
+//                     // 성공 시 페이지 새로고침
+//                     location.reload();
+//                 },
+//                 error: function(data, textStatus) {
+//                     alert("에러가 발생했습니다. 다시 시도해 주세요.");
+//                 }
+//             });
+//         }
+//     }
+
+
+
+
+
+function fn_delete_member(member_id, del_yn) {
+    if (confirm("정말 " + (del_yn === 'Y' ? "탈퇴" : "복구") + "하시겠습니까?")) {
+        $.ajax({
+            type: "post",
+            url: "${contextPath}/admin/member/deleteMember.do",
+            data: {
+                member_id: member_id,
+                del_yn: del_yn
+            },
+            success: function(data, textStatus) {
+                if (data.trim() === 'success') {
+                    alert("처리가 완료되었습니다.");
+                    // --- 이 부분을 아래와 같이 수정 ---
+                    location.reload(true); // true 인자를 추가하여 강제 새로고침
+                    // 또는
+                    // location.href = window.location.href; // 현재 URL로 다시 이동
+                    // 또는
+                    // window.location.replace(window.location.href); // 현재 페이지를 히스토리에서 지우고 이동
+                    // -----------------------------
+                } else {
+                    alert("처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                }
+            },
+            error: function(data, textStatus) {
+                alert("에러가 발생했습니다. 다시 시도해 주세요.");
+            }
+        });
+    }
+}
+
+
 </script>
 </head>
 
@@ -188,7 +246,7 @@
 				<tr class="dot_line">
 					<td class="fixed_join">아이디</td>
 					<td>
-						<input name="member_id" type="text" size="20" value="${memberInfo.member_id }"  disabled/>
+						<input name="member_id" type="text" size="20" value="${member_info.member_id }"  disabled/>
 					</td>
 					 <td>
 					</td>
@@ -196,7 +254,7 @@
 				<tr class="dot_line">
 					<td class="fixed_join">비밀번호</td>
 					<td>
-					  <input name="member_pw" type="password" size="20" value="${memberInfo.member_pw }" />
+					  <input name="member_pw" type="password" size="20" value="${member_info.member_pw }" />
 					</td>
 					<td>
 					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_pw')" />
@@ -205,7 +263,7 @@
 				<tr class="dot_line">
 					<td class="fixed_join">이름</td>
 					<td>
-					  <input name="member_name" type="text" size="20" value="${memberInfo.member_name }"  disabled />
+					  <input name="member_name" type="text" size="20" value="${member_info.member_name }"  disabled />
 					 </td>
 					 <td>
 					</td>
@@ -214,7 +272,7 @@
 					<td class="fixed_join">성별</td>
 					<td>
 					  <c:choose >
-					    <c:when test="${memberInfo.member_gender =='101' }">
+					    <c:when test="${member_info.member_gender =='101' }">
 					      <input type="radio" name="member_gender" value="102" />
 						  여성 <span style="padding-left:30px"></span>
 					   <input type="radio" name="member_gender" value="101" checked />남성
@@ -236,7 +294,7 @@
 					   <select name="member_birth_y">
 					     <c:forEach var="i" begin="1" end="100">
 					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_y==1920+i }">
+					         <c:when test="${member_info.member_birth_y==1920+i }">
 							   <option value="${ 1920+i}" selected>${ 1920+i} </option>
 							</c:when>
 							<c:otherwise>
@@ -248,7 +306,7 @@
 					<select name="member_birth_m" >
 						<c:forEach var="i" begin="1" end="12">
 					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_m==i }">
+					         <c:when test="${member_info.member_birth_m==i }">
 							   <option value="${i }" selected>${i }</option>
 							</c:when>
 							<c:otherwise>
@@ -261,7 +319,7 @@
 					<select name="member_birth_d">
 							<c:forEach var="i" begin="1" end="31">
 					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_d==i }">
+					         <c:when test="${member_info.member_birth_d==i }">
 							   <option value="${i }" selected>${i }</option>
 							</c:when>
 							<c:otherwise>
@@ -271,7 +329,7 @@
 					   	</c:forEach>
 					</select>일 <span style="padding-left:50px"></span>
 					   <c:choose>
-					    <c:when test="${memberInfo.member_birth_gn=='2' }"> 
+					    <c:when test="${member_info.member_birth_gn=='2' }"> 
 					  <input type="radio" name="member_birth_gn" value="2" checked />양력
 						<span style="padding-left:20px"></span> 
 						<input type="radio"  name="member_birth_gn" value="1" />음력
@@ -297,10 +355,10 @@
 							<option value="018">018</option>
 							<option value="019">019</option>
 					</select> 
-					 - <input type="text" name="tel2" size=4 value="${memberInfo.tel2 }"> 
-					 - <input type="text"name="tel3"  size=4 value="${memberInfo.tel3 }"><br> <br>
+					 - <input type="text" name="tel2" size=4 value="${member_info.tel2 }"> 
+					 - <input type="text"name="tel3"  size=4 value="${member_info.tel3 }"><br> <br>
 					 <c:choose> 
-					   <c:when test="${memberInfo.smssts_yn=='true' }">
+					   <c:when test="${member_info.smssts_yn=='true' }">
 					     <input type="checkbox"  name="smssts_yn" value="Y" checked /> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
 						</c:when>
 						<c:otherwise>
@@ -315,7 +373,7 @@
 				<tr class="dot_line">
 					<td class="fixed_join">이메일<br>(e-mail)</td>
 					<td>
-					   <input type="text" name="email1" size=10 value="${memberInfo.email1 }" /> @ <input type="text" size=10  name="email2" id="email2_direct" value="${memberInfo.email2 }" /> 
+					   <input type="text" name="email1" size=10 value="${member_info.email1 }" /> @ <input type="text" size=10  name="email2" id="email2_direct" value="${member_info.email2 }" /> 
 					   <select name="email2_select" id="email2_select" onChange="changeEmailDomain()"  title="직접입력">
 							<option value="non">직접입력</option>
 							<option value="hanmail.net">hanmail.net</option>
@@ -331,7 +389,7 @@
 							<option value="freechal.com">freechal.com</option>
 					</select><Br><br> 
 					<c:choose> 
-					   <c:when test="${memberInfo.emailsts_yn=='true' }">
+					   <c:when test="${member_info.emailsts_yn=='true' }">
 					     <input type="checkbox" name="emailsts_yn"  value="Y" checked /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
 						</c:when>
 						<c:otherwise>
@@ -346,12 +404,12 @@
 				<tr class="dot_line">
 					<td class="fixed_join">주소</td>
 					<td>
-					   <input type="text" id="zipcode" name="zipcode" size=5 value="${memberInfo.zipcode }" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
+					   <input type="text" id="zipcode" name="zipcode" size=5 value="${member_info.zipcode }" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
 					  <br>
 					  <p> 
-					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50" value="${memberInfo.roadAddress }"><br><br>
-					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${memberInfo.jibunAddress }"><br><br>
-					  나머지 주소: <input type="text"  name="namujiAddress" size="50" value="${memberInfo.namujiAddress }" />
+					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50" value="${member_info.roadAddress }"><br><br>
+					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${member_info.jibunAddress }"><br><br>
+					  나머지 주소: <input type="text"  name="namujiAddress" size="50" value="${member_info.namujiAddress }" />
 					   </p>
 					</td>
 					<td>
@@ -367,12 +425,19 @@
 		<tr>
 			<td >
 				<input type="hidden" name="command"  value="modify_my_info" /> 
-				<input name="btn_cancel_member" type="button"  value="수정 취소">
+				<c:choose>
+					<c:when test="${member_info.del_yn eq 'Y' }">
+						<input type="button" value="회원복원" onClick="fn_delete_member('${member_info.member_id }','N')">   
+					</c:when>
+					<c:when test="${member_info.del_yn eq 'N' }">
+						<input type="button" value="회원탈퇴" onClick="fn_delete_member('${member_info.member_id }','Y')">
+					</c:when>
+				</c:choose>
 			</td>
 		</tr>
 	</table>
 	</div>
-	<input  type="hidden" name="h_tel1" value="${memberInfo.tel1}" />
+	<input  type="hidden" name="h_tel1" value="${member_info.tel1}" />
 </form>	
 </body>
 </html>

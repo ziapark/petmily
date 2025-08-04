@@ -148,17 +148,24 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	}
 	
 	@RequestMapping(value="/deleteMember.do" ,method={RequestMethod.POST})
-	public ModelAndView deleteMember(HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		ModelAndView mav = new ModelAndView();
-		HashMap<String,String> memberMap=new HashMap<String,String>();
-		String member_id=request.getParameter("member_id");
-		String del_yn=request.getParameter("del_yn");
-		memberMap.put("del_yn", del_yn);
-		memberMap.put("member_id", member_id);
+	public void deleteMember(HttpServletRequest request, HttpServletResponse response)  throws Exception {
+	    response.setContentType("text/plain; charset=utf-8");
+	    PrintWriter pw = response.getWriter();
 
-		adminMemberService.modifyMemberInfo(memberMap);
-		mav.setViewName("redirect:/admin/member/adminMemberMain.do");
-		return mav;
+	    HashMap<String,String> memberMap=new HashMap<String,String>();
+	    String member_id=request.getParameter("member_id");
+	    String del_yn=request.getParameter("del_yn");
+	    memberMap.put("del_yn", del_yn);
+	    memberMap.put("member_id", member_id);
+
+	    try {
+	        adminMemberService.modifyMemberInfo(memberMap);
+	        pw.print("success"); // 성공 시 "success" 문자열을 반환
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        pw.print("failed"); // 실패 시 "failed" 문자열 반환
+	    } finally {
+	        pw.close();
+	    }
 	}
-
 }
