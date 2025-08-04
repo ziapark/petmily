@@ -9,13 +9,20 @@
 <meta charset="utf-8">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script>
+$(document).ready(function() {
+    $('form').on('submit', function(e) {
+        console.log("폼 제출됨");  // 콘솔에서 이거 보이면 form 태그 문제는 아님
+    });
+});
+</script>
 </head>
 <body>
 <c:if test="${not empty message}">
   <script>alert("${message}");</script>
 </c:if>
 	<h3>객실 등록</h3>
-	<form name="frm_add_room" action="${contextPath}/business/addroom.do" method="post">	
+	<form action="${contextPath}/business/addroom.do" method="post" enctype="multipart/form-data">	
 		<input type="hidden" name="p_num" id="p_num" value="${pensionInfo.p_num}" />
 		<h4>펜션번호: ${pensionInfo.p_num}</h4>
 
@@ -72,6 +79,11 @@
 					<tr class="dot_line">
 						<td class="fixed_join">비품(편의시설)</td>
 						<td><textarea name="amenities" rows="4" cols="50" placeholder="예: TV, 에어컨, 냉장고 등"></textarea></td>
+					</tr>
+					
+					<tr class="dot_Line">
+						<td class="fixed_join">메인 이미지</td>
+						<td><input type="file" name="file" placeholder="이미지를 선택해주세요" required></td>
 					</tr>
 				</tbody>
 			</table>

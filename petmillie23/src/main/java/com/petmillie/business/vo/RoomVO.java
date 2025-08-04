@@ -16,6 +16,7 @@ public class RoomVO {
 	private String amenities;
 	private String reg_date;
 	private String del_yn;
+	private String fileimage;
 	
 	public String getRoom_id() {
 		return room_id;
@@ -89,4 +90,11 @@ public class RoomVO {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
+	public String getFileimage() {
+		return fileimage;
+	}
+	public void setFileimage(String fileimage) {
+		this.fileimage = fileimage;
+	}
+	
 }
