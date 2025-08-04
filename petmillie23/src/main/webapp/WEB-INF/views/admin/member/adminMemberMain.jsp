@@ -11,12 +11,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script>
 function search_member(search_period){	
-	temp=calcPeriod(search_period);
+	var temp=calcPeriod(search_period);
 	var date=temp.split(",");
-	beginDate=date[0];
-	endDate=date[1];
-	//alert("beginDate:"+beginDate+",endDate:"+endDate);
-	//return ;
+	var beginDate=date[0];
+	var endDate=date[1];
 	
 	var formObj=document.createElement("form");
     
@@ -53,79 +51,64 @@ function  calcPeriod(search_period){
 		beginMonth=endMonth;
 		beginDay=endDay;
 	}else if(search_period=='one_week'){
-		beginYear=dt.getFullYear();
-		if(endDay-7<1){
-			beginMonth=dt.getMonth();	
-		}else{
-			beginMonth=dt.getMonth()+1;
-		}
-		
-		dt.setDate(endDay-7);
-		beginDay=dt.getDate();
-		
+		var newDt = new Date(dt.setDate(dt.getDate() - 7));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}else if(search_period=='two_week'){
-		beginYear = dt.getFullYear();
-		if(endDay-14<1){
-			beginMonth=dt.getMonth();	
-		}else{
-			beginMonth=dt.getMonth()+1;
-		}
-		dt.setDate(endDay-14);
-		beginDay=dt.getDate();
+		var newDt = new Date(dt.setDate(dt.getDate() - 14));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}else if(search_period=='one_month'){
-		beginYear = dt.getFullYear();
-		dt.setMonth(endMonth-1);
-		beginMonth = dt.getMonth();
-		beginDay = dt.getDate();
+		var newDt = new Date(dt.setMonth(dt.getMonth() - 1));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}else if(search_period=='two_month'){
-		beginYear = dt.getFullYear();
-		dt.setMonth(endMonth-2);
-		beginMonth = dt.getMonth();
-		beginDay = dt.getDate();
+		var newDt = new Date(dt.setMonth(dt.getMonth() - 2));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}else if(search_period=='three_month'){
-		beginYear = dt.getFullYear();
-		dt.setMonth(endMonth-3);
-		beginMonth = dt.getMonth();
-		beginDay = dt.getDate();
+		var newDt = new Date(dt.setMonth(dt.getMonth() - 3));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}else if(search_period=='four_month'){
-		beginYear = dt.getFullYear();
-		dt.setMonth(endMonth-4);
-		beginMonth = dt.getMonth();
-		beginDay = dt.getDate();
+		var newDt = new Date(dt.setMonth(dt.getMonth() - 4));
+		beginYear = newDt.getFullYear();
+		beginMonth = newDt.getMonth() + 1;
+		beginDay = newDt.getDate();
 	}
 	
 	if(beginMonth <10){
 		beginMonth='0'+beginMonth;
-		if(beginDay<10){
-			beginDay='0'+beginDay;
-		}
+	}
+	if(beginDay<10){
+		beginDay='0'+beginDay;
 	}
 	if(endMonth <10){
 		endMonth='0'+endMonth;
-		if(endDay<10){
-			endDay='0'+endDay;
-		}
+	}
+	if(endDay<10){
+		endDay='0'+endDay;
 	}
 	endDate=endYear+'-'+endMonth +'-'+endDay;
 	beginDate=beginYear+'-'+beginMonth +'-'+beginDay;
-	//alert(beginDate+","+endDate);
 	return beginDate+","+endDate;
 }
 
 
 
-function fn_member_detail(order_id){
-	//alert(order_id);
-	var frm_delivery_list=document.frm_delivery_list;
-	
-
+function fn_member_detail(member_id){
 	var formObj=document.createElement("form");
-	var i_order_id = document.createElement("input");
+	var i_member_id = document.createElement("input");
 	
-	i_order_id.name="order_id";
-	i_order_id.value=order_id;
+	i_member_id.name="member_id";
+	i_member_id.value=member_id;
 	
-    formObj.appendChild(i_order_id);
+    formObj.appendChild(i_member_id);
     document.body.appendChild(formObj); 
     formObj.method="post";
     formObj.action="/bookshop01/admin/member/memberDetail.do";
@@ -136,18 +119,17 @@ function fn_member_detail(order_id){
 
 function fn_enable_detail_search(r_search){
 	var frm_delivery_list=document.frm_delivery_list;
-	t_beginYear=frm_delivery_list.beginYear;
-	t_beginMonth=frm_delivery_list.beginMonth;
-	t_beginDay=frm_delivery_list.beginDay;
-	t_endYear=frm_delivery_list.endYear;
-	t_endMonth=frm_delivery_list.endMonth;
-	t_endDay=frm_delivery_list.endDay;
-	s_search_type=frm_delivery_list.s_search_type;
-	t_search_word=frm_delivery_list.t_search_word;
-	btn_search=frm_delivery_list.btn_search;
+	var t_beginYear=frm_delivery_list.beginYear;
+	var t_beginMonth=frm_delivery_list.beginMonth;
+	var t_beginDay=frm_delivery_list.beginDay;
+	var t_endYear=frm_delivery_list.endYear;
+	var t_endMonth=frm_delivery_list.endMonth;
+	var t_endDay=frm_delivery_list.endDay;
+	var s_search_type=frm_delivery_list.s_search_type;
+	var t_search_word=frm_delivery_list.t_search_word;
+	var btn_search=frm_delivery_list.btn_search;
 	
 	if(r_search.value=='detail_search'){
-		//alert(r_search.value);
 		t_beginYear.disabled=false;
 		t_beginMonth.disabled=false;
 		t_beginDay.disabled=false;
@@ -177,43 +159,38 @@ function fn_enable_detail_search(r_search){
 function fn_detail_search(){
 	var frm_delivery_list=document.frm_delivery_list;
 	
-	beginYear=frm_delivery_list.beginYear.value;
-	beginMonth=frm_delivery_list.beginMonth.value;
-	beginDay=frm_delivery_list.beginDay.value;
-	endYear=frm_delivery_list.endYear.value;
-	endMonth=frm_delivery_list.endMonth.value;
-	endDay=frm_delivery_list.endDay.value;
-	search_type=frm_delivery_list.s_search_type.value;
-	search_word=frm_delivery_list.t_search_word.value;
+	var beginYear=frm_delivery_list.beginYear.value;
+	var beginMonth=frm_delivery_list.beginMonth.value;
+	var beginDay=frm_delivery_list.beginDay.value;
+	var endYear=frm_delivery_list.endYear.value;
+	var endMonth=frm_delivery_list.endMonth.value;
+	var endDay=frm_delivery_list.endDay.value;
+	var search_type=frm_delivery_list.s_search_type.value;
+	var search_word=frm_delivery_list.t_search_word.value;
 
 	var formObj=document.createElement("form");
-	var i_command = document.createElement("input");
 	var i_beginDate = document.createElement("input"); 
 	var i_endDate = document.createElement("input");
 	var i_search_type = document.createElement("input");
 	var i_search_word = document.createElement("input");
     
-	
-    i_command.name="command";
     i_beginDate.name="beginDate";
     i_endDate.name="endDate";
     i_search_type.name="search_type";
     i_search_word.name="search_word";
     
-    i_command.value="list_detail_order_goods";
 	i_beginDate.value=beginYear+"-"+beginMonth+"-"+beginDay;
     i_endDate.value=endYear+"-"+endMonth+"-"+endDay;
     i_search_type.value=search_type;
     i_search_word.value=search_word;
 	
-    formObj.appendChild(i_command);
     formObj.appendChild(i_beginDate);
     formObj.appendChild(i_endDate);
     formObj.appendChild(i_search_type);
     formObj.appendChild(i_search_word);
     document.body.appendChild(formObj); 
-    formObj.method="post";
-    formObj.action="/bookshop01/admin/member/memberDetail.do";
+    formObj.method="get";
+    formObj.action="/bookshop01/admin/member/adminMemberMain.do";
     formObj.submit();
 	
 }
@@ -234,38 +211,17 @@ function fn_detail_search(){
 					<td>
 					  <select name="curYear">
 					     <c:forEach   var="i" begin="0" end="5">
-					      <c:choose>
-					        <c:when test="${endYear==endYear-i}">
-					          <option value="${endYear }" selected>${endYear  }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <option value="${endYear-i }">${endYear-i }</option>
-					        </c:otherwise>
-					      </c:choose>
+					        <option value="${endYear-i }" <c:if test="${endYear == endYear-i}">selected</c:if>>${endYear-i }</option>
 					    </c:forEach>
 					</select>년 <select name="curMonth" >
 						 <c:forEach   var="i" begin="1" end="12">
-					      <c:choose>
-					        <c:when test="${endMonth==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <option value="${i }">${i }</option>
-					        </c:otherwise>
-					      </c:choose>
+					        <option value="${i }" <c:if test="${endMonth == i}">selected</c:if>>${i }</option>
 					    </c:forEach>					
 					</select>월
 					
 					 <select name="curDay">
 					  <c:forEach   var="i" begin="1" end="31">
-					      <c:choose>
-					        <c:when test="${endDay==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <option value="${i }">${i }</option>
-					        </c:otherwise>
-					      </c:choose>
+					        <option value="${i }" <c:if test="${endDay == i}">selected</c:if>>${i }</option>
 					    </c:forEach>	
 					</select>일  &nbsp;이전&nbsp;&nbsp;&nbsp;&nbsp; 
 					<a href="javascript:search_member('today')">
@@ -298,104 +254,34 @@ function fn_detail_search(){
 					조회 기간:
 					<select name="beginYear" disabled>
 					 <c:forEach   var="i" begin="0" end="5">
-					      <c:choose>
-					        <c:when test="${beginYear==beginYear-i }">
-					          <option value="${beginYear-i }" selected>${beginYear-i  }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <option value="${beginYear-i }">${beginYear-i }</option>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>
+					    <option value="${endYear-i }" <c:if test="${beginYear == endYear-i}">selected</c:if>>${endYear-i }</option>
+					</c:forEach>
 					</select>년 
 					<select name="beginMonth" disabled >
-						 <c:forEach   var="i" begin="1" end="12">
-					      <c:choose>
-					        <c:when test="${beginMonth==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <c:choose>
-					            <c:when test="${i <10 }">
-					              <option value="0${i }">0${i }</option>
-					            </c:when>
-					            <c:otherwise>
-					            <option value="${i }">${i }</option>
-					            </c:otherwise>
-					          </c:choose>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>					
+						<c:forEach var="i" begin="1" end="12">
+					    	<option value="${i < 10 ? '0' : ''}${i }" <c:if test="${beginMonth == i}">selected</c:if>>${i < 10 ? '0' : ''}${i }</option>
+						</c:forEach>					
 					</select>월
 					 <select name="beginDay" disabled >
 					  <c:forEach   var="i" begin="1" end="31">
-					      <c:choose>
-					        <c:when test="${beginDay==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <c:choose>
-					            <c:when test="${i <10 }">
-					              <option value="0${i }">0${i }</option>
-					            </c:when>
-					            <c:otherwise>
-					            <option value="${i }">${i }</option>
-					            </c:otherwise>
-					          </c:choose>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>	
+					    	<option value="${i < 10 ? '0' : ''}${i }" <c:if test="${beginDay == i}">selected</c:if>>${i < 10 ? '0' : ''}${i }</option>
+					</c:forEach>	
 					</select>일  &nbsp; ~
 					
 					<select name="endYear" disabled >
 					 <c:forEach   var="i" begin="0" end="5">
-					      <c:choose>
-					        <c:when test="${endYear==endYear-i }">
-					          <option value="${2016-i }" selected>${2016-i  }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <option value="${2016-i }">${2016-i }</option>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>
+					    <option value="${endYear-i }" <c:if test="${endYear == endYear-i}">selected</c:if>>${endYear-i }</option>
+					</c:forEach>
 					</select>년 
 					<select name="endMonth" disabled >
 						 <c:forEach   var="i" begin="1" end="12">
-					      <c:choose>
-					        <c:when test="${endMonth==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <c:choose>
-					            <c:when test="${i <10 }">
-					              <option value="0${i }">0${i }</option>
-					            </c:when>
-					            <c:otherwise>
-					            <option value="${i }">${i }</option>
-					            </c:otherwise>
-					          </c:choose>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>					
+					    	<option value="${i < 10 ? '0' : ''}${i }" <c:if test="${endMonth == i}">selected</c:if>>${i < 10 ? '0' : ''}${i }</option>
+						</c:forEach>					
 					</select>월
 					 <select name="endDay" disabled >
 					  <c:forEach   var="i" begin="1" end="31">
-					      <c:choose>
-					        <c:when test="${endDay==i }">
-					          <option value="${i }"  selected>${i }</option>
-					        </c:when>
-					        <c:otherwise>
-					          <c:choose>
-					            <c:when test="${i<10}">
-					              <option value="0${i}">0${i }</option>
-					            </c:when>
-					            <c:otherwise>
-					            <option value="${i}">${i }</option>
-					            </c:otherwise>
-					          </c:choose>
-					        </c:otherwise>
-					      </c:choose>
-					    </c:forEach>	
+					    	<option value="${i < 10 ? '0' : ''}${i }" <c:if test="${endDay == i}">selected</c:if>>${i < 10 ? '0' : ''}${i }</option>
+					</c:forEach>	
 					</select>
 												 
 				  </td>
@@ -406,7 +292,7 @@ function fn_detail_search(){
 						<option value="all" checked>전체</option>
 						<option value="member_name">회원이름</option>
 						<option value="member_id">회원아이디</option>
-						<option value="member_hp_num">회원휴대폰번호</option>
+						<option value="member_tel">회원휴대폰번호</option>
 						<option value="member_addr">회원주소</option>
 					</select>
 					<input  type="text"  size="30" name="t_search_word" disabled />  
@@ -415,99 +301,93 @@ function fn_detail_search(){
 				</tr>				
 			</tbody>
 		</table>
-		<div class="clear">
-	</div>
+	</form>   
+	<div class="clear"></div>
 	
-<div class="clear"></div>
-<table class="list_view">
-		<tbody align=center >
-			<tr align=center bgcolor="#ffcc00">
-				<td class="fixed" >회원아이디</td>
-				<td class="fixed">회원이름</td>
-				<td>휴대폰번호</td>
-				<td>주소</td>
-				<td>가입일</td>
-				<td>탈퇴여부</td>
-			</tr>
-   <c:choose>
-     <c:when test="${empty member_list}">			
+	<table class="list_view">
+		<colgroup>
+			<col style="width: 10%;">
+			<col style="width: 10%;">
+			<col style="width: 15%;">
+			<col style="width: 20%;">
+			<col style="width: 35%;">
+			<col style="width: 10%;">
+			<col style="width: 10%;">
+		</colgroup>
+		<thead align=center bgcolor="#ffcc00">
 			<tr>
-		       <td colspan=5 class="fixed">
-				  <strong>조회된 회원이 없습니다.</strong>
-			   </td>
-		     </tr>
-	 </c:when>
-	 <c:otherwise>
-	     <c:forEach var="item" items="${member_list}" varStatus="item_num">
-	            <tr >       
-					<td width=10%>
-					
-					  <a href="${pageContext.request.contextPath}/admin/member/memberDetail.do?member_id=${item.member_id}">
-					     <strong>${item.member_id}</strong>
-					  </a>
-					</td>
-					<td width=10%>
-					  <strong>${item.member_name}</strong><br>
-					</td>
-					<td width=10% >
-					  <strong>${item.hp1}-${item.hp2}-${item.hp3}</strong><br>
-					</td>
-					<td width=50%>
-					  <strong>${item.roadAddress}</strong><br>
-					  <strong>${item.jibunAddress}</strong><br>
-					  <strong>${item.namujiAddress}</strong><br>
-					</td>
-					<td width=10%>
-					   <c:set var="join_date" value="${item.joinDate}" />
-					   <c:set var="arr" value="${fn:split(join_date,' ')}" />
-					   <strong><c:out value="${arr[0]}" /></strong>
-				    </td>
-				    <td width=10%>
-				       <c:choose>
-				         <c:when test="${item.del_yn=='N' }">
-				           <strong>활동중</strong>  
-				         </c:when>
-				         <c:otherwise>
-				           <strong>탈퇴</strong>
-				         </c:otherwise>
-				       </c:choose>
-				    </td>
-				</tr>
-		</c:forEach>
-	</c:otherwise>
-  </c:choose>	
-         <tr>
-             <td colspan=8 class="fixed">
-                 <c:forEach   var="page" begin="1" end="10" step="1" >
-		         <c:if test="${chapter >1 && page==1 }">
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter-1}&pageNum=${(chapter-1)*10 +1 }">&nbsp;pre &nbsp;</a>
-		         </c:if>
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter}&pageNum=${page}">${(chapter-1)*10 +page } </a>
-		         <c:if test="${page ==10 }">
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter+1}&pageNum=${chapter*10+1}">&nbsp; next</a>
-		         </c:if> 
-	      		</c:forEach> 
-           </td>
-        </tr>  		   
+				<th>회원아이디</th>
+				<th>회원이름</th>
+				<th>휴대폰번호</th>
+				<th>이메일</th>
+				<th>주소</th>
+				<th>가입일</th>
+				<th>탈퇴여부</th>
+			</tr>
+		</thead>
+		<tbody align=center>
+			<c:choose>
+				<c:when test="${empty member_list}">			
+					<tr>
+						<td colspan="7" class="fixed">
+							<strong>조회된 회원이 없습니다.</strong>
+						</td>
+					</tr>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="item" items="${member_list}" varStatus="item_num">
+						<tr>       
+							<td>
+								<a href="javascript:fn_member_detail('${item.member_id}')">
+									<strong>${item.member_id}</strong>
+								</a>
+							</td>
+							<td>
+								<strong>${item.member_name}</strong>
+							</td>
+							<td>
+								<strong>${item.tel1}-${item.tel2}-${item.tel3}</strong>
+							</td>
+							<td>
+								<strong>${item.email1}@${item.email2}</strong>
+							</td>
+							<td>
+								<strong>[${item.zipcode}] ${item.roadAddress} ${item.namujiAddress}</strong>
+							</td>
+							<td>
+								<c:set var="member_join" value="${item.member_join}" />
+								<c:set var="arr" value="${fn:split(member_join,' ')}" />
+								<strong><c:out value="${arr[0]}" /></strong>
+							</td>
+							<td>
+								<c:choose>
+									<c:when test="${item.del_yn == 'N' }">
+										<strong>활동중</strong>  
+									</c:when>
+									<c:otherwise>
+										<strong>탈퇴</strong>
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>	
 		</tbody>
 	</table>
-  </form>   	
-	<div class="clear"></div>
-<c:choose>
- <c:when test="${not empty order_goods_list }">	
-   <DIV id="page_wrap">
-		 <c:forEach   var="page" begin="1" end="10" step="1" >
-		         <c:if test="${chapter >1 && page==1 }">
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter-1}&pageNum=${(chapter-1)*10 +1 }">&nbsp;pre &nbsp;</a>
-		         </c:if>
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter}&pageNum=${page}">${(chapter-1)*10 +page } </a>
-		         <c:if test="${page ==10 }">
-		          <a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter+1}&pageNum=${chapter*10+1}">&nbsp; next</a>
-		         </c:if> 
-	      </c:forEach> 
-	</DIV>	
- </c:when>
-</c:choose>
+  	<div class="clear"></div>
+	<div id="page_wrap">
+		<c:if test="${not empty member_list}">
+			<c:forEach var="page" begin="1" end="10" step="1">
+				<c:if test="${chapter > 1 && page == 1 }">
+					<a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter-1}&pageNum=${(chapter-1)*10 + 1 }">&nbsp;pre &nbsp;</a>
+				</c:if>
+				<a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter}&pageNum=${page}">${(chapter-1)*10 + page } </a>
+				<c:if test="${page == 10 }">
+					<a href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter+1}&pageNum=${chapter*10+1}">&nbsp; next</a>
+				</c:if> 
+			</c:forEach>
+		</c:if>
+	</div>
 </body>
 </html>
-

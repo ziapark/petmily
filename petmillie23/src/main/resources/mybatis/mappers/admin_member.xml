@@ -30,22 +30,26 @@
 </resultMap>
 
 
-<!-- MySQL용 페이징 + 조건식, 문자열 결합 등 수정 -->
 <select id="listMember" resultMap="memberResult" parameterType="java.util.HashMap">
     SELECT *
     FROM member
-    WHERE DATE_FORMAT(joinDate, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
-    <if test="search_type == 'member_id'">
+    WHERE DATE_FORMAT(member_join, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+    <if test="search_type == 'member_id' and search_word != null and search_word != ''">
         AND member_id = #{search_word}
     </if>
-    <if test="search_type == 'member_name'">
-        AND member_name = #{search_word}
+    <if test="search_type == 'member_name' and search_word != null and search_word != ''">
+        AND member_name LIKE CONCAT('%', #{search_word}, '%')
     </if>
-    <if test="search_type == 'member_hp_num'">
-        AND CONCAT(tel1, tel2, tel3) = #{search_word}
+    <if test="search_type == 'member_tel' and search_word != null and search_word != ''">
+        AND CONCAT(tel1, tel2, tel3) LIKE CONCAT('%', #{search_word}, '%')
     </if>
-    ORDER BY joinDate DESC
-    LIMIT #{offset}, 10
+    <if test="search_type == 'member_addr' and search_word != null and search_word != ''">
+        AND (roadAddress LIKE CONCAT('%', #{search_word}, '%') OR jibunAddress LIKE CONCAT('%', #{search_word}, '%') OR namujiAddress LIKE CONCAT('%', #{search_word}, '%'))
+    </if>
+    ORDER BY member_join DESC
+    <if test="begin != null and begin != ''">
+        LIMIT #{begin}, 10
+    </if>
 </select>
 
 
@@ -57,23 +61,23 @@
 <update id="modifyMemberInfo" parameterType="java.util.HashMap">
     UPDATE member
     <set>
-        <if test="member_pw != '' and member_pw != null">member_pw = #{member_pw},</if>
-        <if test="member_gender != '' and member_gender != null">member_gender = #{member_gender},</if>
-        <if test="member_birth_y != '' and member_birth_y != null">member_birth_y = #{member_birth_y},</if>
-        <if test="member_birth_m != '' and member_birth_m != null">member_birth_m = #{member_birth_m},</if>
-        <if test="member_birth_d != '' and member_birth_d != null">member_birth_d = #{member_birth_d},</if>
-        <if test="tel1 != '' and tel1 != null">tel1 = #{tel1},</if>
-        <if test="tel2 != '' and tel2 != null">tel2 = #{tel2},</if>
-        <if test="tel3 != '' and tel3 != null">tel3 = #{tel3},</if>
-        <if test="smssts_yn != '' and smssts_yn != null">smssts_yn = #{smssts_yn},</if>
-        <if test="email1 != '' and email1 != null">email1 = #{email1},</if>
-        <if test="email2 != '' and email2 != null">email2 = #{email2},</if>
-        <if test="emailsts_yn != '' and emailsts_yn != null">emailsts_yn = #{emailsts_yn},</if>
-        <if test="zipcode != '' and zipcode != null">zipcode = #{zipcode},</if>
-        <if test="roadAddress != '' and roadAddress != null">roadAddress = #{roadAddress},</if>
-        <if test="jibunAddress != '' and jibunAddress != null">jibunAddress = #{jibunAddress},</if>
-        <if test="namujiAddress != '' and namujiAddress != null">namujiAddress = #{namujiAddress},</if>
-        <if test="del_yn != '' and del_yn != null">del_yn = #{del_yn}</if>
+        <if test="member_pw != null and member_pw != ''">member_pw = #{member_pw},</if>
+        <if test="member_gender != null and member_gender != ''">member_gender = #{member_gender},</if>
+        <if test="member_birth_y != null and member_birth_y != ''">member_birth_y = #{member_birth_y},</if>
+        <if test="member_birth_m != null and member_birth_m != ''">member_birth_m = #{member_birth_m},</if>
+        <if test="member_birth_d != null and member_birth_d != ''">member_birth_d = #{member_birth_d},</if>
+        <if test="tel1 != null and tel1 != ''">tel1 = #{tel1},</if>
+        <if test="tel2 != null and tel2 != ''">tel2 = #{tel2},</if>
+        <if test="tel3 != null and tel3 != ''">tel3 = #{tel3},</if>
+        <if test="smssts_yn != null and smssts_yn != ''">smssts_yn = #{smssts_yn},</if>
+        <if test="email1 != null and email1 != ''">email1 = #{email1},</if>
+        <if test="email2 != null and email2 != ''">email2 = #{email2},</if>
+        <if test="emailsts_yn != null and emailsts_yn != ''">emailsts_yn = #{emailsts_yn},</if>
+        <if test="zipcode != null and zipcode != ''">zipcode = #{zipcode},</if>
+        <if test="roadAddress != null and roadAddress != ''">roadAddress = #{roadAddress},</if>
+        <if test="jibunAddress != null and jibunAddress != ''">jibunAddress = #{jibunAddress},</if>
+        <if test="namujiAddress != null and namujiAddress != ''">namujiAddress = #{namujiAddress},</if>
+        <if test="del_yn != null and del_yn != ''">del_yn = #{del_yn}</if>
     </set>
     WHERE member_id = #{member_id}
 </update>
