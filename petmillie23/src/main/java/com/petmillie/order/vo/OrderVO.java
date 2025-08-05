@@ -22,7 +22,6 @@ public class OrderVO {
 	private String jibunAddress;
 	private String namujiAddress;
 	private String delivery_method;
-	private String pay_order_tel;
 	private String delivery_message;
 	private String delivery_state; //기본값 배송준비중
 	private String goods_fileName;
@@ -81,12 +80,6 @@ public class OrderVO {
 	}
 	public void setDelivery_method(String delivery_method) {
 		this.delivery_method = delivery_method;
-	}
-	public String getPay_order_tel() {
-		return pay_order_tel;
-	}
-	public void setPay_order_tel(String pay_order_tel) {
-		this.pay_order_tel = pay_order_tel;
 	}
 	public int getOrder_num() {
 		return order_num;

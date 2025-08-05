@@ -67,6 +67,7 @@ window.onload = togglePaymentOptions;
  * 결제버튼 클릭 시 호출!
  */
 async function requestCardPayment() {
+	console.log("함수 진입");
   const f = document.forms['form_order'];
   const orderName = "펫밀리 주문결제";
   const price = f['total_price'] ? f['total_price'].value : 1000;
@@ -145,13 +146,29 @@ async function requestCardPayment() {
     }
     // 추가 필드는 PortOne 공식문서 참고
   });
-
+  console.log("💳 [PortOne 결제 응답 전체]", response);
+  alert("[PortOne 결제 응답 전체]\n" + JSON.stringify(response, null, 2));
   // 결제 실패
   if (response.code != null) {
     alert(response.message);
     return;
   }
-
+  // 결제 식별자 추출 (paymentKey, imp_uid, txId 중 실제로 오는 값!)
+  const paymentKey = response.paymentKey || response.imp_uid || response.id || response.txId;
+  const txId = response.txId;
+  if (!paymentKey && !txId) {
+	  alert("결제는 되었지만 paymentKey를 받지 못했습니다. 관리자에게 문의하세요.");
+	  console.error("📛 결제 응답 이상:", response);
+	  return;
+	}
+  
+//어떤 식별자인지(프론트에서 서버로 함께 전달)
+  let paymentKeyType = "unknown";
+  if (response.paymentKey) paymentKeyType = "paymentKey";
+  else if (response.imp_uid) paymentKeyType = "imp_uid";
+  else if (response.id) paymentKeyType = "id";
+  else if (response.txId) paymentKeyType = "txId";
+  
   // 결제 성공시 서버로 주문/결제 내역 전달
   try {
   const res = await fetch("/petmillie/order/payToOrderGoods.do", {
@@ -160,10 +177,19 @@ async function requestCardPayment() {
     body: JSON.stringify({
       ...data,
       paymentId: paymentId,
-      portone_paymentKey: response.paymentKey,
+      portone_paymentKey: paymentKey,
       paymentStatus: response.status
     })
   });
+  
+  let result;
+  try {
+      result = await res.json();
+  } catch (e) {
+      const text = await res.text();
+      alert("서버 에러: " + text);
+      return;
+  }
 
   const text = await res.text();
   try {
@@ -183,6 +209,8 @@ async function requestCardPayment() {
 }
 }
 </script>
+01987a8e-a202-765b-b42e-cd04435b4374
+01987a8e-a202-765b-b42e-cd04435b4374
 
 <BODY>
   <H1>주문하기</H1>

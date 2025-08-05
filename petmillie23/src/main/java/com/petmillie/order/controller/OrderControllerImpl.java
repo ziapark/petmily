@@ -4,6 +4,7 @@ package com.petmillie.order.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.vo.MemberVO;
@@ -179,18 +183,27 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
 	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 		System.out.println("📌 payData = " + payData);  // 여기에 로그
 	    // 필수값 추출
 	    String paymentKey = (String) payData.get("portone_paymentKey");
-
+	    
 	    // paymentKey가 null이면 에러 처리
 	    if (paymentKey == null || paymentKey.isBlank()) {
 	        return new ApiResponse(false, "결제 실패: paymentKey 없음");
 	    }
+	    
 
-	    // 여기서 검증 로직 필요 시 portoneService.verify() 호출
+	    int expectAmount = Integer.parseInt(String.valueOf(payData.get("price")));
+	    boolean isValid = portoneService.verifyPayment(paymentKey, expectAmount);
+	    if (!isValid) {
+	        return new ApiResponse(false, "결제 검증 실패! 금액 또는 상태가 일치하지 않습니다.");
+	    }
+	    
 	    // 주문/결제 DB 저장
 	    OrderVO orderVO = new OrderVO();
+	    orderVO.setMember_id(memberInfo.getMember_id());
 	    orderVO.setReceiver_name((String) payData.get("receiver_name"));
 	    orderVO.setTel1((String) payData.get("tel1"));
 	    orderVO.setTel2((String) payData.get("tel2"));
@@ -200,7 +213,6 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    orderVO.setJibunAddress((String) payData.get("jibunAddress"));
 	    orderVO.setNamujiAddress((String) payData.get("namujiAddress"));
 	    orderVO.setDelivery_method((String) payData.get("delivery_method"));
-	    orderVO.setPay_order_tel((String) payData.get("pay_order_tel"));
 	    orderVO.setDelivery_message((String) payData.get("delivery_message"));
 	    orderVO.setTotal_price(String.valueOf(payData.get("price")));
 
@@ -232,6 +244,22 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    orderService.addNewOrder(List.of(orderVO), payVO);
 
 	    return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseBody
+	public Map<String, Object> handleRuntimeException(RuntimeException ex) {
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("success", false);
+	    try {
+	        // 혹시 던진 메시지가 JSON이면 파싱해서 반환
+	        ObjectMapper mapper = new ObjectMapper();
+	        JsonNode json = mapper.readTree(ex.getMessage());
+	        map.put("message", json.has("message") ? json.get("message").asText() : ex.getMessage());
+	    } catch (Exception e) {
+	        map.put("message", ex.getMessage());
+	    }
+	    return map;
 	}
 
 }

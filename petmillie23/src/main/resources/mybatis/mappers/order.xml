@@ -6,7 +6,7 @@
 <mapper namespace="mapper.order">
 
 	<!-- OrderVO용 ResultMap -->
-	<resultMap id="orderResult" type="com.petmillie.order.vo.OrderVO">
+	<resultMap id="orderResult" type="OrderVO">
 		<result property="order_num" column="order_num" />
 		<result property="member_id" column="member_id" />
 		<result property="order_id" column="order_id" />
@@ -25,7 +25,6 @@
 		<result property="jibunAddress" column="jibunAddress" />
 		<result property="namujiAddress" column="namujiAddress" />
 		<result property="delivery_method" column="delivery_method" />
-		<result property="pay_order_tel" column="pay_order_tel" />
 		<result property="delivery_message" column="delivery_message" />
 		<result property="delivery_state" column="delivery_state" />
 		<result property="goods_fileName" column="goods_fileName" />
@@ -33,7 +32,7 @@
 	</resultMap>
 
 	<!-- memberVO용 ResultMap -->
-	<resultMap id="memberResult" type="com.petmillie.member.vo.MemberVO">
+	<resultMap id="memberResult" type="MemberVO">
 		<result property="member_id" column="member_id" />
 		<result property="member_pw" column="member_pw" />
 		<result property="member_name" column="member_name" />
@@ -55,6 +54,18 @@
 		<result property="namujiAddress" column="namujiAddress" />
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
+	
+	<insert id="insertNewOrder" parameterType="OrderVO">
+  INSERT INTO userorder (
+    member_id, order_id, goods_num, goods_name, goods_sales_price, total_price, goods_qty, order_name, receiver_name, tel1, tel2, tel3, 
+    zipcode, roadAddress, jibunAddress, namujiAddress, delivery_method, delivery_message, delivery_state, goods_fileName, order_time
+  )
+  VALUES (
+    #{member_id}, #{order_id}, #{goods_num}, #{goods_name}, #{goods_sales_price}, #{total_price}, #{goods_qty}, #{order_name}, #{receiver_name}, #{tel1}, #{tel2},
+    #{tel3}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{delivery_method}, #{delivery_message}, #{delivery_state}, #{goods_fileName}, #{order_time}
+  )
+</insert>
+
 
 	<!-- 주문 목록 조회 -->
 	<select id="selectNewOrderList" resultMap="orderResult" parameterType="java.util.Map">
