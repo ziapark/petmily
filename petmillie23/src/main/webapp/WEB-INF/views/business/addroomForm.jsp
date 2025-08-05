@@ -18,13 +18,13 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+<div class="container text-center mt-3 mb-3">
 <c:if test="${not empty message}">
   <script>alert("${message}");</script>
 </c:if>
 	<h3>객실 등록</h3>
 	<form action="${contextPath}/business/addroom.do" method="post" enctype="multipart/form-data">	
 		<input type="hidden" name="p_num" id="p_num" value="${pensionInfo.p_num}" />
-		<h4>펜션번호: ${pensionInfo.p_num}</h4>
 
 		<div id="detail_table">
 			<table>
@@ -101,5 +101,6 @@ $(document).ready(function() {
 			</table>
 		</div>
 	</form>	
+	</div>
 </body>
 </html>

@@ -156,19 +156,19 @@
 			    <li><a href="#">추가하셈3-2</a></li>
 			    <li><a href="#">추가하셈3-3</a></li>
 			  </ul>
-			  <c:if test="${isLogOn==true and not empty businessInfo}">
+			  <c:if test="${not empty businessInfo}">
 			  <ul class="submenu">
 			  	<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a>
 			  	<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a>
 			  	<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a>
 			  </ul>
-			  </c:if>
-			  <ul class="submenu">
+			  	<ul class="submenu">
 			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
 			  </ul>
+			  </c:if>
 			<c:choose>
 			<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
 				<ul class="submenu">

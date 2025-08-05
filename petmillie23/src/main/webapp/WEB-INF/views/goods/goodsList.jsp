@@ -19,7 +19,6 @@
 	<div class="row row-cols-1 mb-3">
 		<div class="col bg-light p-5 text-start">
 			<h2 class="fw-bold">상품 리스트</h2>
-			<p>데이터베이스에서 가져온 다양한 상품들을 만나보세요!</p>	
 		</div>
 	</div>
 	

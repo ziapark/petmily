@@ -15,7 +15,6 @@
 	<h3>내 상세 정보</h3>
 <form name="frm_mod_business" action="${contextPath}/business/addpension.do" method="post">
 	<input type="hidden" name="business_id" id="business_id" value="${sessionScope.businessInfo.business_id}"/>
-	<h4>${sessionScope.businessInfo.business_id}</h4>	
 	<div id="detail_table">
 		<table>
 			<tbody>

@@ -379,6 +379,7 @@ table td {
 
 </head>
 <body>
+<div class="container text-center mt-3 mb-3">
 	<form name="frm_mod_goods" method="post">
 		<DIV class="clear"></DIV>
 		<DIV id="container">
@@ -650,5 +651,6 @@ table td {
 				</DIV>
 				<DIV class="clear"></DIV>
 	</form>
+	</div>
 </body>
 </html>

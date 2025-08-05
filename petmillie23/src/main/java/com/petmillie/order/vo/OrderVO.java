@@ -24,15 +24,10 @@ public class OrderVO {
 	private String delivery_method;
 	private String pay_order_tel;
 	private String delivery_message;
-	private String pay_method;
-	private String card_com_name;
-	private String card_pay_month;
 	private String delivery_state; //기본값 배송준비중
-	private int final_total_price;
 	private String goods_fileName;
-	private String pay_order_time;
+	private String order_time;
 
-	
 	public String getTotal_price() {
 		return total_price;
 	}
@@ -92,12 +87,6 @@ public class OrderVO {
 	}
 	public void setPay_order_tel(String pay_order_tel) {
 		this.pay_order_tel = pay_order_tel;
-	}
-	public String getPay_order_time() {
-		return pay_order_time;
-	}
-	public void setPay_order_time(String pay_order_time) {
-		this.pay_order_time = pay_order_time;
 	}
 	public int getOrder_num() {
 		return order_num;
@@ -159,35 +148,11 @@ public class OrderVO {
 	public void setDelivery_message(String delivery_message) {
 		this.delivery_message = delivery_message;
 	}
-	public String getPay_method() {
-		return pay_method;
-	}
-	public void setPay_method(String pay_method) {
-		this.pay_method = pay_method;
-	}
-	public String getCard_com_name() {
-		return card_com_name;
-	}
-	public void setCard_com_name(String card_com_name) {
-		this.card_com_name = card_com_name;
-	}
-	public String getCard_pay_month() {
-		return card_pay_month;
-	}
-	public void setCard_pay_month(String card_pay_month) {
-		this.card_pay_month = card_pay_month;
-	}
 	public String getDelivery_state() {
 		return delivery_state;
 	}
 	public void setDelivery_state(String delivery_state) {
 		this.delivery_state = delivery_state;
-	}
-	public int getFinal_total_price() {
-		return final_total_price;
-	}
-	public void setFinal_total_price(int final_total_price) {
-		this.final_total_price = final_total_price;
 	}
 	public String getGoods_fileName() {
 		return goods_fileName;
@@ -195,5 +160,13 @@ public class OrderVO {
 	public void setGoods_fileName(String goods_fileName) {
 		this.goods_fileName = goods_fileName;
 	}
+	public String getOrder_time() {
+		return order_time;
+	}
+	public void setOrder_time(String order_time) {
+		this.order_time = order_time;
+	}
+	
+	
 
 }

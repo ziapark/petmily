@@ -5,7 +5,8 @@
 
 <mapper namespace="mapper.admin.order">
 
-	<resultMap id="orderResult" type="OrderVO">
+	<!-- OrderVO용 ResultMap -->
+	<resultMap id="adminorderResult" type="com.petmillie.order.vo.OrderVO">
 		<result property="order_num" column="order_num" />
 		<result property="member_id" column="member_id" />
 		<result property="order_id" column="order_id" />
@@ -16,20 +17,39 @@
 		<result property="goods_qty" column="goods_qty" />
 		<result property="order_name" column="order_name" />
 		<result property="receiver_name" column="receiver_name" />
-		<result property="receiver_tel" column="receiver_tel" />
-		<result property="delivery_address" column="delivery_address" />
+		<result property="tel1" column="tel1" />
+		<result property="tel2" column="tel2" />
+		<result property="tel3" column="tel3" />
+		<result property="zipcode" column="zipcode" />
+		<result property="roadAddress" column="roadAddress" />
+		<result property="jibunAddress" column="jibunAddress" />
+		<result property="namujiAddress" column="namujiAddress" />
+		<result property="delivery_method" column="delivery_method" />
+		<result property="pay_order_tel" column="pay_order_tel" />
 		<result property="delivery_message" column="delivery_message" />
+		<result property="delivery_state" column="delivery_state" />
+		<result property="goods_fileName" column="goods_fileName" />
+		<result property="order_time" column="order_time" />
+	</resultMap>
+
+	<!-- PayVO용 ResultMap -->
+	<resultMap id="adminpayResult" type="com.petmillie.order.vo.PayVO">
+		<result property="payment_id" column="payment_id" />
 		<result property="pay_method" column="pay_method" />
 		<result property="card_com_name" column="card_com_name" />
 		<result property="card_pay_month" column="card_pay_month" />
-		<result property="pay_order_tel" column="pay_order_tel" />
-		<result property="delivery_state" column="delivery_state" />
 		<result property="final_total_price" column="final_total_price" />
-		<result property="goods_fileName" column="goods_fileName" />
+		<result property="pay_order_time" column="pay_order_time" />
+		<result property="order_num" column="order_num" />
+		<result property="payment_amount" column="payment_amount" />
+		<result property="payment_status" column="payment_status" />
+		<result property="pg_tid" column="pg_tid" />
+		<result property="payment_time" column="payment_time" />
+		<result property="pay_order_tel" column="pay_order_tel" />
 	</resultMap>
 
-
-	<resultMap id="memberResult" type="memberVO">
+	<!-- memberVO용 ResultMap -->
+	<resultMap id="adminmemberResult" type="com.petmillie.member.vo.MemberVO">
 		<result property="member_id" column="member_id" />
 		<result property="member_pw" column="member_pw" />
 		<result property="member_name" column="member_name" />
@@ -52,12 +72,12 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 
-	<select id="selectNewOrderList" resultMap="orderResult" parameterType="java.util.Map">
+	<select id="selectNewOrderList" resultMap="adminorderResult" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT *
 			FROM userorder
-			WHERE DATE_FORMAT(pay_order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
-			ORDER BY pay_order_time DESC
+			WHERE DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+			ORDER BY order_time DESC
 			LIMIT #{offset}, #{limit}
 		]]>
 	</select>
@@ -72,13 +92,13 @@
 		WHERE order_id = #{order_id}
 	</update>
 
-	<select id="selectOrderDetail" resultMap="orderResult" parameterType="int">
+	<select id="selectOrderDetail" resultMap="adminorderResult" parameterType="int">
 		<![CDATA[
 			SELECT * FROM userorder WHERE order_id = #{order_id}
 		]]>
 	</select>
 
-	<select id="selectOrderer" resultMap="memberResult" parameterType="String">
+	<select id="selectOrderer" resultMap="adminmemberResult" parameterType="String">
 		<![CDATA[
 			SELECT * FROM member WHERE member_id = #{member_id}
 		]]>

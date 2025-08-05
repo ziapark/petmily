@@ -214,12 +214,18 @@ function fn_order_all_cart_goods(){
 									value="${item.goods_num }"
 									onClick="calcGoodsPrice(${item.goods_sales_price },this)">
 							</td>
+							
 							<td class="goods_image">
+
 								<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num }">
-									<img width="75" alt=""
-										src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}" />
+								<c:forEach var="image" items="${imageList}" varStatus="status">
+									<img width="75" img alt="${item.goods_name}"
+                     src="${contextPath}/goods/thumbnails.do?goods_num=${item.goods_num}&fileName=${image.fileName}" />
+                     							</c:forEach>
 								</a>
+
 							</td>
+
 							<td>
 								<h2>
 									<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num }">${item.goods_name }</a>

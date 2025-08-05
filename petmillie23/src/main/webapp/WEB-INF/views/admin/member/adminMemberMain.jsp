@@ -117,7 +117,7 @@ function fn_member_detail(member_id){
     formObj.appendChild(i_member_id);
     document.body.appendChild(formObj); 
     formObj.method="post";
-    formObj.action="/petmillie23/admin/member/memberDetail.do";
+    formObj.action="/petmillie/admin/member/memberDetail.do";
     formObj.submit();
 	
 }
