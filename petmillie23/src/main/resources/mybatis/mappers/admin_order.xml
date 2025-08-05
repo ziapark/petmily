@@ -4,33 +4,31 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.admin.order">
-	
-	<!-- 주문 ResultMap -->
-<resultMap id="orderResult" type="OrderVO">
-    <result property="order_num" column="order_num" />
-    <result property="member_id" column="member_id" />
-    <result property="order_id" column="order_id" />
-    <result property="goods_num" column="goods_num" />
-    <result property="goods_name" column="goods_name" />
-    <result property="goods_sales_price" column="goods_sales_price" />
-    <result property="total_price" column="total_price" />
-    <result property="goods_qty" column="goods_qty" />
-    <result property="order_name" column="order_name" />
-    <result property="receiver_name" column="receiver_name" />
-    <result property="receiver_tel" column="receiver_tel" />
-    <result property="delivery_address" column="delivery_address" />
-    <result property="delivery_message" column="delivery_message" />
-    <result property="pay_method" column="pay_method" />
-    <result property="card_com_name" column="card_com_name" />
-    <result property="card_pay_month" column="card_pay_month" />
-    <result property="pay_order_tel" column="pay_order_tel" />
-    <result property="delivery_state" column="delivery_state" />
-    <result property="final_total_price" column="final_total_price" />
-    <result property="goods_fileName" column="goods_fileName" />
-</resultMap>
+
+	<resultMap id="orderResult" type="OrderVO">
+		<result property="order_num" column="order_num" />
+		<result property="member_id" column="member_id" />
+		<result property="order_id" column="order_id" />
+		<result property="goods_num" column="goods_num" />
+		<result property="goods_name" column="goods_name" />
+		<result property="goods_sales_price" column="goods_sales_price" />
+		<result property="total_price" column="total_price" />
+		<result property="goods_qty" column="goods_qty" />
+		<result property="order_name" column="order_name" />
+		<result property="receiver_name" column="receiver_name" />
+		<result property="receiver_tel" column="receiver_tel" />
+		<result property="delivery_address" column="delivery_address" />
+		<result property="delivery_message" column="delivery_message" />
+		<result property="pay_method" column="pay_method" />
+		<result property="card_com_name" column="card_com_name" />
+		<result property="card_pay_month" column="card_pay_month" />
+		<result property="pay_order_tel" column="pay_order_tel" />
+		<result property="delivery_state" column="delivery_state" />
+		<result property="final_total_price" column="final_total_price" />
+		<result property="goods_fileName" column="goods_fileName" />
+	</resultMap>
 
 
-	<!-- 회원 ResultMap -->
 	<resultMap id="memberResult" type="memberVO">
 		<result property="member_id" column="member_id" />
 		<result property="member_pw" column="member_pw" />
@@ -54,7 +52,6 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 
-	<!-- 주문 목록 (MySQL 페이징) -->
 	<select id="selectNewOrderList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT *
@@ -65,7 +62,6 @@
 		]]>
 	</select>
 
-	<!-- 배송 상태 업데이트 -->
 	<update id="updateDeliveryState" parameterType="java.util.Map">
 		UPDATE userorder
 		<set>
@@ -76,15 +72,12 @@
 		WHERE order_id = #{order_id}
 	</update>
 
-	<!-- 주문 상세 조회 -->
 	<select id="selectOrderDetail" resultMap="orderResult" parameterType="int">
 		<![CDATA[
 			SELECT * FROM userorder WHERE order_id = #{order_id}
-			SELECT * FROM order_id_squence WHERE id = #{id}
 		]]>
 	</select>
 
-	<!-- 주문자 정보 조회 -->
 	<select id="selectOrderer" resultMap="memberResult" parameterType="String">
 		<![CDATA[
 			SELECT * FROM member WHERE member_id = #{member_id}

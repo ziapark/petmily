@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
  <script>
@@ -40,49 +42,23 @@
     function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                var fullRoadAddr = data.roadAddress;
+                var extraRoadAddr = '';
 
-                // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
-                var extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
-                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
                 if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
                     extraRoadAddr += data.bname;
                 }
-                // 건물명이 있고, 공동주택일 경우 추가한다.
                 if(data.buildingName !== '' && data.apartment === 'Y'){
                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
                 }
-                // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
                 if(extraRoadAddr !== ''){
-                    extraRoadAddr = ' (' + extraRoadAddr + ')';
-                }
-                // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
-                if(fullRoadAddr !== ''){
-                    fullRoadAddr += extraRoadAddr;
+                    fullRoadAddr += ' (' + extraRoadAddr + ')';
                 }
 
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('zipcode').value = data.zonecode; //5자리 새우편번호 사용
+                document.getElementById('zipcode').value = data.zonecode;
                 document.getElementById('roadAddress').value = fullRoadAddr;
                 document.getElementById('jibunAddress').value = data.jibunAddress;
-
-                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                if(data.autoRoadAddress) {
-                    //예상되는 도로명 주소에 조합형 주소를 추가한다.
-                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                    document.getElementById('guide').innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-
-                } else if(data.autoJibunAddress) {
-                    var expJibunAddr = data.autoJibunAddress;
-                    document.getElementById('guide').innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-
-                } else {
-                    document.getElementById('guide').innerHTML = '';
-                }
+                document.getElementById('guide').innerHTML = '';
             }
         }).open();
     }
@@ -131,7 +107,7 @@
             var member_birth_gn = frm_mod_member.member_birth_gn;
             for(var i=0; i<member_birth_gn.length; i++){
                 if(member_birth_gn[i].checked){
-                    value_gn = member_birth_gn[i].nextSibling.textContent.trim();
+                    value_gn = member_birth_gn[i].value; // 수정: nextSibling.textContent 대신 value 사용
                     break;
                 }
             }
@@ -154,7 +130,6 @@
             var value_namujiAddress = frm_mod_member.namujiAddress.value;
             value = value_zipcode + "," + value_roadAddress + "," + value_jibunAddress + "," + value_namujiAddress;
         }
-        // AJAX 호출
         $.ajax({
             type : "post",
             async : false,
@@ -176,33 +151,6 @@
         });
     }
 
-//     // 회원 탈퇴/복구 기능을 위한 JavaScript 함수
-//     function fn_delete_member(member_id, del_yn) {
-//         if (confirm("정말 " + (del_yn === 'Y' ? "탈퇴" : "복구") + "하시겠습니까?")) {
-//             // AJAX를 사용하여 서버에 회원 탈퇴/복구 요청
-//             $.ajax({
-//                 type: "post",
-//                 url: "${contextPath}/admin/member/deleteMember.do",
-//                 data: {
-//                     member_id: member_id,
-//                     del_yn: del_yn
-//                 },
-//                 success: function(data, textStatus) {
-//                     alert("처리가 완료되었습니다.");
-//                     // 성공 시 페이지 새로고침
-//                     location.reload();
-//                 },
-//                 error: function(data, textStatus) {
-//                     alert("에러가 발생했습니다. 다시 시도해 주세요.");
-//                 }
-//             });
-//         }
-//     }
-
-
-
-
-
 function fn_delete_member(member_id, del_yn) {
     if (confirm("정말 " + (del_yn === 'Y' ? "탈퇴" : "복구") + "하시겠습니까?")) {
         $.ajax({
@@ -215,13 +163,7 @@ function fn_delete_member(member_id, del_yn) {
             success: function(data, textStatus) {
                 if (data.trim() === 'success') {
                     alert("처리가 완료되었습니다.");
-                    // --- 이 부분을 아래와 같이 수정 ---
-                    location.reload(true); // true 인자를 추가하여 강제 새로고침
-                    // 또는
-                    // location.href = window.location.href; // 현재 URL로 다시 이동
-                    // 또는
-                    // window.location.replace(window.location.href); // 현재 페이지를 히스토리에서 지우고 이동
-                    // -----------------------------
+                    location.reload(true);
                 } else {
                     alert("처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
                 }
@@ -232,212 +174,236 @@ function fn_delete_member(member_id, del_yn) {
         });
     }
 }
-
-
 </script>
 </head>
 
 <body>
-	<h3>내 상세 정보</h3>
-<form name="frm_mod_member">	
-	<div id="detail_table">
-		<table>
-			<tbody>
-				<tr class="dot_line">
-					<td class="fixed_join">아이디</td>
-					<td>
-						<input name="member_id" type="text" size="20" value="${member_info.member_id }"  disabled/>
-					</td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">비밀번호</td>
-					<td>
-					  <input name="member_pw" type="password" size="20" value="${member_info.member_pw }" />
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_pw')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이름</td>
-					<td>
-					  <input name="member_name" type="text" size="20" value="${member_info.member_name }"  disabled />
-					 </td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">성별</td>
-					<td>
-					  <c:choose >
-					    <c:when test="${member_info.member_gender =='101' }">
-					      <input type="radio" name="member_gender" value="102" />
-						  여성 <span style="padding-left:30px"></span>
-					   <input type="radio" name="member_gender" value="101" checked />남성
-					    </c:when>
-					    <c:otherwise>
-					      <input type="radio" name="member_gender" value="102"  checked />
-						   여성 <span style="padding-left:30px"></span>
-					      <input type="radio" name="member_gender" value="101"  />남성
-					   </c:otherwise>
-					   </c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_gender')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">법정생년월일</td>
-					<td>
-					   <select name="member_birth_y">
-					     <c:forEach var="i" begin="1" end="100">
-					       <c:choose>
-					         <c:when test="${member_info.member_birth_y==1920+i }">
-							   <option value="${ 1920+i}" selected>${ 1920+i} </option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${ 1920+i}" >${ 1920+i} </option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>년 
-					<select name="member_birth_m" >
-						<c:forEach var="i" begin="1" end="12">
-					       <c:choose>
-					         <c:when test="${member_info.member_birth_m==i }">
-							   <option value="${i }" selected>${i }</option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${i }">${i }</option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>월 
-					
-					<select name="member_birth_d">
-							<c:forEach var="i" begin="1" end="31">
-					       <c:choose>
-					         <c:when test="${member_info.member_birth_d==i }">
-							   <option value="${i }" selected>${i }</option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${i }">${i }</option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>일 <span style="padding-left:50px"></span>
-					   <c:choose>
-					    <c:when test="${member_info.member_birth_gn=='2' }"> 
-					  <input type="radio" name="member_birth_gn" value="2" checked />양력
-						<span style="padding-left:20px"></span> 
-						<input type="radio"  name="member_birth_gn" value="1" />음력
+<div class="container my-5">
+	<h3 class="mb-4">내 상세 정보</h3>
+	<div class="card">
+		<div class="card-body">
+			<form name="frm_mod_member">	
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<th class="align-middle bg-light">아이디</th>
+							<td>
+								<input name="member_id" type="text" class="form-control" value="${member_info.member_id }" disabled/>
+							</td>
+							<td>
+								</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">비밀번호</th>
+							<td>
+							  <input name="member_pw" type="password" class="form-control" value="${member_info.member_pw }" />
+							</td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('member_pw')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">이름</th>
+							<td>
+							  <input name="member_name" type="text" class="form-control" value="${member_info.member_name }" disabled />
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">성별</th>
+							<td>
+							  <c:choose >
+							    <c:when test="${member_info.member_gender =='101' }">
+							      <div class="form-check form-check-inline">
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" />
+							      	<label class="form-check-label" for="genderFemale">여성</label>
+							      </div>
+							      <div class="form-check form-check-inline">
+							   		<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" checked />
+							   		<label class="form-check-label" for="genderMale">남성</label>
+							      </div>
+							    </c:when>
+							    <c:otherwise>
+							      <div class="form-check form-check-inline">
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" checked />
+							      	<label class="form-check-label" for="genderFemale">여성</label>
+							      </div>
+							      <div class="form-check form-check-inline">
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" />
+							      	<label class="form-check-label" for="genderMale">남성</label>
+							      </div>
+							   </c:otherwise>
+							   </c:choose>
+							</td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('member_gender')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">법정생년월일</th>
+							<td>
+							   <div class="d-flex align-items-center flex-wrap">
+								   <select name="member_birth_y" class="form-select d-inline-block w-auto me-1">
+								     <c:forEach var="i" begin="1" end="100">
+								       <option value="${1920+i}" <c:if test="${member_info.member_birth_y==1920+i}">selected</c:if>>${1920+i} </option>
+								   	</c:forEach>
+								   </select>년 
+								   <select name="member_birth_m" class="form-select d-inline-block w-auto me-1">
+									   <c:forEach var="i" begin="1" end="12">
+								       <option value="${i}" <c:if test="${member_info.member_birth_m==i}">selected</c:if>>${i}</option>
+								   	</c:forEach>
+								   </select>월 
+								
+								   <select name="member_birth_d" class="form-select d-inline-block w-auto me-1">
+										<c:forEach var="i" begin="1" end="31">
+								       <option value="${i}" <c:if test="${member_info.member_birth_d==i}">selected</c:if>>${i}</option>
+								   	</c:forEach>
+								   </select>일
+								
+								   <div class="d-flex align-items-center ms-3">
+									<c:choose>
+								    	<c:when test="${member_info.member_birth_gn=='2' }">
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" checked />
+												<label class="form-check-label" for="solar">양력</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" />
+												<label class="form-check-label" for="lunar">음력</label>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" />
+												<label class="form-check-label" for="solar">양력</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" checked />
+												<label class="form-check-label" for="lunar">음력</label>
+											</div>
+										</c:otherwise>
+									</c:choose>
+								   </div>
+							   </div>
+							</td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('member_birth')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">휴대폰번호</th>
+							<td>
+							   <div class="d-flex align-items-center">
+								   <select  name="tel1" id="tel1" class="form-select w-auto me-1">
+										<option value="010" selected>010</option>
+										<option value="011">011</option>
+										<option value="016">016</option>
+										<option value="017">017</option>
+										<option value="018">018</option>
+										<option value="019">019</option>
+								   </select>
+								   - <input type="text" name="tel2" class="form-control mx-1 w-auto" value="${member_info.tel2 }"> 
+								   - <input type="text"name="tel3" class="form-control mx-1 w-auto" value="${member_info.tel3 }">
+							   </div>
+							   <div class="form-check mt-2">
+								 <c:choose> 
+								   <c:when test="${member_info.smssts_yn=='true' }">
+								     <input type="checkbox" class="form-check-input" name="smssts_yn" id="smssts_yn" value="Y" checked />
+								     <label class="form-check-label" for="smssts_yn">쇼핑몰에서 발송하는 SMS 소식을 수신합니다.</label>
+									</c:when>
+									<c:otherwise>
+									  <input type="checkbox" class="form-check-input" name="smssts_yn" id="smssts_yn" value="N"  />
+									  <label class="form-check-label" for="smssts_yn">쇼핑몰에서 발송하는 SMS 소식을 수신합니다.</label>
+									</c:otherwise>
+								 </c:choose>	
+							   </div>
+						    </td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('tel')" />
+							</td>	
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">이메일<br>(e-mail)</th>
+							<td>
+								<div class="d-flex align-items-center">
+								   <input type="text" name="email1" class="form-control w-auto" value="${member_info.email1 }" />
+								   <span class="mx-1">@</span>
+								   <input type="text" name="email2" id="email2_direct" class="form-control w-auto me-1" value="${member_info.email2 }" />
+								   <select name="email2_select" id="email2_select" onChange="changeEmailDomain()" class="form-select w-auto" title="직접입력">
+										<option value="non">직접입력</option>
+										<option value="hanmail.net">hanmail.net</option>
+										<option value="naver.com">naver.com</option>
+										<option value="yahoo.co.kr">yahoo.co.kr</option>
+										<option value="hotmail.com">hotmail.com</option>
+										<option value="paran.com">paran.com</option>
+										<option value="nate.com">nate.com</option>
+										<option value="google.com">google.com</option>
+										<option value="gmail.com">gmail.com</option>
+										<option value="empal.com">empal.com</option>
+										<option value="korea.com">korea.com</option>
+										<option value="freechal.com">freechal.com</option>
+								   </select>
+								</div>
+								<div class="form-check mt-2">
+								<c:choose> 
+								   <c:when test="${member_info.emailsts_yn=='true' }">
+								     <input type="checkbox" class="form-check-input" name="emailsts_yn" id="emailsts_yn" value="Y" checked />
+								     <label class="form-check-label" for="emailsts_yn">쇼핑몰에서 발송하는 e-mail을 수신합니다.</label>
+									</c:when>
+									<c:otherwise>
+									  <input type="checkbox" class="form-check-input" name="emailsts_yn" id="emailsts_yn" value="N"  />
+									  <label class="form-check-label" for="emailsts_yn">쇼핑몰에서 발송하는 e-mail을 수신합니다.</label>
+									</c:otherwise>
+								 </c:choose>
+								</div>
+							</td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('email')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="align-middle bg-light">주소</th>
+							<td>
+							   <div class="d-flex align-items-center mb-2">
+							   		<input type="text" id="zipcode" name="zipcode" class="form-control me-2" value="${member_info.zipcode }" readonly>
+							   		<a href="javascript:execDaumPostcode()" class="btn btn-secondary">우편번호검색</a>
+							   </div>
+							  	<div class="mb-2">
+								  <label for="roadAddress" class="form-label">도로명 주소:</label>
+								  <input type="text" id="roadAddress"  name="roadAddress" class="form-control" value="${member_info.roadAddress }" readonly>
+								</div>
+								<div class="mb-2">
+								  <label for="jibunAddress" class="form-label">지번 주소:</label>
+								  <input type="text" id="jibunAddress" name="jibunAddress" class="form-control" value="${member_info.jibunAddress }" readonly>
+								</div>
+								<div>
+								  <label for="namujiAddress" class="form-label">나머지 주소:</label>
+								  <input type="text"  name="namujiAddress" id="namujiAddress" class="form-control" value="${member_info.namujiAddress }" />
+								</div>
+							</td>
+							<td>
+							  <input type="button" class="btn btn-primary" value="수정하기" onClick="fn_modify_member_info('address')" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<div class="text-center mt-4">
+					<input  type="hidden" name="command"  value="modify_my_info" /> 
+					<c:choose>
+						<c:when test="${member_info.del_yn eq 'Y' }">
+							<input type="button" class="btn btn-success" value="회원복원" onClick="fn_delete_member('${member_info.member_id }','N')">
 						</c:when>
-						<c:otherwise>
-						  <input type="radio" name="member_birth_gn" value="2" />양력
-						  <input type="radio"  name="member_birth_gn" value="1" checked  />음력
-						</c:otherwise>
-						</c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_birth')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">휴대폰번호</td>
-					<td>
-					   <select  name="tel1" id="tel1">
-							<option value="010" selected>010</option>
-							<option value="011">011</option>
-							<option value="016">016</option>
-							<option value="017">017</option>
-							<option value="018">018</option>
-							<option value="019">019</option>
-					</select> 
-					 - <input type="text" name="tel2" size=4 value="${member_info.tel2 }"> 
-					 - <input type="text"name="tel3"  size=4 value="${member_info.tel3 }"><br> <br>
-					 <c:choose> 
-					   <c:when test="${member_info.smssts_yn=='true' }">
-					     <input type="checkbox"  name="smssts_yn" value="Y" checked /> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
+						<c:when test="${member_info.del_yn eq 'N' }">
+							<input type="button" class="btn btn-danger" value="회원탈퇴" onClick="fn_delete_member('${member_info.member_id }','Y')">
 						</c:when>
-						<c:otherwise>
-						  <input type="checkbox"  name="smssts_yn" value="N"  /> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
-						</c:otherwise>
-					 </c:choose>	
-				    </td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('tel')" />
-					</td>	
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이메일<br>(e-mail)</td>
-					<td>
-					   <input type="text" name="email1" size=10 value="${member_info.email1 }" /> @ <input type="text" size=10  name="email2" id="email2_direct" value="${member_info.email2 }" /> 
-					   <select name="email2_select" id="email2_select" onChange="changeEmailDomain()"  title="직접입력">
-							<option value="non">직접입력</option>
-							<option value="hanmail.net">hanmail.net</option>
-							<option value="naver.com">naver.com</option>
-							<option value="yahoo.co.kr">yahoo.co.kr</option>
-							<option value="hotmail.com">hotmail.com</option>
-							<option value="paran.com">paran.com</option>
-							<option value="nate.com">nate.com</option>
-							<option value="google.com">google.com</option>
-							<option value="gmail.com">gmail.com</option>
-							<option value="empal.com">empal.com</option>
-							<option value="korea.com">korea.com</option>
-							<option value="freechal.com">freechal.com</option>
-					</select><Br><br> 
-					<c:choose> 
-					   <c:when test="${member_info.emailsts_yn=='true' }">
-					     <input type="checkbox" name="emailsts_yn"  value="Y" checked /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
-						</c:when>
-						<c:otherwise>
-						  <input type="checkbox" name="emailsts_yn"  value="N"  /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
-						</c:otherwise>
-					 </c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('email')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">주소</td>
-					<td>
-					   <input type="text" id="zipcode" name="zipcode" size=5 value="${member_info.zipcode }" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
-					  <br>
-					  <p> 
-					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50" value="${member_info.roadAddress }"><br><br>
-					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${member_info.jibunAddress }"><br><br>
-					  나머지 주소: <input type="text"  name="namujiAddress" size="50" value="${member_info.namujiAddress }" />
-					   </p>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('address')" />
-					</td>
-				</tr>
-			</tbody>
-		</table>
+					</c:choose>
+				</div>
+				<input  type="hidden" name="h_tel1" value="${member_info.tel1}" />
+			</form>	
 		</div>
-		<div class="clear">
-		<br><br>
-		<table align=center>
-		<tr>
-			<td >
-				<input type="hidden" name="command"  value="modify_my_info" /> 
-				<c:choose>
-					<c:when test="${member_info.del_yn eq 'Y' }">
-						<input type="button" value="회원복원" onClick="fn_delete_member('${member_info.member_id }','N')">   
-					</c:when>
-					<c:when test="${member_info.del_yn eq 'N' }">
-						<input type="button" value="회원탈퇴" onClick="fn_delete_member('${member_info.member_id }','Y')">
-					</c:when>
-				</c:choose>
-			</td>
-		</tr>
-	</table>
 	</div>
-	<input  type="hidden" name="h_tel1" value="${member_info.tel1}" />
-</form>	
+</div>
 </body>
 </html>

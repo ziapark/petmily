@@ -26,14 +26,15 @@ import com.petmillie.order.vo.OrderVO;
 public class AdminOrderControllerImpl extends BaseController  implements AdminOrderController{
 	@Autowired
 	private AdminOrderService adminOrderService;
-	
 	@Override
 	@RequestMapping(value="/adminOrderMain.do" ,method={RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView adminOrderMain(@RequestParam Map<String, String> dateMap,
 	                                   HttpServletRequest request, HttpServletResponse response)  throws Exception {
 	    String viewName=(String)request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
-	    mav.addObject("body", "/WEB-INF/views"+ viewName +".jsp");
+	    
+	    // viewName 변수에서 '/WEB-INF/views' 경로를 제거하고, JSP의 상대 경로만 남깁니다.
+	    mav.addObject("body", "/WEB-INF/views"+viewName +".jsp");
 
 	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
 	    String section = dateMap.get("section");
@@ -98,16 +99,21 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	}
 	
 	
+	// AdminOrderControllerImpl.java
+	// ...
 	@Override
 	@RequestMapping(value="/detailOrder.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView orderDetail(@RequestParam("order_id") int order_id, 
-			                      HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView("/common/layout");
-		mav.addObject("body", "WEB-INF/views" + viewName +".jsp");
-		Map orderMap =adminOrderService.orderDetail(order_id);
-		mav.addObject("orderMap", orderMap);
-		return mav;
+	                                HttpServletRequest request, HttpServletResponse response)  throws Exception {
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+
+	    // JSP 파일의 정확한 상대 경로를 직접 지정해 줍니다.
+	    // detailOrder.jsp 파일이 있는 위치가 WEB-INF/views/admin/order 아래에 있다고 가정합니다.
+	    mav.addObject("body", "/WEB-INF/views/"+viewName+".jsp");
+
+	    Map orderMap =adminOrderService.orderDetail(order_id);
+	    mav.addObject("orderMap", orderMap);
+	    return mav;
 	}
-	
 }
