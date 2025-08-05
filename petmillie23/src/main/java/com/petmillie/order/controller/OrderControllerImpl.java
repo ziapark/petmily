@@ -179,7 +179,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
 	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
-	    
+		System.out.println("📌 payData = " + payData);  // 여기에 로그
 	    // 필수값 추출
 	    String paymentKey = (String) payData.get("portone_paymentKey");
 

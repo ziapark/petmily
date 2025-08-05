@@ -154,25 +154,33 @@ async function requestCardPayment() {
 
   // 결제 성공시 서버로 주문/결제 내역 전달
   try {
-    const res = await fetch("${ctx}/order/payToOrderGoods.do", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...data,
-        paymentId: paymentId,
-        portone_paymentKey: response.paymentKey,
-        paymentStatus: response.status
-      })
-    });
-    const result = await res.json();
+  const res = await fetch("/petmillie/order/payToOrderGoods.do", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...data,
+      paymentId: paymentId,
+      portone_paymentKey: response.paymentKey,
+      paymentStatus: response.status
+    })
+  });
+
+  const text = await res.text();
+  try {
+    const result = JSON.parse(text);
     alert(result.message || "주문이 완료되었습니다!");
-    if(result.success) {
-      window.location.href = "${contextPath}/order/payComplete.do";
+    if (result.success) {
+      window.location.href = `${ctx}/order/payComplete.do`;
     }
   } catch (e) {
-	  console.error("❌ 예외 발생:", e);
-    alert("서버 오류! 결제는 이미 되었을 수도 있으니, 반드시 관리자에게 문의해 주세요!");
+    console.error("❌ JSON 파싱 실패! 응답 텍스트:", text);
+    alert("서버에서 이상한 응답이 왔어요. 관리자에게 문의해주세요.");
   }
+
+} catch (e) {
+  console.error("❌ fetch 요청 실패:", e);
+  alert("서버와의 통신 중 오류 발생! 결제는 되었을 수 있으니 꼭 확인 부탁드립니다!");
+}
 }
 </script>
 
