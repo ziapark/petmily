@@ -12,7 +12,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
  <script>
- function changeEmailDomain() {1
+ function changeEmailDomain() {
 	  var email2Select = document.getElementById("email2_select");
 	  var email2Direct = document.getElementById("email2_direct");
 	  if(email2Select.value == "non") {
