@@ -171,13 +171,13 @@ function fn_cancel_order(order_id){
 				  <a href="${contextPath}/mypage/myOrderDetail.do?order_id=${item.order_id }"><strong>${item.order_id }</strong>  </a>
 				</td>
 				<td >
-				 <strong>${item.pay_order_time }</strong> 
+				 <strong>${item.order_time }</strong> 
 				</td>
 				<td> 
 				    <strong>
 					   <c:forEach var="item2" items="${myOrderHistList}" varStatus="j">
 				          <c:if  test="${item.order_id ==item2.order_id}" >
-				            <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item2.goods_id }">${item2.goods_title }</a><br>
+				            <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item2.goods_num }">${item2.goods_name }</a><br>
 				         </c:if>   
 					 </c:forEach>
 					 </strong>
@@ -186,7 +186,7 @@ function fn_cancel_order(order_id){
 				   <strong>
 				      <c:forEach var="item2" items="${myOrderHistList}" varStatus="j">
 				          <c:if  test="${item.order_id ==item2.order_id}" >
-				             ${item.goods_sales_price*item.order_goods_qty }원/${item.order_goods_qty }<br>
+				             ${item.goods_sales_price*item.goods_qty }원/${item.goods_qty }<br>
 				         </c:if>   
 					 </c:forEach>
 				   </strong>
@@ -213,7 +213,7 @@ function fn_cancel_order(order_id){
 				  </strong>
 				</td>
 				<td>
-				 <strong>${item.orderer_name }</strong> 
+				 <strong>${item.order_name }</strong> 
 				</td>
 				<td>
 					<strong>${item.receiver_name }</strong>
