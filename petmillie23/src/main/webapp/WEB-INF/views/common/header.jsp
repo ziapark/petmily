@@ -156,12 +156,14 @@
 			    <li><a href="#">추가하셈3-2</a></li>
 			    <li><a href="#">추가하셈3-3</a></li>
 			  </ul>
+			  <c:if test="${empty businessInfo and empty memberInfo }">
 			  <ul class="submenu">
 			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
 			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
 			  </ul>
+			  </c:if>
 			  <c:if test="${not empty businessInfo}">
 			  <ul class="submenu">
 			  	<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a>
@@ -184,6 +186,12 @@
 				<li><a href="#">배송관리</a></li>
 				<li><a href="#">게시판관리</a></li>
 				</ul>
+				<ul class="submenu">
+			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
+			    <li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
+			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
+			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
+			  </ul>
 			</c:when>
 			<c:when test="${isLogOn==true and not empty memberInfo.member_id !='admin' }">
 			  <ul class="submenu">

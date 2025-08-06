@@ -6,7 +6,10 @@
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <html>
 <body>
-<h2>Hello World!</h2>
-<a href="${contextPath}/main/main.do">메인 홈페이지 가기</a>
+<%
+String contextPath = request.getContextPath();
+response.sendRedirect(contextPath+"/main/main.do"); 
+%>
+
 </body>
 </html>
