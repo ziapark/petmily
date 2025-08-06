@@ -23,33 +23,8 @@
     <result property="goods_credate" column="goods_credate"/>
 </resultMap>
 
-	<resultMap id="orderResult" type="OrderVO">
-		<result property="order_num" column="order_num" />
-		<result property="member_id" column="member_id" />
-		<result property="order_id" column="order_id" />
-		<result property="goods_num" column="goods_num" />
-		<result property="goods_name" column="goods_name" />
-		<result property="goods_sales_price" column="goods_sales_price" />
-		<result property="total_price" column="total_price" />
-		<result property="goods_qty" column="goods_qty" />
-		<result property="order_name" column="order_name" />
-		<result property="receiver_name" column="receiver_name" />
-		<result property="tel1" column="tel1" />
-		<result property="tel2" column="tel2" />
-		<result property="tel3" column="tel3" />
-		<result property="zipcode" column="zipcode" />
-		<result property="roadAddress" column="roadAddress" />
-		<result property="jibunAddress" column="jibunAddress" />
-		<result property="namujiAddress" column="namujiAddress" />
-		<result property="delivery_method" column="delivery_method" />
-		<result property="delivery_message" column="delivery_message" />
-		<result property="delivery_state" column="delivery_state" />
-		<result property="goods_fileName" column="goods_fileName" />
-		<result property="order_time" column="order_time" />
-	</resultMap>
-
 	
-	<select id="selectMyOrderGoodsList" resultMap="orderResult" parameterType="String">
+	<select id="selectMyOrderGoodsList" resultMap="goodsResult" parameterType="String">
 	    <![CDATA[
 			select * from userorder
             where member_id=#{member_id}

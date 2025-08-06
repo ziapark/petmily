@@ -98,11 +98,6 @@ async function requestCardPayment() {
     pd_name: orderName,
     price: price,
     receiver_name: f['receiver_name']?.value,
-    goods_num: f['goods_num']?.value,
-    goods_name: f['goods_name']?.value,
-   	goods_sales_price: f['goods_sales_price']?.value,
-   	order_name: f['order_name']?.value,
-   	order_num : f['order_num']?.value,
     tel1: tel1,
     tel2: tel2,
     tel3: tel3,
@@ -160,6 +155,7 @@ async function requestCardPayment() {
   }
   // 결제 식별자 추출 (paymentKey, imp_uid, txId 중 실제로 오는 값!)
   const paymentKey = response.paymentKey || response.imp_uid || response.id || response.txId;
+  const txId = response.txId;
   if (!paymentKey && !txId) {
 	  alert("결제는 되었지만 paymentKey를 받지 못했습니다. 관리자에게 문의하세요.");
 	  console.error("📛 결제 응답 이상:", response);
@@ -186,6 +182,15 @@ async function requestCardPayment() {
     })
   });
   
+  let result;
+  try {
+      result = await res.json();
+  } catch (e) {
+      const text = await res.text();
+      alert("서버 에러: " + text);
+      return;
+  }
+
   const text = await res.text();
   try {
     const result = JSON.parse(text);
@@ -204,6 +209,8 @@ async function requestCardPayment() {
 }
 }
 </script>
+01987a8e-a202-765b-b42e-cd04435b4374
+01987a8e-a202-765b-b42e-cd04435b4374
 
 <BODY>
   <H1>주문하기</H1>
@@ -239,13 +246,8 @@ async function requestCardPayment() {
             <td>
               <h2>
                 ${item.goods_qty * item.goods_sales_price}원
-                <input type="hidden" name="order_num" value="${item.order_num}">
-                <input type="hidden" name="goods_num" value="${item.goods_num}">
                 <input type="hidden" name="total_price" value="${item.goods_qty * item.goods_sales_price}">
                 <input type="hidden" name="order_id" value="${item.order_id}">
-                <input type="hidden" name="goods_name" value="${item.goods_name }">
-                <input type="hidden" name="goods_sales_price" value="${item.goods_sales_price }">
-                <input type="hidden" name="order_name" value="${sessionScope.memberInfo.member_name}">
               </h2>
             </td>
           </tr>
