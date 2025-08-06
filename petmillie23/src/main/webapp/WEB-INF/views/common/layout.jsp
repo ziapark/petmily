@@ -22,7 +22,7 @@
 <script src="${contextPath}/resources/jquery/basic-jquery-slider.js" type="text/javascript"></script>
 <script src="${contextPath}/resources/jquery/tabs.js" type="text/javascript"></script>
 <script src="${contextPath}/resources/jquery/carousel.js" type="text/javascript"></script>
-
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0351a11278cad14d12e263429c917675&libraries=services"></script>
 <link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css" media="screen">
 <script>
 	// 슬라이드 
@@ -64,6 +64,67 @@
 		</div>
 		 <jsp:include page="quickMenu.jsp"/>
     </div>        	
+    <script>
+    
+    const contextPath = '${pageContext.request.contextPath}';
+    
+    //카카오맵 api- 사용자 동네정보 얻기 
+	function sendLocationToServer(lat, lon) {
+		fetch(contextPath + '/location', {
+	    method: 'POST',
+	    headers: { 'Content-Type': 'application/json' },
+	    body: JSON.stringify({ latitude: lat, longitude: lon })
+	  })
+	  .then(res => res.json())
+	  .then(data => {
+	    // 서버가 보내준 위치명 화면에 표시 (예: 대전 유성구)
+	    document.getElementById('locationDisplay').innerText = data.address || "위치 정보 없음";
+	  })
+	  .catch(err => {
+	    console.error("위치 전송 오류:", err);
+	  });
+	}
+	
+	function requestUserLocation() {
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(
+	      position => {
+	        sendLocationToServer(position.coords.latitude, position.coords.longitude);
+	      },
+	      error => {
+	        console.error("위치 정보 요청 거부됨 또는 오류", error);
+	      }
+	    );
+	  } else {
+	    alert("위치 정보가 지원되지 않는 브라우저입니다.");
+	  }
+	}
+	
+	window.onload = () => {
+	  requestUserLocation();
+	}
+	
+	navigator.geolocation.getCurrentPosition(function(position) {
+	    var lat = position.coords.latitude;
+	    var lng = position.coords.longitude;
+	    console.log("현재위치:", lat, lng);
+	
+	   /* var container = document.getElementById('map');
+	    var options = {
+	        center: new kakao.maps.LatLng(lat, lng),
+	        level: 3
+	    };
+	    var map = new kakao.maps.Map(container, options);
+	
+	    // 마커 찍기
+	    var marker = new kakao.maps.Marker({
+	        position: new kakao.maps.LatLng(lat, lng)
+	    });
+	    marker.setMap(map);*/
+	}, function(error) {
+	    console.error('위치 정보를 가져오는데 실패했습니다.', error);
+	});
+</script>
 </body>      
         
         

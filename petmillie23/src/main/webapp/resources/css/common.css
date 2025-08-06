@@ -108,27 +108,36 @@ article { width:100%; margin:0 auto; }
 
 /* 본문 */
 #wrap {width:100%;}
-.mainbanner_wrap {width:100%; height:300px;}
+.mainbanner_wrap {width:100%; height:400px;}
 .contents_wrap {width:100%; max-width:1200px; margin:0 auto;}
 .carousel-item {background:#676767 !important;}
-
+article h3 {color:#676767; font-size:1.2em;}
 
 /* 본문 : 날씨 */
-
+.weather_recommendation {
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif !important;
+}
 .weather_wrap {width:100%;}
 .weather_wrap h2 {font-size: 1.4rem;}
+#locationDisplay {background:url(/petmillie/resources/image/location.png) left center no-repeat; 
+					background-size:20px; padding-left:25px; box-sizing:border-box; 
+					color: #2196F3 !important; font-size: 1.0em;line-height: 27px;
+					}
 .weather_api_box {overflow:hidden;}
-.weater_box {   width: 250px;
-			    float: left;
-			    border: 1px solid #eee;
+.weather_box {  font-size: 0.8em;
+			    border: 1px solid #83e7b3;
 			    border-radius: 5px;
 			    box-sizing: border-box;
 			    padding: 10px;
 			    margin: 5px;
 			    background: #fff;
-			    box-shadow: 2px 3px 7px #b5b5b58f;}
-.weather_goods .goods_item {background:#eee; height:100px;}
+			   }
+.weather_wrap .weather_goods {border-bottom: 1px solid #83e7b3;}
+.weather_goods .goods_item {width:33.3%;float:left; text-align: center;}
 
+.weather_goods .goods_item a {display:inline-block; width:90%; margin:0 auto; }
+.weather_goods .goods_item a img {width:100%;}
+.weather_goods .goods_item p {text-align:left; padding: 10px 0 0 20px; font-weight:bold;}
 
 
 /* 게시판 */
