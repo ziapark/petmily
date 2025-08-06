@@ -228,7 +228,8 @@ function fn_detail_order(order_id){
     formObj.appendChild(i_order_id);
     document.body.appendChild(formObj); 
     formObj.method="post";
-    formObj.action="${contextPath}/admin/order/orderDetail.do";
+    // 수정된 부분: URL을 '/admin/order/detailOrder.do'로 변경
+    formObj.action="${contextPath}/admin/order/detailOrder.do";
     formObj.submit();
 	
 }
@@ -615,4 +616,3 @@ function fn_detail_search(){
 	<div class="clear"></div>
 </body>
 </html>
-

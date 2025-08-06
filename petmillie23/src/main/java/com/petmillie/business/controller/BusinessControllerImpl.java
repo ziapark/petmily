@@ -1,9 +1,12 @@
 package com.petmillie.business.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -277,28 +281,62 @@ public class BusinessControllerImpl implements BusinessController {
 		return resEntity;
 	}
 
-	@Override
 	@RequestMapping(value="addroom.do" , method= {RequestMethod.POST,RequestMethod.GET})
-	public String addpension2(@ModelAttribute("RoomVO") RoomVO roomVO, HttpServletRequest request, HttpServletResponse response, Model model, RedirectAttributes redirectAttributes) throws Exception {
-			response.setContentType("text/html; charset=UTF-8");
-			request.setCharacterEncoding("utf-8");
-			System.out.println("객실명 : " + roomVO.getRoom_name());
-			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+	public String addpension2(RoomVO roomVO, 
+	                          @RequestParam(value="file", required = false) MultipartFile fileimage, 
+	                          HttpServletRequest request, 
+	                          HttpServletResponse response, 
+	                          Model model, 
+	                          RedirectAttributes redirectAttributes) throws Exception {
 
-			try {
-				businessService.addpension2(roomVO);
-				HttpSession session = request.getSession();
-			    session.setAttribute("roomInfo", roomVO);
-			    session.setAttribute("message", "등록이 완료 되었습니다");	
-			    return "redirect:/business/mypension.do";
-			} catch (Exception e) {
-				e.printStackTrace();
-				HttpSession session = request.getSession();
-				session.setAttribute("message", "등록에 실패 하였습니다");
-			    return "redirect:/business/addroomForm.do";
-			}
+	    System.out.println("addroom.do 컨트롤러 진입");
+	    response.setContentType("text/html; charset=UTF-8");
+	    request.setCharacterEncoding("utf-8"); 
+	    System.out.println("객실명 : " + roomVO.getRoom_name());
+
+	    if (fileimage == null || fileimage.isEmpty()) {
+	        redirectAttributes.addFlashAttribute("message", "이미지를 반드시 선택해주세요.");
+	        return "redirect:/business/addroomForm.do";
+	    }
+
+	    try {
+	        String saveDir = "C:\\petupload\\room";
+	        File uploadPath = new File(saveDir);
+	        if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	        // 🔧 UUID로 파일명 변환
+	        String originalFileName = fileimage.getOriginalFilename();
+	        String uuid = UUID.randomUUID().toString();
+	        String extension = "";
+
+	        // 확장자 추출
+	        int dotIndex = originalFileName.lastIndexOf(".");
+	        if (dotIndex != -1) {
+	            extension = originalFileName.substring(dotIndex);
+	        }
+
+	        String savedFileName = uuid + extension;
+	        System.out.println("저장할 파일명: " + savedFileName);
+
+	        File saveFile = new File(uploadPath, savedFileName);
+	        fileimage.transferTo(saveFile);  // 실제 파일 저장
+
+	        roomVO.setFileimage(savedFileName);  // 🔧 UUID 적용된 이름으로 저장
+	        businessService.addpension2(roomVO);
+
+	        HttpSession session = request.getSession();
+	        session.setAttribute("message", "등록이 완료 되었습니다");
+	        return "redirect:/business/mypension.do";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        HttpSession session = request.getSession();
+	        session.setAttribute("message", "등록에 실패 하였습니다");
+	        return "redirect:/business/addroomForm.do";
+	    }
 	}
+
+	
 	@Override
 	@RequestMapping(value="/roomdetailInfo.do" ,method = {RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView roomdetailInfo(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception {

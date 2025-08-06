@@ -28,6 +28,7 @@ public class MemberVO {
 	private String member_join;
 	private String del_yn;
 	private String role;
+	
 	private String kakao_id;
 	private String social_type;
 	

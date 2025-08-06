@@ -1,6 +1,10 @@
 package com.petmillie.order.controller;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,17 +14,25 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.vo.MemberVO;
+import com.petmillie.order.portone.PortoneService;
 import com.petmillie.order.service.OrderService;
+import com.petmillie.order.vo.ApiResponse;
 import com.petmillie.order.vo.OrderVO;
+import com.petmillie.order.vo.PayVO;
 
 @Controller("orderController")
 @RequestMapping(value="/order")
@@ -29,6 +41,8 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	private OrderService orderService;
 	@Autowired
 	private OrderVO orderVO;
+	@Autowired
+	private PortoneService portoneService;
 	
 	@RequestMapping(value="/orderEachGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView orderEachGoods(@ModelAttribute("orderVO") OrderVO _orderVO,
@@ -108,8 +122,8 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		session.setAttribute("memberInfo", memberVO);
 		return mav;
 	}	
-	
-	@RequestMapping(value="/payToOrderGoods.do" ,method = RequestMethod.POST)
+	// 기존 결제 메서드
+/*	@RequestMapping(value="/payToOrderGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView payToOrderGoods(@RequestParam Map<String, String> receiverMap,
 			                       HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		String viewName=(String)request.getAttribute("viewName");
@@ -143,25 +157,109 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 			orderVO.setNamujiAddress(receiverMap.get("namujiAddress"));
 			orderVO.setDelivery_method(receiverMap.get("delivery_method"));
 			orderVO.setDelivery_message(receiverMap.get("namujiAddress"));
-			orderVO.setPay_method(receiverMap.get("pay_method"));
-			orderVO.setCard_com_name(receiverMap.get("card_com_name"));
-			orderVO.setCard_pay_month(receiverMap.get("card_pay_month"));
 			orderVO.setPay_order_tel(receiverMap.get("pay_order_tel"));
-			
 			int sales_price = Integer.parseInt(orderVO.getGoods_sales_price());
-			
-			int finalPrice = orderVO.getGoods_qty() * sales_price;
-		    orderVO.setFinal_total_price(finalPrice);
 		    //orderVO.setGoods_qty(goods_qty);
 		  
 			myOrderList.set(i, orderVO); 
 			}//end for
+		PayVO payVO =  new PayVO();
+		payVO.setOrder_num(myOrderList.get(0).getOrder_num());
+		payVO.setPay_method(receiverMap.get("pay_method"));
+		payVO.setCard_com_name(receiverMap.get("card_com_name"));
+		payVO.setCard_pay_month(receiverMap.get("card_pay_month"));
+		payVO.setPay_order_tel(receiverMap.get("pay_order_tel"));
+		payVO.setPayment_amount(receiverMap.get("payment_amount"));
+		payVO.setPayment_status("success");
+		payVO.setPg_tid(receiverMap.get("pg_tid"));
 		
-	    orderService.addNewOrder(myOrderList);
+	    orderService.addNewOrder(myOrderList, payVO);
 		mav.addObject("myOrderInfo",receiverMap);//OrderVO�� �ֹ���� ��������  �ֹ��� ������ ǥ���Ѵ�.
 		mav.addObject("myOrderList", myOrderList);
 		return mav;
+	}  */
+	
+	//포트원 결제 메서드
+	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
+	@ResponseBody
+	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		System.out.println("📌 payData = " + payData);  // 여기에 로그
+	    // 필수값 추출
+	    String paymentKey = (String) payData.get("portone_paymentKey");
+	    
+	    // paymentKey가 null이면 에러 처리
+	    if (paymentKey == null || paymentKey.isBlank()) {
+	        return new ApiResponse(false, "결제 실패: paymentKey 없음");
+	    }
+	    
+
+	    int expectAmount = Integer.parseInt(String.valueOf(payData.get("price")));
+	    boolean isValid = portoneService.verifyPayment(paymentKey, expectAmount);
+	    if (!isValid) {
+	        return new ApiResponse(false, "결제 검증 실패! 금액 또는 상태가 일치하지 않습니다.");
+	    }
+	    
+	    // 주문/결제 DB 저장
+	    OrderVO orderVO = new OrderVO();
+	    orderVO.setMember_id(memberInfo.getMember_id());
+	    orderVO.setReceiver_name((String) payData.get("receiver_name"));
+	    orderVO.setTel1((String) payData.get("tel1"));
+	    orderVO.setTel2((String) payData.get("tel2"));
+	    orderVO.setTel3((String) payData.get("tel3"));
+	    orderVO.setZipcode((String) payData.get("zipcode"));
+	    orderVO.setRoadAddress((String) payData.get("roadAddress"));
+	    orderVO.setJibunAddress((String) payData.get("jibunAddress"));
+	    orderVO.setNamujiAddress((String) payData.get("namujiAddress"));
+	    orderVO.setDelivery_method((String) payData.get("delivery_method"));
+	    orderVO.setDelivery_message((String) payData.get("delivery_message"));
+	    orderVO.setTotal_price(String.valueOf(payData.get("price")));
+
+	    PayVO payVO = new PayVO();
+	    payVO.setPayment_id((String) payData.get("paymentId"));
+	    payVO.setPay_method((String) payData.get("pay_method"));
+	    payVO.setCard_com_name((String) payData.get("card_com_name"));
+	    payVO.setCard_pay_month((String) payData.get("card_pay_month"));
+	    payVO.setPayment_status((String) payData.get("paymentStatus"));
+	    payVO.setPg_tid((String) payData.get("portone_paymentKey"));
+	    payVO.setPay_order_tel((String) payData.get("pay_order_tel"));
+
+	    // 금액 필드는 타입 주의
+	    String priceStr = String.valueOf(payData.get("price"));
+	    try {
+	        int final_price = Integer.parseInt(priceStr);
+	        payVO.setFinal_total_price(final_price);        // int 필드
+	        payVO.setPayment_amount(priceStr);        // String 필드도 같이 채움
+	    } catch (NumberFormatException e) {
+	        // 금액 파싱 실패 시 예외처리
+	        return new ApiResponse(false, "금액 데이터가 올바르지 않습니다.");
+	    }
+
+	    // 결제 시간은 현재 시간으로 넣는 것도 방법
+	    String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+	    payVO.setPay_order_time(now);
+	    payVO.setPayment_time(now);
+
+	    orderService.addNewOrder(List.of(orderVO), payVO);
+
+	    return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
 	}
 	
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseBody
+	public Map<String, Object> handleRuntimeException(RuntimeException ex) {
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("success", false);
+	    try {
+	        // 혹시 던진 메시지가 JSON이면 파싱해서 반환
+	        ObjectMapper mapper = new ObjectMapper();
+	        JsonNode json = mapper.readTree(ex.getMessage());
+	        map.put("message", json.has("message") ? json.get("message").asText() : ex.getMessage());
+	    } catch (Exception e) {
+	        map.put("message", ex.getMessage());
+	    }
+	    return map;
+	}
 
 }

@@ -2,6 +2,8 @@ package com.petmillie.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -12,6 +14,9 @@ public class ViewNameInterceptor extends  HandlerInterceptorAdapter{
 		        String viewName = getViewName(request);
 		        request.setAttribute("viewName", viewName);
 	
+		        if (request instanceof MultipartHttpServletRequest) {
+		            return true; // 넘긴다
+		        }
 		        // 👉 여기에 side_menu 설정 추가!
 		        String uri = request.getRequestURI();
 	

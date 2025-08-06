@@ -165,6 +165,7 @@ function calcPeriod(search_period) {
 </script>
 </head>
 <body>
+<div class="container text-center mt-3 mb-3">
    <H3>상품 조회</H3>
 	<form method="post">
 		<TABLE cellpadding="10" cellspacing="10">

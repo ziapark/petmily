@@ -23,7 +23,8 @@ function result(){
 </c:if>
 </head>
 <body>
-	<H3>회원 로그인 창</H3>
+<div class="container text-center mt-3 mb-3">
+	<H3>사업자 회원 로그인</H3>
 	<DIV id="detail_table">
 	<form action="${contextPath}/business/busilogin.do" method="post" onsubmit="return Checklogin();">
 		<TABLE>
@@ -50,5 +51,6 @@ function result(){
 		   <a href="#">고객 센터</a>		   
 	</form>	
 	</DIV>	
+	</div>
 </body>
 </html>

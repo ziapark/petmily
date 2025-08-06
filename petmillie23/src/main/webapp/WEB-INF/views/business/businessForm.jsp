@@ -209,12 +209,6 @@ function fn_overlapped(){
           </td>
         </tr>
         <tr class="dot_line">
-          <td class="fixed_join">썸네일 이미지</td>
-          <td>
-            <input name="thumbnail_img" type="text" size="40" placeholder="파일명 또는 업로드" />
-          </td>
-        </tr>
-        <tr class="dot_line">
           <td class="fixed_join">정산 은행명</td>
           <td>
             <input name="bank_name" type="text" size="15" />

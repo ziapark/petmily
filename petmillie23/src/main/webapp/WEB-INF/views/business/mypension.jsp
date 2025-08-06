@@ -12,33 +12,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>내 업체 정보</title>
-</head>
-<body>
-<c:if test="${not empty sessionScope.message}">
-  <script>alert("${sessionScope.message}");</script>
-  <c:remove var="message" scope="session" />
-</c:if>
-<h2>등록된 업체</h2>
-<c:if test="${not empty pensionList}">
-  <p><strong>업체명:</strong> ${pensionList.business_name}</p>
-  <p><strong>업체유형:</strong> ${pensionList.business_type}</p>
-  <p><strong>대표자명:</strong> ${pensionList.owner_name}</p>
-  <p><strong>우편번호:</strong> ${pensionList.zipcode}</p>
-  <p><strong>도로명 주소:</strong> ${pensionList.roadAddress}</p>
-  <p><strong>지번 주소:</strong> ${pensionList.jibunAddress}</p>
-  <p><strong>나머지 주소:</strong> ${pensionList.namujiAddress}</p>
-  <p><strong>승인상태:</strong> ${pensionList.approval_status}</p>
-  <br>
-</c:if>
-
-<c:if test="${empty pensionList}">
-  <p>등록된 업체 정보가 없습니다.</p>
-  <br>
-</c:if>
-<hr>
-  <c:out value="${sessionScope.message}" />
-<h2>등록된 펜션</h2>
+<link rel="stylesheet" href="css/common.css">
 <script>
 function pensiondelete(p_num) {
     console.log("탈퇴요청 p_num:", p_num);
@@ -83,35 +57,92 @@ function pensiondelete(p_num) {
     }
 }
 </script>
+<title>내 업체 정보</title>
+</head>
+<body>
+<c:if test="${not empty sessionScope.message}">
+  <script>alert("${sessionScope.message}");</script>
+  <c:remove var="message" scope="session" />
+</c:if>
+
+  <div class="container text-center mt-3 mb-3">
+  	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold h2h2">사업자 정보 페이지</h2>
+			<p class="h2p"></p>
+		</div>
+	</div>
+
+	 <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
+
+<div class="col">
+      <div class="pd">
+<c:if test="${not empty pensionList}">
+  <p class="card-text mb-0 bd"><strong>업체명:</strong> ${pensionList.business_name}</p>
+  <p class="card-text mb-0 bd"><strong>업체유형:</strong> ${pensionList.business_type}</p>
+  <p class="card-text mb-0 bd"><strong>대표자명:</strong> ${pensionList.owner_name}</p>
+  <p class="card-text mb-0 bd"><strong>우편번호:</strong> ${pensionList.zipcode}</p>
+  <p class="card-text mb-0 bd"><strong>도로명 주소:</strong> ${pensionList.roadAddress}</p>
+  <p class="card-text mb-0 bd"><strong>지번 주소:</strong> ${pensionList.jibunAddress}</p>
+  <p class="card-text mb-0 bd"><strong>나머지 주소:</strong> ${pensionList.namujiAddress}</p>
+  <p class="card-text mb-0 bd"><strong>승인상태:</strong> ${pensionList.approval_status}</p>
+  <br>
+</c:if>
+
+<c:if test="${empty pensionList}">
+  <p>등록된 업체 정보가 없습니다.</p>
+  <br>
+</c:if>
+ </div>
+</div>
 <c:choose>
-<c:when test="${not empty pensionInfo and pensionInfo.del_yn == 'N'}">
-<input type="hidden" name="p_num" value="${pensionInfo.p_num}"/>
-<p><strong>펜션 등록번호 : </strong>${pensionInfo.business_id}</p>
-<p><strong>업체 명 : </strong>${pensionInfo.p_name}</p>
-<p><strong>업체 전화번호 : </strong>${pensionInfo.tel1}-<span>${pensionInfo.tel2}</span>-<span>${pensionInfo.tel3}</span></p>
-<p><strong>객실 수 : </strong>${pensionInfo.room_count}</p>
-<p><strong>시설 정보 : </strong>${pensionInfo.facilities}</p>
-<p><strong>설명 : </strong>${pensionInfo.description}</p>
-<a href="${contextPath}/business/pensiondetail.do?p_num=${pensionInfo.p_num}"><button type="button">업체수정</button></a>
-<button type="button" onclick="pensiondelete(${pensionInfo.p_num})">업체삭제</button>
-<a href="${contextPath}/business/addroomForm.do?p_num=${pensionInfo.p_num}"><button type="button">객실추가</button></a>
-<hr>
-</c:when>
+  <c:when test="${not empty pensionInfo and pensionInfo.del_yn == 'N'}">
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <input type="hidden" name="p_num" value="${pensionInfo.p_num}" />
+        <h5 class="card-title text-success">업체 정보</h5>
+        <p class="card-text mb-1"><strong>펜션 등록번호:</strong> ${pensionInfo.business_id}</p>
+        <p class="card-text mb-1"><strong>업체 명:</strong> ${pensionInfo.p_name}</p>
+        <p class="card-text mb-1">
+          <strong>업체 전화번호:</strong> ${pensionInfo.tel1}-${pensionInfo.tel2}-${pensionInfo.tel3}
+        </p>
+        <p class="card-text mb-1"><strong>객실 수:</strong> ${pensionInfo.room_count}</p>
+        <p class="card-text mb-1"><strong>시설 정보:</strong> ${pensionInfo.facilities}</p>
+        <p class="card-text"><strong>설명:</strong> ${pensionInfo.description}</p>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+          <a href="${contextPath}/business/pensiondetail.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-primary btn-sm">
+            업체수정
+          </a>
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="pensiondelete(${pensionInfo.p_num})">
+            업체삭제
+          </button>
+          <a href="${contextPath}/business/addroomForm.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-success btn-sm">
+            객실추가
+          </a>
+        </div>
+      </div>
+    </div>
+  </c:when>
+  
+
   <c:when test="${pensionInfo.del_yn == 'Y'}">
-  	<p>삭제된 펜션 정보입니다.</p>
-  	<hr>
+    <div class="alert alert-warning">삭제된 펜션 정보입니다.</div>
   </c:when>
 </c:choose>
+    
 
 <c:if test="${empty pensionInfo}">
   <p>등록된 펜션 정보가 없습니다.</p>
 <a href="${contextPath}/business/addpensionForm.do"><button type="button">펜션 등록</button></a>
   <br>
 </c:if>
+
+
 <script>
 function submitdelete(room_id) {
     console.log("탈퇴요청 room_id:", room_id);
-    if (confirm("정말로 객실을 삭제 하시겠습니까?\n(탈퇴 후 복구가 불가능합니다.)")) {
+    if (confirm("정말로 객실을 삭제 하시겠습니까?\n(삭제 후 복구가 불가능합니다.)")) {
         $.ajax({
             type: "POST",
             url: "${contextPath}/business/removeroom.do",
@@ -152,34 +183,59 @@ function submitdelete(room_id) {
     }
 }
 </script>
-<h2>등록된 객실리스트</h2>
+
+</div>
+<h3 class="mb-4" style="display: block; text-align:left;">등록된 객실 리스트</h3>
+
 <c:choose>
   <c:when test="${not empty roomInfo and not empty pensionInfo and pensionInfo.del_yn == 'N'}">
-    <c:forEach var="room" items="${roomInfo}">
-      <div>
-        <input type="hidden" name="room_id" value="${room.room_id}"/>
-      	객실 번호: ${room.room_id} <br>
-        객실명: ${room.room_name} <br>
-        가격: ${room.price} <br>
-        객실타입: ${room.room_type} <br>
-        침대타입: ${room.bed_type} <br>
-        최대인원: ${room.max_capacity} <br>
-        면적: ${room.room_size} <br>
-        설명: ${room.room_description} <br>
-        편의시설: ${room.amenities} <br>
-        <a href="${contextPath}/business/roomdetailInfo.do?room_id=${room.room_id}"><button type="button">수정</button></a>
-        <button type="button" onclick="submitdelete(${room.room_id})">삭제</button>
-        <hr>
+    <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
+  <c:forEach var="room" items="${roomInfo}">
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="row g-0">
+          <!-- 이미지 영역 -->
+          <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
+            <img src="http://localhost:8090/petupload/room/${room.fileimage}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
+          </div>
+
+          <!-- 텍스트 정보 -->
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title left">${room.room_name}</h5>
+              <p class="card-text mb-1 left"><strong>객실 번호:</strong> ${room.room_id}</p>
+              <p class="card-text mb-1 left"><strong>가격:</strong> <fmt:formatNumber value="${room.price}" type="currency" currencySymbol="₩"/></p>
+              <p class="card-text mb-1 left"><strong>타입:</strong> ${room.room_type} / ${room.bed_type}</p>
+              <p class="card-text mb-1 left"><strong>인원:</strong> ${room.max_capacity}명 / ${room.room_size}㎡</p>
+              <p class="card-text left"><strong>설명:</strong> ${room.room_description}</p>
+              <p class="card-text left"><strong>편의시설:</strong> ${room.amenities}</p>
+            </div>
+
+            <div class="card-footer bg-white border-top-0 d-flex justify-content-end gap-2">
+              <a href="${contextPath}/business/roomdetailInfo.do?room_id=${room.room_id}" class="btn btn-sm btn-outline-primary">
+                수정
+              </a>
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitdelete(${room.room_id})">
+                삭제
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </c:forEach>
+    </div>
+  </c:forEach>
+</div>
   </c:when>
+
   <c:when test="${pensionInfo.del_yn == 'Y'}">
-  	<p>삭제된 펜션 정보입니다.</p>
-  	<hr>
+    <div class="alert alert-warning mt-3">삭제된 펜션 정보입니다.</div>
   </c:when>
+
   <c:otherwise>
-    객실 정보가 없습니다.
+    <div class="alert alert-secondary mt-3">객실 정보가 없습니다.</div>
   </c:otherwise>
 </c:choose>
+
+	</div>
 </body>
 </html>

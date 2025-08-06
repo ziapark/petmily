@@ -1,16 +1,16 @@
 package com.petmillie.order.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.petmillie.order.dao.OrderDAO;
+import com.petmillie.order.dao.PayDAO;
 import com.petmillie.order.vo.OrderVO;
+import com.petmillie.order.vo.PayVO;
 
 
 @Service("orderService")
@@ -18,6 +18,8 @@ import com.petmillie.order.vo.OrderVO;
 public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderDAO orderDAO;
+	@Autowired
+	private PayDAO payDAO;
 	
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception{
 		List<OrderVO> orderGoodsList;
@@ -25,8 +27,9 @@ public class OrderServiceImpl implements OrderService {
 		return orderGoodsList;
 	}
 	
-	public void addNewOrder(List<OrderVO> myOrderList) throws Exception{
+	public void addNewOrder(List<OrderVO> myOrderList, PayVO payVO) throws Exception{
 		orderDAO.insertNewOrder(myOrderList);
+		payDAO.insertPay(payVO);
 		orderDAO.removeGoodsFromCart(myOrderList);
 	}	
 	

@@ -28,7 +28,7 @@
 	    <![CDATA[
 			select * from userorder
             where member_id=#{member_id}
-            order by pay_order_time desc
+            order by order_time desc
 		]]>
 	</select>
 	
@@ -43,8 +43,8 @@
 	    <![CDATA[
 		  select * from userorder
           where member_id=#{member_id}
-          and DATE_FORMAT(pay_order_time,'%Y-%m-%d') between #{beginDate} and #{endDate}
-          order by pay_order_time desc
+          and DATE_FORMAT(order_time,'%Y-%m-%d') between #{beginDate} and #{endDate}
+          order by order_time desc
     	]]>
 	</select>	
 	

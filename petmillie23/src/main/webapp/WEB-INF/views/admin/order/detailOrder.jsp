@@ -59,23 +59,23 @@ function fn_modify_order_state(order_id){
 				<c:forEach var="item" items="${orderList }">
 				    <td> ${item.order_id }</td>
 					<td class="goods_image">
-					  <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id }">
-					    <img width="75" alt=""  src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}">
+					  <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num }">
+					    <img width="75" alt=""  src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}">
 					  </a>
 					</td>
 					<td>
 					  <h2>
-					     <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id }">${item.goods_title }</a>
+					     <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num }">${item.goods_name }</a>
 					  </h2>
 					</td>
 					<td>
-					  <h2>${item.order_goods_qty }개<h2>
+					  <h2>${item.goods_qty }개<h2>
 					</td>
-					<td><h2>${item.order_goods_qty *item.goods_sales_price}원 (10% 할인)</h2></td>
+					<td><h2>${item.goods_qty * item.goods_sales_price}원 (10% 할인)</h2></td>
 					<td><h2>0원</h2></td>
-					<td><h2>${1500 *item.order_goods_qty }원</h2></td>
+					<td><h2>${1500 * item.goods_qty }원</h2></td>
 					<td>
-					  <h2>${item.order_goods_qty *item.goods_sales_price}원</h2>
+					  <h2>${item.goods_qty * item.goods_sales_price}원</h2>
 					</td>
 			</tr>
 			</c:forEach>
@@ -112,7 +112,7 @@ function fn_modify_order_state(order_id){
 				<tr class="dot_line">
 					<td class="fixed_join">주소</td>
 					<td>
-					   ${deliveryInfo.delivery_address}
+					   [${deliveryInfo.zipcode}] ${deliveryInfo.roadAddress} ${deliveryInfo.jibunAddress} ${deliveryInfo.namujiAddress}
 					</td>
 				</tr>
 				<tr class="dot_line">
@@ -139,19 +139,19 @@ function fn_modify_order_state(order_id){
 			 <tr class="dot_line">
 				<td ><h2>이름</h2></td>
 				<td>
-				 <input  type="text" value="${orderer.member_name}" size="15" disabled />
+				 <input  type="text" value="${orderer.order_name}" size="15" disabled />
 				</td>
 			  </tr>
 			  <tr class="dot_line">
 				<td ><h2>핸드폰</h2></td>
 				<td>
-				 <input  type="text" value="${orderer.tel1}-${orderer.tel2}-${orderer.tel3}" size="15" disabled />
+				 <input  type="text" value="${orderer.pay_order_tel}" size="15" disabled />
 				</td>
 			  </tr>
 			  <tr class="dot_line">
 				<td><h2>이메일</h2></td>
 				<td>
-				   <input  type="text" value="${orderer.email1}@${orderer.email2}" size="15" disabled />
+				   <input  type="text" value="${orderer.member_id}" size="15" disabled />
 				</td>
 			  </tr>
 		   </tbody>
@@ -255,8 +255,4 @@ function fn_modify_order_state(order_id){
 		<a href="${contextPath}/main/main.do"> 
 		   <IMG width="75" alt="" src="${contextPath}/resources/image/btn_shoping_continue.jpg">
 		</a>
-<div class="clear"></div>		
-	
-			
-			
-			
+<div class="clear"></div>

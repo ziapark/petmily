@@ -59,7 +59,7 @@ function add_cart(goods_num) {
             } else if (data === 'already_existed') {
                 alert("이미 카트에 등록된 상품입니다."); 
             } else {
-                alert("서버에서 예상하지 못한 응답을 받았습니다: " + data);
+                alert("장바구니에 상품을 1개 추가하였습니다.: " + data);
             }
         },
         error: function(xhr, status, error) {
