@@ -124,10 +124,10 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
 </head>
 <body>
     <hgroup>
-        <h1>컴퓨터와 인터넷</h1>
-        <h2>국내외 도서 &gt; 컴퓨터와 인터넷 &gt; 웹 개발</h2>
+<!--         <h1>컴퓨터와 인터넷</h1> -->
+<!--         <h2>국내외 도서 &gt; 컴퓨터와 인터넷 &gt; 웹 개발</h2> -->
         <h3>${goods.goods_name}</h3>
-        <h4>${goods.goods_maker} &nbsp; 저 | ${goods.goods_publisher}</h4>
+        <h4>${goods.goods_maker} &nbsp;  | ${goods.goods_publisher}</h4>
     </hgroup>
 
 <div id="goods_image">
