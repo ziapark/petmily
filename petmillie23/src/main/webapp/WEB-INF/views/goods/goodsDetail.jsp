@@ -124,10 +124,10 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
 </head>
 <body>
     <hgroup>
-        <h1>펫밀리</h1>
-       
+        <h1>컴퓨터와 인터넷</h1>
+        <h2>국내외 도서 &gt; 컴퓨터와 인터넷 &gt; 웹 개발</h2>
         <h3>${goods.goods_name}</h3>
-        <h4>${goods.goods_maker} &nbsp;  | ${goods.goods_publisher}</h4>
+        <h4>${goods.goods_maker} &nbsp; 저 | ${goods.goods_publisher}</h4>
     </hgroup>
 
 <div id="goods_image">
@@ -209,8 +209,8 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
     <!-- 탭 영역 -->
     <div id="container">
         <ul class="tabs">
-            <li><a href="#tab1">물품소개</a></li>
-            <li><a href="#tab2">제조사소개</a></li>
+            <li><a href="#tab1">책소개</a></li>
+            <li><a href="#tab2">저자소개</a></li>
             <li><a href="#tab3">책목차</a></li>
             <li><a href="#tab4">출판사서평</a></li>
           
@@ -219,20 +219,20 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
 
         <div class="tab_container">
             <div class="tab_content" id="tab1">
-                <h4>물품소개</h4>
+                <h4>책소개</h4>
                 <p>${fn:replace(goods.goods_intro,"/n", "<br/>")}</p>
                 <c:forEach var="image" items="${imageList}">
                     <img src="${contextPath}/download.do?goods_num=${goods.goods_num}&fileName=${image.fileName}" alt="추가 이미지"/>
                 </c:forEach>
             </div>
             <div class="tab_content" id="tab2">
-                <h4>제조사소개</h4>
+                <h4>저자소개</h4>
                 <div class="writer">저자 : ${goods.goods_maker}</div>
                 <p>${fn:replace(goods.goods_goods_writer_intro, "/n", "<br/>")}</p>
             </div>
            
             <div class="tab_content" id="tab4">
-                <h4>출판사서평(빈칸))</h4>
+                <h4>출판사서평</h4>
                 <p></p>
             </div>
            
