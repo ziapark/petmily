@@ -58,11 +58,11 @@
 	<insert id="insertNewOrder" parameterType="OrderVO" useGeneratedKeys="true" keyProperty="order_num">
   INSERT INTO userorder (
     member_id, order_id, goods_num, goods_name, goods_sales_price, total_price, goods_qty, order_name, receiver_name, tel1, tel2, tel3, 
-    zipcode, roadAddress, jibunAddress, namujiAddress, delivery_method, delivery_message, delivery_state, goods_fileName, order_time
+    zipcode, roadAddress, jibunAddress, namujiAddress, delivery_method, delivery_message, goods_fileName, order_time
   )
   VALUES (
     #{member_id}, #{order_id}, #{goods_num}, #{goods_name}, #{goods_sales_price}, #{total_price}, #{goods_qty}, #{order_name}, #{receiver_name}, #{tel1}, #{tel2},
-    #{tel3}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{delivery_method}, #{delivery_message}, #{delivery_state}, #{goods_fileName}, NOW()
+    #{tel3}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{delivery_method}, #{delivery_message}, #{goods_fileName}, NOW()
   )
 </insert>
 

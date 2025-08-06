@@ -12,7 +12,7 @@
 
 </head>
 <body>
-	<h3>내 상세 정보</h3>
+	<h3>업체 등록</h3>
 <form name="frm_mod_business" action="${contextPath}/business/addpension.do" method="post">
 	<input type="hidden" name="business_id" id="business_id" value="${sessionScope.businessInfo.business_id}"/>
 	<div id="detail_table">

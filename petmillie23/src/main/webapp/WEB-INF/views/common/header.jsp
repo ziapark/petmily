@@ -204,7 +204,7 @@
 				<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
 				<li><a href="#">나의 주소록</a></li>
 				<li><a href="#">개인정보 동의내역</a></li>
-				<li><a href="#">회원탈퇴</a></li>
+				<li><a href="${contextPath}/member/deleteForm.do">회원탈퇴</a></li>
 			</ul>
 			<ul class="submenu">
 			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>

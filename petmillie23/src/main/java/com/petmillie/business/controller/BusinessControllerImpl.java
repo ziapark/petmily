@@ -249,6 +249,14 @@ public class BusinessControllerImpl implements BusinessController {
 		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 		return resEntity;
 	}
+	
+	@RequestMapping(value="/deleteMember.do", method= {RequestMethod.POST,RequestMethod.GET})
+	public String deleteMember (@RequestParam("business_number") String business_number,HttpSession session, RedirectAttributes redirectAttributes) throws Exception{
+		businessService.removeMember(business_number);
+		session.invalidate();
+		redirectAttributes.addFlashAttribute("message","회원탈퇴가 완료되었습니다.");
+		return "redirect:/main/main.do";
+	}
 
 	@Override
 	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})

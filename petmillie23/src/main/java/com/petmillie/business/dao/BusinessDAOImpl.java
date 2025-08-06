@@ -104,7 +104,13 @@ public class BusinessDAOImpl implements BusinessDAO {
 
 
     @Override
-    public List<ReservaionVO> reservationList(String business_id) throws Exception {
+    public List<ReservaionVO> reservationList(String business_id) throws DataAccessException {
         return sqlSession.selectList("mapper.reser.reservationList", business_id);
     }
+
+	@Override
+	public int removeMember(String business_number) throws DataAccessException {
+		int re = sqlSession.update("mapper.business.removebusiness", business_number);
+		return re ;
+	}
 }

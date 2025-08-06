@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.petmillie.common.base.BaseController;
 import com.petmillie.member.service.MemberService;
@@ -223,6 +223,14 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	    	session.setAttribute("social_type", "kakao");
 	        return "redirect:/member/kakaoForm.do"; // 회원가입 폼으로 이동
 	    }
+	}
+	
+	@RequestMapping(value="/deleteMember.do", method= {RequestMethod.GET,RequestMethod.POST})
+	public String deleteMember(@RequestParam("member_id") String member_id, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
+	    memberService.removeMember(member_id);
+	    session.invalidate(); // 세션도 끊자!
+	    redirectAttributes.addFlashAttribute("message", "회원탈퇴가 완료되었습니다.");
+	    return "redirect:/main/main.do";
 	}
 	}
 

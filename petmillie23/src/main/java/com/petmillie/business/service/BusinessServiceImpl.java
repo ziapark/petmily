@@ -107,4 +107,9 @@ public class BusinessServiceImpl implements BusinessService {
 		List<ReservaionVO> list = businessDAO.reservationList(business_id);
 		return list;
 	}
+
+	@Override
+	public int removeMember(String business_number) throws Exception {
+		return businessDAO.removeMember(business_number);
+	}
 }

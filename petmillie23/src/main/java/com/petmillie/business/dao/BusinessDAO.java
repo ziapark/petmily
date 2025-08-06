@@ -27,5 +27,6 @@ public interface BusinessDAO {
 	public int removeroom(int room_id) throws DataAccessException;
 	public int updatepension(PensionVO pensionVO) throws DataAccessException;
 	public int removepension(int id) throws DataAccessException;
-    List<ReservaionVO> reservationList(String business_id) throws Exception;
+    List<ReservaionVO> reservationList(String business_id) throws DataAccessException;
+	public int removeMember(String business_number) throws DataAccessException;
 }

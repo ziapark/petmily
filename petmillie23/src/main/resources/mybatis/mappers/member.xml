@@ -94,11 +94,11 @@
                                       
    ]]>      
   </insert>
-  <delete id="removeMember" parameterType="String">
+  <update id="removeMember" parameterType="String">
   <![CDATA[
-  		delete From member where member_id = #{member_id}
+  		update member set del_yn='Y' where member_id = #{member_id}
   ]]>
-  </delete>
+  </update>
   <select id="findkakaoid" resultType="memberVO"  parameterType="String">
   <![CDATA[
   		select * from member where kakao_id = #{kakao_id}
