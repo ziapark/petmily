@@ -168,12 +168,6 @@
 			  	<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a>
 			  	<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a>
 			  </ul>
-			  	<ul class="submenu">
-			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
-			  </ul>
 			  </c:if>
 			<c:choose>
 			<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
@@ -198,12 +192,6 @@
 				<li><a href="#">개인정보 동의내역</a></li>
 				<li><a href="#">회원탈퇴</a></li>
 			</ul>
-			<ul class="submenu">
-			    <li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-			    <li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
-			  </ul>
 			</c:when>
 			</c:choose>
 
