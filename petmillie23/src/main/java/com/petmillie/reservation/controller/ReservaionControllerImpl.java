@@ -48,6 +48,15 @@ public class ReservaionControllerImpl implements ReservaionController {
 	}
 
 	
-	
+//	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
+//	public ModelAndView showReservationMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//	    List<BusinessVO> businessList = businessService.getAllBusinesses(); // 등록된 업체 전체 조회
+//	    ModelAndView mav = new ModelAndView("/common/layout");
+//	    mav.addObject("title", "펜션 예약");
+//	    mav.addObject("body", "/WEB-INF/views/reservationMain.jsp"); // 이게 보여줄 JSP
+//	    mav.addObject("businessList", businessList); // JSP로 업체 리스트 전달
+//	    return mav;
+//	}
+
 
 }

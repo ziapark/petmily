@@ -124,8 +124,9 @@
 				<li><a href="#">목욕/위생</a></li>
 				<li><a href="#">산책용품</a></li>
 				<li><a href="#">생활용품</a></li>
-				<li><a href="#">예약</a></li>
-
+				<li><a href="${contextPath}/reservation/main.do">예약</a></li>
+				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
+				
 				<c:choose>
 					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
 						<li><a href="#">관리자</a></li>
@@ -135,17 +136,14 @@
 						<li><a href="#">마이페이지</a></li>
 					</c:when>
 					<c:when test="${not empty businessInfo}">
-						<li><a
-							href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">사업자</a></li>
+						<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">사업자</a></li>
 					</c:when>
 				</c:choose>
-				<li><a
-					href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
 			</ul>
 
 			<div class="submenu-wrap">
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsList.do"">사료</a></li>
+					<li><a href="${contextPath}/goods/goodsList.do">사료</a></li>
 					<li><a href="#">간식</a></li>
 					<li><a href="#">영양제</a></li>
 					<li><a href="#">기타상품</a></li>
@@ -183,79 +181,47 @@
 					<li><a href="#">추가하셈3-3</a></li>
 				</ul>
 				
-<!-- 				<ul class="submenu"> -->
-<!-- 					<li><a -->
-<%-- 						href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li> --%>
-<%-- 					<li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li> --%>
-<!-- 					<li><a -->
-<%-- 						href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li> --%>
-<!-- 					<li><a -->
-<%-- 						href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li> --%>
-<!-- 				</ul> -->
-				<c:if test="${not empty businessInfo}">
+				<ul class="submenu">
+					<li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
+				</ul>
+				
+				<c:if test="${isLogOn==true and memberInfo.member_id =='admin' }">
 					<ul class="submenu">
-						<li><a href="${contextPath}/business/addpensionForm.do">업체
-								등록</a>
-						<li><a href="${contextPath}/reservation/reserForm.do">예약
-								확인</a>
-						<li><a href="${contextPath}/business/businessDetailInfo.do">사업자
-								정보관리</a>
-					</ul>
-					<ul class="submenu">
-						<li><a
-							href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-						<li><a
-							href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-						<li><a
-							href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-						<li><a
-							href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
+						<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
+						<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문관리</a></li>
+						<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
+						<li><a href="#">배송관리</a></li>
+						<li><a href="#">게시판관리</a></li>
 					</ul>
 				</c:if>
-				<c:choose>
-					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
-						<ul class="submenu">
-							<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
-							<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문관리</a></li>
-							<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-							<li><a href="#">배송관리</a></li>
-							<li><a href="#">게시판관리</a></li>
-						</ul>
-					</c:when>
-					<c:when
-						test="${isLogOn==true and not empty memberInfo.member_id !='admin' }">
-						<ul class="submenu">
-							<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송
-									조회</a></li>
-							<li><a href="#">반품/교환 신청 및 조회</a></li>
-							<li><a href="#">취소 주문 내역</a></li>
-							<li><a href="#">세금 계산서</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-							<li><a href="#">나의 주소록</a></li>
-							<li><a href="#">개인정보 동의내역</a></li>
-							<li><a href="#">회원탈퇴</a></li>
-						</ul>
-						<ul class="submenu">
-							<li><a
-								href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-							<li><a
-								href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-							<li><a
-								href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-							<li><a
-								href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
-						</ul>
-					</c:when>
-				</c:choose>
-
+				
+				<c:if test="${isLogOn==true and not empty memberInfo.member_id !='admin' }">
+					<ul class="submenu">
+						<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
+						<li><a href="#">반품/교환 신청 및 조회</a></li>
+						<li><a href="#">취소 주문 내역</a></li>
+						<li><a href="#">세금 계산서</a></li>
+					</ul>
+					<ul class="submenu">
+						<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+						<li><a href="#">나의 주소록</a></li>
+						<li><a href="#">개인정보 동의내역</a></li>
+						<li><a href="#">회원탈퇴</a></li>
+					</ul>
+				</c:if>
+				
+				<c:if test="${not empty businessInfo}">
+					<ul class="submenu">
+						<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
+						<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a></li>
+						<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
+					</ul>
+				</c:if>
 			</div>
-
-
 		</div>
-
 	</div>
-
 </body>
 </html>
