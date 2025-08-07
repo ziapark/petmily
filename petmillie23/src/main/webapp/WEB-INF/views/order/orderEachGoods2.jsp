@@ -71,7 +71,7 @@ async function requestCardPayment() {
   const f = document.forms['form_order'];
   const orderName = "펫밀리 주문결제";
   const price = f['total_price'] ? f['total_price'].value : 1000;
-  const or_idx = f?.order_id?.value ?? new Date().getTime();
+  const or_idx = Number(f?.order_id?.value) > 0 ? f.order_id.value : new Date().getTime();
   console.log("or_idx:", or_idx);
   const ctx = "${pageContext.request.contextPath}";
 
@@ -212,7 +212,7 @@ async function requestCardPayment() {
     <TABLE class="list_view">
       <TBODY align=center>
         <tr style="background: #33ff00">
-          <td>주문번호 </td>
+          <td>상품번호 </td>
           <td colspan=2 class="fixed">주문상품명</td>
           <td>수량</td>
           <td>주문금액</td>
@@ -222,7 +222,7 @@ async function requestCardPayment() {
         </tr>
         <c:forEach var="item" items="${myOrderList}">
           <tr>
-            <td>${item.order_id}</td>
+            <td>${item.goods_num}</td>
             <td class="goods_image">
               <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">
                 <img width="75" alt="" src="${contextPath}/thumbnails.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}">

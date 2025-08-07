@@ -189,6 +189,11 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    // 필수값 추출
 	    String paymentKey = (String) payData.get("portone_paymentKey");
         Object goodsNumObj = payData.get("goods_num");
+        Object orIdxObj = payData.get("or_idx");
+        if (orIdxObj == null) {
+            throw new IllegalArgumentException("or_idx가 null입니다!");
+        }
+        int orderId = ((Number) orIdxObj).intValue();
 	    // paymentKey가 null이면 에러 처리
 	    if (paymentKey == null || paymentKey.isBlank()) {
 	        return new ApiResponse(false, "결제 실패: paymentKey 없음");
@@ -204,6 +209,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    // 주문/결제 DB 저장
 	    OrderVO orderVO = new OrderVO();
 	    orderVO.setMember_id(memberInfo.getMember_id());
+	    orderVO.setOrder_id(orderId);
         orderVO.setGoods_name((String) payData.get("goods_name"));
         orderVO.setReceiver_name((String) payData.get("receiver_name"));
         orderVO.setGoods_sales_price((String) payData.get("goods_sales_price"));
