@@ -10,6 +10,6 @@
 String contextPath = request.getContextPath();
 response.sendRedirect(contextPath+"/main/main.do"); 
 %>
-
+A
 </body>
 </html>
