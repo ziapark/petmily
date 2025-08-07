@@ -124,7 +124,7 @@
 				<li><a href="#">목욕/위생</a></li>
 				<li><a href="#">산책용품</a></li>
 				<li><a href="#">생활용품</a></li>
-				<li><a href="${contextPath}/reservation/main.do">예약</a></li>
+				<li><a href="${contextPath}/reservation/pensionList.do">예약</a></li>
 				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
 				
 				<c:choose>
@@ -176,7 +176,7 @@
 				</ul>
 				
 				<ul class="submenu">
-					<li><a href="#">펜션예약</a></li>
+					<li><a href="${contextPath}/reservation/pensionList.do">펜션예약</a></li>
 					<li><a href="#">추가하셈3</a></li>
 					<li><a href="#">추가하셈3-3</a></li>
 				</ul>
