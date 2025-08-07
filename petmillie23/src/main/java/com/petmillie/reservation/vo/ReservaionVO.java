@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component("ReservaionVO")
 public class ReservaionVO {
-	private String reservation_id;
+	private String reservaion_id;
 	private String business_id;
 	private String reservation_date;
 	private String end_date;
@@ -21,10 +21,10 @@ public class ReservaionVO {
 		this.member_id = member_id;
 	}
 	public String getReservaion_id() {
-		return reservation_id;
+		return reservaion_id;
 	}
 	public void setReservaion_id(String reservaion_id) {
-		this.reservation_id = reservaion_id;
+		this.reservaion_id = reservaion_id;
 	}
 	public String getBusiness_id() {
 		return business_id;
