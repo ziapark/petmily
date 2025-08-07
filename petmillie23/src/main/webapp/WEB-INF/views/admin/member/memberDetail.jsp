@@ -12,7 +12,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
  <script>
- function changeEmailDomain() {
+ function changeEmailDomain() {1
 	  var email2Select = document.getElementById("email2_select");
 	  var email2Direct = document.getElementById("email2_direct");
 	  if(email2Select.value == "non") {
@@ -179,7 +179,7 @@ function fn_delete_member(member_id, del_yn) {
 
 <body>
 <div class="container my-5">
-	<h3 class="mb-4">내 상세 정보</h3>
+	<h3 class="mb-4">회원의 상세 정보</h3>
 	<div class="card">
 		<div class="card-body">
 			<form name="frm_mod_member">	

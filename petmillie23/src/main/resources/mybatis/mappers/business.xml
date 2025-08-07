@@ -124,7 +124,10 @@
 			   </set>
 		where business_number=#{business_number}
 	</update>
-	
+	<update id="removebusiness" parameterType="String">
+		update business set del_yn = 'Y' where business_number = #{business_number}
+	</update>
+		
 	<resultMap id="pensionResult" type="pensionVO">
 	<result property="p_num" column="p_num"/>
 	<result property="business_id" column="business_id"/>

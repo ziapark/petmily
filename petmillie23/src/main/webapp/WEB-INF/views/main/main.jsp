@@ -8,7 +8,12 @@
 <%
   request.setCharacterEncoding("UTF-8");
 %>  
+<c:if test="${not empty sessionScope.message}">
+  <script>alert("${sessionScope.message}");</script>
+  <c:remove var="message" scope="session" />
+</c:if>
 <!-- 메인배너 start -->
+
 <div class="mainbanner_wrap">
 	<div id="carouselExampleCaptions" class="carousel slide" "><!-- data-bs-ride="carousel -->
 		<div class="carousel-indicators">
@@ -49,6 +54,7 @@
 		</button>
 	</div>
 </div>
+
 <!-- 메인배너 end -->
 <!-- 메인하단 본문영역 start -->
 <div class="contents_wrap">

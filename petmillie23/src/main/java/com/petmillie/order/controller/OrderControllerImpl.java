@@ -180,32 +180,31 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	}  */
 	
 	//포트원 결제 메서드
-	@RequestMapping(value = "/payToOrderGoods.do", method = RequestMethod.POST)
+	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
 	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
-	    HttpSession session = request.getSession();
-	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-
-	    System.out.println("📌 payData = " + payData);
-
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		System.out.println("📌 payData = " + payData);  // 여기에 로그
+	    // 필수값 추출
 	    String paymentKey = (String) payData.get("portone_paymentKey");
-	    Object goodsNumObj = payData.get("goods_num");
-
+	    
+	    // paymentKey가 null이면 에러 처리
 	    if (paymentKey == null || paymentKey.isBlank()) {
 	        return new ApiResponse(false, "결제 실패: paymentKey 없음");
 	    }
+	    
 
-	    // 주문 정보 세팅
+	    int expectAmount = Integer.parseInt(String.valueOf(payData.get("price")));
+	    boolean isValid = portoneService.verifyPayment(paymentKey, expectAmount);
+	    if (!isValid) {
+	        return new ApiResponse(false, "결제 검증 실패! 금액 또는 상태가 일치하지 않습니다.");
+	    }
+	    
+	    // 주문/결제 DB 저장
 	    OrderVO orderVO = new OrderVO();
 	    orderVO.setMember_id(memberInfo.getMember_id());
-	    orderVO.setGoods_name((String) payData.get("goods_name"));
 	    orderVO.setReceiver_name((String) payData.get("receiver_name"));
-	    orderVO.setGoods_sales_price((String) payData.get("goods_sales_price"));
-	    orderVO.setOrder_name((String) payData.get("order_name"));
-
-	    int goodsNum = Integer.parseInt(goodsNumObj.toString());
-	    orderVO.setGoods_num(goodsNum);
-
 	    orderVO.setTel1((String) payData.get("tel1"));
 	    orderVO.setTel2((String) payData.get("tel2"));
 	    orderVO.setTel3((String) payData.get("tel3"));
@@ -217,52 +216,35 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    orderVO.setDelivery_message((String) payData.get("delivery_message"));
 	    orderVO.setTotal_price(String.valueOf(payData.get("price")));
 
-	    // 결제 금액 파싱
-	    String priceStr = String.valueOf(payData.get("price"));
-	    int final_price;
-	    try {
-	        final_price = Integer.parseInt(priceStr);
-	    } catch (NumberFormatException e) {
-	        return new ApiResponse(false, "금액 데이터가 올바르지 않습니다.");
-	    }
-
-	    // 현재 시간
-	    String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-	    List<OrderVO> myOrderList = List.of(orderVO);
-	    // 1️⃣ 먼저 주문 저장 (order_num 생성됨)
-	    orderService.addNewOrder(myOrderList);
-	    int generatedOrderNum = orderVO.getOrder_num();
-	    System.out.println("✅ 생성된 order_num = " + generatedOrderNum);
-	    System.out.println("✅ 생성된 order_num = " + orderVO.getOrder_num());
-	    // 2️⃣ 결제 정보 저장
 	    PayVO payVO = new PayVO();
-	    payVO.setOrder_num(generatedOrderNum);
 	    payVO.setPayment_id((String) payData.get("paymentId"));
 	    payVO.setPay_method((String) payData.get("pay_method"));
 	    payVO.setCard_com_name((String) payData.get("card_com_name"));
 	    payVO.setCard_pay_month((String) payData.get("card_pay_month"));
 	    payVO.setPayment_status((String) payData.get("paymentStatus"));
-	    payVO.setPg_tid(paymentKey);
+	    payVO.setPg_tid((String) payData.get("portone_paymentKey"));
 	    payVO.setPay_order_tel((String) payData.get("pay_order_tel"));
 
-	    payVO.setFinal_total_price(final_price);
-	    payVO.setPayment_amount(priceStr);
+	    // 금액 필드는 타입 주의
+	    String priceStr = String.valueOf(payData.get("price"));
+	    try {
+	        int final_price = Integer.parseInt(priceStr);
+	        payVO.setFinal_total_price(final_price);        // int 필드
+	        payVO.setPayment_amount(priceStr);        // String 필드도 같이 채움
+	    } catch (NumberFormatException e) {
+	        // 금액 파싱 실패 시 예외처리
+	        return new ApiResponse(false, "금액 데이터가 올바르지 않습니다.");
+	    }
+
+	    // 결제 시간은 현재 시간으로 넣는 것도 방법
+	    String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 	    payVO.setPay_order_time(now);
 	    payVO.setPayment_time(now);
 
-	    // 결제 insert	
-	    orderService.addNewpay(payVO);
-	    
-	    
-	    
-	    orderService.removeCartItem(memberInfo.getMember_id(), orderVO.getGoods_num());
-	    
-	    session.setAttribute("PayVO", payVO);
-	    session.setAttribute("OrderList", myOrderList);
+	    orderService.addNewOrder(List.of(orderVO), payVO);
 
 	    return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
 	}
-
 	
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseBody

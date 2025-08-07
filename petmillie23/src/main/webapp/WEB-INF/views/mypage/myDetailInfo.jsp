@@ -180,199 +180,159 @@
 </head>
 
 <body>
-	<h3>내 상세 정보</h3>
-<form name="frm_mod_member">	
-	<div id="detail_table">
-		<table>
-			<tbody>
-				<tr class="dot_line">
-					<td class="fixed_join">아이디</td>
-					<td>
-						<input name="member_id" type="text" size="20" value="${memberInfo.member_id }"  disabled/>
-					</td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">비밀번호</td>
-					<td>
-					  <input name="member_pw" type="password" size="20" value="${memberInfo.member_pw }" />
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_pw')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이름</td>
-					<td>
-					  <input name="member_name" type="text" size="20" value="${memberInfo.member_name }"  disabled />
-					 </td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">성별</td>
-					<td>
-					  <c:choose >
-					    <c:when test="${memberInfo.member_gender =='101' }">
-					      <input type="radio" name="member_gender" value="102" />
-						  여성 <span style="padding-left:30px"></span>
-					   <input type="radio" name="member_gender" value="101" checked />남성
-					    </c:when>
-					    <c:otherwise>
-					      <input type="radio" name="member_gender" value="102"  checked />
-						   여성 <span style="padding-left:30px"></span>
-					      <input type="radio" name="member_gender" value="101"  />남성
-					   </c:otherwise>
-					   </c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_gender')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">법정생년월일</td>
-					<td>
-					   <select name="member_birth_y">
-					     <c:forEach var="i" begin="1" end="100">
-					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_y==1920+i }">
-							   <option value="${ 1920+i}" selected>${ 1920+i} </option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${ 1920+i}" >${ 1920+i} </option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>년 
-					<select name="member_birth_m" >
-						<c:forEach var="i" begin="1" end="12">
-					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_m==i }">
-							   <option value="${i }" selected>${i }</option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${i }">${i }</option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>월 
-					
-					<select name="member_birth_d">
-							<c:forEach var="i" begin="1" end="31">
-					       <c:choose>
-					         <c:when test="${memberInfo.member_birth_d==i }">
-							   <option value="${i }" selected>${i }</option>
-							</c:when>
-							<c:otherwise>
-							  <option value="${i }">${i }</option>
-							</c:otherwise>
-							</c:choose>
-					   	</c:forEach>
-					</select>일 <span style="padding-left:50px"></span>
-					   <c:choose>
-					    <c:when test="${memberInfo.member_birth_gn=='2' }"> 
-					  <input type="radio" name="member_birth_gn" value="2" checked />양력
-						<span style="padding-left:20px"></span> 
-						<input type="radio"  name="member_birth_gn" value="1" />음력
-						</c:when>
-						<c:otherwise>
-						  <input type="radio" name="member_birth_gn" value="2" />양력
-						  <input type="radio"  name="member_birth_gn" value="1" checked  />음력
-						</c:otherwise>
-						</c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('member_birth')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">휴대폰번호</td>
-					<td>
-					   <select  name="tel1" id="tel1">
-							<option value="010" selected>010</option>
-							<option value="011">011</option>
-							<option value="016">016</option>
-							<option value="017">017</option>
-							<option value="018">018</option>
-							<option value="019">019</option>
-					</select> 
-					 - <input type="text" name="tel2" size=4 value="${memberInfo.tel2 }"> 
-					 - <input type="text"name="tel3"  size=4 value="${memberInfo.tel3 }"><br> <br>
-					 <c:choose> 
-					   <c:when test="${memberInfo.smssts_yn=='true' }">
-					     <input type="checkbox"  name="smssts_yn" value="Y" checked /> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
-						</c:when>
-						<c:otherwise>
-						  <input type="checkbox"  name="smssts_yn" value="N"  /> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
-						</c:otherwise>
-					 </c:choose>	
-				    </td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('tel')" />
-					</td>	
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이메일<br>(e-mail)</td>
-					<td>
-					   <input type="text" name="email1" size=10 value="${memberInfo.email1 }" /> @ <input type="text" size=10  name="email2" id="email2_direct" value="${memberInfo.email2 }" /> 
-					   <select name="email2_select" id="email2_select" onChange="changeEmailDomain()"  title="직접입력">
-							<option value="non">직접입력</option>
-							<option value="hanmail.net">hanmail.net</option>
-							<option value="naver.com">naver.com</option>
-							<option value="yahoo.co.kr">yahoo.co.kr</option>
-							<option value="hotmail.com">hotmail.com</option>
-							<option value="paran.com">paran.com</option>
-							<option value="nate.com">nate.com</option>
-							<option value="google.com">google.com</option>
-							<option value="gmail.com">gmail.com</option>
-							<option value="empal.com">empal.com</option>
-							<option value="korea.com">korea.com</option>
-							<option value="freechal.com">freechal.com</option>
-					</select><Br><br> 
-					<c:choose> 
-					   <c:when test="${memberInfo.emailsts_yn=='true' }">
-					     <input type="checkbox" name="emailsts_yn"  value="Y" checked /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
-						</c:when>
-						<c:otherwise>
-						  <input type="checkbox" name="emailsts_yn"  value="N"  /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
-						</c:otherwise>
-					 </c:choose>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('email')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">주소</td>
-					<td>
-					   <input type="text" id="zipcode" name="zipcode" size=5 value="${memberInfo.zipcode }" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
-					  <br>
-					  <p> 
-					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50" value="${memberInfo.roadAddress }"><br><br>
-					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${memberInfo.jibunAddress }"><br><br>
-					  나머지 주소: <input type="text"  name="namujiAddress" size="50" value="${memberInfo.namujiAddress }" />
-					   </p>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_member_info('address')" />
-					</td>
-				</tr>
-			</tbody>
-		</table>
+<div class="container my-5">
+	<h3 class="mb-4">내 상세 정보</h3>
+	<div class="card">
+		<div class="card-body">
+			<form name="frm_mod_member">
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<th class="bg-light align-middle">아이디</th>
+							<td>
+								<input name="member_id" type="text" class="form-control" value="${memberInfo.member_id}" disabled />
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">비밀번호</th>
+							<td>
+								<input name="member_pw" type="password" class="form-control" value="${memberInfo.member_pw}" />
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('member_pw')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">이름</th>
+							<td>
+								<input name="member_name" type="text" class="form-control" value="${memberInfo.member_name}" disabled />
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">성별</th>
+							<td>
+								<div class="form-check form-check-inline">
+									<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" <c:if test="${memberInfo.member_gender != '101'}">checked</c:if> />
+									<label class="form-check-label" for="genderFemale">여성</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" <c:if test="${memberInfo.member_gender == '101'}">checked</c:if> />
+									<label class="form-check-label" for="genderMale">남성</label>
+								</div>
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('member_gender')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">생년월일</th>
+							<td>
+								<div class="d-flex align-items-center flex-wrap">
+									<select name="member_birth_y" class="form-select w-auto me-1">
+										<c:forEach var="i" begin="1" end="100">
+											<option value="${1920+i}" <c:if test="${memberInfo.member_birth_y==1920+i}">selected</c:if>>${1920+i}</option>
+										</c:forEach>
+									</select>년
+									<select name="member_birth_m" class="form-select w-auto me-1">
+										<c:forEach var="i" begin="1" end="12">
+											<option value="${i}" <c:if test="${memberInfo.member_birth_m==i}">selected</c:if>>${i}</option>
+										</c:forEach>
+									</select>월
+									<select name="member_birth_d" class="form-select w-auto me-1">
+										<c:forEach var="i" begin="1" end="31">
+											<option value="${i}" <c:if test="${memberInfo.member_birth_d==i}">selected</c:if>>${i}</option>
+										</c:forEach>
+									</select>일
+									<div class="ms-3">
+										<div class="form-check form-check-inline">
+											<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" <c:if test="${memberInfo.member_birth_gn=='2'}">checked</c:if> />
+											<label class="form-check-label" for="solar">양력</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" <c:if test="${memberInfo.member_birth_gn=='1'}">checked</c:if> />
+											<label class="form-check-label" for="lunar">음력</label>
+										</div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('member_birth')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">휴대폰번호</th>
+							<td>
+								<div class="d-flex align-items-center">
+									<select name="tel1" class="form-select w-auto me-1">
+										<option value="010">010</option>
+										<option value="011">011</option>
+										<option value="016">016</option>
+										<option value="017">017</option>
+										<option value="018">018</option>
+										<option value="019">019</option>
+									</select> -
+									<input type="text" name="tel2" class="form-control w-auto mx-1" value="${memberInfo.tel2}" /> -
+									<input type="text" name="tel3" class="form-control w-auto" value="${memberInfo.tel3}" />
+								</div>
+								<div class="form-check mt-2">
+									<input type="checkbox" class="form-check-input" name="smssts_yn" id="smssts_yn" value="Y" <c:if test="${memberInfo.smssts_yn=='true'}">checked</c:if> />
+									<label class="form-check-label" for="smssts_yn">SMS 수신 동의</label>
+								</div>
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('tel')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">이메일</th>
+							<td>
+								<div class="d-flex align-items-center">
+									<input type="text" name="email1" class="form-control w-auto me-1" value="${memberInfo.email1}" /> @
+									<input type="text" name="email2" id="email2_direct" class="form-control w-auto mx-1" value="${memberInfo.email2}" />
+									<select name="email2_select" id="email2_select" class="form-select w-auto" onchange="changeEmailDomain()">
+										<option value="non">직접입력</option>
+										<option value="naver.com">naver.com</option>
+										<option value="gmail.com">gmail.com</option>
+										<!-- 필요한 도메인 추가 -->
+									</select>
+								</div>
+								<div class="form-check mt-2">
+									<input type="checkbox" class="form-check-input" name="emailsts_yn" id="emailsts_yn" value="Y" <c:if test="${memberInfo.emailsts_yn=='true'}">checked</c:if> />
+									<label class="form-check-label" for="emailsts_yn">이메일 수신 동의</label>
+								</div>
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('email')" />
+							</td>
+						</tr>
+						<tr>
+							<th class="bg-light align-middle">주소</th>
+							<td>
+								<div class="mb-2 d-flex">
+									<input type="text" name="zipcode" id="zipcode" class="form-control me-2" value="${memberInfo.zipcode}" readonly />
+									<a href="javascript:execDaumPostcode()" class="btn btn-secondary">우편번호 검색</a>
+								</div>
+								<input type="text" name="roadAddress" class="form-control mb-2" value="${memberInfo.roadAddress}" readonly placeholder="도로명 주소" />
+								<input type="text" name="jibunAddress" class="form-control mb-2" value="${memberInfo.jibunAddress}" readonly placeholder="지번 주소" />
+								<input type="text" name="namujiAddress" class="form-control" value="${memberInfo.namujiAddress}" placeholder="상세 주소" />
+							</td>
+							<td>
+								<input type="button" class="btn btn-primary" value="수정하기" onclick="fn_modify_member_info('address')" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="text-center mt-4">
+					<input type="hidden" name="command" value="modify_my_info" />
+					<input type="hidden" name="h_tel1" value="${memberInfo.tel1}" />
+				</div>
+			</form>
 		</div>
-		<div class="clear">
-		<br><br>
-		<table align=center>
-		<tr>
-			<td >
-				<input type="hidden" name="command"  value="modify_my_info" /> 
-				<input name="btn_cancel_member" type="button"  value="수정 취소">
-			</td>
-		</tr>
-	</table>
 	</div>
-	<input  type="hidden" name="h_tel1" value="${memberInfo.tel1}" />
-</form>	
+</div>
+
 </body>
 </html>

@@ -25,4 +25,5 @@ public interface BusinessService {
 	public int updatepension(PensionVO pensionVO) throws Exception;
 	public int removepension(int id) throws Exception;
 	public List reservationList(String business_id) throws Exception;
+	public int removeMember(String business_number)throws Exception;
 }
