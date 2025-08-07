@@ -101,7 +101,8 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    dateMap.put("beginDate", beginDate);
 	    dateMap.put("endDate", endDate);
 	    dateMap.put("member_id", member_id);
-
+	    dateMap.put("offset", "0");    // ✅ null 아니어야 함
+	    dateMap.put("limit", "10");    // ✅ null 아니어야 함
 	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
 
 	    // 날짜 정보 추가
@@ -219,5 +220,13 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		
 		return mav;
 	}
+
+	@Override
+	public void addReview(String order_id) {
+		
+		
+	}
+	
+	
 	
 }

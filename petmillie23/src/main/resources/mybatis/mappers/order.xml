@@ -74,7 +74,7 @@
 			FROM userorder
 			WHERE DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
 			ORDER BY order_time DESC
-			LIMIT #{offset}, #{limit}
+			
 		]]>
 	</select>
 
