@@ -157,7 +157,8 @@ function fn_cancel_order(order_id){
 				<td>주문상태</td>
 				<td>주문자</td>
 				<td>수령자</td>
-				<td> <a href="${contextPath}/mypage/myOrderDetail.do?order_id=${item.order_id }"><strong>${item.order_id }</strong>  </a></td>
+				<%-- <td> <a href="${contextPath}/mypage/myOrderDetail.do?order_id=${item.order_id }"><strong>${item.order_id }</strong>  </a></td> --%>
+				<td>리뷰</td>
 				<td>주문취소</td>
 			</tr>
    <c:choose>
@@ -174,7 +175,7 @@ function fn_cancel_order(order_id){
           <c:when test="${item.order_id != pre_order_id }">   
             <tr>       
 				<td>
-				  <a href="${contextPath}/mypage/review.do?order_id=${item.order_id }"><strong>리뷰쓰기</strong></a>
+				  ${item.order_num }
 				</td>
 				<td >
 				 <strong>${item.order_time }</strong> 
@@ -224,6 +225,7 @@ function fn_cancel_order(order_id){
 				<td>
 					<strong>${item.receiver_name }</strong>
 				</td>
+				<td><a href="${contextPath}/mypage/writeReviewForm.do?order_id=${item.order_num}"><strong>리뷰쓰기</strong></a></td>
 				<td>
 			     <c:choose>
 			   <c:when test="${item.delivery_state=='delivery_prepared'}">
