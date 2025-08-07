@@ -14,13 +14,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.business.service.BusinessService;
 import com.petmillie.business.vo.BusinessVO;
+import com.petmillie.business.vo.PensionVO;
+import com.petmillie.reservation.service.ReservaionService; // import 추가
 import com.petmillie.reservation.vo.ReservaionVO;
 
 @Controller("ReservationController")
 @RequestMapping("/reservation")
 public class ReservaionControllerImpl implements ReservaionController {
+
 	@Autowired
 	private BusinessService businessService;
+
+	@Autowired
+	private ReservaionService reservationService; // 이 줄을 추가해야 합니다.
 	
 	@Override
 	@RequestMapping(value="/reserForm.do", method= {RequestMethod.GET, RequestMethod.POST})
@@ -46,17 +52,78 @@ public class ReservaionControllerImpl implements ReservaionController {
 	    
 	    return mav;
 	}
-
 	
-//	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
-//	public ModelAndView showReservationMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//	    List<BusinessVO> businessList = businessService.getAllBusinesses(); // 등록된 업체 전체 조회
+//	@RequestMapping(value="/pensionList.do", method=RequestMethod.GET)
+//	public ModelAndView listPensions(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//	    
+//	    // 1. 모든 펜션 목록을 가져옵니다.
+//	    List<PensionVO> pensionList = reservationService.listAllPensions();
+//	    
+//	    // 2. ModelAndView 객체를 생성하고, 조회된 목록을 추가합니다.
+//	    String viewName = (String) request.getAttribute("viewName");
 //	    ModelAndView mav = new ModelAndView("/common/layout");
-//	    mav.addObject("title", "펜션 예약");
-//	    mav.addObject("body", "/WEB-INF/views/reservationMain.jsp"); // 이게 보여줄 JSP
-//	    mav.addObject("businessList", businessList); // JSP로 업체 리스트 전달
+//	    mav.setViewName("reservation/pensionList"); // WEB-INF/views/reservation/pensionList.jsp를 바라보게 설정
+//	    mav.addObject("pensionList", pensionList);
+//	    
+//	    System.out.println("펜션 목록을 가져왔습니다. 갯수: " + pensionList.size());
+//	    
 //	    return mav;
 //	}
-
-
+//	
+//	
+//	
+//	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="/pensionList.do", method=RequestMethod.GET)
+	public ModelAndView listPensions(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    
+	    List<PensionVO> pensionList = reservationService.listAllPensions();
+	    
+	    String viewName = "reservation/pensionList"; // 뷰 이름만 지정합니다.
+	    
+	    // ModelAndView 객체를 생성하고, 레이아웃 페이지를 뷰 이름으로 지정합니다.
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    
+	    // 실제 콘텐츠가 들어갈 뷰 경로를 'body'라는 이름으로 addObject 합니다.
+	    mav.addObject("body", "/WEB-INF/views/" + viewName + ".jsp");
+	    
+	    // 제목도 추가하면 레이아웃에 표시됩니다.
+	    mav.addObject("title", "펜션 목록");
+	    
+	    // 조회된 펜션 목록을 'pensionList'라는 이름으로 뷰에 전달합니다.
+	    mav.addObject("pensionList", pensionList);
+	    
+	    System.out.println("펜션 목록을 가져왔습니다. 갯수: " + pensionList.size());
+	    
+	    return mav;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
