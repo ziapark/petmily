@@ -219,5 +219,11 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		
 		return mav;
 	}
+
+	@Override
+	public void addReview(String order_id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

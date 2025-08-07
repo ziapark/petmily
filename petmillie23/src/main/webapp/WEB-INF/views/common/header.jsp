@@ -124,6 +124,7 @@
 				<li><a href="#">목욕/위생</a></li>
 				<li><a href="#">산책용품</a></li>
 				<li><a href="#">생활용품</a></li>
+				<li><a href="#">예약</a></li>
 
 				<c:choose>
 					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
@@ -175,15 +176,22 @@
 					<li><a href="#">추가하셈3</a></li>
 					<li><a href="#">추가하셈3-3</a></li>
 				</ul>
+				
 				<ul class="submenu">
-					<li><a
-						href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-					<li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-					<li><a
-						href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-					<li><a
-						href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
+					<li><a href="#">펜션예약</a></li>
+					<li><a href="#">추가하셈3</a></li>
+					<li><a href="#">추가하셈3-3</a></li>
 				</ul>
+				
+<!-- 				<ul class="submenu"> -->
+<!-- 					<li><a -->
+<%-- 						href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li> --%>
+<%-- 					<li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li> --%>
+<!-- 					<li><a -->
+<%-- 						href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li> --%>
+<!-- 					<li><a -->
+<%-- 						href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li> --%>
+<!-- 				</ul> -->
 				<c:if test="${not empty businessInfo}">
 					<ul class="submenu">
 						<li><a href="${contextPath}/business/addpensionForm.do">업체
