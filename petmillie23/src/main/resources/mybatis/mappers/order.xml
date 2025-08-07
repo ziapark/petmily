@@ -68,7 +68,7 @@
 
 
 	<!-- 주문 목록 조회 -->
-	<select id="selectNewOrderList" resultMap="orderResult" parameterType="java.util.Map">
+	<select id="selectMyOrderList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT *
 			FROM userorder

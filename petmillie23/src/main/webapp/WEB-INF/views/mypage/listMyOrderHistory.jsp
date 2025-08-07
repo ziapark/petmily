@@ -40,9 +40,14 @@ function fn_cancel_order(order_id){
 </script>
 </head>
 <body>
-	<H3>주문 배송 조회</H3>
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold">주문내역</h2>
+		</div>
+	</div>
 	<form  method="post">	
-		<table>
+		<table class="table">
 			<tbody>
 				<tr>
 					<td>
@@ -142,7 +147,7 @@ function fn_cancel_order(order_id){
 	</div>
 </form>	
 <div class="clear"></div>
-<table class="list_view">
+<table class="table">
 		<tbody align=center >
 			<tr style="background:#33ff00" >
 				<td class="fixed" >주문번호</td>
@@ -152,6 +157,7 @@ function fn_cancel_order(order_id){
 				<td>주문상태</td>
 				<td>주문자</td>
 				<td>수령자</td>
+				<td> <a href="${contextPath}/mypage/myOrderDetail.do?order_id=${item.order_id }"><strong>${item.order_id }</strong>  </a></td>
 				<td>주문취소</td>
 			</tr>
    <c:choose>
@@ -168,7 +174,7 @@ function fn_cancel_order(order_id){
           <c:when test="${item.order_id != pre_order_id }">   
             <tr>       
 				<td>
-				  <a href="${contextPath}/mypage/myOrderDetail.do?order_id=${item.order_id }"><strong>${item.order_id }</strong>  </a>
+				  <a href="${contextPath}/mypage/review.do?order_id=${item.order_id }"><strong>리뷰쓰기</strong></a>
 				</td>
 				<td >
 				 <strong>${item.order_time }</strong> 
@@ -239,5 +245,6 @@ function fn_cancel_order(order_id){
 	</table>
      	
 	<div class="clear"></div>
+	</div>
 </body>
 </html>

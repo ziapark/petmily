@@ -191,7 +191,7 @@ position:relative;
 .goods-item input[type="button"].like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
 
 .cartAndLike_wrap {position:absolute;left:0;bottom:0;}
-.goods-item a {display: block; height: 200px;  width: 100%;}
+.goods-item a {display: block; height: 200px;  width: 100%; overflow:hidden;}
 .goods-item a img {width:100%; border:0;}
 
 /* 사업자 페이지 */

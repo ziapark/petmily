@@ -19,5 +19,6 @@ public interface MyPageController {
 					            @RequestParam("value")  String value,
 					            HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public String removeMember(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public void addReview (@RequestParam("order_id")  String order_id);
 	
 }

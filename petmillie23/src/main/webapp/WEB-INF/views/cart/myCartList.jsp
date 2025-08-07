@@ -186,7 +186,14 @@ function fn_order_all_cart_goods(){
 </script>
 </head>
 <body>
-	<table class="list_view">
+
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold">장바구니</h2>
+		</div>
+	</div>
+	<table class="table">
 	<tbody align=center>
 		<tr style="background: #33ff00">
 			<td class="fixed">구분</td>
@@ -273,7 +280,7 @@ function fn_order_all_cart_goods(){
 	<br>
 	<br>
 
-	<table width=80% class="list_view" style="background: #cacaff">
+	<table width=80% class="table" style="background: #cacaff">
 	<tbody>
 		<tr align=center class="fixed">
 			<td class="fixed">총 항목 수</td>
@@ -323,3 +330,6 @@ function fn_order_all_cart_goods(){
 		</a>
 		<center>
 			</form>
+			
+			
+</div>

@@ -206,9 +206,16 @@ async function requestCardPayment() {
 </script>
 
 <BODY>
-  <H1>주문하기</H1>
+
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+		<div class="col bg-light p-5 text-start">
+			<P class="fw-bold">주문하기</P>
+		</div>
+	</div>	
+  <H3>주문정보</H3>
   <form name="form_order">
-    <TABLE class="list_view">
+    <TABLE class="table">
       <TBODY align=center>
         <tr style="background: #33ff00">
           <td>주문번호 </td>
@@ -228,16 +235,16 @@ async function requestCardPayment() {
               </a>
             </td>
             <td>
-              <h2>
+              <P>
                 <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">${item.goods_name}</a>
-              </h2>
+              </P>
             </td>
-            <td><h2>${item.goods_qty}개</h2></td>
-            <td><h2>${item.goods_qty * item.goods_sales_price}원 (10% 할인)</h2></td>
-            <td><h2>0원</h2></td>
-            <td><h2>${1500 * item.goods_qty}원</h2></td>
+            <td><P>${item.goods_qty}개</P></td>
+            <td><P>${item.goods_qty * item.goods_sales_price}원 (10% 할인)</P></td>
+            <td><P>0원</P></td>
+            <td><P>${1500 * item.goods_qty}원</P></td>
             <td>
-              <h2>
+              <P>
                 ${item.goods_qty * item.goods_sales_price}원
                 <input type="hidden" name="order_num" value="${item.order_num}">
                 <input type="hidden" name="goods_num" value="${item.goods_num}">
@@ -246,7 +253,7 @@ async function requestCardPayment() {
                 <input type="hidden" name="goods_name" value="${item.goods_name }">
                 <input type="hidden" name="goods_sales_price" value="${item.goods_sales_price }">
                 <input type="hidden" name="order_name" value="${sessionScope.memberInfo.member_name}">
-              </h2>
+              </P>
             </td>
           </tr>
         </c:forEach>
@@ -254,9 +261,9 @@ async function requestCardPayment() {
     </TABLE>
     <DIV class="clear"></DIV>
     <br><br>
-    <H1>2.배송지 정보</H1>
+    <H3>배송지 정보</H3>
     <DIV class="detail_table">
-      <TABLE>
+      <TABLE class="table">
         <TBODY>
           <TR class="dot_line">
             <TD class="fixed_join">배송방법</TD>
@@ -310,23 +317,23 @@ async function requestCardPayment() {
     </DIV>
     <div>
       <br><br>
-      <h2>주문고객</h2>
+      <P>주문고객</P>
       <table>
         <TBODY>
           <tr class="dot_line">
-            <td><h2>이름</h2></td>
+            <td><P>이름</P></td>
             <td>
               <input type="text" value="${sessionScope.memberInfo.member_name}" size="15" readonly />
             </td>
           </tr>
           <tr class="dot_line">
-            <td><h2>핸드폰</h2></td>
+            <td><P>핸드폰</P></td>
             <td>
               <input type="text" name="pay_order_tel" id="pay_order_tel" value="${sessionScope.memberInfo.tel1}-${sessionScope.memberInfo.tel2}-${sessionScope.memberInfo.tel3}" size="15" readonly />
             </td>
           </tr>
           <tr class="dot_line">
-            <td><h2>이메일</h2></td>
+            <td><P>이메일</P></td>
             <td>
               <input type="text" value="${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}" size="15" readonly />
             </td>
@@ -336,9 +343,9 @@ async function requestCardPayment() {
     </div>
     <DIV class="clear"></DIV>
     <br><br><br>
-    <H1>3.결제정보</H1>
+    <H3>결제정보</H3>
     <DIV class="detail_table">
-      <table>
+      <table class="table">
         <TBODY>
           <TR class="dot_line">
             <TD class="fixed_join">결제방법</TD>
@@ -378,4 +385,5 @@ async function requestCardPayment() {
     <img width="75" alt="" src="${contextPath}/resources/image/btn_shoping_continue.jpg">
   </a>
   <DIV class="clear"></DIV>
+  </div>
 </BODY>

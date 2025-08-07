@@ -123,36 +123,36 @@ function fn_overlapped(){
 <body>
 	<h3>필수입력사항</h3>
 	<form action="${contextPath}/member/addMember.do" method="post" onsubmit=" return setEmail();">	
-	<div id="detail_table">
+	<div id="">
 		<table>
 			<tbody>
 				<tr class="dot_line">
 					<td class="fixed_join">아이디</td>
 					<td>
-					  <input type="text" name="member_id"  id="member_id"  size="20" required/>
+					  <input type="text" name="member_id"  id="member_id"  size="20" class="form-control" required/>
 					   
 					  <input type="button"  id="btnOverlapped" value="중복체크" onClick="fn_overlapped()" />
 					</td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">비밀번호</td>
-					<td><input name="member_pw" type="password" size="20" required/></td>
+					<td><input name="member_pw" type="password" size="20" class="form-control"  required/></td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">이름</td>
-					<td><input name="member_name" type="text" size="20" required/></td>
+					<td><input name="member_name" type="text" size="20" class="form-control"  required/></td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">성별</td>
-					<td><input type="radio" name="member_gender" value="102" />
+					<td><input type="radio" name="member_gender" value="102"  class="form-check"  />
 						여성<span style="padding-left:120px"></span>
-						 <input type="radio" name="member_gender" value="101" checked />남성
+						 <input type="radio" name="member_gender" value="101"  class="form-check"  checked />남성
 					</td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">생년월일</td>
 					<td>
-					<select name="member_birth_y">
+					<select name="member_birth_y"  class="form-control" >
 					 
 					     <c:forEach var="year" begin="1" end="100">
 					       <c:choose>
@@ -166,7 +166,7 @@ function fn_overlapped(){
 					   	</c:forEach> 
 							
 					</select>년 
-					 <select name="member_birth_m" >
+					 <select name="member_birth_m"  class="form-select" >
 					   <c:forEach var="month" begin="1" end="12">
 					       <c:choose>
 					         <c:when test="${month==5 }">
@@ -178,7 +178,7 @@ function fn_overlapped(){
 							</c:choose>
 					   	</c:forEach>
 					</select>월  
-					<select name="member_birth_d">
+					<select name="member_birth_d"  class="form-select" >
 							<c:forEach var="day" begin="1" end="31">
 					       <c:choose>
 					         <c:when test="${day==10 }">
@@ -190,14 +190,14 @@ function fn_overlapped(){
 							</c:choose>
 					   	</c:forEach>
 					</select>일 <span style="padding-left:50px"></span>
-					  <input type="radio" name="member_birth_gn" value="2" checked />양력
+					  <input type="radio" name="member_birth_gn" value="2" checked class="form-check"/>양력
 						 <span style="padding-left:50px"></span>
-						<input type="radio"  name="member_birth_gn" value="1" />음력
+						<input type="radio"  name="member_birth_gn" value="1" class="form-check"/>음력
 				  </td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">휴대폰번호</td>
-					<td><select  name="tel1">
+					<td><select  name="tel1"  class="form-select" >
 							<option>없음</option>
 							<option selected value="010">010</option>
 							<option value="011">011</option>
@@ -210,8 +210,8 @@ function fn_overlapped(){
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">이메일<br>(e-mail)</td>
-					<td><input size="10px"   type="text" name="email1" required/> @ <input  size="10px"  type="text" name="email2" id="email2_direct" required/> 
-						  <select name="email2_select" id="email2_select" onChange="changeEmailDomain()"	title="직접입력">
+					<td><input size="10px"   type="text" name="email1"  class="form-control"  required/> @ <input  size="10px"  type="text" name="email2"  class="form-control"  id="email2_direct" required/> 
+						  <select name="email2_select" id="email2_select" onChange="changeEmailDomain()" class="form-select" title="직접입력">
 									<option value="non">직접입력</option>
 									<option value="hanmail.net">hanmail.net</option>
 									<option value="naver.com">naver.com</option>
@@ -226,17 +226,17 @@ function fn_overlapped(){
 									<option value="freechal.com">freechal.com</option>
 							</select>
 							<input type="hidden" name="member_email" id="member_email" /><br> <br> 
-							<input type="checkbox" name="emailsts_yn" value="Y" checked /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.</td>
+							<input type="checkbox" name="emailsts_yn" value="Y"  class="form-control"  checked /> 쇼핑몰에서 발송하는 e-mail을 수신합니다.</td>
 				</tr>
 				<tr class="dot_line">
 					<td class="fixed_join">주소</td>
 					<td>
-					   <input type="text" id="zipcode" name="zipcode" size="10" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
+					   <input type="text" id="zipcode" name="zipcode" size="10"  class="form-control" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
 					  <br>
 					  <p> 
-					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50"><br><br>
-					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50"><br><br>
-					  나머지 주소: <input type="text"  name="namujiAddress" size="50" />
+					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50"  class="form-control" ><br><br>
+					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50"  class="form-control" ><br><br>
+					  나머지 주소: <input type="text"  name="namujiAddress" size="50"  class="form-control" />
 					   <span id="guide" style="color:#999"></span>
 					   </p>
 					</td>

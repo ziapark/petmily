@@ -28,7 +28,7 @@ public class MyPageDAOImpl implements MyPageDAO{
 	}	
 
 	public List<OrderVO> selectMyOrderHistoryList(Map dateMap) throws DataAccessException{
-		List<OrderVO> myOrderHistList=(List)sqlSession.selectList("mapper.mypage.selectMyOrderGoodsList",dateMap);
+		List<OrderVO> myOrderHistList=(List)sqlSession.selectList("mapper.mypage.selectMyOrderList",dateMap);
 		return myOrderHistList;
 	}
 	
