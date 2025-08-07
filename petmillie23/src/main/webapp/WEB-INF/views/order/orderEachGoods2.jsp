@@ -71,7 +71,8 @@ async function requestCardPayment() {
   const f = document.forms['form_order'];
   const orderName = "펫밀리 주문결제";
   const price = f['total_price'] ? f['total_price'].value : 1000;
-  const or_idx = f['order_id'] ? f['order_id'].value : new Date().getTime();
+  const or_idx = f?.order_id?.value ?? new Date().getTime();
+  console.log("or_idx:", or_idx);
   const ctx = "${pageContext.request.contextPath}";
 
   // 휴대폰 번호 3개 입력값 합치기
@@ -101,6 +102,11 @@ async function requestCardPayment() {
     tel1: tel1,
     tel2: tel2,
     tel3: tel3,
+    goods_num: f['goods_num']?.value,
+    goods_name: f['goods_name']?.value,
+    goods_sales_price: f['goods_sales_price']?.value,
+    order_name: f['order_name']?.value,
+    order_num : f['order_num']?.value,
     zipcode: f['zipcode']?.value,
     roadAddress: roadAddress,
     jibunAddress: jibunAddress,
@@ -181,17 +187,7 @@ async function requestCardPayment() {
       paymentStatus: response.status
     })
   });
-  
-  let result;
-  try {
-      result = await res.json();
-  } catch (e) {
-      const text = await res.text();
-      alert("서버 에러: " + text);
-      return;
-  }
-
-  const text = await res.text();
+   const text = await res.text();
   try {
     const result = JSON.parse(text);
     alert(result.message || "주문이 완료되었습니다!");
@@ -209,8 +205,6 @@ async function requestCardPayment() {
 }
 }
 </script>
-01987a8e-a202-765b-b42e-cd04435b4374
-01987a8e-a202-765b-b42e-cd04435b4374
 
 <BODY>
   <H1>주문하기</H1>
@@ -246,8 +240,13 @@ async function requestCardPayment() {
             <td>
               <h2>
                 ${item.goods_qty * item.goods_sales_price}원
+                <input type="hidden" name="order_num" value="${item.order_num}">
+                <input type="hidden" name="goods_num" value="${item.goods_num}">
                 <input type="hidden" name="total_price" value="${item.goods_qty * item.goods_sales_price}">
                 <input type="hidden" name="order_id" value="${item.order_id}">
+                <input type="hidden" name="goods_name" value="${item.goods_name }">
+                <input type="hidden" name="goods_sales_price" value="${item.goods_sales_price }">
+                <input type="hidden" name="order_name" value="${sessionScope.memberInfo.member_name}">
               </h2>
             </td>
           </tr>

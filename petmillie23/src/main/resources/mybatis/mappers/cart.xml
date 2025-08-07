@@ -105,4 +105,13 @@
     WHERE member_id = #{member_id} AND goods_num = #{goods_num}
 </update>
 
+  <select id="selectCartIdByMemberAndGoods" resultType="int" parameterType="CartVO">
+  SELECT cart_id
+  FROM cart
+  WHERE member_id = #{member_id}
+    AND goods_num = #{goods_num}
+</select>
+
+
+
 </mapper>

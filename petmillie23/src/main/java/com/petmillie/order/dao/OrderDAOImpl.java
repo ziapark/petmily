@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import com.petmillie.order.vo.OrderIDVO;
+import com.petmillie.cart.vo.CartVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Repository("orderDAO")
@@ -47,12 +47,14 @@ public class OrderDAOImpl implements OrderDAO {
 			sqlSession.delete("mapper.order.deleteGoodsFromCart",orderVO);		
 		}
 	}	
-/*	private int selectOrderID() throws DataAccessException{
-		 OrderIDVO orderIDVO = new OrderIDVO();
-		 
-	    sqlSession.insert("mapper.order.insertOrderID", orderIDVO);
-	    return orderIDVO.getId();  // MySQL이 AUTO_INCREMENT 값 자동으로 채워줌
-		
-	} */
+    @Override
+    public Integer selectCartIdByMemberAndGoods(CartVO cartVO) throws DataAccessException {
+        return sqlSession.selectOne("mapper.cart.selectCartIdByMemberAndGoods", cartVO);
+    }
+
+    @Override
+    public void deleteCartGoods(int cart_id) throws DataAccessException {
+        sqlSession.delete("mapper.cart.deleteCartGoods", cart_id);
+    }
 }
 
