@@ -259,7 +259,6 @@ public class OrderControllerImpl extends BaseController implements OrderControll
         payVO.setPay_order_time(now);
         payVO.setPayment_time(now);
 
-        orderService.addNewOrder(List.of(orderVO), payVO);
         // 결제 insert    
         orderService.addNewpay(payVO);
         
