@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.dao.MyPageDAO;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Service("myPageService")
@@ -42,4 +43,11 @@ public class MyPageServiceImpl  implements MyPageService{
 	public MemberVO myDetailInfo(String member_id) throws Exception{
 		return myPageDAO.selectMyDetailInfo(member_id);
 	}
+	
+    @Override
+    public void writeGoodsReview(GoodsReviewVO goodsReviewVO) {
+    	
+    	myPageDAO.insertGoodsReview(goodsReviewVO);
+    }
+
 }

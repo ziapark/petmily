@@ -23,7 +23,21 @@
     <result property="goods_credate" column="goods_credate"/>
 </resultMap>
 
-	
+	<!-- 리절트 맵 정의 -->
+<resultMap id="goodsReviewResult" type="GoodsReviewVO">
+    <result property="review_id" column="review_id"/>
+    <result property="member_id" column="member_id"/>
+    <result property="order_num" column="order_num"/>
+    <result property="rating" column="rating"/>
+    <result property="subject" column="subject"/>
+    <result property="content" column="content"/>
+    <result property="file_name" column="file_name"/>
+    <result property="created_at" column="created_at"/>
+    <result property="updated_at" column="updated_at"/>
+    <result property="del_yn" column="del_yn"/>
+    
+</resultMap>
+
 	<select id="selectMyOrderGoodsList" resultMap="goodsResult" parameterType="String">
 	    <![CDATA[
 			select * from userorder
@@ -119,4 +133,21 @@
 	   where order_id=#{order_id}
 	</update>
 	
+	
+    <insert id="insertGoodsReview" parameterType="GoodsReviewVO">
+        INSERT INTO goods_review (member_id, order_num, rating, subject, content,file_name)
+        VALUES (#{member_id}, #{order_num}, #{rating}, #{subject}, #{content},#{file_name})
+    </insert>
+	
+	    <update id="updateBoard" parameterType="BoardVO">
+        UPDATE goods_review
+        SET member_id = #{member_id}, subject = #{subject}, #{rating},content = #{content}, file_name =#{file_name},board_type=#{board_type}
+        WHERE comu_id = #{comu_id}
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM goods_review WHERE comu_id = #{comu_id}
+    </delete> 
+    
+    
 </mapper>

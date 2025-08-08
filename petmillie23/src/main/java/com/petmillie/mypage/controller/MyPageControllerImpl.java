@@ -1,8 +1,10 @@
 package com.petmillie.mypage.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,16 +15,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.common.base.BaseController;
 import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Controller("myPageController")
@@ -30,6 +35,9 @@ import com.petmillie.order.vo.OrderVO;
 public class MyPageControllerImpl extends BaseController  implements MyPageController{
 	@Autowired
 	private MyPageService myPageService;
+	
+	@Autowired
+	private GoodsReviewVO goodsReviewVO;
 	
 	@Autowired
 	private MemberVO memberVO;
@@ -220,11 +228,70 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		
 		return mav;
 	}
+	
+	
+	@RequestMapping("/writeReviewForm.do")
+	public ModelAndView writeForm(@ModelAttribute OrderVO orderVO,HttpServletRequest request) {
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		System.out.println("viewName = " + viewName);
+		System.out.println("리뷰메소드진입");
+		int order_id = orderVO.getOrder_num();
+		String order_name = orderVO.getOrder_name();
+		String goods_name = orderVO.getGoods_name();
+		mav.addObject("order_id", order_id);
+		mav.addObject("order_name", order_name);
+		mav.addObject("goods_name", goods_name);
+		
+		System.out.println("리뷰작성자:" + order_name);
+	    
+	    return mav;
+	}
 
 	@Override
-	public void addReview(String order_id) {
+	@RequestMapping("/addReview.do")
+	public ModelAndView addReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request) throws Exception {
 		
 		
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "메인페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		
+		System.out.println("리뷰쓰기메소드진입");
+		
+		HttpSession session = request.getSession();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+	    if (memberInfo == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    
+	    String memberId = memberInfo.getMember_id();
+	    goodsReviewVO.setMember_id(memberId);
+	    
+	    // **C드라이브에 저장할 경로 설정** 
+	    String saveDir = "C:\\petupload\\goodsreivew\\";
+	    File uploadPath = new File(saveDir);
+	    if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	    if (!file.isEmpty()) {
+	        String originalFileName = file.getOriginalFilename();
+	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+
+	        file.transferTo(new File(saveDir + savedFileName));
+	        goodsReviewVO.setFile_name(savedFileName);
+	    } else {
+	    	goodsReviewVO.setFile_name(null);
+	    }
+		
+	    myPageService.writeGoodsReview(goodsReviewVO);
+		
+
+	    return new ModelAndView("redirect:/mypage/listMyOrderHistory.do?");
+
 	}
 	
 	

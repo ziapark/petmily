@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petmillie.member.vo.MemberVO;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Repository("myPageDAO")
@@ -44,5 +45,11 @@ public class MyPageDAOImpl implements MyPageDAO{
 	
 	public void updateMyOrderCancel(String order_id) throws DataAccessException{
 		sqlSession.update("mapper.mypage.updateMyOrderCancel",order_id);
+	}
+
+	@Override
+	public void insertGoodsReview(GoodsReviewVO goodsReviewVO) throws DataAccessException {
+		sqlSession.insert("mapper.board.insertGoodsReview", goodsReviewVO); 
+		
 	}
 }
