@@ -61,23 +61,25 @@
         <h2>${pension.p_name} 예약하기</h2>
 
         <form action="${contextPath}/reservation/addReservation.do" method="post">
-            <input type="hidden" name="p_num" value="${pension.p_num}">
-            <input type="hidden" name="member_id" value="${sessionScope.member.member_id}">
-
-            <div class="form-group">
-                <label for="reservation_date">체크인 날짜:</label>
-                <input type="date" id="reservation_date" name="reservation_date" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="end_date">체크아웃 날짜:</label>
-                <input type="date" id="end_date" name="end_date" required>
-            </div>
-            
-            <div class="submit-button-container">
-                <button type="submit" class="submit-button">예약 완료</button>
-            </div>
-        </form>
+    <!-- p_num 대신 business_id를 사용하도록 수정 -->
+    <input type="hidden" name="business_id" value="${pension.business_id}">
+    <input type="hidden" name="member_id" value="${sessionScope.member.member_id}">
+    
+    <div class="form-group">
+        <label for="reservation_date">체크인 날짜:</label>
+        <input type="date" id="reservation_date" name="reservation_date" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="end_date">체크아웃 날짜:</label>
+        <input type="date" id="end_date" name="end_date" required>
+    </div>
+    
+    <div class="submit-button-container">
+        <button type="submit" class="submit-button">예약 완료</button>
+    </div>
+</form>
     </div>
 </body>
 </html>
+
