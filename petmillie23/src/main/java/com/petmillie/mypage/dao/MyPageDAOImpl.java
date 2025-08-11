@@ -18,8 +18,8 @@ public class MyPageDAOImpl implements MyPageDAO{
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<OrderVO> selectMyOrderGoodsList(String member_id) throws DataAccessException{
-		List<OrderVO> orderGoodsList=(List)sqlSession.selectList("mapper.order.selectMyOrderGoodsList",member_id);
+	public List<OrderVO> selectMyOrderList(String member_id) throws DataAccessException{
+		List<OrderVO> orderGoodsList=(List)sqlSession.selectList("mapper.order.selectMyOrderList",member_id);
 		return orderGoodsList;
 	}
 	
@@ -49,7 +49,15 @@ public class MyPageDAOImpl implements MyPageDAO{
 
 	@Override
 	public void insertGoodsReview(GoodsReviewVO goodsReviewVO) throws DataAccessException {
-		sqlSession.insert("mapper.board.insertGoodsReview", goodsReviewVO); 
+		
+		sqlSession.insert("mapper.mypage.insertGoodsReview", goodsReviewVO); 
 		
 	}
+	@Override
+	public List<GoodsReviewVO> selectGoodsReview(String member_id) throws DataAccessException{
+		List<GoodsReviewVO> mygoodsReviewList= sqlSession.selectList("mapper.mypage.selectGoodsReview",member_id);
+		System.out.println(mygoodsReviewList);
+		return mygoodsReviewList;
+	}
+
 }

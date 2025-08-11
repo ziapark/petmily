@@ -232,20 +232,21 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	@RequestMapping("/writeReviewForm.do")
 	public ModelAndView writeForm(@ModelAttribute OrderVO orderVO,HttpServletRequest request) {
+		
+		
 		String viewName = (String) request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		System.out.println("viewName = " + viewName);
-		System.out.println("리뷰메소드진입");
-		int order_id = orderVO.getOrder_num();
+		int order_num = orderVO.getOrder_num();
 		String order_name = orderVO.getOrder_name();
 		String goods_name = orderVO.getGoods_name();
-		mav.addObject("order_id", order_id);
+		mav.addObject("order_num", order_num);
 		mav.addObject("order_name", order_name);
 		mav.addObject("goods_name", goods_name);
 		
-		System.out.println("리뷰작성자:" + order_name);
-	    
+		System.out.println("order_num" + order_num);
+		
 	    return mav;
 	}
 
@@ -259,9 +260,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		mav.addObject("title", "메인페이지");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
-		
-		System.out.println("리뷰쓰기메소드진입");
-		
 		HttpSession session = request.getSession();
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
@@ -271,6 +269,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    
 	    String memberId = memberInfo.getMember_id();
 	    goodsReviewVO.setMember_id(memberId);
+	    
 	    
 	    // **C드라이브에 저장할 경로 설정** 
 	    String saveDir = "C:\\petupload\\goodsreivew\\";
@@ -286,14 +285,38 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    } else {
 	    	goodsReviewVO.setFile_name(null);
 	    }
-		
+
 	    myPageService.writeGoodsReview(goodsReviewVO);
-		
 
 	    return new ModelAndView("redirect:/mypage/listMyOrderHistory.do?");
 
 	}
 	
+	@Override
+	@RequestMapping("/myReview.do")
+	public ModelAndView myReview(HttpServletRequest request) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "메인페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		HttpSession session = request.getSession();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+	    if (memberInfo == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    
+	    String member_id = memberInfo.getMember_id();
+	    
+	    
+	    List<GoodsReviewVO> goodsReviewVO = myPageService.getReviewById(member_id);
+	    
+	    mav.addObject("goodsReviewVO", goodsReviewVO);
+	    
+	    return mav;
+
+	}
 	
 	
 }

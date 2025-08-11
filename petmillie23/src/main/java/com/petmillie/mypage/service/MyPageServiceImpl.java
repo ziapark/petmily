@@ -20,7 +20,7 @@ public class MyPageServiceImpl  implements MyPageService{
 	private MyPageDAO myPageDAO;
 
 	public List<OrderVO> listMyOrderGoods(String member_id) throws Exception{
-		return myPageDAO.selectMyOrderGoodsList(member_id);
+		return myPageDAO.selectMyOrderList(member_id);
 	}
 	
 	public List findMyOrderInfo(String order_id) throws Exception{
@@ -46,8 +46,15 @@ public class MyPageServiceImpl  implements MyPageService{
 	
     @Override
     public void writeGoodsReview(GoodsReviewVO goodsReviewVO) {
-    	
+
     	myPageDAO.insertGoodsReview(goodsReviewVO);
     }
+
+	@Override
+	public List<GoodsReviewVO> getReviewById(String member_id) throws Exception {
+		
+		return myPageDAO.selectGoodsReview(member_id);
+		
+	}
 
 }

@@ -3,6 +3,8 @@ package com.petmillie.mypage.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DataAccessException;
+
 import com.petmillie.board.vo.BoardVO;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
@@ -16,4 +18,5 @@ public interface MyPageService{
 	public void cancelOrder(String order_id) throws Exception;
 	public MemberVO myDetailInfo(String member_id) throws Exception;
 	public void writeGoodsReview(GoodsReviewVO goodsReviewVO) throws Exception;
+	public List<GoodsReviewVO> getReviewById(String member_id) throws Exception ;
 }

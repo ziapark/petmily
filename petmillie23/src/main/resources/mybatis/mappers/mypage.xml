@@ -135,9 +135,17 @@
 	
 	
     <insert id="insertGoodsReview" parameterType="GoodsReviewVO">
-        INSERT INTO goods_review (member_id, order_num, rating, subject, content,file_name)
-        VALUES (#{member_id}, #{order_num}, #{rating}, #{subject}, #{content},#{file_name})
+        INSERT INTO goods_review (member_id, order_num, rating,content,file_name)
+        VALUES (#{member_id}, #{order_num}, #{rating}, #{content},#{file_name})
     </insert>
+	
+	<select id="selectGoodsReview" resultMap="goodsReviewResult" parameterType="String">
+	    <![CDATA[
+		    select * from goods_review
+            where member_id=#{member_id}
+    	]]>
+	</select>
+	
 	
 	    <update id="updateBoard" parameterType="BoardVO">
         UPDATE goods_review

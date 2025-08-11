@@ -10,7 +10,6 @@ public class GoodsReviewVO {
 	private String member_id;
 	private int order_num;
 	private int rating;
-	private String subject;
 	private String content;
 	private String file_name;
 	
@@ -40,12 +39,6 @@ public class GoodsReviewVO {
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
 	}
 	public String getContent() {
 		return content;

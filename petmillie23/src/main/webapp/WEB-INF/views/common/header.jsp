@@ -133,7 +133,6 @@
 					</c:when>
 					<c:when test="${isLogOn==true and not empty memberInfo}">
 						<li><a href="#">나의 주문</a></li>
-						<li><a href="#">마이페이지</a></li>
 					</c:when>
 					<c:when test="${not empty businessInfo}">
 						<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">사업자</a></li>
@@ -204,12 +203,6 @@
 						<li><a href="#">반품/교환 신청 및 조회</a></li>
 						<li><a href="#">취소 주문 내역</a></li>
 						<li><a href="#">세금 계산서</a></li>
-					</ul>
-					<ul class="submenu">
-						<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-						<li><a href="#">나의 주소록</a></li>
-						<li><a href="#">개인정보 동의내역</a></li>
-						<li><a href="#">회원탈퇴</a></li>
 					</ul>
 				</c:if>
 				

@@ -65,8 +65,7 @@
        #{tel3}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{delivery_method}, #{delivery_message}, #{goods_fileName}, NOW()
   )
 </insert>
-
-
+ 
 	<!-- 주문 목록 조회 -->
 	<select id="selectMyOrderList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[

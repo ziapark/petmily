@@ -25,5 +25,5 @@ public interface MyPageController {
 	public String removeMember(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public ModelAndView addReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request) throws Exception;
-	
+	public ModelAndView myReview(HttpServletRequest request) throws Exception ;
 }
