@@ -1,14 +1,17 @@
 package com.petmillie.reservation.service;
 
 import java.util.List;
-import com.petmillie.business.vo.PensionVO;
+
+import com.petmillie.business.vo.PensionVO; // PensionVO를 import 합니다.
 
 public interface ReservaionService {
 
-    // 전체 펜션 목록을 조회하는 기능
+    /**
+     * 일반 회원이 보는 펜션 목록을 모두 조회합니다.
+     * @return 펜션 목록을 담은 List<PensionVO>
+     * @throws Exception
+     */
     public List<PensionVO> listAllPensions() throws Exception;
-
-    // 특정 펜션의 상세 정보를 조회하는 기능
-    public PensionVO getPensionDetail(int pensionId) throws Exception;
     
+    public PensionVO getPensionDetail(int pensionId) throws Exception;
 }

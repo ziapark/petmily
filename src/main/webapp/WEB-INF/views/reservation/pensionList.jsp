@@ -78,6 +78,16 @@
                             </c:if>
                         </p>
                         <p><strong>시설:</strong> ${pension.facilities}</p>
+                        <p><strong>전화번호:</strong> ${pension.tel1} - ${pension.tel2} - ${pension.tel3}</p>
+                         <p><strong>체크인:</strong> ${pension.checkin_time}</p>
+                         <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
+                     
+                        
+                        
+                        
+                        
+                     
+	
                     </div>
                 </a>
                 <%-- ▲▲▲▲▲ [ 링크 수정 완료! ] ▲▲▲▲▲ --%>
