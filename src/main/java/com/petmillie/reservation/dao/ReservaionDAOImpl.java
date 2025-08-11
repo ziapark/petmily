@@ -15,26 +15,28 @@ public class ReservaionDAOImpl implements ReservaionDAO {
     @Autowired
     private SqlSession sqlSession;
     
-    // (기존 코드) 사업자 예약 내역 조회 메서드
+    // 기존 매퍼(펜션 조회 등)가 남아있는 네임스페이스
+    private static final String NAMESPACE_ORIG = "com.petmillie.reservation.dao.ReservaionDAO.";
+    // 새로 분리한 관리자 전용 매퍼 (adminReseravtion.xml)
+    private static final String NAMESPACE_ADMIN = "mapper.adminReser.";
+
+    // 사업자(관리자)용 예약 목록 — 새 매퍼로 호출
     @Override
     public List<ReservaionVO> selectReservaionList(String business_id) throws Exception {
-        // 이 부분은 기존에 구현되어 있는 코드로 가정합니다.
-        return null;
+        return sqlSession.selectList(NAMESPACE_ADMIN + "reservationList", business_id);
     }
 
     // ----------------------------------------------------
-    // ** 일반 회원용 펜션 목록 조회 기능 추가 **
+    // 일반 회원용 펜션 목록/상세 (기존 매퍼 사용)
     // ----------------------------------------------------
     @Override
     public List<PensionVO> selectAllPensionList() throws Exception {
-        // ▼▼▼ 1. 이 부분의 문자열을 수정했습니다! ▼▼▼
-        return sqlSession.selectList("com.petmillie.reservation.dao.ReservaionDAO.selectAllPensionList");
+        return sqlSession.selectList(NAMESPACE_ORIG + "selectAllPensionList");
     }
     
     @Override
     public PensionVO selectPensionById(int pensionId) throws Exception {
-        // ▼▼▼ 2. 이 부분의 문자열도 함께 수정했습니다! ▼▼▼
-        return sqlSession.selectOne("com.petmillie.reservation.dao.ReservaionDAO.selectPensionById", pensionId);
+        return sqlSession.selectOne(NAMESPACE_ORIG + "selectPensionById", pensionId);
     }
     
 }
