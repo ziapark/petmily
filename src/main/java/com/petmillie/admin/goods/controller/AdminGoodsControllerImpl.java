@@ -40,7 +40,9 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	private static final String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
 	@Autowired
 	private AdminGoodsService adminGoodsService;
-
+	@Autowired
+	private GoodsVO goodsVO;
+	
 	@RequestMapping(value="/adminGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
 			 HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -101,7 +103,6 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 		return mav;
 
 	}
-
 
 	@RequestMapping(value="/addNewGoods.do", method={RequestMethod.POST})
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
@@ -204,10 +205,6 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 	    return resEntity;
 	}
-
-
-		
-	
 
 	@RequestMapping(value="/modifyGoodsForm.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView modifyGoodsForm(@RequestParam("goods_num") int goods_num,
@@ -414,9 +411,6 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
         resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
         return resEntity;
     }
-    // --- 상품 삭제 메서드 끝 ---
-    
-    
     
     // --- 상품 복원 메서드 (del_yn='N'으로 업데이트) ---
     @RequestMapping(value="/restoreGoods.do", method={RequestMethod.POST})
@@ -441,7 +435,6 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
         resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
         return resEntity;
     }
-    // --- 상품 복원 메서드 끝 ---
 
 	@RequestMapping(value="/addNewGoodsForm.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView addNewGoodsForm(@RequestParam Map<String, String> dateMap,
@@ -454,9 +447,31 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 		mav.addObject("title", "마이페이지");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
-
 		return mav;
-
 	}
+	
+	@RequestMapping(value="/updateGoodsStatus.do" ,method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<String> updateGoodsStatus(@RequestParam("goods_num") int goods_num, @RequestParam("goods_status") String goods_status, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "마이페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+
+		goodsVO.setGoods_num(goods_num);
+		goodsVO.setGoods_status(goods_status);
+		
+		try {
+			if(goods_status.equals("삭제")) {
+				adminGoodsService.removeGoods(goods_num);
+			}else {
+				adminGoodsService.updateGoodsStatus(goodsVO);
+			}
+			return ResponseEntity.ok("success");
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+		}
+	}
+	
 
 }

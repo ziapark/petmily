@@ -6,6 +6,7 @@ import java.util.Map;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.goods.vo.GoodsVO;
 
 public interface BusinessService {
 
@@ -26,4 +27,6 @@ public interface BusinessService {
 	public int removepension(int id) throws Exception;
 	public List reservationList(String business_id) throws Exception;
 	public int removeMember(String business_number)throws Exception;
+	public int addNewGoods(Map newGoodsMap) throws Exception;
+	public List<GoodsVO> listNewGoods(Map condMap) throws Exception;
 }

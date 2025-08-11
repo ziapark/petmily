@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,4 +34,5 @@ public interface BusinessController {
 	public String removeroom(@RequestParam String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	String addpension2(RoomVO roomVO, MultipartFile fileimage, HttpServletRequest request, HttpServletResponse response,
 			Model model, RedirectAttributes redirectAttributes) throws Exception;
+	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 }

@@ -23,6 +23,7 @@ public interface AdminGoodsDAO {
 	public void updateOrderGoods(Map orderMap) throws DataAccessException;
 	public void modifyMemberInfo(Map MemberMap) throws DataAccessException;
 //	 public void removeGoods(int goods_num) throws Exception; 
-	 public void updateGoodsDelYn(Map<String, Object> goodsMap) throws Exception;
+	 public int updateGoodsDelYn(Map<String, Object> goodsMap) throws Exception;
+	 public int updateGoodsStatus(GoodsVO goodsVO) throws Exception;
 	
 }

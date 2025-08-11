@@ -1,16 +1,19 @@
 package com.petmillie.business.controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,11 +34,14 @@ import com.petmillie.business.service.BusinessService;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
-
+import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.goods.vo.ImageFileVO;
+import com.petmillie.common.base.BaseController;
 
 @Controller("businessController")
 @RequestMapping("/business")
-public class BusinessControllerImpl implements BusinessController {
+public class BusinessControllerImpl extends BaseController implements BusinessController {
+	private static final String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
 	@Autowired
 	private BusinessService businessService;
 	@Autowired
@@ -119,11 +126,11 @@ public class BusinessControllerImpl implements BusinessController {
 		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 		return resEntity;
 	}
+	
 	@Override
 	@RequestMapping(value = "/overlapped.do", method = RequestMethod.POST)
 	@ResponseBody
-	public String overlapped(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	public String overlapped(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int result = businessService.overlapped(id);
 		return (result == 0) ? "false" : "true";
 	}
@@ -471,6 +478,175 @@ public class BusinessControllerImpl implements BusinessController {
 		int result = businessService.removepension(id);
 		System.out.println(result);
 		return (result == 0 ) ? "false" : "true";
+	}
+	
+	@Override
+	@RequestMapping(value="/addNewGoods.do", method={RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
+	    multipartRequest.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html; charset=UTF-8");
+	    String imageFileName = null;
+
+	    Map<String, Object> newGoodsMap = new HashMap<>();
+	    Enumeration<?> enu = multipartRequest.getParameterNames();
+	    while (enu.hasMoreElements()) {
+	        String name = (String) enu.nextElement();
+	        String value = multipartRequest.getParameter(name);
+	        newGoodsMap.put(name, value);
+	    }
+
+	    HttpSession session = multipartRequest.getSession();
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+	    String reg_id = businessVO.getSeller_id();
+
+	    // ✅ 이미지 업로드 처리
+	    List<ImageFileVO> imageFileList = new ArrayList<>();
+	    Iterator<String> fileNames = multipartRequest.getFileNames();
+
+	    while (fileNames.hasNext()) {
+	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
+
+	        if (multipartFile != null && !multipartFile.isEmpty()) {
+	            String originalName = multipartFile.getOriginalFilename();
+	            String ext = originalName.substring(originalName.lastIndexOf("."));
+	            String newFileName = UUID.randomUUID().toString() + ext;
+
+	            File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	            if (!tempDir.exists()) {
+	                tempDir.mkdirs();
+	            }
+
+	            File destFile = new File(tempDir, newFileName);
+	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
+
+	            ImageFileVO imageFileVO = new ImageFileVO();
+	            imageFileVO.setFileName(newFileName);
+	            imageFileVO.setReg_id(reg_id);
+
+	            String extension = ext.toLowerCase();
+	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
+	                imageFileVO.setFileType("image");
+	            } else {
+	                imageFileVO.setFileType("etc");
+	            }
+
+	            imageFileList.add(imageFileVO);
+	        }
+	    }
+
+	    if (!imageFileList.isEmpty()) {
+	        String mainImageFileName = imageFileList.get(0).getFileName();
+	        newGoodsMap.put("goods_fileName", mainImageFileName);
+	        newGoodsMap.put("imageFileList", imageFileList);
+	    }
+
+	    String message = null;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+	    try {
+	        int goods_num = businessService.addNewGoods(newGoodsMap);
+
+	        if (!imageFileList.isEmpty()) {
+	            for (ImageFileVO imageFileVO : imageFileList) {
+	                imageFileName = imageFileVO.getFileName();
+	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
+	            }
+	        }
+
+	        message = "<script>";
+	        message += " alert('등록성공.');";
+	        message += " location.href='" + multipartRequest.getContextPath() + "/business/businessGoodsMain.do';";
+	        message += "</script>";
+
+	    } catch (Exception e) {
+	        if (!imageFileList.isEmpty()) {
+	            for (ImageFileVO imageFileVO : imageFileList) {
+	                imageFileName = imageFileVO.getFileName();
+	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                if (srcFile.exists()) srcFile.delete();
+	            }
+	        }
+
+	        message = "<script>";
+	        message += " alert('등록실패');";
+	        message += " location.href='" + multipartRequest.getContextPath() + "/business/addNewGoodsForm.do';";
+	        message += "</script>";
+
+	        e.printStackTrace();
+	    }
+
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
+	}
+	
+
+	@RequestMapping(value="/businessGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
+	public ModelAndView businessGoodsMain(@RequestParam Map<String, String> dateMap,
+			 HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		HttpSession session=request.getSession();
+		session=request.getSession();
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "마이페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+
+		session.setAttribute("side_menu", "business_mode");
+
+		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+		String section = dateMap.get("section");
+		String pageNum = dateMap.get("pageNum");
+		String beginDate=null,endDate=null;
+
+		String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+		beginDate=tempDate[0];
+		endDate=tempDate[1];
+		dateMap.put("beginDate", beginDate);
+		dateMap.put("endDate", endDate);
+
+		Map<String,Object> condMap=new HashMap<String,Object>();
+		if(section== null) {
+			section = "1";
+		}
+		condMap.put("section",section);
+		if(pageNum== null) {
+			pageNum = "1";
+		}
+		condMap.put("pageNum",pageNum);
+		condMap.put("beginDate",beginDate);
+		condMap.put("endDate", endDate);
+
+        int pageSize = 10;
+        int currentPage = Integer.parseInt(pageNum);
+        int offset = (currentPage - 1) * pageSize;
+
+        condMap.put("offset", offset);
+        condMap.put("limit", pageSize);
+
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+	    String reg_id = businessVO.getBusiness_number();
+	    
+		List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
+		mav.addObject("newGoodsList", newGoodsList);
+
+		String beginDate1[]=beginDate.split("-");
+		String endDate2[]=endDate.split("-");
+		mav.addObject("beginYear",beginDate1[0]);
+		mav.addObject("beginMonth",beginDate1[1]);
+		mav.addObject("beginDay",beginDate1[2]);
+		mav.addObject("endYear",endDate2[0]);
+		mav.addObject("endMonth",endDate2[1]);
+		mav.addObject("endDay",endDate2[2]);
+
+		mav.addObject("section", section);
+		mav.addObject("pageNum", pageNum);
+		return mav;
+
 	}
 }
 

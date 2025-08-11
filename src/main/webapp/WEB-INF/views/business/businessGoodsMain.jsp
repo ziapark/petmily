@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"
-    isELIgnored="false" %>
-
+    pageEncoding="utf-8" isELIgnored="false" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -11,7 +9,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>관리자 상품 조회</title>
+<title>사업자 상품 조회</title>
 <style>
     table {width: 100%;border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
     table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
@@ -30,7 +28,6 @@
     .status-deleted {color: #dc3545;font-weight: bold;}
     .status-active {color: #28a745;}
 </style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 	function search_goods_list(fixedSearchPeriod) {
 		var formObj = document.createElement("form");
@@ -106,27 +103,6 @@
 		beginDate = beginYear + '-' + beginMonth + '-' + beginDay;
 		//alert(beginDate+","+endDate);
 		return beginDate + "," + endDate;
-	}
-	
-	function updateGoodsStatus(selectElement, goodsNum) {
-	    const selectedStatus = selectElement.value;
-
-	    $.ajax({
-	        type: "POST",
-	        url: "${contextPath}/admin/goods/updateGoodsStatus.do",
-	        data: {
-	            goods_num: goodsNum,
-	            goods_status: selectedStatus
-	        },
-	        success: function(response) {
-	            alert("상태가 변경되었습니다.");
-	            // 성공 후 처리 (선택사항: 새로고침 없이 UI 업데이트 등)
-	        },
-	        error: function(xhr, status, error) {
-	            alert("상태 변경 중 오류가 발생했습니다.");
-	            console.error(error);
-	        }
-	    });
 	}
 </script>
 </head>
@@ -273,15 +249,16 @@
                             <td>
                                 <strong><fmt:formatDate value="${item.goods_credate}" pattern="yyyy-MM-dd" /></strong>
                             </td>
-							<td>
-							    <input type="hidden" name="goods_num" value="${item.goods_num}" />
-							    <select name="goods_status" onchange="updateGoodsStatus(this, '${item.goods_num}')">
-							        <option value="승인대기" ${item.goods_status == '승인대기' ? 'selected' : ''}>승인대기</option>
-							        <option value="판매중" ${item.goods_status == '판매중' ? 'selected' : ''}>판매중</option>
-							        <option value="품절" ${item.goods_status == '품절' ? 'selected' : ''}>품절</option>
-							        <option value="삭제" ${item.goods_status == '삭제' ? 'selected' : ''}>삭제</option>
-							    </select>
-							</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${item.del_yn eq 'Y'}">
+                                        <strong class="status-deleted">삭제됨</strong>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <strong class="status-active">${item.goods_status}</strong>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                         </TR>
                     </c:forEach>
                 </c:otherwise>
@@ -351,7 +328,7 @@
             </tr>
         </TBODY>
     </TABLE>
-    <form action="${contextPath}/admin/goods/addNewGoodsForm.do" style="width:100%; text-align:right;">
+    <form action="${contextPath}/business/addNewGoodsForm.do" style="width:100%; text-align:right;">
         <input type="submit" value="상품 등록하기" >
     </form>
 	</div>

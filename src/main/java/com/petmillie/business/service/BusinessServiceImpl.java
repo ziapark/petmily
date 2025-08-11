@@ -1,15 +1,19 @@
 package com.petmillie.business.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.petmillie.admin.goods.dao.AdminGoodsDAO;
 import com.petmillie.business.dao.BusinessDAO;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
 import com.petmillie.reservation.vo.ReservaionVO;
 
@@ -19,7 +23,9 @@ public class BusinessServiceImpl implements BusinessService {
 	private BusinessDAO businessDAO;
 	@Autowired
 	private ReservaionDAO reservaionDAO;
-
+	@Autowired
+	private AdminGoodsDAO adminGoodsDAO;
+	
 	@Override
 	public void addSeller(BusinessVO businessVO) throws Exception {
 		 businessDAO.addSeller(businessVO);
@@ -111,5 +117,21 @@ public class BusinessServiceImpl implements BusinessService {
 	@Override
 	public int removeMember(String business_number) throws Exception {
 		return businessDAO.removeMember(business_number);
+	}
+	
+	@Override
+	public int addNewGoods(Map newGoodsMap) throws Exception{
+		int goods_num = adminGoodsDAO.insertNewGoods(newGoodsMap);	//admin꺼 사용
+		ArrayList<ImageFileVO> imageFileList = (ArrayList)newGoodsMap.get("imageFileList");
+		for(ImageFileVO imageFileVO : imageFileList) {
+			imageFileVO.setGoods_num(goods_num);
+		}
+		adminGoodsDAO.insertGoodsImageFile(imageFileList);
+		return goods_num;
+	}
+	
+	@Override
+	public List<GoodsVO> listNewGoods(Map condMap) throws Exception{
+		return adminGoodsDAO.selectNewGoodsList(condMap);
 	}
 }

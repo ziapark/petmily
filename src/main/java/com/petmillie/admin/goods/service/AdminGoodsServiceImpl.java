@@ -87,41 +87,28 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
 		return null;
 	}
 
-	
+	public int updateGoodsStatus(GoodsVO goodsVO) throws Exception{
+		return adminGoodsDAO.updateGoodsStatus(goodsVO);
+	}
 
 	 
-	 @Override
-	    public void removeGoods(int goods_num) throws Exception {
-	     
-	        Map<String, Object> goodsMap = new HashMap<>();
-	        goodsMap.put("goods_num", goods_num);
-	        goodsMap.put("del_yn", "Y"); // del_yn을 'Y'로 설정
-
-	        adminGoodsDAO.updateGoodsDelYn(goodsMap); // DAO에 새로 추가될 메서드 호출
-
-	    
-	    }
-	
+	@Override
+	public int removeGoods(int goods_num) throws Exception {     
+        Map<String, Object> goodsMap = new HashMap<>();
+        goodsMap.put("goods_num", goods_num);
+        goodsMap.put("del_yn", "Y"); // del_yn을 'Y'로 설정
+        goodsMap.put("goods_status", "삭제");
+        return adminGoodsDAO.updateGoodsDelYn(goodsMap); // DAO에 새로 추가될 메서드 호출
+	}
 	 
-	 @Override
-	    public void restoreGoods(int goods_num) throws Exception {
-	        // GOODS 테이블의 del_yn 컬럼 값을 'N'으로 업데이트 (복원)
-	        Map<String, Object> goodsMap = new HashMap<>();
-	        goodsMap.put("goods_num", goods_num);
-	        goodsMap.put("del_yn", "N"); // 'N'으로 설정하여 복원
-	        adminGoodsDAO.updateGoodsDelYn(goodsMap); // 기존 updateGoodsDelYn DAO 메서드 재활용
-	    }
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+	@Override
+    public void restoreGoods(int goods_num) throws Exception {
+        // GOODS 테이블의 del_yn 컬럼 값을 'N'으로 업데이트 (복원)
+        Map<String, Object> goodsMap = new HashMap<>();
+        goodsMap.put("goods_num", goods_num);
+        goodsMap.put("del_yn", "N"); // 'N'으로 설정하여 복원
+        goodsMap.put("goods_status", "판매중");
+        adminGoodsDAO.updateGoodsDelYn(goodsMap); // 기존 updateGoodsDelYn DAO 메서드 재활용
+    }
 	 
 }

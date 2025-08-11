@@ -66,8 +66,9 @@
 		</div>
 	</div>	
 
-	<form class="add_new_goods_form" action="${contextPath}/admin/goods/addNewGoods.do" method="post"enctype="multipart/form-data">
-		<input type="hidden" name="goods_status" value="판매중">
+
+	<form class="add_new_goods_form" action="${contextPath}/business/addNewGoods.do" method="post"enctype="multipart/form-data">
+		<input type="hidden" name="goods_status" value="승인대기">
 		<table>
 			<tr>
 				<td><label class="form-label">상품명</label></td>
