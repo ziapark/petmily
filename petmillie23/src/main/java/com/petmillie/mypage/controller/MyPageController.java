@@ -26,4 +26,10 @@ public interface MyPageController {
 	
 	public ModelAndView addReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request) throws Exception;
 	public ModelAndView myReview(HttpServletRequest request) throws Exception ;
+	public ModelAndView myReviewDetail(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception ;
+	public ModelAndView deleteReview(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception ;
+	public ModelAndView updateReviewForm(HttpServletRequest request, int review_id) throws Exception ;
+	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file,
+            						@RequestParam("originalFileName") String originalFileName, 
+            						HttpServletRequest request) throws Exception;
 }

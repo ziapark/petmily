@@ -257,7 +257,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		
 		String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "메인페이지");
+		mav.addObject("title", "펫밀리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
 		HttpSession session = request.getSession();
@@ -297,7 +297,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	public ModelAndView myReview(HttpServletRequest request) throws Exception {
 		String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "메인페이지");
+		mav.addObject("title", "펫밀리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
 		HttpSession session = request.getSession();
@@ -309,14 +309,93 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    
 	    String member_id = memberInfo.getMember_id();
 	    
-	    
 	    List<GoodsReviewVO> goodsReviewVO = myPageService.getReviewById(member_id);
-	    
+ 
 	    mav.addObject("goodsReviewVO", goodsReviewVO);
 	    
 	    return mav;
 
 	}
+	
+	@Override
+	@RequestMapping("/myReviewDetail.do")
+	public ModelAndView myReviewDetail(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "펫밀리");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    GoodsReviewVO review = myPageService.getReviewDetailByReviewId(review_id);
+	    mav.addObject("review", review);
+	    return mav;
+	}
+	
+	@Override
+	@RequestMapping("/deleteReview.do")
+	public ModelAndView deleteReview(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "펫밀리");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    myPageService.deleteReview(review_id);
+	
+	    return new ModelAndView("redirect:/mypage/myReview.do");
+	}
+	
+	@Override
+	@RequestMapping("/updateReviewForm.do")
+	public ModelAndView updateReviewForm(HttpServletRequest request, int review_id) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "펫밀리");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		GoodsReviewVO review = myPageService.getReviewDetailByReviewId(review_id);
+		mav.addObject("review", review);
+	    return mav;
+	}
+	
+	@Override
+	@RequestMapping("/updateReview.do")
+	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, 
+									@RequestParam("uploadFile") MultipartFile file,
+						            @RequestParam("originalFileName") String originalFileName, 
+						            HttpServletRequest request) throws Exception {
+		System.out.println("업데이트진입");
+		String saveDir = "C:\\petupload\\goodsreivew\\";	
+	    File uploadPath = new File(saveDir);
+	    if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	    // 새 파일 업로드 했을 경우
+	    if (!file.isEmpty()) {
+	        // 기존 파일 삭제
+	        if (originalFileName != null && !originalFileName.isEmpty()) {
+	            File oldFile = new File(saveDir + originalFileName);
+	            if (oldFile.exists()) {
+	                oldFile.delete(); // 삭제
+	            }
+	        }
+
+	        // 새 파일 저장
+	        String originalFileNameNew = file.getOriginalFilename();
+	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileNameNew;
+	        file.transferTo(new File(saveDir + savedFileName));
+	        goodsReviewVO.setFile_name(savedFileName);
+	    } else {
+	        // 파일 안 바꿨으면 기존 파일 유지
+	    	goodsReviewVO.setFile_name(originalFileName);
+	    }
+		    
+	    System.out.println("컨트롤러: 서비스진입 전");
+	    myPageService.updateReview(goodsReviewVO);
+	    System.out.println("컨트롤러: 업데이트완료");
+	    return new ModelAndView("redirect:/mypage/myReview.do");
+	}
+
+	
+	
+	
+	
+	
 	
 	
 }

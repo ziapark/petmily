@@ -57,4 +57,24 @@ public class MyPageServiceImpl  implements MyPageService{
 		
 	}
 
+	@Override
+	public GoodsReviewVO getReviewDetailByReviewId(int review_id) throws Exception {
+		return myPageDAO.getReviewDetailByReviewId(review_id);
+	}
+
+	@Override
+	public void deleteReview(int review_id) throws Exception {
+		myPageDAO.deleteReview(review_id);
+		
+	}
+
+	@Override
+	public void updateReview(GoodsReviewVO goodsReviewVO) throws Exception {
+		System.out.println("서비스진입 내용:" + goodsReviewVO.getContent()+"리뷰아이디:"+goodsReviewVO.getReview_id());
+		myPageDAO.updateReview(goodsReviewVO);
+		
+	}
+	
+	
+	
 }

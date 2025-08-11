@@ -37,6 +37,7 @@
     		<div class="contents_box" style="text-align:left;">
     			<c:if test="${not empty vo.file_name}">
 				  <div class="imgbox">
+				  	<!-- FileDownloadController에  /board/image.do 맵핑있음 -->
 				    <img src="${contextPath}/board/image.do?fileName=${vo.file_name}&comu_id=${vo.comu_id}" />
 				  </div>
 				</c:if>

@@ -21,64 +21,70 @@
 	<div class="container text-center mt-3 mb-3">
 	<div class="row row-cols-1 mb-3">
 		<div class="col bg-light p-5 text-start">
-			<h2 class="fw-bold">리뷰 등록</h2>
+			<h2 class="fw-bold">리뷰 수정</h2>
 			<p></p>	
 		</div>
 	</div>
 	<div class="row row-cols-1">
 
 	<div class="col">
-	<form name="writeForm" action="${contextPath}/mypage/addReview.do" method="post" enctype="multipart/form-data">
+	<form name="writeForm" action="${contextPath}/mypage/updateReview.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
-	    <input type="hidden" name="order_num" value="${order_num}" />
-	    <input type="hidden" name="order_num" value="${review_id}" />
+	    <input type="hidden" name="order_num" value="${review.order_num}" />
+	    <input type="hidden" name="originalFileName" value="${review.file_name}" />
+	    <input type="hidden" name="review_id" value="${review.review_id}" />
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">작성자 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${order_name}" readonly>
+			     <input type="text" name="member_id" class="form-control" value="${review.member_id}" readonly>
 			  </div>
 		</div>
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">주문 상품 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${goods_name}" readonly>
+			     <input type="text" name="goods_name" class="form-control" value="${review.goods_name}" readonly>
 			  </div>
 		</div>		
 		<div class="mb-3 row">
 			<label for="" class="col-sm-2 col-form-label">내용 </label>
 			<div class="col-sm-10">
-				<textarea class="form-control writearea" name="content"></textarea>  
+				<textarea class="form-control writearea" name="content">${review.content}</textarea>
 			</div>
 		</div>	
 		<div class="mb-3 row">
 		  <label class="col-sm-2 col-form-label">평가</label>
 		  <div class="col-sm-10 d-flex">
 		    <div class="form-check me-3">
-		      <input class="form-check-input" type="radio" name="rating" id="rating1" value="1">
-		      <label class="form-check-label" for="rating1">★</label>
+		        <input class="form-check-input" type="radio" name="rating" id="rating1" value="1"
+			    <c:if test="${review.rating == 1}">checked</c:if> >
+				<label class="form-check-label" for="rating1">★</label>
 		    </div>
 		    <div class="form-check me-3">
-		      <input class="form-check-input" type="radio" name="rating" id="rating2" value="2">
-		      <label class="form-check-label" for="rating2">★★</label>
+				<input class="form-check-input" type="radio" name="rating" id="rating2" value="2"
+			    <c:if test="${review.rating == 2}">checked</c:if> >
+				<label class="form-check-label" for="rating2">★★</label>
 		    </div>
 		    <div class="form-check me-3">
-		      <input class="form-check-input" type="radio" name="rating" id="rating3" value="3">
-		      <label class="form-check-label" for="rating3">★★★</label>
+		      	<input class="form-check-input" type="radio" name="rating" id="rating3" value="3"
+				<c:if test="${review.rating == 3}">checked</c:if> >
+				<label class="form-check-label" for="rating3">★★★</label>
 		    </div>
 		    <div class="form-check me-3">
-		      <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
-		      <label class="form-check-label" for="rating4">★★★★</label>
+		        <input class="form-check-input" type="radio" name="rating" id="rating4" value="4"
+			    <c:if test="${review.rating == 4}">checked</c:if> >
+			    <label class="form-check-label" for="rating4">★★★★</label>
 		    </div>
 		    <div class="form-check">
-		      <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
-		      <label class="form-check-label" for="rating5">★★★★★</label>
+		        <input class="form-check-input" type="radio" name="rating" id="rating5" value="5"
+			    <c:if test="${review.rating == 5}">checked</c:if> >
+			    <label class="form-check-label" for="rating5">★★★★★</label>
 		    </div>
 		  </div>
 		</div>
 		<div class="mb-3 row">
 			<label for="" class="col-sm-2 col-form-label">사진첨부</label>
 			<div class="col-sm-10">
-				<input type="file" name="uploadFile" class="form-control">
+				<input type="file" name="uploadFile" class="form-control" value="${review.file_name}">
 			</div>
 		</div>
 		<div class="mb-3 row">

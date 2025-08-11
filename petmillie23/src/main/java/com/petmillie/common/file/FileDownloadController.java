@@ -17,7 +17,8 @@ import net.coobird.thumbnailator.Thumbnails;
 public class FileDownloadController {
 	private static String CURR_BOARD_REPO_PATH = "C:\\petupload"; // 게시판 전용 경로
 	private static String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods"; // 상품 전용 경로
-	private static String CURR_ROOM_REPO_PATH = "C:\\petupload\\room";
+	private static String CURR_ROOM_REPO_PATH = "C:\\petupload\\room"; //객실 전용경로
+	private static String CURR_REVIEW_REPO_PATH = "C:\\petupload\\goodsreivew"; //리뷰전용경로
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
@@ -143,4 +144,37 @@ public class FileDownloadController {
 	    System.out.println("이미지 스트리밍 완료!");
 	}
 
+	//리뷰이미지출력
+	@RequestMapping("/mypage/image.do")
+	public void displayReviewImage(@RequestParam("file_name") String file_name,
+	                              @RequestParam("review_id") String review_id,
+	                              HttpServletResponse response) throws Exception {
+		System.out.println("image.do진입");
+		String filePath = CURR_REVIEW_REPO_PATH + "\\" + file_name;
+		
+		System.out.println("image.do filePath " +filePath);
+		File image = new File(filePath);
+	
+		if (!image.exists()) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		String contentType = "application/octet-stream";
+		if (file_name.endsWith(".jpg") || file_name.endsWith(".jpeg")) {
+			contentType = "image/jpeg";
+		} else if (file_name.endsWith(".png")) {
+			contentType = "image/png";
+		}
+		response.setContentType(contentType);
+		
+		try (FileInputStream in = new FileInputStream(image);
+		     OutputStream out = response.getOutputStream()) {
+			byte[] buffer = new byte[1024 * 8];
+			int count;
+			while ((count = in.read(buffer)) != -1) {
+				out.write(buffer, 0, count);
+			}
+		}
+	}
 }

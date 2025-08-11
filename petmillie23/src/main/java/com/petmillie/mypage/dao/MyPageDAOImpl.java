@@ -60,4 +60,23 @@ public class MyPageDAOImpl implements MyPageDAO{
 		return mygoodsReviewList;
 	}
 
+	@Override
+	public GoodsReviewVO getReviewDetailByReviewId(int review_id) throws DataAccessException {
+		
+		return sqlSession.selectOne("mapper.mypage.getReviewDetailByReviewId", review_id); 
+	}
+
+	@Override
+	public void deleteReview(int review_id) throws DataAccessException {
+		
+		sqlSession.delete("mapper.mypage.deleteReview",review_id);
+	}
+
+	@Override
+	public void updateReview(GoodsReviewVO goodsReviewVO) throws DataAccessException {
+		System.out.println("dao진입: 작성내용" + goodsReviewVO.getContent() +"별점"+ goodsReviewVO.getRating() + "리뷰아이디"+ goodsReviewVO.getReview_id() + "파일명"+ goodsReviewVO.getFile_name());
+		sqlSession.update("mapper.mypage.updateReview", goodsReviewVO); 
+		
+	}
+
 }

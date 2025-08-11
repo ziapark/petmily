@@ -19,4 +19,7 @@ public interface MyPageService{
 	public MemberVO myDetailInfo(String member_id) throws Exception;
 	public void writeGoodsReview(GoodsReviewVO goodsReviewVO) throws Exception;
 	public List<GoodsReviewVO> getReviewById(String member_id) throws Exception ;
+	public GoodsReviewVO getReviewDetailByReviewId(int review_id) throws Exception;
+	public void deleteReview(int review_id) throws Exception; 
+	public void updateReview(GoodsReviewVO goodsReviewVO) throws Exception;
 }

@@ -65,7 +65,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardVO getBoardView(int comu_id) {
-        boardDAO.updateViews(comu_id);
+       // boardDAO.updateViews(comu_id);
         return boardDAO.getBoardByNum(comu_id);
     }
 

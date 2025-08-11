@@ -18,4 +18,7 @@ public interface MyPageDAO {
 	public void updateMyOrderCancel(String order_id) throws DataAccessException;
 	public void insertGoodsReview(GoodsReviewVO goodsReviewVO) throws DataAccessException;
 	public List<GoodsReviewVO> selectGoodsReview(String member_id) throws DataAccessException;
+	public GoodsReviewVO getReviewDetailByReviewId (int review_id) throws DataAccessException;
+	public void deleteReview(int review_id) throws DataAccessException;
+	public void updateReview(GoodsReviewVO goodsReviewVO) throws DataAccessException;
 }

@@ -18,15 +18,19 @@
 	</div>
 	<form  method="post">	
 		<table class="table">
-			<tr>
-				<td>내용</td>
+			<tr>	
+				<td>상품이미지</td>
+				<td>구매상품</td>
 				<td>별점</td>
+				<td>작성일</td>
 			</tr>
 
 			<c:forEach var="item" items="${goodsReviewVO}">
 			<tr>
-				<td>${item.content }</td>
-				<td>${item.rating }</td>
+				<td><img src="${contextPath}/mypage/image.do?file_name=${item.file_name}&review_id=${item.review_id}" style="width:100px;"/></td>
+				<td><a href="${contextPath}/mypage/myReviewDetail.do?review_id=${item.review_id}&goods_name=${item.goods_name}">${item.goods_name}</a></td>
+				<td>${item.rating}</td>
+				<td>${item.created_at}</td>			
 			</tr>
 			</c:forEach>
 		</table>

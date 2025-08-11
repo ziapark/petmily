@@ -34,6 +34,7 @@
     <result property="file_name" column="file_name"/>
     <result property="created_at" column="created_at"/>
     <result property="updated_at" column="updated_at"/>
+    <result property="goods_name" column="goods_name"/>
     <result property="del_yn" column="del_yn"/>
     
 </resultMap>
@@ -139,22 +140,44 @@
         VALUES (#{member_id}, #{order_num}, #{rating}, #{content},#{file_name})
     </insert>
 	
-	<select id="selectGoodsReview" resultMap="goodsReviewResult" parameterType="String">
+	<select id="selectGoodsReview" resultMap="goodsReviewResult" parameterType="string">
+    <![CDATA[
+        SELECT 
+            r.review_id,
+            r.member_id,
+            r.order_num, 
+            r.rating, 
+            r.content,
+            r.file_name,
+            r.created_at,
+            r.updated_at,
+            r.del_yn,
+            o.goods_name
+        FROM goods_review r
+        JOIN userorder o 
+            ON r.order_num = o.order_num
+        WHERE r.member_id = #{member_id}
+    ]]>
+	</select>
+	<select id="getReviewDetailByReviewId" resultMap="goodsReviewResult" parameterType="int">
 	    <![CDATA[
-		    select * from goods_review
-            where member_id=#{member_id}
-    	]]>
+	    SELECT r.review_id, r.member_id, r.order_num, r.rating, r.content, r.file_name,
+	           r.created_at, r.updated_at, r.del_yn,
+	           o.goods_name
+	    FROM goods_review r
+	    JOIN userorder o ON r.order_num = o.order_num
+	    WHERE r.review_id = #{review_id}
+	    ]]>
 	</select>
 	
-	
-	    <update id="updateBoard" parameterType="BoardVO">
+    <update id="updateReview" parameterType="GoodsReviewVO">
         UPDATE goods_review
-        SET member_id = #{member_id}, subject = #{subject}, #{rating},content = #{content}, file_name =#{file_name},board_type=#{board_type}
-        WHERE comu_id = #{comu_id}
+        SET rating= #{rating}, content= #{content}, file_name= #{file_name}
+        WHERE review_id = #{review_id}
     </update>
 
-    <delete id="deleteBoard" parameterType="int">
-        DELETE FROM goods_review WHERE comu_id = #{comu_id}
+    <delete id="deleteReview" parameterType="int">
+        DELETE FROM goods_review WHERE review_id = #{review_id}
     </delete> 
     
     
