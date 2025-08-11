@@ -1,11 +1,9 @@
 package com.petmillie.reservation.dao;
 
 import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.reservation.vo.ReservaionVO;
 
@@ -15,26 +13,36 @@ public class ReservaionDAOImpl implements ReservaionDAO {
     @Autowired
     private SqlSession sqlSession;
     
-    // (기존 코드) 사업자 예약 내역 조회 메서드
+    // MyBatis 매퍼 XML의 namespace와 일치해야 합니다.
+    private static final String NAMESPACE = "com.petmillie.reservation.dao.ReservaionDAO";
+
     @Override
     public List<ReservaionVO> selectReservaionList(String business_id) throws Exception {
-        // 이 부분은 기존에 구현되어 있는 코드로 가정합니다.
-        return null;
+        // 이 부분은 다른 기능(사업자용)이므로 기존 로직을 유지합니다.
+        return sqlSession.selectList("mapper.adminReser.reservationList", business_id);
     }
 
-    // ----------------------------------------------------
-    // ** 일반 회원용 펜션 목록 조회 기능 추가 **
-    // ----------------------------------------------------
+    /**
+     * 전체 펜션 목록을 조회하는 메서드
+     */
     @Override
-    public List<PensionVO> selectAllPensionList() throws Exception {
-        // ▼▼▼ 1. 이 부분의 문자열을 수정했습니다! ▼▼▼
-        return sqlSession.selectList("com.petmillie.reservation.dao.ReservaionDAO.selectAllPensionList");
+    public List<PensionVO> selectAllPensions() throws Exception {
+        return sqlSession.selectList(NAMESPACE + ".selectAllPensions");
     }
     
+    /**
+     * ID로 특정 펜션 정보를 조회하는 메서드
+     */
     @Override
     public PensionVO selectPensionById(int pensionId) throws Exception {
-        // ▼▼▼ 2. 이 부분의 문자열도 함께 수정했습니다! ▼▼▼
-        return sqlSession.selectOne("com.petmillie.reservation.dao.ReservaionDAO.selectPensionById", pensionId);
+        return sqlSession.selectOne(NAMESPACE + ".selectPensionById", pensionId);
     }
-    
+
+    /**
+     * 예약 정보를 데이터베이스에 삽입하는 메서드
+     */
+    @Override
+    public int insertReservation(ReservaionVO reservationVO) throws Exception {
+        return sqlSession.insert(NAMESPACE + ".insertReservation", reservationVO);
+    }
 }

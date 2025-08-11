@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.petmillie.reservation.dao.ReservaionDAO">
 
@@ -23,6 +23,12 @@
     </resultMap>
 
     <select id="selectAllPensionList" resultMap="pensionResult">
+        <![CDATA[
+            SELECT * FROM pension WHERE del_yn = 'N'
+        ]]>
+    </select>
+    
+    <select id="selectAllPensions" resultMap="pensionResult">
         <![CDATA[
             SELECT * FROM pension WHERE del_yn = 'N'
         ]]>
