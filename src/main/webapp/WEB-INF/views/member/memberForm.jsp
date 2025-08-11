@@ -123,6 +123,64 @@
 			}
 		}); //end ajax	 
 	}
+	
+	function fn_sendAuthCode() {
+	    const email1 = $("#email1").val();
+	    let email2;
+	    const email2Select = $("#email2_select").val();
+
+	    if(email2Select === "non") {
+	        email2 = $("#email2_direct").val();
+	    } else {
+	        email2 = email2Select;
+	    }
+
+	    if(!email1 || !email2){
+	        alert("이메일 주소를 입력해주세요.");
+	        return;
+	    }
+		
+		$.ajax({
+			type:"POST",
+			url:"${contextPath}/member/sendAuthCode.do",
+			data:{"email1":email1, "email2":email2},
+			success:function(data){
+				if(data !== 'true'){
+					alert("입력하신 이메일로 인증번호가 발송되었습니다.");
+					$("#authCodeInput").prop("disabled", false);
+					$("#mailCheckResult").text("인증번호가 발송되었습니다.").css("color", "green");
+					serverAuthCode = data;
+					isEmailVerified = false;
+				}else{
+					alert("이미 가입된 이메일입니다. 로그인 페이지로 이동합니다.");
+					window.location.href = "${contextPath}/member/loginForm.do";
+					return ;
+				}
+			},
+			error : function(){
+				alert("메일 발송에 실패했습니다. 이메일 주소를 확인해주세요.");
+			}
+		});
+	}
+
+	$(document).ready(function() {
+	    $("#verifyAuthCodeBtn").click(function(){
+	        const userInputCode = $("#authCodeInput").val();
+	
+	        if(!userInputCode){
+	            alert("인증번호를 입력해주세요.");
+	            return;
+	        }
+	
+	        if(userInputCode === serverAuthCode){
+	            $("#mailCheckResult").text("이메일 인증이 완료되었습니다.").css("color", "blue");
+	            isEmailVerified = true;
+	        }else{
+	            $("#mailCheckResult").text("인증번호가 일치하지 않습니다.").css("color", "red");
+	            isEmailVerified = false;
+	        }        
+	    });
+    });   
 </script>
 </head>
 <body>
@@ -232,8 +290,7 @@
 									<div class="form-check mt-2">
 										<input type="checkbox" name="smssts_yn"
 											class="form-check-input" value="Y" id="smsCheck" checked />
-										<label class="form-check-label" for="smsCheck">SMS 수신
-											동의</label>
+										<label class="form-check-label" for="smsCheck">SMS 수신동의</label>
 									</div>
 								</td>
 							</tr>
@@ -241,7 +298,7 @@
 								<th class="bg-light">이메일</th>
 								<td>
 									<div class="d-flex align-items-center mb-2">
-										<input type="text" name="email1"
+										<input type="text" name="email1" id="email1"
 											class="form-control w-auto me-1" required /> <span>@</span>
 										<input type="text" name="email2" id="email2_direct"
 											class="form-control w-auto mx-1" required /> <select
@@ -254,12 +311,20 @@
 											<option value="korea.com">korea.com</option>
 											<!-- 필요하면 더 추가 -->
 										</select>
+										<button type="button" class="btn btn-secondary"
+											id="sendAuthCodeBtn" onclick="fn_sendAuthCode()">인증번호 발송</button>
 									</div> <input type="hidden" name="member_email" id="member_email" />
+									<div class="form-group">
+	                            		<div style="display: flex; align-items: center; margin-top: 5px;">
+	                                		<input type="text" id="authCodeInput" class="form-control" placeholder="인증번호를 입력하세요" disabled>
+	                                		<button type="button" id="verifyAuthCodeBtn" class="btn btn-primary" style="margin-left: 10px; white-space: nowrap;">인증번호 확인</button>
+	                            		</div>
+                            			<p id="mailCheckResult" style="margin-top: 5px;"></p>
+                        			</div>
 									<div class="form-check">
 										<input type="checkbox" name="emailsts_yn"
 											class="form-check-input" value="Y" id="emailCheck" checked />
-										<label class="form-check-label" for="emailCheck">이메일
-											수신 동의</label>
+										<label class="form-check-label" for="emailCheck">이메일 수신 동의</label>
 									</div>
 								</td>
 							</tr>

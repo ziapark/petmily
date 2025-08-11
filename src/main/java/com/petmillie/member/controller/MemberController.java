@@ -20,6 +20,7 @@ public interface MemberController {
 	public ResponseEntity  addMember(@ModelAttribute("member") MemberVO member,
             HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String overlapped(@RequestParam("id") String id,HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String sendAuthCode(@RequestParam("email1") String email1, @RequestParam("email2") String email2) throws Exception;
 	public String kakaoLogin(@RequestParam("code")String code, @RequestParam Map<String, String> loginMap, HttpSession session, Model model) throws Exception;
 	
 

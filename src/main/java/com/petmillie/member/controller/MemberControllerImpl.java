@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.petmillie.common.base.BaseController;
+import com.petmillie.member.service.MailService;
 import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 
@@ -37,7 +38,9 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	private MemberService memberService;
 	@Autowired
 	private MemberVO memberVO;
-
+	@Autowired
+	private MailService mailService;
+	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -127,7 +130,20 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 		return (result == 0) ? "false" : "true";
 	}
 	
-
+	@Override
+	@RequestMapping(value="/sendAuthCode.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String sendAuthCode(@RequestParam("email1") String email1, @RequestParam("email2") String email2) throws Exception{
+		//이메일 인증
+		String overlappedByEmail = memberService.overlappedByEmail(email1, email2);
+		if(overlappedByEmail.equals("true")) {
+			return overlappedByEmail;
+		}else {
+			String email = email1 + "@" + email2;
+			String authCode = mailService.joinEmail(email);
+			return authCode;
+		}
+	}
 
 	@RequestMapping(value = "/*Form.do", method = RequestMethod.GET)
 	public ModelAndView Form(HttpServletRequest request, HttpServletResponse response) throws Exception {

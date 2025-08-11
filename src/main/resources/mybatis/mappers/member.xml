@@ -104,4 +104,12 @@
   		select * from member where kakao_id = #{kakao_id}
   ]]>
   </select>
+  
+  	<select id="selectOverlappedEmail" parameterType="memberVO" resultType="String">
+		<![CDATA[
+			SELECT IF(COUNT(*) > 0, 'true', 'false')
+			FROM member
+			WHERE email1 = #{email1} AND email2 = #{email2} 
+		]]>
+	</select>
 </mapper>

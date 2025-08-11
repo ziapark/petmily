@@ -8,7 +8,10 @@
 	<bean id="propertyPlaceholderConfigurer"
 	class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	<property name="locations">
-	<value>/WEB-INF/config/jdbc/jdbc.properties</value>
+	<list>
+		<value>/WEB-INF/config/jdbc/jdbc.properties</value>
+		<value>/WEB-INF/config/mail/mail.properties</value>
+	</list>
 	</property>
 	</bean>
 	
@@ -20,6 +23,25 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 	</bean>
+	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		    <property name="host" value="smtp.gmail.com" />
+		    <property name="port" value="587" />
+		    <property name="username" value="${mail.username}" /> 
+		    <property name="password" value="${mail.password}" />
+		    <property name="javaMailProperties">
+		        <props>
+		            <prop key="mail.transport.protocol">smtp</prop>
+		            <prop key="mail.smtp.auth">true</prop>
+		            <prop key="mail.smtp.starttls.enable">true</prop> 
+		            <prop key="mail.debug">true</prop>
+		            <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+		            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+		            <prop key="mail.smtp.localhost">localhost</prop>
+		        </props>
+		    </property>
+		</bean>
+
 	<bean id ="sqlSessionFactory" class= "org.mybatis.spring.SqlSessionFactoryBean" >
 	    <property name="dataSource" ref="dataSource" />
 	  <property name="configLocation" value="classpath:mybatis/models/modelConfig.xml"/>

@@ -1,5 +1,4 @@
 package com.petmillie.member.dao;
-
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -13,6 +12,8 @@ import com.petmillie.member.vo.MemberVO;
 public class MemberDAOImpl  implements MemberDAO{
 	@Autowired
 	private SqlSession sqlSession;	
+	@Autowired
+	private MemberVO memberVO;
 	
 	@Override
 	public MemberVO login(Map loginMap) throws DataAccessException{
@@ -31,6 +32,14 @@ public class MemberDAOImpl  implements MemberDAO{
 		return result;
 	}
 
+	@Override
+	public String overlappedByEmail(String email1, String email2) throws DataAccessException{
+		memberVO.setEmail1(email1);
+		memberVO.setEmail2(email2);
+		String result = sqlSession.selectOne("mapper.member.selectOverlappedEmail", memberVO);
+		return result;
+	}
+	
 	@Override
 	public int removeMember(String id) throws DataAccessException {
 		return sqlSession.delete("mapper.member.removeMember", id);

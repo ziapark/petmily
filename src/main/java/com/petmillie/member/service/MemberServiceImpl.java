@@ -17,7 +17,7 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDAO memberDAO;
 	
 	@Override
-	public MemberVO login(Map  loginMap) throws Exception{
+	public MemberVO login(Map loginMap) throws Exception{
 		return memberDAO.login(loginMap);
 	}
 	
@@ -29,6 +29,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int overlapped(String id) throws Exception{
 		return memberDAO.selectOverlappedID(id);
+	}
+	
+	@Override
+	public String overlappedByEmail(String email1, String email2) throws Exception{
+		return memberDAO.overlappedByEmail(email1, email2);
 	}
 	
 	@Override
