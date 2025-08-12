@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.business">
-<resultMap id="businessResult" type="BusinessVO">
-    <result property="business_id" column="business_id"/>
-    <result property="seller_id" column="seller_id"/>
-    <result property="seller_pw" column="seller_pw"/>
-    <result property="business_name" column="business_name"/>
-    <result property="business_type" column="business_type"/>
-    <result property="owner_name" column="owner_name"/>
-    <result property="business_number" column="business_number"/>
-    <result property="phone1" column="phone1"/>
-    <result property="phone2" column="phone2"/>
-    <result property="phone3" column="phone3"/>
-    <result property="email1" column="email1"/>
-    <result property="email2" column="email2"/>
-    <result property="zipcode" column="zipcode"/>
-    <result property="roadAddress" column="roadAddress"/>
-    <result property="jibunAddress" column="jibunAddress"/>
-    <result property="namujiAddress" column="namujiAddress"/>
-    <result property="description" column="description"/>
-    <result property="bank_name" column="bank_name"/>
-    <result property="bank_account" column="bank_account"/>
-    <result property="bank_holder" column="bank_holder"/>
-    <result property="approval_status" column="approval_status"/>
-    <result property="role" column="role"/>
-    <result property="reg_date" column="reg_date"/>
-    <result property="del_yn" column="del_yn"/>
-</resultMap>
-	<!-- 사업자 로그인 -->
-	<select id="busilogin" resultType="BusinessVO"  parameterType="java.util.Map"  >
-	    <![CDATA[
-			select * from business 
-			 where business_number=#{business_number}
-			 and seller_pw=#{seller_pw}			
-			 
-		]]>
-	</select>	
+  	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="mapper.business">
+		<resultMap id="businessResult" type="BusinessVO">
+    		<result property="business_id" column="business_id"/>
+		    <result property="seller_id" column="seller_id"/>
+		    <result property="seller_pw" column="seller_pw"/>
+		    <result property="business_name" column="business_name"/>
+		    <result property="business_type" column="business_type"/>
+		    <result property="owner_name" column="owner_name"/>
+		    <result property="business_number" column="business_number"/>
+		    <result property="phone1" column="phone1"/>
+		    <result property="phone2" column="phone2"/>
+		    <result property="phone3" column="phone3"/>
+		    <result property="email1" column="email1"/>
+		    <result property="email2" column="email2"/>
+		    <result property="zipcode" column="zipcode"/>
+		    <result property="roadAddress" column="roadAddress"/>
+		    <result property="jibunAddress" column="jibunAddress"/>
+		    <result property="namujiAddress" column="namujiAddress"/>
+		    <result property="description" column="description"/>
+		    <result property="bank_name" column="bank_name"/>
+		    <result property="bank_account" column="bank_account"/>
+		    <result property="bank_holder" column="bank_holder"/>
+		    <result property="approval_status" column="approval_status"/>
+		    <result property="role" column="role"/>
+		    <result property="reg_date" column="reg_date"/>
+		    <result property="del_yn" column="del_yn"/>
+		</resultMap>
+		<!-- 사업자 로그인 -->
+		<select id="busilogin" resultType="BusinessVO"  parameterType="BusinessVO"  >
+	    	<![CDATA[
+				select * from business 
+			 	where seller_id=#{seller_id}
+			 	and seller_pw=#{seller_pw}
+			]]>
+		</select>	
 	<!-- 사업자 회원가입 -->
 <insert id="insertNewBusinesspartner" parameterType="BusinessVO">
 	<![CDATA[
@@ -55,7 +54,7 @@
 	   select count(*)
 	   from business
 	   where seller_id = #{id}
-	   ]]>
+	]]>
 	</select>
 	<!--  -->
 	<select id="listMyGoods" parameterType="BusinessVO" resultType="BusinessVO">

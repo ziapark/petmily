@@ -218,7 +218,9 @@
 						<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
 						<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a></li>
 						<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
+						<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
 						<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+						
 					</ul>
 				</c:if>
 			</div>

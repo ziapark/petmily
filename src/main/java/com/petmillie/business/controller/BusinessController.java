@@ -21,7 +21,7 @@ import com.petmillie.business.vo.RoomVO;
 public interface BusinessController {
 	public ResponseEntity addSeller(@ModelAttribute("BusinessVO") BusinessVO businessVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String overlapped(@RequestParam("id") String id,HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView login(@RequestParam("seller_id") String seller_id, @RequestParam("seller_pw") String seller_pw, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, String p_num, HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView businessDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception;	
 	public ResponseEntity modifyMyInfo(@RequestParam("attribute")  String attribute,@RequestParam("value")  String value, HttpServletRequest request, HttpServletResponse response)  throws Exception;
