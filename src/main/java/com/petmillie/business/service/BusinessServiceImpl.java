@@ -37,8 +37,8 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public BusinessVO login(Map loginMap) throws Exception {
-		return businessDAO.login(loginMap);
+	public BusinessVO login(String seller_id, String seller_pw) throws Exception {
+		return businessDAO.login(seller_id, seller_pw);
 	}
 
 	@Override

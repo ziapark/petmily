@@ -30,9 +30,14 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
 	@Override
-	public BusinessVO login(Map loginMap) throws DataAccessException {
-		BusinessVO business=(BusinessVO)sqlSession.selectOne("mapper.business.busilogin", loginMap);
-		return business;
+	public BusinessVO login(String seller_id, String seller_pw) throws DataAccessException {
+		BusinessVO businessVO = new BusinessVO(); 
+		
+		businessVO.setSeller_id(seller_id);
+		businessVO.setSeller_pw(seller_pw);
+		
+		businessVO = (BusinessVO)sqlSession.selectOne("mapper.business.busilogin", businessVO);
+		return businessVO;
 	}
 
 	@Override

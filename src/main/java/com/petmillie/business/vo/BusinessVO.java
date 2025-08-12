@@ -28,6 +28,7 @@ public class BusinessVO {
 	private String role;
 	private String reg_date;
 	private String del_yn;
+	
 	public String getEmail1() {
 		return email1;
 	}

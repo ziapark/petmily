@@ -34,9 +34,9 @@ import com.petmillie.business.service.BusinessService;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
-import com.petmillie.common.base.BaseController;
 
 @Controller("businessController")
 @RequestMapping("/business")
@@ -51,50 +51,51 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	@Autowired
 	private RoomVO roomVO;
 	
+	@Override
 	@RequestMapping(value = "/busilogin.do", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		businessVO = businessService.login(loginMap);
-		if (businessVO != null && businessVO.getSeller_id() != null && "seller".equals(businessVO.getRole())) {
-			System.out.println("이름" + businessVO.getSeller_id());
-			System.out.println("권한" +businessVO.getRole());
-			HttpSession session = request.getSession();
-			String business_id = businessVO.getBusiness_id();
-	        PensionVO pension = businessService.pension(business_id); // 펜션 정보 조회
-			session.setAttribute("isLogOn", true);
-			session.setAttribute("businessInfo", businessVO);	 // 기본 정보
-			
-			if(pension != null) {
-			session.setAttribute("pensionInfo", pension);        // 펜션 정보
-	        session.setAttribute("p_num", pension.getP_num());   // p_num 따로 꺼내기 (편의성)
-			}else {
-				System.out.println("등록된 펜션 정보 없음");
-			}  // p_num 따로 꺼내기 (편의성)
-				mav.setViewName("redirect:/main/main.do");
-			
-		} else {
-			String message = "로그인에 실패했습니다.";
-			ModelAndView mav2 = new ModelAndView("/common/layout");
-			mav2.addObject("message", message);
-			mav2.addObject("title", "로그인");
-			mav2.addObject("body", "/WEB-INF/views/business/loginForm.jsp");
-			return mav2;
-		}
-		return mav;
-	}
-	
-	@RequestMapping("/*Form.do")
-	public ModelAndView Form(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String viewName = (String) request.getAttribute("viewName");
+	public ModelAndView login(@RequestParam("seller_id") String seller_id, @RequestParam("seller_pw") String seller_pw, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//사업자 로그인
 		ModelAndView mav = new ModelAndView("/common/layout");
-		mav.addObject("title", "메인페이지");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		int result = businessService.overlapped(seller_id);
+
+		if(result != 0) {
+			//아이디 존재
+			BusinessVO businessVO = businessService.login(seller_id, seller_pw);
+			if(businessVO == null) {
+				//비밀번호 틀림
+				mav.addObject("title", "로그인");
+				mav.addObject("message", "비밀번호가 일치하지 않습니다.");
+				mav.addObject("body", "/WEB-INF/views/business/loginForm.jsp");
+			}else {
+				//로그인 성공
+				mav.addObject("title", "메인페이지");
+				HttpSession session = request.getSession();
+				String business_id = businessVO.getBusiness_id();
+		        PensionVO pension = businessService.pension(business_id); // 펜션 정보 조회
+				session.setAttribute("isLogOn", true);
+				session.setAttribute("businessInfo", businessVO);	 // 기본 정보
+				
+				if(pension != null) {
+					session.setAttribute("pensionInfo", pension);        // 펜션 정보
+			        session.setAttribute("p_num", pension.getP_num());   // p_num 따로 꺼내기 (편의성)
+				}else {
+					System.out.println("등록된 펜션 정보 없음");
+				}
+				mav.setViewName("redirect:/main/main.do");
+			}
+		}else {
+			mav.addObject("title", "로그인");
+			mav.addObject("message", "존재하지 않는 아이디 입니다.");
+			mav.addObject("body", "/WEB-INF/views/business/loginForm.jsp");
+		}
+		
 		return mav;
 	}
 	
 	@Override
 	@RequestMapping(value = "/addSeller.do", method = RequestMethod.POST)
 	public ResponseEntity addSeller(@ModelAttribute("BusinessVO") BusinessVO businessVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//사업자 회원가입
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
 		
@@ -108,13 +109,13 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		    session.setAttribute("isLogOn", true);
 		    session.setAttribute("businessInfo", businessVO);
 			message = "<script>";
-			message += " alert('회원가입 성공');";
+			message += " alert('회원가입이 완료되었습니다. 반갑습니다.');";
 			message += " location.href='" + request.getContextPath() + "/main/main.do';";
 			message += " </script>";
 
 		} catch (Exception e) {
 			message = "<script>";
-			message += " alert('회원가입 실패');";
+			message += " alert('회원가입에 실패했습니다. 다시 시도해주세요.');";
 			message += " location.href='" + request.getContextPath() + "/business/businessForm.do';";
 			message += " </script>";
 
@@ -128,12 +129,23 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	@RequestMapping(value = "/overlapped.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String overlapped(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//아이디 중복체크
 		int result = businessService.overlapped(id);
 		return (result == 0) ? "false" : "true";
 	}
 	
+	@RequestMapping("/*Form.do")
+	public ModelAndView Form(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//입력 폼 출력
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("title", "메인페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		return mav;
+	}
+	
 	@Override
-	@RequestMapping(value="/mypension.do" ,method = RequestMethod.GET)
+	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
 	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		if(businessVO == null && businessVO.getBusiness_number() == null) {
 
@@ -155,10 +167,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		String business_number=businessVO.getBusiness_number();
 		String business_id = businessVO.getBusiness_id();
 		
-			
 		BusinessVO mypension = businessService.mypension(business_number);
 		PensionVO pension = businessService.pension(business_id);
-
 		
 		if (p_num == null || p_num.trim().isEmpty()) {
 		    Object sessionPnum = session.getAttribute("p_num");
@@ -185,7 +195,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		session.setAttribute("p_num", p_num);
 
 		return mav;
-
 	}
 
 	@Override
