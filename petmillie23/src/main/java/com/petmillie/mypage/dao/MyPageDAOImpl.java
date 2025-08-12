@@ -1,6 +1,7 @@
 package com.petmillie.mypage.dao;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
+import com.petmillie.mypage.vo.LikeGoodsVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Repository("myPageDAO")
@@ -18,9 +20,9 @@ public class MyPageDAOImpl implements MyPageDAO{
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<OrderVO> selectMyOrderList(String member_id) throws DataAccessException{
-		List<OrderVO> orderGoodsList=(List)sqlSession.selectList("mapper.order.selectMyOrderList",member_id);
-		return orderGoodsList;
+	public List<OrderVO> selectMyOrderList(Map<String, Object> params) throws DataAccessException {
+	    List<OrderVO> orderGoodsList = sqlSession.selectList("mapper.order.selectMyOrderList", params);
+	    return orderGoodsList;
 	}
 	
 	public List selectMyOrderInfo(String order_id) throws DataAccessException{
@@ -74,9 +76,48 @@ public class MyPageDAOImpl implements MyPageDAO{
 
 	@Override
 	public void updateReview(GoodsReviewVO goodsReviewVO) throws DataAccessException {
-		System.out.println("dao진입: 작성내용" + goodsReviewVO.getContent() +"별점"+ goodsReviewVO.getRating() + "리뷰아이디"+ goodsReviewVO.getReview_id() + "파일명"+ goodsReviewVO.getFile_name());
+		
 		sqlSession.update("mapper.mypage.updateReview", goodsReviewVO); 
 		
 	}
+
+	@Override
+	public boolean existsReview(int orderNum, String memberId) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("order_num", orderNum);
+	    params.put("member_id", memberId);
+
+	    Integer count = sqlSession.selectOne("mapper.mypage.existsReview", params);
+	    
+	    return count != null && count > 0;
+	}
+	@Override
+	public List<LikeGoodsVO> likeGoodsList(String member_id) throws DataAccessException {
+
+		return sqlSession.selectList("mapper.mypage.selectLikeGoodsList", member_id);
+	}
+
+	@Override
+	public List<Integer> selectLikedGoodsNums(String member_id) throws Exception {
+		return sqlSession.selectList("mapper.mypage.selectLikedGoodsNums", member_id);
+	}
+	@Override
+	public int existsLikeGoods(Map<String, Object> params) throws Exception {
+	    return sqlSession.selectOne("mapper.mypage.existsLikeGoods", params);
+	}
+
+	@Override
+	public void insertLikeGoods(Map<String, Object> params) throws Exception {
+	    sqlSession.insert("mapper.mypage.insertLikeGoods", params);
+	}
+
+	@Override
+	public void deleteLikeGoods(Map<String, Object> params) throws Exception {
+	    sqlSession.delete("mapper.mypage.deleteLikeGoods", params);
+	}
+
+
+
+	
 
 }

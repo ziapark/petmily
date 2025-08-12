@@ -225,7 +225,20 @@ function fn_cancel_order(order_id){
 				<td>
 					<strong>${item.receiver_name }</strong>
 				</td>
-				<td><a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_num}&order_name=${item.order_name}&goods_name=${item.goods_name}"><strong>리뷰쓰기</strong></a></td>
+				<td>
+				    <c:choose>
+				         <c:when test="${item.hasReview}">
+				            <a href="${contextPath}/mypage/myReview.do?goods_num=${item.goods_num}">
+				                <strong>리뷰보기</strong>
+				            </a>
+				        </c:when>
+				        <c:otherwise>
+				            <a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_num}&order_name=${item.order_name}&goods_name=${item.goods_name}">
+				                <strong>리뷰쓰기</strong>
+				            </a>
+				        </c:otherwise>
+				    </c:choose>
+				</td>
 				<td>
 			     <c:choose>
 			   <c:when test="${item.delivery_state=='delivery_prepared'}">

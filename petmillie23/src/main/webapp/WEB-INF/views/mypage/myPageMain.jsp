@@ -49,20 +49,21 @@ function fn_cancel_order(order_id){
 	</div>
 	<div class="mypage_wrap"> 
 	<div class="side_menu">
-		<ul>
-			<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
+		<ul>	
 			<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
+			<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
+			<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
 			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-			<li><a href="#">회원탈퇴</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
 		</ul>
 	</div>
 	<div class="mypage_content">
 		<h3 style="text-align:left;">최근주문내역
-		    <A href="#"> <IMG  src="${contextPath}/resources/image/btn_more_see.jpg">  </A> 
+		    <A href="#"> <IMG  src="${contextPath}/resources/image/btn_more_see.jpg"></A> 
 		</h3>
 		<table class="table">
 				<tbody align=center >
-					<tr style="background:#33ff00" >
+					<tr style="background:#33ff00">
 						<td>주문번호</td>
 						<td>주문일자</td>
 						<td>주문상품</td>
@@ -150,29 +151,12 @@ function fn_cancel_order(order_id){
 		</h3>
 		<table class="table">
 		  <tr>
-		    <td>
-			   예치금 &nbsp;&nbsp;  <strong>10000원</strong>
-		   </td>
-		    <td>
-			   쇼핑머니 &nbsp;&nbsp; <strong>9000원</strong>
-		   </td>
-		   </tr>
-		   <tr>
-		    <td>
-			   쿠폰 &nbsp;&nbsp;  <strong>6000원</strong>
-		   </td>
+
 		    <td>
 			   포인트 &nbsp;&nbsp; <strong>2000원</strong>
 		   </td>
 		   </tr>
-		   <tr>
-		    <td>
-			   상품권 &nbsp;&nbsp;  <strong>4000원</strong>
-		   </td>
-		    <td>
-				디지털머니 &nbsp;&nbsp; <strong>9000원</strong>
-		   </td>
-		   </tr>
+		   
 		</table>
 		
 		<br><br><br>	

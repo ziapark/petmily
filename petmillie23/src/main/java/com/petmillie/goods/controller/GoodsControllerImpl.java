@@ -1,8 +1,10 @@
 package com.petmillie.goods.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.service.GoodsService;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.member.vo.MemberVO;
+import com.petmillie.mypage.service.MyPageService;
 
 import net.sf.json.JSONObject;
 
@@ -27,6 +31,8 @@ import net.sf.json.JSONObject;
 public class GoodsControllerImpl extends BaseController implements GoodsController {
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private MyPageService myPageService;
 	@Autowired
 	private GoodsVO goodsVO;
 	
@@ -163,17 +169,27 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	    ModelAndView mav = new ModelAndView("/common/layout");
 
 	    mav.addObject("title", "전체 상품");
-
-	    // viewName은 직접 지정하는 것이 안전함
 	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
 
-	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
+	    // 전체 상품 리스트 가져오기
 	    List<GoodsVO> goodsList = goodsService.listAllGoods();
-	    for (GoodsVO goodsVO : goodsList) {
-	        System.out.println(goodsVO.getGoods_fileName());  // 각 상품의 이미지 파일명 출력
+	    mav.addObject("goodsList", goodsList);
+
+	    // 세션에서 로그인한 회원 아이디 꺼내기
+	    String member_id = null;
+	    HttpSession session = request.getSession(false);
+	    if (session != null && session.getAttribute("memberInfo") != null) {
+	        MemberVO member = (MemberVO) session.getAttribute("memberInfo");
+	        member_id = member.getMember_id();
 	    }
-	    
-	    mav.addObject("goodsList", goodsList); // JSP로 전달
+
+	    // 로그인 했으면 좋아요 누른 상품 번호 Set 가져오기
+	    Set<Integer> likedGoodsSet = new HashSet<>();
+	    if (member_id != null) {
+	        likedGoodsSet = new HashSet<>(myPageService.getLikedGoodsNums(member_id));
+	    }
+	    mav.addObject("likedGoodsSet", likedGoodsSet);
+
 	    return mav;
 	}
 

@@ -28,6 +28,7 @@ import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
 import com.petmillie.mypage.vo.GoodsReviewVO;
+import com.petmillie.mypage.vo.LikeGoodsVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Controller("myPageController")
@@ -47,31 +48,35 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	@Override
 	@RequestMapping(value="/myPageMain.do" ,method = RequestMethod.GET)
-	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message,
-			   HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		if(memberVO == null && memberVO.getMember_id() == null) {
+	public ModelAndView myPageMain(@RequestParam Map<String, String> dateMap, @RequestParam(required = false,value="message") String message,
+	                               HttpServletRequest request, HttpServletResponse response)  throws Exception {
+	    memberVO = (MemberVO) request.getSession().getAttribute("memberInfo");
+	    if(memberVO == null || memberVO.getMember_id() == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
 
+	    HttpSession session = request.getSession();
+	    session.setAttribute("side_menu", "my_page"); 
 
-		}
-		HttpSession session=request.getSession();
-		session=request.getSession();
-		session.setAttribute("side_menu", "my_page"); 
-		
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "마이페이지");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-		memberVO=(MemberVO)session.getAttribute("memberInfo");
-		String member_id=memberVO.getMember_id();
-		
-		List<OrderVO> myOrderList=myPageService.listMyOrderGoods(member_id);
-		
-		mav.addObject("message", message);
-		mav.addObject("myOrderList", myOrderList);
+	    String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "마이페이지");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
-		return mav;
+	    String member_id = memberVO.getMember_id();
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("member_id", member_id);
+	    params.put("offset", 0);
+	    params.put("limit", 10);
+
+	    List<OrderVO> myOrderList = myPageService.listMyOrderGoods(params);
+
+	    
+	    mav.addObject("message", message);
+	    mav.addObject("myOrderList", myOrderList);
+
+	    return mav;
 	}
-
 	@Override
 	@RequestMapping(value="/myOrderDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView myOrderDetail(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception {
@@ -111,7 +116,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    dateMap.put("member_id", member_id);
 	    dateMap.put("offset", "0");    // ✅ null 아니어야 함
 	    dateMap.put("limit", "10");    // ✅ null 아니어야 함
-	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
 
 	    // 날짜 정보 추가
 	    String[] beginDateArr = beginDate.split("-");
@@ -123,8 +127,18 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    mav.addObject("endMonth", endDateArr[1]);
 	    mav.addObject("endDay", endDateArr[2]);
 
-	    mav.addObject("myOrderHistList", myOrderHistList);
+	 // 주문 내역 조회
+	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
 
+	    // 각 주문별 리뷰 여부 체크
+	    for (OrderVO order : myOrderHistList) {
+	    	
+	        boolean hasReview = myPageService.existsReview(order.getOrder_num(), member_id);
+	        order.setHasReview(hasReview);
+	    }
+
+	    mav.addObject("myOrderHistList", myOrderHistList);
+	    
 	    return mav;
 	}
 
@@ -216,6 +230,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		int result = memberService.removeMember(id);
 		return (result == 0 ) ? "false" : "true";
 	}
+	
 	@RequestMapping(value="/deleteForm.do", method=RequestMethod.GET)
 	public ModelAndView Form(HttpServletRequest request, HttpServletResponse response) throws Exception{
 	    HttpSession session = request.getSession();
@@ -360,7 +375,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 									@RequestParam("uploadFile") MultipartFile file,
 						            @RequestParam("originalFileName") String originalFileName, 
 						            HttpServletRequest request) throws Exception {
-		System.out.println("업데이트진입");
+	
 		String saveDir = "C:\\petupload\\goodsreivew\\";	
 	    File uploadPath = new File(saveDir);
 	    if (!uploadPath.exists()) uploadPath.mkdirs();
@@ -385,12 +400,37 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    	goodsReviewVO.setFile_name(originalFileName);
 	    }
 		    
-	    System.out.println("컨트롤러: 서비스진입 전");
 	    myPageService.updateReview(goodsReviewVO);
-	    System.out.println("컨트롤러: 업데이트완료");
 	    return new ModelAndView("redirect:/mypage/myReview.do");
 	}
-
+	@Override
+	@RequestMapping("/likeGoods.do")
+	public ModelAndView likeGoods(HttpServletRequest request, String member_id) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "펫밀리");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		List<LikeGoodsVO> likeGoodsList = myPageService.likeGoodsList(member_id);
+		
+		mav.addObject("likeGoodsList", likeGoodsList);
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toggleLikeGoods.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> toggleLikeGoods(@RequestParam String member_id, @RequestParam int goods_num) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        result = myPageService.toggleLikeGoods(member_id, goods_num);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        result.put("success", false);
+	    }
+	    return result;
+	}
+	
 	
 	
 	

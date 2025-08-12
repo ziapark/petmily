@@ -36,8 +36,70 @@
     <result property="updated_at" column="updated_at"/>
     <result property="goods_name" column="goods_name"/>
     <result property="del_yn" column="del_yn"/>
-    
 </resultMap>
+
+	<!-- 리절트 맵 정의 -->
+<resultMap id="likeGoodsResult" type="LikeGoodsVO">
+    <result property="likeId" column="like_id"/>
+    <result property="memberId" column="member_id"/>
+    <result property="goodsNum" column="goods_num"/>
+    <result property="goodsName" column="goods_name"/>
+    <result property="goodsSalesPrice" column="goods_sales_price"/>
+</resultMap>
+
+
+
+	<select id="selectLikeGoodsList" parameterType="string" resultMap="likeGoodsResult">
+	    SELECT 
+	        l.like_goods_id,
+	        l.member_id,
+	        l.goods_num,
+	        g.goods_name,
+	        g.goods_sales_price
+	    FROM likes_goods l
+	    JOIN goods g 
+	      ON l.goods_num = g.goods_num
+	    WHERE l.member_id = #{member_id}
+	</select>
+	
+	<select id="selectLikedGoodsNums" parameterType="string" resultType="int">
+	    SELECT goods_num
+	    FROM likes_goods
+	    WHERE member_id = #{member_id}
+	</select>
+	
+	<select id="existsLikeGoods" parameterType="map" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM likes_goods 
+	    WHERE member_id = #{member_id} AND goods_num = #{goods_num}
+	</select>
+	
+	<insert id="insertLikeGoods" parameterType="map">
+	    INSERT INTO likes_goods (member_id, goods_num)
+	    VALUES (#{member_id}, #{goods_num})
+	</insert>
+	
+	<delete id="deleteLikeGoods" parameterType="map">
+	    DELETE FROM likes_goods
+	    WHERE member_id = #{member_id} AND goods_num = #{goods_num}
+	</delete>
+	
+
+
+<!-- 	<select id="selectMyOrderList" parameterType="string" resultMap="orderResult">
+	    SELECT 
+
+	        u.member_id,
+	        u.goods_num,
+	        u.order_date,
+	        g.goods_name,
+	        g.goods_sales_price
+	    FROM userorder u
+	    JOIN goods g 
+	      ON u.goods_num = g.goods_num
+	    WHERE u.member_id = #{member_id}
+	</select> -->
+
 
 	<select id="selectMyOrderGoodsList" resultMap="goodsResult" parameterType="String">
 	    <![CDATA[
@@ -159,6 +221,14 @@
         WHERE r.member_id = #{member_id}
     ]]>
 	</select>
+	
+	<select id="existsReview" resultType="int" parameterType="map">
+	    SELECT COUNT(*) > 0
+	    FROM goods_review
+	    WHERE order_num = #{order_num}
+	      AND member_id = #{member_id}
+	</select>
+
 	<select id="getReviewDetailByReviewId" resultMap="goodsReviewResult" parameterType="int">
 	    <![CDATA[
 	    SELECT r.review_id, r.member_id, r.order_num, r.rating, r.content, r.file_name,
