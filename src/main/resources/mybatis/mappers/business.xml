@@ -21,7 +21,6 @@
     <result property="jibunAddress" column="jibunAddress"/>
     <result property="namujiAddress" column="namujiAddress"/>
     <result property="description" column="description"/>
-    <result property="thumbnail_img" column="thumbnail_img"/>
     <result property="bank_name" column="bank_name"/>
     <result property="bank_account" column="bank_account"/>
     <result property="bank_holder" column="bank_holder"/>
@@ -44,10 +43,10 @@
 	<![CDATA[
 		insert into business(		
 		seller_id, seller_pw, business_name, business_type, owner_name, business_number, phone1, phone2, phone3, email1, email2, zipcode,
-		roadAddress, jibunAddress, namujiAddress, description, thumbnail_img, bank_name, bank_account, bank_holder)
+		roadAddress, jibunAddress, namujiAddress, description, bank_name, bank_account, bank_holder)
 		values(
 		#{seller_id}, #{seller_pw}, #{business_name}, #{business_type}, #{owner_name}, #{business_number}, #{phone1}, #{phone2}, #{phone3}, 
-		#{email1}, #{email2}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{description}, #{thumbnail_img}, #{bank_name}, #{bank_account}, #{bank_holder})
+		#{email1}, #{email2}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{description}, #{bank_name}, #{bank_account}, #{bank_holder})
 		 ]]>
 </insert>
 <!-- 아이디 중복검사 -->
