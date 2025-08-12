@@ -1,6 +1,6 @@
 package com.petmillie.reservation.controller;
 
-import java.util.List;
+import java.util.List; // List import 추가
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.business.service.BusinessService;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
+import com.petmillie.business.vo.RoomVO; // RoomVO import 추가
 import com.petmillie.reservation.service.ReservaionService;
 import com.petmillie.reservation.vo.ReservaionVO;
 
@@ -27,7 +28,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	private ReservaionService reservationService;
 
 	/**
-	 * 사업자 예약 내역 조회 (기존 기능 유지)
+	 * 사업자 예약 내역 조회 (기존 코드 유지)
 	 */
 	@Override
 	@RequestMapping(value = "/reserForm.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -52,7 +53,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	}
 
 	/**
-	 * 일반 회원용 펜션 목록 조회 (기존 기능 유지)
+	 * 일반 회원용 펜션 목록 조회 (기존 코드 유지)
 	 */
 	@Override
 	@RequestMapping(value = "/pensionList.do", method = RequestMethod.GET)
@@ -70,15 +71,18 @@ public class ReservaionControllerImpl implements ReservaionController {
 	}
 
 	/**
-	 * 펜션 상세 정보 조회 (지도 표시 기능)
+	 * 펜션 상세 정보 및 객실 목록 조회 (기능 추가)
 	 */
 	@Override
 	@RequestMapping(value = "/pensionDetail.do", method = RequestMethod.GET)
-	public ModelAndView pensionDetail(@RequestParam("p_num") String p_num, HttpServletRequest request,
+	public ModelAndView pensionDetail(@RequestParam("p_num") int p_num, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		// Service를 호출해서 펜션 상세 정보(주소 포함)를 가져옵니다.
+		// 1. 펜션 상세 정보 조회
 		PensionVO pension = reservationService.getPensionDetail(p_num);
+		
+		// 2. 해당 펜션의 객실 목록 조회 (새로 추가된 부분)
+		List<RoomVO> roomList = reservationService.getRoomList(p_num);
 
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("body", "/WEB-INF/views/reservation/pensionDetail.jsp");
@@ -89,7 +93,9 @@ public class ReservaionControllerImpl implements ReservaionController {
 			mav.addObject("title", "펜션 정보 없음");
 		}
 
+		// 3. ModelAndView에 펜션 정보와 '객실 목록'을 추가
 		mav.addObject("pension", pension);
+		mav.addObject("roomList", roomList); // JSP로 객실 목록 전달
 
 		return mav;
 	}

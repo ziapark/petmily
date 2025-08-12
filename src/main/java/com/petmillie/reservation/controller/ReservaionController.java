@@ -19,6 +19,7 @@ public interface ReservaionController {
 
 	/**
 	 * 펜션 상세 정보 조회 (지도 표시 기능)
+	 * @param p_num 타입을 String에서 int로 변경
 	 */
-	public ModelAndView pensionDetail(@RequestParam("p_num") String p_num, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView pensionDetail(@RequestParam("p_num") int p_num, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

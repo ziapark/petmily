@@ -193,11 +193,11 @@
             <c:when test="${not empty roomList}">
                 <c:forEach var="room" items="${roomList}">
                     <div class="room-card">
-                        <div class="room-card-image">
-                            <img src="${contextPath}/resources/images/room/${room.fileimage}"
-                                 alt="${room.room_name} 이미지"
-                                 onerror="this.src='${contextPath}/resources/image/default_room.png';">
-                        </div>
+<!--                         <div class="room-card-image"> -->
+<%--                             <img src="${contextPath}/resources/images/room/${room.fileimage}" --%>
+<%--                                  alt="${room.room_name} 이미지" --%>
+<%--                                  onerror="this.src='${contextPath}/resources/image/default_room.png';"> --%>
+<!--                         </div> -->
                         <div class="room-card-body">
                             <h4>${room.room_name}</h4>
                             <p><strong>객실유형:</strong> ${room.room_type}</p>
