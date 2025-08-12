@@ -1,11 +1,9 @@
 package com.petmillie.member.service;
 
-import java.util.Map;
-
 import com.petmillie.member.vo.MemberVO;
 
 public interface MemberService {
-	public MemberVO login(Map loginMap) throws Exception;
+	public MemberVO login(String member_id, String member_pw) throws Exception;
 	public void addMember(MemberVO memberVO) throws Exception;
 	public int overlapped(String id) throws Exception;
 	public String overlappedByEmail(String email1, String email2) throws Exception;

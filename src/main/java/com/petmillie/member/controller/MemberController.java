@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.member.vo.MemberVO;
 
 public interface MemberController {
-	public ModelAndView login(@RequestParam Map<String, String> loginMap,HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView login(@RequestParam("member_id") String member_id, @RequestParam("member_pw") String member_pw, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ResponseEntity  addMember(@ModelAttribute("member") MemberVO member,
             HttpServletRequest request, HttpServletResponse response) throws Exception;
