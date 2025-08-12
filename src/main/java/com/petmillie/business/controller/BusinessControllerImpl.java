@@ -99,30 +99,45 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
 		
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-		try {
-			businessService.addSeller(businessVO);
-			HttpSession session = request.getSession();
-		    session.setAttribute("isLogOn", true);
-		    session.setAttribute("businessInfo", businessVO);
-			message = "<script>";
-			message += " alert('회원가입이 완료되었습니다. 반갑습니다.');";
-			message += " location.href='" + request.getContextPath() + "/main/main.do';";
-			message += " </script>";
+		String isDuplicate = businessService.isBusinessNumberDuplicate(businessVO.getBusiness_number());
+		
+		if(isDuplicate.equals("true")) {
+			//이미 가입된 사업자 번호
+		    String message = "<script>";
+		    message += " alert('이미 가입된 사업자번호입니다.');";
+		    message += " location.href='" + request.getContextPath() + "/business/loginForm.do';";
+		    message += "</script>";
 
-		} catch (Exception e) {
-			message = "<script>";
-			message += " alert('회원가입에 실패했습니다. 다시 시도해주세요.');";
-			message += " location.href='" + request.getContextPath() + "/business/businessForm.do';";
-			message += " </script>";
+		    HttpHeaders responseHeaders = new HttpHeaders();
+		    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-			e.printStackTrace();
-		}
-		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
+		    return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+		}else {
+			String message = null;
+			ResponseEntity resEntity = null;
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+			try {
+				businessService.addSeller(businessVO);
+				HttpSession session = request.getSession();
+			    session.setAttribute("isLogOn", true);
+			    session.setAttribute("businessInfo", businessVO);
+				message = "<script>";
+				message += " alert('회원가입이 완료되었습니다. 반갑습니다.');";
+				message += " location.href='" + request.getContextPath() + "/main/main.do';";
+				message += " </script>";
+
+			} catch (Exception e) {
+				message = "<script>";
+				message += " alert('회원가입에 실패했습니다. 다시 시도해주세요.');";
+				message += " location.href='" + request.getContextPath() + "/business/businessForm.do';";
+				message += " </script>";
+
+				e.printStackTrace();
+			}
+			resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+			return resEntity;
+		}		
 	}
 	
 	@Override

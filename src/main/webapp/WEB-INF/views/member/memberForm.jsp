@@ -2,186 +2,185 @@
 	pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html >
 <html>
 <head>
-<meta charset="utf-8">
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script>
-	function changeEmailDomain() {
-		var email2Select = document.getElementById("email2_select");
-		var email2Direct = document.getElementById("email2_direct");
-		if (email2Select.value == "non") {
-			email2Direct.style.display = "inline";
-			email2Direct.value = ""; // 직접입력 초기화
-			email2Direct.focus();
-		} else {
-			email2Direct.style.display = "none";
-			email2Direct.value = email2Select.value;
-		}
-	}
-
-	// form submit 전에 호출해서 실제 email 합치기
-	function setEmail() {
-		var email1 = document.getElementById("email1").value;
-		var email2;
-		var email2Select = document.getElementById("email2_select");
-		if (email2Select.value == "non") {
-			email2 = document.getElementById("email2_direct").value;
-		} else {
-			email2 = email2Select.value;
-		}
-		document.getElementById("member_email").value = email1 + "@" + email2;
-		return true;
-	}
-
-	function execDaumPostcode() {
-		new daum.Postcode(
-				{
-					oncomplete : function(data) {
-						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-						// 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
-						// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-						var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
-						var extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
-						// 법정동명이 있을 경우 추가한다. (법정리는 제외)
-						// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-						if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-							extraRoadAddr += data.bname;
-						}
-						// 건물명이 있고, 공동주택일 경우 추가한다.
-						if (data.buildingName !== '' && data.apartment === 'Y') {
-							extraRoadAddr += (extraRoadAddr !== '' ? ', '
-									+ data.buildingName : data.buildingName);
-						}
-						// 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-						if (extraRoadAddr !== '') {
-							extraRoadAddr = ' (' + extraRoadAddr + ')';
-						}
-						// 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
-						if (fullRoadAddr !== '') {
-							fullRoadAddr += extraRoadAddr;
-						}
-
-						// 우편번호와 주소 정보를 해당 필드에 넣는다.
-						document.getElementById('zipcode').value = data.zonecode; //5자리 새우편번호 사용
-						document.getElementById('roadAddress').value = fullRoadAddr;
-						document.getElementById('jibunAddress').value = data.jibunAddress;
-
-						// 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-						if (data.autoRoadAddress) {
-							//예상되는 도로명 주소에 조합형 주소를 추가한다.
-							var expRoadAddr = data.autoRoadAddress
-									+ extraRoadAddr;
-							document.getElementById('guide').innerHTML = '(예상 도로명 주소 : '
-									+ expRoadAddr + ')';
-
-						} else if (data.autoJibunAddress) {
-							var expJibunAddr = data.autoJibunAddress;
-							document.getElementById('guide').innerHTML = '(예상 지번 주소 : '
-									+ expJibunAddr + ')';
-						} else {
-							document.getElementById('guide').innerHTML = '';
-						}
-
-					}
-				}).open();
-	}
-
-	function fn_overlapped() {
-		var _id = $("#member_id").val();
-		if (_id == '') {
-			alert("ID를 입력하세요");
-			return;
-		}
-		$.ajax({
-			type : "post",
-			async : false,
-			url : "${contextPath}/member/overlapped.do",
-			dataType : "text",
-			data : {
-				id : _id
-			},
-			success : function(data, textStatus) {
-				if (data.trim() == 'false') {
-					alert("사용할 수 있는 ID입니다.");
-					$('#btnOverlapped').prop("disabled", true);
-					$('#member_id').prop("readonly", true);
-					$('#member_id').val(_id);
-				} else {
-					alert("사용할 수 없는 ID입니다.");
-				}
-			},
-			error : function(data, textStatus) {
-				alert("에러가 발생했습니다.");
-			},
-			complete : function(data, textStatus) {
-				//alert("작업을완료 했습니다");
-			}
-		}); //end ajax	 
-	}
-	
-	function fn_sendAuthCode() {
-	    const email1 = $("#email1").val();
-	    let email2;
-	    const email2Select = $("#email2_select").val();
-
-	    if(email2Select === "non") {
-	        email2 = $("#email2_direct").val();
-	    } else {
-	        email2 = email2Select;
-	    }
-
-	    if(!email1 || !email2){
-	        alert("이메일 주소를 입력해주세요.");
-	        return;
-	    }
+	<meta charset="utf-8">
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script>
+		let isEmailVerified = false;
+		let serverAuthCode = '';
 		
-		$.ajax({
-			type:"POST",
-			url:"${contextPath}/member/sendAuthCode.do",
-			data:{"email1":email1, "email2":email2},
-			success:function(data){
-				if(data !== 'true'){
-					alert("입력하신 이메일로 인증번호가 발송되었습니다.");
-					$("#authCodeInput").prop("disabled", false);
-					$("#mailCheckResult").text("인증번호가 발송되었습니다.").css("color", "green");
-					serverAuthCode = data;
-					isEmailVerified = false;
-				}else{
-					alert("이미 가입된 이메일입니다. 로그인 페이지로 이동합니다.");
-					window.location.href = "${contextPath}/member/loginForm.do";
-					return ;
-				}
-			},
-			error : function(){
-				alert("메일 발송에 실패했습니다. 이메일 주소를 확인해주세요.");
+		function changeEmailDomain() {
+			var email2Select = document.getElementById("email2_select");
+			var email2Direct = document.getElementById("email2_direct");
+			if (email2Select.value == "non") {
+				email2Direct.style.display = "inline";
+				email2Direct.value = ""; // 직접입력 초기화
+				email2Direct.focus();
+			} else {
+				email2Direct.style.display = "none";
+				email2Direct.value = email2Select.value;
 			}
-		});
-	}
+		}
 
-	$(document).ready(function() {
-	    $("#verifyAuthCodeBtn").click(function(){
-	        const userInputCode = $("#authCodeInput").val();
+		function execDaumPostcode() {
+			new daum.Postcode({
+				oncomplete : function(data) {
+					// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+					// 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+					// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+					var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+					var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+
+					// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+					// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+					if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+						extraRoadAddr += data.bname;
+					}
+					// 건물명이 있고, 공동주택일 경우 추가한다.
+					if (data.buildingName !== '' && data.apartment === 'Y') {
+						extraRoadAddr += (extraRoadAddr !== '' ? ', '
+								+ data.buildingName : data.buildingName);
+					}
+					// 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+					if (extraRoadAddr !== '') {
+						extraRoadAddr = ' (' + extraRoadAddr + ')';
+					}
+					// 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+					if (fullRoadAddr !== '') {
+						fullRoadAddr += extraRoadAddr;
+					}
+
+					// 우편번호와 주소 정보를 해당 필드에 넣는다.
+					document.getElementById('zipcode').value = data.zonecode; //5자리 새우편번호 사용
+					document.getElementById('roadAddress').value = fullRoadAddr;
+					document.getElementById('jibunAddress').value = data.jibunAddress;
+
+					// 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+					if (data.autoRoadAddress) {
+						//예상되는 도로명 주소에 조합형 주소를 추가한다.
+						var expRoadAddr = data.autoRoadAddress
+								+ extraRoadAddr;
+						document.getElementById('guide').innerHTML = '(예상 도로명 주소 : '
+								+ expRoadAddr + ')';
+
+					} else if (data.autoJibunAddress) {
+						var expJibunAddr = data.autoJibunAddress;
+						document.getElementById('guide').innerHTML = '(예상 지번 주소 : '
+								+ expJibunAddr + ')';
+					} else {
+						document.getElementById('guide').innerHTML = '';
+					}
+				}
+			}).open();
+		}
+
+		function fn_overlapped() {
+			var _id = $("#member_id").val();
+			if (_id == '') {
+				alert("아이디를 입력하세요");
+				return;
+			}
+			$.ajax({
+				type : "post",
+				async : false,
+				url : "${contextPath}/member/overlapped.do",
+				dataType : "text",
+				data : {
+					id : _id
+				},
+				success : function(data, textStatus) {
+					if (data.trim() == 'false') {
+						alert("사용할 수 있는 아이디입니다.");
+						$('#btnOverlapped').prop("disabled", true);
+						$('#member_id').prop("readonly", true);
+						$('#member_id').val(_id);
+					} else {
+						alert("사용할 수 없는 아이디입니다.");
+					}
+				},
+				error : function(data, textStatus) {
+					alert("에러가 발생했습니다.");
+				}
+			}); 
+		}
 	
-	        if(!userInputCode){
-	            alert("인증번호를 입력해주세요.");
-	            return;
-	        }
+		function fn_sendAuthCode() {
+	    	const email1 = $("#email1").val();
+	    	let email2;
+	    	const email2Select = $("#email2_select").val();
+
+	    	if(email2Select === "non") {
+	    	    email2 = $("#email2_direct").val();
+	    	} else {
+	     	    email2 = email2Select;
+	    	}	
+
+		    if(!email1 || !email2){
+		        alert("이메일 주소를 입력해주세요.");
+		        return;
+		    }
+		
+			$.ajax({
+				type:"POST",
+				url:"${contextPath}/member/sendAuthCode.do",
+				data:{"email1":email1, "email2":email2},
+				success:function(data){
+					if(data !== 'true'){
+						alert("입력하신 이메일로 인증번호가 발송되었습니다.");
+						$("#authCodeInput").prop("disabled", false);
+						$("#mailCheckResult").text("인증번호가 발송되었습니다.").css("color", "green");
+						serverAuthCode = data;
+						isEmailVerified = false;
+					}else{
+						alert("이미 가입된 이메일입니다. 로그인 페이지로 이동합니다.");
+						window.location.href = "${contextPath}/member/loginForm.do";
+						return ;
+					}
+				},
+				error : function(){
+					alert("메일 발송에 실패했습니다. 이메일 주소를 확인해주세요.");
+				}
+			});
+		}
+
+		$(document).ready(function() {
+	    	$("#verifyAuthCodeBtn").click(function(){
+	       		const userInputCode = $("#authCodeInput").val();
 	
-	        if(userInputCode === serverAuthCode){
-	            $("#mailCheckResult").text("이메일 인증이 완료되었습니다.").css("color", "blue");
-	            isEmailVerified = true;
-	        }else{
-	            $("#mailCheckResult").text("인증번호가 일치하지 않습니다.").css("color", "red");
-	            isEmailVerified = false;
-	        }        
-	    });
-    });   
-</script>
+		        if(!userInputCode){
+		            alert("인증번호를 입력해주세요.");
+	    	        return;
+	        	}
+	
+		        if(userInputCode === serverAuthCode){
+		            $("#mailCheckResult").text("이메일 인증이 완료되었습니다.").css("color", "blue");
+	    	        isEmailVerified = true;
+	    	    }else{
+	     	        $("#mailCheckResult").text("인증번호가 일치하지 않습니다.").css("color", "red");
+	            	isEmailVerified = false;
+	        	}        
+	    	});
+    	});
+		
+		$(function() {
+			$('form').on('submit', function(e) {
+			    if (!$('#btnOverlapped').prop('disabled')) {
+			        alert('아이디 중복검사를 해주세요.');
+			        e.preventDefault();
+			        return;
+			    }
+			    if (!isEmailVerified) {
+			        alert('이메일 인증을 완료해주세요.');
+			        e.preventDefault();
+			        return;
+			    }
+			});
+		});
+	</script>
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
@@ -193,8 +192,7 @@
 		</div>
 		<div class="row row-cols-1">
 			<h3 class="mt-5 mb-4">필수입력사항</h3>
-			<form action="${contextPath}/member/addMember.do" method="post"
-				onsubmit="return setEmail();">
+			<form action="${contextPath}/member/addMember.do" method="post">
 				<div class="card p-4">
 					<table class="table table-bordered align-middle">
 						<tbody>

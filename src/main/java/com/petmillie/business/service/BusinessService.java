@@ -12,6 +12,7 @@ public interface BusinessService {
 
 	public void addSeller(BusinessVO businessVO) throws Exception;
 	public int overlapped(String id) throws Exception;
+	public String isBusinessNumberDuplicate(String business_number) throws Exception;
 	public BusinessVO login(String seller_id, String seller_pw) throws Exception;
 	public BusinessVO mypension(String business_number) throws Exception;
 	public BusinessVO businessDetailInfo(String business_number) throws Exception;

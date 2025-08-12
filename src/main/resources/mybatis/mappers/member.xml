@@ -41,70 +41,69 @@
 		]]>
 	</select>	
 	<select id="selectOverlappedID" parameterType="String" resultType="int">
-	   select count(*)
-	   from member
-	   where member_id = #{id}
+	    <![CDATA[
+	        select 
+	            (select count(*) from member where member_id = #{member_id}) +
+	            (select count(*) from business where seller_id = #{member_id})
+	        as total_count
+	    ]]>
 	</select>
-	
-  <insert id="insertNewMember"  parameterType="memberVO">
-  <![CDATA[
-    	insert into member(			 member_id,
-				 					 member_pw,
-				 					 kakao_id,
-                                     member_name,
-                                     member_gender,
-                                     member_birth_y,
-                                     member_birth_m,
-                                     member_birth_d,
-                                     member_birth_gn,
-                                     tel1,
-                                     tel2,
-                                     tel3,
-                                     smssts_yn,
-                                     email1,
-                                     email2,
-                                     emailsts_yn,
-                                     social_type,
-                                     zipcode,
-                                     roadAddress,
-                                     jibunAddress,
-                                     namujiAddress)
-							 values(#{member_id},
-									#{member_pw},
-									#{kakao_id},
-									#{member_name},
-                                 	#{member_gender},
-                                   	#{member_birth_y},
-                                   	#{member_birth_m},
-                                    #{member_birth_d},
-                                    #{member_birth_gn},
-                                    #{tel1},
-                                    #{tel2},
-                                    #{tel3},
-                                    #{smssts_yn},
-                                    #{email1},
-                                    #{email2},
-                                    #{emailsts_yn},
-                                    #{social_type},
-                                    #{zipcode},
-                                    #{roadAddress},
-                                    #{jibunAddress},
-                                    #{namujiAddress})
-                                  
-                                      
-   ]]>      
-  </insert>
-  <update id="removeMember" parameterType="String">
-  <![CDATA[
-  		update member set del_yn='Y' where member_id = #{member_id}
-  ]]>
-  </update>
-  <select id="findkakaoid" resultType="memberVO"  parameterType="String">
-  <![CDATA[
-  		select * from member where kakao_id = #{kakao_id}
-  ]]>
-  </select>
-  
+	<insert id="insertNewMember"  parameterType="memberVO">
+  		<![CDATA[
+    	insert into member(member_id,
+	 					 member_pw,
+	 					 kakao_id,
+                         member_name,
+                         member_gender,
+                         member_birth_y,
+                         member_birth_m,
+                         member_birth_d,
+                         member_birth_gn,
+                         tel1,
+                         tel2,
+                         tel3,
+                         smssts_yn,
+                         email1,
+                         email2,
+                         emailsts_yn,
+                         social_type,
+                         zipcode,
+                         roadAddress,
+                         jibunAddress,
+                         namujiAddress)
+				 values(#{member_id},
+						#{member_pw},
+						#{kakao_id},
+						#{member_name},
+                     	#{member_gender},
+                       	#{member_birth_y},
+                       	#{member_birth_m},
+                        #{member_birth_d},
+                        #{member_birth_gn},
+                        #{tel1},
+                        #{tel2},
+                        #{tel3},
+                        #{smssts_yn},
+                        #{email1},
+                        #{email2},
+                        #{emailsts_yn},
+                        #{social_type},
+                        #{zipcode},
+                        #{roadAddress},
+                        #{jibunAddress},
+                        #{namujiAddress})                                  
+   		]]>      
+  	</insert>
+  	<update id="removeMember" parameterType="String">
+  		<![CDATA[
+  			update member set del_yn='Y' where member_id = #{member_id}
+ 	 	]]>
+  	</update>
+  	<select id="findkakaoid" resultType="memberVO"  parameterType="String">
+  		<![CDATA[
+  			select * from member where kakao_id = #{kakao_id}
+  		]]>
+  	</select>
   	<select id="selectOverlappedEmail" parameterType="memberVO" resultType="String">
 		<![CDATA[
 			SELECT IF(COUNT(*) > 0, 'true', 'false')

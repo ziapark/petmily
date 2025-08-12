@@ -37,6 +37,11 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
+	public String isBusinessNumberDuplicate(String business_number) throws Exception{
+		return businessDAO.isBusinessNumberDuplicate(business_number);
+	}
+	
+	@Override
 	public BusinessVO login(String seller_id, String seller_pw) throws Exception {
 		return businessDAO.login(seller_id, seller_pw);
 	}

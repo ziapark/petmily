@@ -14,6 +14,7 @@ public interface BusinessDAO {
 
 	public void addSeller(BusinessVO businessVO) throws DataAccessException;
 	public int selectOverlappedID(String id) throws DataAccessException;
+	public String isBusinessNumberDuplicate(String business_number) throws DataAccessException;
 	public BusinessVO login(String seller_id, String seller_pw) throws DataAccessException;
 	public BusinessVO mypension(String business_number) throws DataAccessException;
 	public BusinessVO businessDetailInfo(String business_number)throws DataAccessException;

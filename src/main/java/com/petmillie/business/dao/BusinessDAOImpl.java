@@ -30,6 +30,11 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
 	@Override
+	public String isBusinessNumberDuplicate(String business_number) throws DataAccessException{
+		return sqlSession.selectOne("mapper.business.isBusinessNumberDuplicate", business_number);
+	}
+	
+	@Override
 	public BusinessVO login(String seller_id, String seller_pw) throws DataAccessException {
 		BusinessVO businessVO = new BusinessVO(); 
 		

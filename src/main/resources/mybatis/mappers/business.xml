@@ -37,32 +37,43 @@
 			 	and seller_pw=#{seller_pw}
 			]]>
 		</select>	
-	<!-- 사업자 회원가입 -->
-<insert id="insertNewBusinesspartner" parameterType="BusinessVO">
-	<![CDATA[
-		insert into business(		
-		seller_id, seller_pw, business_name, business_type, owner_name, business_number, phone1, phone2, phone3, email1, email2, zipcode,
-		roadAddress, jibunAddress, namujiAddress, description, bank_name, bank_account, bank_holder)
-		values(
-		#{seller_id}, #{seller_pw}, #{business_name}, #{business_type}, #{owner_name}, #{business_number}, #{phone1}, #{phone2}, #{phone3}, 
-		#{email1}, #{email2}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{description}, #{bank_name}, #{bank_account}, #{bank_holder})
-		 ]]>
-</insert>
-<!-- 아이디 중복검사 -->
-	<select id="selectOverlappedID" parameterType="String" resultType="int">
-	<![CDATA[
-	   select count(*)
-	   from business
-	   where seller_id = #{id}
-	]]>
-	</select>
-	<!--  -->
-	<select id="listMyGoods" parameterType="BusinessVO" resultType="BusinessVO">
-	<![CDATA[
-		select * from business
-        where business_number=#{business_number}
-	]]>
-	</select>
+		<!-- 사업자 회원가입 -->
+		<insert id="insertNewBusinesspartner" parameterType="BusinessVO">
+			<![CDATA[
+				insert into business(		
+				seller_id, seller_pw, business_name, business_type, owner_name, business_number, phone1, phone2, phone3, email1, email2, zipcode,
+				roadAddress, jibunAddress, namujiAddress, description, bank_name, bank_account, bank_holder)
+				values(
+				#{seller_id}, #{seller_pw}, #{business_name}, #{business_type}, #{owner_name}, #{business_number}, #{phone1}, #{phone2}, #{phone3}, 
+				#{email1}, #{email2}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{description}, #{bank_name}, #{bank_account}, #{bank_holder})
+		 	]]>
+		</insert>
+		<!-- 아이디 중복검사 -->
+		<select id="selectOverlappedID" parameterType="String" resultType="int">
+		    <![CDATA[
+		        select 
+		            (select count(*) from member where member_id = #{member_id}) +
+		            (select count(*) from business where seller_id = #{member_id})
+		        as total_count
+		    ]]>
+		</select>
+		
+		<!-- 사업자번호 중복검사 -->
+		<select id="isBusinessNumberDuplicate" parameterType="String" resultType="String">
+		    <![CDATA[
+		        select 
+		          case when count(*) > 0 then 'true' else 'false' end as result
+		        from business
+		        where business_number = #{business_number}
+		    ]]>
+		</select>
+		
+		<select id="listMyGoods" parameterType="BusinessVO" resultType="BusinessVO">
+			<![CDATA[
+				select * from business
+        		where business_number=#{business_number}
+			]]>
+		</select>
 		<!-- 승인 정보 불러오기 -->
 	<select id="mypension" parameterType="BusinessVO" resultType="BusinessVO">
 	<![CDATA[

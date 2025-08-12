@@ -27,8 +27,8 @@ public class MemberDAOImpl  implements MemberDAO{
 	}
 
 	@Override
-	public int selectOverlappedID(String id) throws DataAccessException {
-		int result =  sqlSession.selectOne("mapper.member.selectOverlappedID",id);
+	public int selectOverlappedID(String member_id) throws DataAccessException {
+		int result =  sqlSession.selectOne("mapper.member.selectOverlappedID",member_id);
 		return result;
 	}
 
