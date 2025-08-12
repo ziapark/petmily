@@ -52,8 +52,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	private RoomVO roomVO;
 	
 	@RequestMapping(value = "/busilogin.do", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		businessVO = businessService.login(loginMap);
 		if (businessVO != null && businessVO.getSeller_id() != null && "seller".equals(businessVO.getRole())) {
@@ -95,12 +94,10 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@Override
 	@RequestMapping(value = "/addSeller.do", method = RequestMethod.POST)
-	public ResponseEntity addSeller(@ModelAttribute("BusinessVO") BusinessVO businessVO, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ResponseEntity addSeller(@ModelAttribute("BusinessVO") BusinessVO businessVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("utf-8");
-		System.out.println("오너명 : " + businessVO.getOwner_name());
-		System.out.println("업체명 : " + businessVO.getBusiness_name());
+		
 		String message = null;
 		ResponseEntity resEntity = null;
 		HttpHeaders responseHeaders = new HttpHeaders();

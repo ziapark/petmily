@@ -21,7 +21,6 @@ public class BusinessVO {
 	private String jibunAddress;
 	private String namujiAddress;
 	private String description;
-	private String thumbnail_img;
 	private String bank_name;
 	private String bank_account;
 	private String bank_holder;
@@ -130,12 +129,6 @@ public class BusinessVO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public String getThumbnail_img() {
-		return thumbnail_img;
-	}
-	public void setThumbnail_img(String thumbnail_img) {
-		this.thumbnail_img = thumbnail_img;
 	}
 	public String getBank_name() {
 		return bank_name;
