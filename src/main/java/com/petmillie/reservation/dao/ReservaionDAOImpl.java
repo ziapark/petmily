@@ -39,4 +39,10 @@ public class ReservaionDAOImpl implements ReservaionDAO {
         return sqlSession.selectOne(NAMESPACE_ORIG + "selectPensionById", pensionId);
     }
     
+    
+    @Override
+    public PensionVO selectPensionDetail(String p_num) throws Exception {
+        // 기존의 NAMESPACE_ORIG 방식을 그대로 사용해서 매퍼의 selectPensionDetail 쿼리를 호출합니다.
+        return sqlSession.selectOne(NAMESPACE_ORIG + "selectPensionDetail", p_num);
+    }
 }

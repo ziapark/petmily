@@ -271,35 +271,94 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return "redirect:/main/main.do";
 	}
 
+//	@Override
+//	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
+//	public ResponseEntity addpension(@ModelAttribute("PensionVO")PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+//		response.setContentType("text/html; charset=UTF-8");
+//		request.setCharacterEncoding("utf-8");
+//		System.out.println("업체명 : " + pensionVO.getP_name());
+//		String message = null;
+//		ResponseEntity resEntity = null;
+//		HttpHeaders responseHeaders = new HttpHeaders();
+//		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+//		try {
+//			businessService.addpension(pensionVO);
+//			HttpSession session = request.getSession();
+//		    session.setAttribute("pensionInfo", pensionVO);
+//			message = "<script>";
+//			message += " alert('등록 성공');";
+//			message += " location.href='" + request.getContextPath() + "/business//mypension.do';";
+//			message += " </script>";
+//
+//		} catch (Exception e) {
+//			message = "<script>";
+//			message += " alert('등록 실패');";
+//			message += " location.href='" + request.getContextPath() + "/business/addpensionForm.do';";
+//			message += " </script>";
+//
+//			e.printStackTrace();
+//		}
+//		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+//		return resEntity;
+//	}
 	@Override
 	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
-	public ResponseEntity addpension(@ModelAttribute("PensionVO")PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		response.setContentType("text/html; charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
-		System.out.println("업체명 : " + pensionVO.getP_name());
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-		try {
-			businessService.addpension(pensionVO);
-			HttpSession session = request.getSession();
-		    session.setAttribute("pensionInfo", pensionVO);
-			message = "<script>";
-			message += " alert('등록 성공');";
-			message += " location.href='" + request.getContextPath() + "/business//mypension.do';";
-			message += " </script>";
+	public ResponseEntity addpension(@ModelAttribute("PensionVO") PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    response.setContentType("text/html; charset=UTF-8");
+	    request.setCharacterEncoding("utf-8");
+	    System.out.println("업체명 : " + pensionVO.getP_name());
 
-		} catch (Exception e) {
-			message = "<script>";
-			message += " alert('등록 실패');";
-			message += " location.href='" + request.getContextPath() + "/business/addpensionForm.do';";
-			message += " </script>";
+	    String message = null;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-			e.printStackTrace();
-		}
-		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
+	    // ================== 🔧 수정 부분 시작 🔧 ==================
+	    try {
+	        // 1. 세션에서 로그인한 사업자 정보를 가져옵니다.
+	        HttpSession session = request.getSession();
+	        BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
+	        
+	        // (안전장치) 만약 로그인 정보가 없다면, 다시 로그인 페이지로 보낼 수 있습니다.
+	        if (loginBusinessVO == null) {
+	            message = "<script>";
+	            message += " alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');";
+	            message += " location.href='" + request.getContextPath() + "/business/loginForm.do';";
+	            message += " </script>";
+	            resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	            return resEntity;
+	        }
+
+	        // 2. 가져온 사업자 정보에서 business_id를 추출합니다.
+	        String business_id = loginBusinessVO.getBusiness_id();
+
+	        // 3. pensionVO 객체에 business_id를 설정(set)합니다.
+	        pensionVO.setBusiness_id(business_id);
+	        
+	        // 로그로 확인
+	        System.out.println("세션에서 가져온 business_id: " + pensionVO.getBusiness_id());
+
+	        // 4. business_id가 설정된 pensionVO를 서비스로 전달합니다.
+	        businessService.addpension(pensionVO);
+
+	    // ================== 🔧 수정 부분 끝 🔧 ====================
+
+	        session.setAttribute("pensionInfo", pensionVO);
+	        message = "<script>";
+	        message += " alert('등록 성공');";
+	        message += " location.href='" + request.getContextPath() + "/business/mypension.do';";
+	        message += " </script>";
+
+	    } catch (Exception e) {
+	        message = "<script>";
+	        message += " alert('등록 실패');";
+	        message += " location.href='" + request.getContextPath() + "/business/addpensionForm.do';";
+	        message += " </script>";
+
+	        e.printStackTrace();
+	    }
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
 	}
 
 	@RequestMapping(value="addroom.do" , method= {RequestMethod.POST,RequestMethod.GET})

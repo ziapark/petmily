@@ -28,7 +28,7 @@
         transition: transform 0.2s;
         text-decoration: none;
         color: inherit;
-        display: block; /* a 태그를 블록 요소로 만들어 클릭 영역을 넓힙니다. */
+        display: block;
     }
     .pension-card:hover {
         transform: translateY(-5px);
@@ -59,10 +59,9 @@
     <div class="pension-container">
         <c:if test="${not empty pensionList}">
             <c:forEach var="pension" items="${pensionList}">
-                <%-- ▼▼▼▼▼ [ 이 부분의 href 링크를 수정했습니다! ] ▼▼▼▼▼ --%>
-                <a href="${contextPath}/reservation/pensionDetail.do?pensionId=${pension.p_num}" class="pension-card">
+                <%-- 파라미터 이름을 'pensionId'에서 'p_num'으로 수정했습니다. --%>
+                <a href="${contextPath}/reservation/pensionDetail.do?p_num=${pension.p_num}" class="pension-card">
                     
-                    <%-- 이미지 경로가 맞는지 확인해보세요. 예시로 이미지가 없을 경우를 대비한 경로를 추가했습니다. --%>
                     <img src="${contextPath}/thumbnails.do?goods_id=${pension.p_num}" alt="${pension.p_name} 이미지" 
                          onerror="this.onerror=null; this.src='${contextPath}/resources/image/default_pension.png';">
                     
@@ -79,18 +78,10 @@
                         </p>
                         <p><strong>시설:</strong> ${pension.facilities}</p>
                         <p><strong>전화번호:</strong> ${pension.tel1} - ${pension.tel2} - ${pension.tel3}</p>
-                         <p><strong>체크인:</strong> ${pension.checkin_time}</p>
-                         <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
-                     
-                        
-                        
-                        
-                        
-                     
-	
+                        <p><strong>체크인:</strong> ${pension.checkin_time}</p>
+                        <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
                     </div>
                 </a>
-                <%-- ▲▲▲▲▲ [ 링크 수정 완료! ] ▲▲▲▲▲ --%>
             </c:forEach>
         </c:if>
         
