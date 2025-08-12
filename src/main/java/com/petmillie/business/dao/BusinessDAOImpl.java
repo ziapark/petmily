@@ -25,7 +25,7 @@ public class BusinessDAOImpl implements BusinessDAO {
 	
 	@Override
 	public int selectOverlappedID(String id) throws DataAccessException {
-		int result =  sqlSession.selectOne("mapper.business.selectOverlappedID",id);
+		int result = sqlSession.selectOne("mapper.business.selectOverlappedID",id);
 		return result;
 	}
 
@@ -43,7 +43,7 @@ public class BusinessDAOImpl implements BusinessDAO {
 
 	@Override
 	public BusinessVO businessDetailInfo(String business_number) throws DataAccessException {	
-		BusinessVO DetailInfo = (BusinessVO)sqlSession.selectOne("mapper.business.businessDetailInfo", business_number); 
+		BusinessVO DetailInfo = (BusinessVO)sqlSession.selectOne("mapper.business.businessDetailInfo", business_number);
 		return DetailInfo;
 	}
 
@@ -83,7 +83,7 @@ public class BusinessDAOImpl implements BusinessDAO {
 
 	@Override
 	public RoomVO roomDetailInfo(String room_id) throws DataAccessException {
-		RoomVO DetailInfo = (RoomVO)sqlSession.selectOne("mapper.business.roomDetailInfo", room_id); 
+		RoomVO DetailInfo = (RoomVO)sqlSession.selectOne("mapper.business.roomDetailInfo", room_id);
 		return DetailInfo;
 	}
 
@@ -105,7 +105,8 @@ public class BusinessDAOImpl implements BusinessDAO {
 
     @Override
     public List<ReservaionVO> reservationList(String business_id) throws DataAccessException {
-        return sqlSession.selectList("mapper.reser.reservationList", business_id);
+        // XML 파일의 네임스페이스와 일치하도록 "mapper.reser"를 "mapper.adminReser"로 수정
+        return sqlSession.selectList("mapper.adminReser.reservationList", business_id);
     }
 
 	@Override
