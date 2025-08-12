@@ -1,7 +1,5 @@
 package com.petmillie.member.service;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,8 +15,8 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDAO memberDAO;
 	
 	@Override
-	public MemberVO login(Map loginMap) throws Exception{
-		return memberDAO.login(loginMap);
+	public MemberVO login(String member_id, String member_pw) throws Exception{
+		return memberDAO.login(member_id, member_pw);
 	}
 	
 	@Override

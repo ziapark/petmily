@@ -42,35 +42,45 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	private MailService mailService;
 	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam Map<String, String> loginMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		memberVO = memberService.login(loginMap);
-		if (memberVO != null && memberVO.getMember_id() != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("isLogOn", true);
-			session.setAttribute("memberInfo", memberVO);
-
-			String action = (String) session.getAttribute("action");
-			if ("admin".equals(memberVO.getMember_id())) {
-				session.setAttribute("side_menu", "admin_mode");
-			} else {
-				session.setAttribute("side_menu", "my_page");
-			}
-
-			// 액션 리다이렉트
-			if (action != null && action.equals("/order/orderEachGoods.do")) {
-				mav.setViewName("forward:" + action);
-			} else {
-				mav.setViewName("redirect:/main/main.do");
-			}
-		} else {
-			String message = "로그인에 실패했습니다.";
-			ModelAndView mav2 = new ModelAndView("/common/layout");
-			mav2.addObject("message", message);
-			mav2.addObject("title", "로그인");
-			mav2.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
-			return mav2;
+	public ModelAndView login(@RequestParam("member_id") String member_id, @RequestParam("member_pw") String member_pw, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//회원 로그인
+		ModelAndView mav = new ModelAndView("/common/layout");
+		int result = memberService.overlapped(member_id);
+		
+		if(result != 0) {
+			//아이디 존재
+			MemberVO memberVO = memberService.login(member_id, member_pw);
+			if(memberVO == null) {
+				//비밀번호 틀림
+				mav.addObject("title", "로그인");
+				mav.addObject("message", "비밀번호가 일치하지 않습니다.");
+				mav.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
+			}else {
+				//로그인 성공
+				HttpSession session = request.getSession();
+				session.setAttribute("isLogOn", true);
+				session.setAttribute("memberInfo", memberVO);
+				
+				String action = (String) session.getAttribute("action");
+				if ("admin".equals(memberVO.getMember_id())) {
+					session.setAttribute("side_menu", "admin_mode");
+				} else {
+					session.setAttribute("side_menu", "my_page");
+				}
+				
+				// 액션 리다이렉트
+				if (action != null && action.equals("/order/orderEachGoods.do")) {
+					mav.setViewName("forward:" + action);
+				} else {
+					mav.setViewName("redirect:/main/main.do");
+				}
+			}		
+		}else {
+			mav.addObject("title", "로그인");
+			mav.addObject("message", "존재하지 않는 아이디 입니다.");
+			mav.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
 		}
+		
 		return mav;
 	}
 

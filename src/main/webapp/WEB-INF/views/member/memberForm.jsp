@@ -257,12 +257,12 @@
 
 										<div class="form-check form-check-inline ms-3">
 											<input type="radio" class="form-check-input"
-												name="member_birth_gn" value="2" id="solar" checked /> <label
+												name="member_birth_gn" value="양력" id="solar" checked /> <label
 												class="form-check-label" for="solar">양력</label>
 										</div>
 										<div class="form-check form-check-inline">
 											<input type="radio" class="form-check-input"
-												name="member_birth_gn" value="1" id="lunar" /> <label
+												name="member_birth_gn" value="음력" id="lunar" /> <label
 												class="form-check-label" for="lunar">음력</label>
 										</div>
 									</div>

@@ -16,9 +16,13 @@ public class MemberDAOImpl  implements MemberDAO{
 	private MemberVO memberVO;
 	
 	@Override
-	public MemberVO login(Map loginMap) throws DataAccessException{
-		MemberVO member=(MemberVO)sqlSession.selectOne("mapper.member.login",loginMap);
-	   return member;
+	public MemberVO login(String member_id, String member_pw) throws DataAccessException{
+		MemberVO memberVO = new MemberVO();
+		memberVO.setMember_id(member_id);
+		memberVO.setMember_pw(member_pw);
+		
+		memberVO = (MemberVO)sqlSession.selectOne("mapper.member.login",memberVO);
+		return memberVO;
 	}
 	
 	@Override
