@@ -19,6 +19,11 @@ public class PensionVO {
 	private String reg_date;
 	private String del_yn;
 
+	// ▼▼▼ [이 부분 추가] ▼▼▼
+	// JOIN된 사업자(업체) 정보를 담기 위한 필드
+	private BusinessVO business;
+	// ▲▲▲ [여기까지 추가] ▲▲▲
+
 	public String getP_num() {
 		return p_num;
 	}
@@ -104,5 +109,12 @@ public class PensionVO {
 		this.del_yn = del_yn;
 	}
 	
-	
+	// ▼▼▼ [아래 Getter/Setter 추가] ▼▼▼
+	public BusinessVO getBusiness() {
+		return business;
+	}
+	public void setBusiness(BusinessVO business) {
+		this.business = business;
+	}
+	// ▲▲▲ [여기까지 추가] ▲▲▲
 }

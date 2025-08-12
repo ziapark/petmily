@@ -5,52 +5,44 @@
 
 <mapper namespace="com.petmillie.reservation.dao.ReservaionDAO">
 
-    <resultMap id="pensionResult" type="com.petmillie.business.vo.PensionVO">
+    <resultMap id="pensionDetailResult" type="com.petmillie.business.vo.PensionVO">
         <result property="p_num" column="p_num" />
-        <result property="business_id" column="business_id" />
         <result property="p_name" column="p_name" />
         <result property="tel1" column="tel1" />
         <result property="tel2" column="tel2" />
         <result property="tel3" column="tel3" />
-        <result property="checkin_time" column="checkin_time" />
-        <result property="checkout_time" column="checkout_time" />
-        <result property="room_count" column="room_count" />
-        <result property="max_capacity" column="max_capacity" />
-        <result property="facilities" column="facilities" />
         <result property="description" column="description" />
-        <result property="reg_date" column="reg_date" />
-        <result property="del_yn" column="del_yn" />
+        
+        <association property="business" javaType="com.petmillie.business.vo.BusinessVO">
+            <result property="roadAddress" column="roadAddress"/>
+            <result property="jibunAddress" column="jibunAddress"/>
+        </association>
     </resultMap>
 
-    <select id="selectAllPensionList" resultMap="pensionResult">
+    <select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
         <![CDATA[
             SELECT * FROM pension WHERE del_yn = 'N'
         ]]>
     </select>
     
-    <select id="selectPensionById" resultMap="pensionResult" parameterType="int">
+    
+    <select id="selectPensionDetail" resultMap="pensionDetailResult" parameterType="String">
         <![CDATA[
-            SELECT * FROM pension
-            WHERE p_num = #{pensionId}
-        ]]>
-    </select>
-    
-    
-    <resultMap id="reserResult" type="com.petmillie.reservation.vo.ReservaionVO">
-        <result property="reservaion_id" column="reservation_id"/>
-        <result property="business_id" column="business_id"/>
-        <result property="member_id" column="member_id"/>
-        <result property="reservation_date" column="reservation_date"/>
-        <result property="end_date" column="end_date"/>
-        <result property="reg_date" column="reg_date"/>
-        <result property="status" column="status"/>
-    </resultMap>
-    
-    <select id="reservationList" resultMap="reserResult"  parameterType="String">
-        <![CDATA[
-            SELECT * FROM reservation
-            WHERE business_id = #{business_id}
-            ORDER BY reg_date DESC
+            SELECT
+                p.p_num,
+                p.p_name,
+                p.tel1,
+                p.tel2,
+                p.tel3,
+                p.description,
+                b.roadAddress,
+                b.jibunAddress
+            FROM
+                pension p
+            JOIN
+                business b ON p.business_id = b.business_id
+            WHERE
+                p.p_num = #{p_num}
         ]]>
     </select>
 
