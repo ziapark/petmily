@@ -4,13 +4,15 @@
 
 <configuration>
   <typeAliases>
-  	<typeAlias type="com.petmillie.weather.vo.WeatherVO" alias="WeatherVO" />
+  <typeAlias type="com.petmillie.weather.vo.WeatherVO" alias="WeatherVO" />
     <typeAlias type="com.petmillie.goods.vo.GoodsVO" alias="GoodsVO" />
     <typeAlias type="com.petmillie.goods.vo.ImageFileVO" alias="imageFileVO" />
     <typeAlias type="com.petmillie.member.vo.MemberVO" alias="memberVO" />
     <typeAlias type="com.petmillie.cart.vo.CartVO" alias="cartVO" />
     <typeAlias type="com.petmillie.order.vo.OrderVO" alias="orderVO" />
     <typeAlias type="com.petmillie.mypage.vo.MyPageVO" alias="mypageVO" />
+    <typeAlias type="com.petmillie.mypage.vo.GoodsReviewVO" alias="GoodsReviewVO" />
+    <typeAlias type="com.petmillie.mypage.vo.LikeGoodsVO" alias="LikeGoodsVO" />
     <typeAlias type="com.petmillie.coupon.vo.CouponVO" alias="CouponVO" />
     <typeAlias type="com.petmillie.coupon.vo.UserCouponVO" alias="UserCouponVO" />
     <typeAlias type="com.petmillie.business.vo.BusinessVO" alias="BusinessVO" />

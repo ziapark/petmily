@@ -199,8 +199,12 @@ position:relative;
 .left {text-align:left;}
 
 
-
-
+/* 마이페이지 - 사이드, 본문 레이아웃 */
+.mypage_wrap {overflow:hidden;}
+.side_menu {float:left; width:200px; border-radius:3px;padding:0 25px 0 0; box-sizing:border-box;}
+.side_menu ul {border:1px solid #eee; padding:10px;}
+.side_menu ul li {text-align:left;}
+.mypage_content{float:right; width: calc(100% - 200px);}
 
 
 
