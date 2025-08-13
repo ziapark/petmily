@@ -123,5 +123,15 @@
 		 WHERE owner_name = #{member_name} AND email1 = #{email1} AND email2 = #{email2} AND (del_yn = 'N' OR del_yn IS NULL))
 	</select>
 	
+	<select id="findPw" resultType="String" parameterType="memberVO">
+		(SELECT member_pw FROM member
+		 WHERE member_id = #{member_id} AND email1 = #{email1} AND email2 = #{email2} AND (del_yn = 'N' OR del_yn IS NULL))
+		
+		UNION ALL
+		
+		(SELECT seller_pw FROM business
+		 WHERE seller_id = #{member_id} AND email1 = #{email1} AND email2 = #{email2} AND (del_yn = 'N' OR del_yn IS NULL))
+	</select>
+	
 	
 </mapper>

@@ -281,7 +281,22 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 		return mav;
 	}
 
-	
+	@RequestMapping(value="/findPw.do", method=RequestMethod.POST)
+	public ModelAndView findPw(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("body", "/WEB-INF/views/member/findPwForm.jsp");
+		mav.addObject("title", "비밀번호 찾기");
+
+		String memberPw = memberService.findPw(memberVO);
+		
+		if(memberPw != null && !memberPw.isEmpty()) {
+			mav.addObject("message", "회원님의 비밀번호는 [ " + memberPw + " ] 입니다.");
+		} else {
+			mav.addObject("message", "입력하신 정보와 일치하는 회원이 없습니다.");
+		}
+		
+		return mav;
+	}
 	
 	
 	

@@ -29,6 +29,7 @@ public interface MemberController {
 		// 아이디 찾기(findId) 메서드를 인터페이스에 추가했습니다.
 		public ModelAndView findId(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-	
+		public ModelAndView findPw(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+		
 
 }

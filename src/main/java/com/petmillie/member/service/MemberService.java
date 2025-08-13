@@ -10,4 +10,5 @@ public interface MemberService {
 	public int removeMember(String id)throws Exception;
 	public MemberVO findkakaoid(String kakaoid)throws Exception;
 	public String findId(MemberVO memberVO) throws Exception;
+	public String findPw(MemberVO memberVO) throws Exception;
 }

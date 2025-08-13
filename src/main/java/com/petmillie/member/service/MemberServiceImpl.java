@@ -49,4 +49,8 @@ public class MemberServiceImpl implements MemberService {
 	    public String findId(MemberVO memberVO) throws Exception {
 	        return memberDAO.findId(memberVO);
 	    }
+	 @Override
+		public String findPw(MemberVO memberVO) throws Exception {
+			return memberDAO.findPw(memberVO);
+		}
 }
