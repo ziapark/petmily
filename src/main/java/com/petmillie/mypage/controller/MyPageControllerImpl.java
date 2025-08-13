@@ -405,22 +405,30 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	}
 	@Override
 	@RequestMapping("/likeGoods.do")
-	public ModelAndView likeGoods(HttpServletRequest request, String member_id) throws Exception {
+	public ModelAndView likeGoods(HttpServletRequest request) throws Exception {
 		String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("title", "펫밀리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-		
-		List<LikeGoodsVO> likeGoodsList = myPageService.likeGoodsList(member_id);
-		
-		mav.addObject("likeGoodsList", likeGoodsList);
-		
+
+	    // 세션에서 member_id 가져오기
+	    HttpSession session = request.getSession();
+	    MemberVO member = (MemberVO) session.getAttribute("memberInfo");
+	    if (member == null) {
+	        mav.setViewName("redirect:/member/loginForm.do");
+	        return mav;
+	    }
+	    String member_id = member.getMember_id();
+	    
+	    List<LikeGoodsVO> likeGoodsList = myPageService.likeGoodsList(member_id);
+	    
+	    mav.addObject("likeGoodsList", likeGoodsList);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/toggleLikeGoods.do", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> toggleLikeGoods(@RequestParam String member_id, @RequestParam int goods_num) {
+	public Map<String, Object> toggleLikeGoods(@RequestParam String member_id, @RequestParam int goods_num)  throws Exception {
 	    Map<String, Object> result = new HashMap<>();
 	    try {
 	        result = myPageService.toggleLikeGoods(member_id, goods_num);
@@ -430,8 +438,15 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    }
 	    return result;
 	}
-	
-	
+	@Override
+	@RequestMapping(value ="/likeGoodsDelete.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String likeGoodsDelete(@RequestParam int like_goods_id) throws Exception {
+	    
+		int result = myPageService.likeGoodsDelete(like_goods_id);
+	    return (result > 0) ? "success" : "fail";
+	 
+	}
 	
 	
 	

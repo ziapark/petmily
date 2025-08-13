@@ -189,6 +189,9 @@ position:relative;
 .goods-item input[type="button"].like_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;border:none;}
 .goods-item input[type="button"].like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
 
+.goods-item input[type="button"].like_icon_btn.like_on {background:url(/petmillie/resources/image/like_on.png) no-repeat; background-size:cover;}
+.goods-item input[type="button"].like_icon_btn.like_off {background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;}
+
 .cartAndLike_wrap {position:absolute;left:0;bottom:0;}
 .goods-item a {display: block; height: 200px;  width: 100%; overflow:hidden;}
 .goods-item a img {width:100%; border:0;}
@@ -205,6 +208,5 @@ position:relative;
 .side_menu ul {border:1px solid #eee; padding:10px;}
 .side_menu ul li {text-align:left;}
 .mypage_content{float:right; width: calc(100% - 200px);}
-
 
 

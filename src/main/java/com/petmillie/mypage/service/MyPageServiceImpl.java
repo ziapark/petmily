@@ -87,7 +87,6 @@ public class MyPageServiceImpl  implements MyPageService{
 
 	@Override
 	public List<LikeGoodsVO> likeGoodsList(String member_id) throws Exception {
-		
 		return myPageDAO.likeGoodsList(member_id);
 	}
 
@@ -116,9 +115,14 @@ public class MyPageServiceImpl  implements MyPageService{
 	}
 
 	@Override
-	public Set<Integer> getLikedGoodsNums(String member_id) throws Exception {
+	public Set<Integer> getLikedGoodsSet(String member_id) throws Exception {
 		List<Integer> likedGoodsList = myPageDAO.selectLikedGoodsNums(member_id);
 	    return new HashSet<>(likedGoodsList);
+	}
+
+	@Override
+	public int likeGoodsDelete(int like_goods_id) throws Exception {
+		return myPageDAO.likeGoodsDelete(like_goods_id);
 	}
 	
 

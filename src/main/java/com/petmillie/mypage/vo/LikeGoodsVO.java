@@ -4,8 +4,9 @@ public class LikeGoodsVO {
 	private int like_goods_id;
 	private String member_id;
 	private int goods_num;
-	private String goodsName;
+	private String goods_name;
 	private String goods_sales_price;
+	private String goods_fileName;
 	
 	public int getLike_goods_id() {
 		return like_goods_id;
@@ -31,10 +32,17 @@ public class LikeGoodsVO {
 	public void setGoods_sales_price(String goods_sales_price) {
 		this.goods_sales_price = goods_sales_price;
 	}
-	public String getGoodsName() {
-		return goodsName;
+	public String getGoods_name() {
+		return goods_name;
 	}
-	public void setGoodsName(String goodsName) {
-		this.goodsName = goodsName;
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
 	}
+	public String getGoods_fileName() {
+		return goods_fileName;
+	}
+	public void setGoods_fileName(String goods_fileName) {
+		this.goods_fileName = goods_fileName;
+	}
+
 }

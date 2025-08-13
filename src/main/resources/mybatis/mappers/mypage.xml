@@ -40,11 +40,12 @@
 
 	<!-- 리절트 맵 정의 -->
 <resultMap id="likeGoodsResult" type="LikeGoodsVO">
-    <result property="likeId" column="like_id"/>
-    <result property="memberId" column="member_id"/>
-    <result property="goodsNum" column="goods_num"/>
-    <result property="goodsName" column="goods_name"/>
-    <result property="goodsSalesPrice" column="goods_sales_price"/>
+    <result property="like_goods_id" column="like_goods_id"/>
+    <result property="member_id" column="member_id"/>
+    <result property="goods_num" column="goods_num"/>
+    <result property="goods_name" column="goods_name"/>
+    <result property="goods_sales_price" column="goods_sales_price"/>
+    <result property="goods_fileName" column="goods_fileName"/>
 </resultMap>
 
 
@@ -55,7 +56,8 @@
 	        l.member_id,
 	        l.goods_num,
 	        g.goods_name,
-	        g.goods_sales_price
+	        g.goods_sales_price,
+	        g.goods_fileName  -- 여기 추가
 	    FROM likes_goods l
 	    JOIN goods g 
 	      ON l.goods_num = g.goods_num
@@ -84,6 +86,10 @@
 	    WHERE member_id = #{member_id} AND goods_num = #{goods_num}
 	</delete>
 	
+	<delete id="likeGoodsDelete" parameterType="int">
+	    DELETE FROM likes_goods
+	    WHERE like_goods_id = #{like_goods_id}
+	</delete>
 
 
 <!-- 	<select id="selectMyOrderList" parameterType="string" resultMap="orderResult">

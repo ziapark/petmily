@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
@@ -24,6 +26,7 @@ public interface MyPageService{
 	boolean existsReview(int orderNum, String memberId) throws Exception;
 	public List<LikeGoodsVO> likeGoodsList(String member_id) throws Exception;
 	public Map<String, Object> toggleLikeGoods(String member_id, int goods_num) throws Exception;
-	Set<Integer> getLikedGoodsNums(String member_id) throws Exception;
+	Set<Integer> getLikedGoodsSet(String member_id) throws Exception;
+	public int likeGoodsDelete(int like_goods_id) throws Exception;
 	
 }
