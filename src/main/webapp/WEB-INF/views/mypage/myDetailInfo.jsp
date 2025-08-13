@@ -214,11 +214,11 @@
 							<th class="bg-light align-middle">성별</th>
 							<td>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="여" <c:if test="${memberInfo.member_gender != '101'}">checked</c:if> />
+									<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" <c:if test="${memberInfo.member_gender != '101'}">checked</c:if> />
 									<label class="form-check-label" for="genderFemale">여성</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="남" <c:if test="${memberInfo.member_gender == '101'}">checked</c:if> />
+									<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" <c:if test="${memberInfo.member_gender == '101'}">checked</c:if> />
 									<label class="form-check-label" for="genderMale">남성</label>
 								</div>
 							</td>
@@ -247,11 +247,11 @@
 									</select>일
 									<div class="ms-3">
 										<div class="form-check form-check-inline">
-											<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="양력" <c:if test="${memberInfo.member_birth_gn=='2'}">checked</c:if> />
+											<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" <c:if test="${memberInfo.member_birth_gn=='2'}">checked</c:if> />
 											<label class="form-check-label" for="solar">양력</label>
 										</div>
 										<div class="form-check form-check-inline">
-											<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="음력" <c:if test="${memberInfo.member_birth_gn=='1'}">checked</c:if> />
+											<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" <c:if test="${memberInfo.member_birth_gn=='1'}">checked</c:if> />
 											<label class="form-check-label" for="lunar">음력</label>
 										</div>
 									</div>

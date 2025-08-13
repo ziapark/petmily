@@ -25,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.Session;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.vo.MemberVO;
@@ -88,7 +87,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	
 	
 	@RequestMapping(value="/orderAllCartGoods.do" ,method = RequestMethod.POST)
-	public ModelAndView orderAllCartGoods( @RequestParam("cart_goods_qty") String[] cart_goods_qty,@RequestParam("goods_num") String[] goods_num,
+	public ModelAndView orderAllCartGoods( @RequestParam("cart_goods_qty")  String[] cart_goods_qty,
 			                 HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("body", "/WEB-INF/views/order/orderEachGoods2.jsp");
@@ -99,19 +98,25 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		List<GoodsVO> myGoodsList=(List<GoodsVO>)cartMap.get("myGoodsList");
 		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
 		
-		for (int i = 0; i < cart_goods_qty.length; i++) {
-		    for (GoodsVO goodsVO : myGoodsList) {
-		        if (goodsVO.getGoods_num() == Integer.parseInt(goods_num[i])) {
-		            OrderVO _orderVO = new OrderVO();
-		            _orderVO.setGoods_num(goodsVO.getGoods_num());
-		            _orderVO.setGoods_name(goodsVO.getGoods_name());
-		            _orderVO.setGoods_sales_price(goodsVO.getGoods_sales_price());
-		            _orderVO.setGoods_fileName(goodsVO.getGoods_fileName());
-		            _orderVO.setGoods_qty(Integer.parseInt(cart_goods_qty[i]));
-		            myOrderList.add(_orderVO);
-		            break;
-		        }
-		    }
+		for(int i=0; i<cart_goods_qty.length;i++){
+			String[] cart_goods=cart_goods_qty[i].split(":");
+			for(int j = 0; j< myGoodsList.size();j++) {
+				GoodsVO goodsVO = myGoodsList.get(j);
+				int goods_id = goodsVO.getGoods_num();
+				if(goods_id==Integer.parseInt(cart_goods[0])) {
+					OrderVO _orderVO=new OrderVO();
+					String goods_title=goodsVO.getGoods_name();
+					String goods_sales_price=goodsVO.getGoods_sales_price();
+					String goods_fileName=goodsVO.getGoods_fileName();
+					_orderVO.setGoods_num(goods_id);
+					_orderVO.setGoods_name(goods_title);
+					_orderVO.setGoods_sales_price(goods_sales_price);
+					_orderVO.setGoods_fileName(goods_fileName);
+					_orderVO.setGoods_qty(Integer.parseInt(cart_goods[1]));
+					myOrderList.add(_orderVO);
+					break;
+				}
+			}
 		}
 		session.setAttribute("myOrderList", myOrderList);
 		session.setAttribute("memberInfo", memberVO);
@@ -286,20 +291,6 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	        map.put("message", ex.getMessage());
 	    }
 	    return map;
-	}
-
-	@RequestMapping(value="/payComplete.do", method = {RequestMethod.POST,RequestMethod.GET})
-	@Override
-	public ModelAndView payComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String viewName = (String) request.getAttribute("viewName");
-		HttpSession session = request.getSession();
-		List<OrderVO> myOrderList = (List<OrderVO>)session.getAttribute("myOrderList");
-		String memberInfo = (String)session.getAttribute("memberInfo");
-		String PayVO = (String)session.getAttribute("PayVO");
-		ModelAndView mav = new ModelAndView("/common/layout");
-		mav.addObject("body", "/WEB-INF/views/"+viewName+".jsp");
-		
-		return mav;
 	}
 
 }
