@@ -23,39 +23,44 @@
 	</div>
 	
 	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-	    <c:choose>
-	        <c:when test="${not empty goodsList}">
-	            <c:forEach var="goods" items="${goodsList}">
-	                <div class="col">
-	                    <div class="goods-item">
-	                        <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}&fileName=${goods.goods_fileName}">
-	                            <img src="http://localhost:8090/petupload/goods/${goods.goods_num}/${goods.goods_fileName}" alt="대표 이미지">
-	                        </a>
-	                        <div class="goods-name">${goods.goods_name}</div>
-	                        <div class="goods-price">
-	                            <fmt:formatNumber value="${goods.goods_sales_price}" type="number" pattern="#,###원"/>
-	                        </div>
-	                        
-	                        <div class="cartAndLike_wrap">
-	                        	<input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')">
-	                        	<input type="button" class="like_icon_btn" onclick="addLikeGoods('${goods.goods_num}')">
-	                        </div>
-	                    </div>
-	                </div>
-	            </c:forEach>
-	        </c:when>
-	        <c:otherwise>
-	            <div class="col-12">
-	                <p class="text-muted">현재 등록된 상품이 없습니다. 잠시 후 다시 시도해주세요.</p>
+	  <c:choose>
+	    <c:when test="${not empty goodsList}">
+	      <c:forEach var="goods" items="${goodsList}">
+	        <div class="col">
+	          <div class="goods-item">
+	            <a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}&fileName=${goods.goods_fileName}">
+	              <img src="http://localhost:8090/petupload/goods/${goods.goods_num}/${goods.goods_fileName}" alt="대표 이미지" />
+	            </a>
+	            <div class="goods-name">${goods.goods_name}</div>
+	            <div class="goods-price">
+	              <fmt:formatNumber value="${goods.goods_sales_price}" type="number" pattern="#,###원"/>
 	            </div>
-	        </c:otherwise>
-	    </c:choose>
+	
+	            <div class="cartAndLike_wrap">
+	              <input type="button" class="cart_icon_btn" onclick="addToCart('${goods.goods_num}')"/>
+	              <c:set var="liked" value="${likedGoodsSet.contains(goods.goods_num)}" />
+				  <input type="button" 
+					       class="like_icon_btn ${liked ? 'like_on' : 'like_off'}" 
+					       data-goods-num="${goods.goods_num}" 
+					       onclick="toggleLikeGoods(this)" />
+	            </div>
+	          </div>
+	        </div>
+	      </c:forEach>
+	    </c:when>
+	    <c:otherwise>
+	      <div class="col-12">
+	        <p class="text-muted">현재 등록된 상품이 없습니다. 잠시 후 다시 시도해주세요.</p>
+	      </div>
+	    </c:otherwise>
+	  </c:choose>
 	</div>
 </div>
 
 <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>	
 
 <script>
+//장바구니 추가 
 function addToCart(goodsNum) {
     var isLogOnElement = document.getElementById('isLogOn');
     var isLogOn = isLogOnElement ? isLogOnElement.value : 'false';
@@ -89,6 +94,42 @@ function addToCart(goodsNum) {
         }
     }
 }
+
+//관심상품 추가 
+
+
+function toggleLikeGoods(btn) {
+    var member_id = "${sessionScope.memberInfo.member_id}"; 
+    if (!member_id) {
+        alert("로그인 후 이용 가능합니다.");
+        return;
+    }
+    alert("관심상품추가 스크립트 진입");
+    var goods_num = $(btn).data("goods-num");  // data-goods-num에서 값 가져오기
+    var isLiked = $(btn).hasClass("like_on");  // 클릭한 버튼 기준으로 상태 확인
+
+    $.ajax({
+        url: "${pageContext.request.contextPath}/mypage/toggleLikeGoods.do",
+        type: "POST",
+        dataType: "json",
+        data: { member_id: member_id, goods_num: goods_num },
+        success: function(response) {
+            if(response.success) {
+                if(response.status === "added") {
+                    $(btn).removeClass("like_off").addClass("like_on");
+                } else if(response.status === "deleted") {
+                    $(btn).removeClass("like_on").addClass("like_off");
+                }
+            } else {
+                alert("처리에 실패했습니다.");
+            }
+        },
+        error: function() {
+            alert("좋아요 처리 중 오류가 발생했습니다.");
+        }
+    });
+}
+
 
 </script>
 
