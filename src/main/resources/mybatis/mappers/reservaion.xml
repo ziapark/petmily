@@ -3,8 +3,10 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.petmillie.reservation.dao.ReservaionDAO">
+<!-- 네임스페이스를 DAO에서 호출하는 경로와 일치시킵니다. -->
+<mapper namespace="mapper.reservation">
 
+	<!-- =================== 기존 코드 유지 =================== -->
 	<resultMap id="pensionDetailResult" type="com.petmillie.business.vo.PensionVO">
 		<result property="p_num" column="p_num" />
 		<result property="business_id" column="business_id" />
@@ -39,13 +41,11 @@
 		<result property="fileimage" column="fileimage"/>
 	</resultMap>
 
-
 	<select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
 		<![CDATA[
 			SELECT * FROM pension WHERE del_yn = 'N' ORDER BY p_num DESC
 		]]>
 	</select>
-	
 	
 	<select id="selectPensionDetail" resultMap="pensionDetailResult" parameterType="int">
 		<![CDATA[
@@ -65,5 +65,52 @@
 			SELECT * FROM room WHERE p_num = #{p_num} AND del_yn = 'N' ORDER BY price ASC
 		]]>
 	</select>
+	<!-- ======================================================= -->
 
+
+	<!-- 
+	  ===================================================================
+	  ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ [ 신규 쿼리 2개 추가 ] ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+	  ===================================================================
+	-->
+
+	<!-- 특정 객실 상세 정보 조회 -->
+	<select id="selectRoomDetail" resultMap="roomResult" parameterType="int">
+		<![CDATA[
+			SELECT * FROM room
+			WHERE room_id = #{roomId}
+		]]>
+	</select>
+	<!-- parameterType을 새로 만든 ReservationDTO로 변경 -->
+	<insert id="insertReservation" 
+			parameterType="com.petmillie.reservation.vo.ReservationDTO"
+			useGeneratedKeys="true"
+			keyProperty="reservation_id">
+		<![CDATA[
+			INSERT INTO reservation(
+				member_id,
+				business_id,
+				room_id,
+				checkin_date,
+				checkout_date,
+				guests,
+				reserver_name,
+				reserver_tel,
+				total_price,
+				status
+			)
+			VALUES (
+				#{member_id},
+				#{business_id},
+				#{room_id},
+				#{checkin_date},
+				#{checkout_date},
+				#{guests},
+				#{reserver_name},
+				#{reserver_tel},
+				#{total_price},
+				'예약완료'
+			)
+		]]>
+	</insert>
 </mapper>

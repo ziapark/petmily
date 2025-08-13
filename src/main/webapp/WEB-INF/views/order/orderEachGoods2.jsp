@@ -44,6 +44,7 @@ function execDaumPostcode() {
     }
   }).open();
 }
+
 /**
  * 결제방법 선택 시 카드/할부 UI 토글
  */
@@ -132,8 +133,8 @@ async function requestCardPayment() {
 	});
   // 결제창 호출 (storeId, channelKey는 네 실제값으로 교체!!)
   const response = await PortOne.requestPayment({
-    storeId:"store-e922786e-5a3c-4063-8202-ae25a0966363",   // ★교체필수
-    channelKey: "channel-key-5886f536-8798-4066-aff3-416419fa1d39", // ★교체필수
+    storeId:"store-292f1f91-b8c2-4608-9394-615315d5f811",   // ★교체필수
+    channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc", // ★교체필수
     paymentId: paymentId,
     orderName: data.pd_name,
     totalAmount: data.price,

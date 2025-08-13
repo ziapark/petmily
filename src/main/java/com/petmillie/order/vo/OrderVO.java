@@ -26,6 +26,7 @@ public class OrderVO {
 	private String delivery_state; //기본값 배송준비중
 	private String goods_fileName;
 	private String order_time;
+	private boolean hasReview;
 
 	public String getTotal_price() {
 		return total_price;
@@ -158,6 +159,12 @@ public class OrderVO {
 	}
 	public void setOrder_time(String order_time) {
 		this.order_time = order_time;
+	}
+	public boolean isHasReview() {
+		return hasReview;
+	}
+	public void setHasReview(boolean hasReview) {
+		this.hasReview = hasReview;
 	}
 	
 	

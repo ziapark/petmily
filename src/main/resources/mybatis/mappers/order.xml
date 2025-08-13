@@ -65,15 +65,15 @@
        #{tel3}, #{zipcode}, #{roadAddress}, #{jibunAddress}, #{namujiAddress}, #{delivery_method}, #{delivery_message}, #{goods_fileName}, NOW()
   )
 </insert>
-
-
+ 
 	<!-- 주문 목록 조회 -->
 	<select id="selectMyOrderList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT *
 			FROM userorder
-			WHERE DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
-			ORDER BY order_time DESC
+			 WHERE member_id = #{member_id}
+			 AND DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+        ORDER BY order_time DESC
 			
 		]]>
 	</select>

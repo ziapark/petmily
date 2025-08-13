@@ -28,8 +28,8 @@
 		<img alt="카카오로그인" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
 		</a>
 		<br><br>
-		<a href="#">아이디 찾기</a>  | 
-		<a href="#">비밀번호 찾기</a> |
+	<a href="${contextPath}/member/findIdForm.do">아이디 찾기</a>| 
+	<a href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> |
 		<a href="#">고객 센터</a>
 	</div>	
 </body>

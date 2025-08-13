@@ -10,9 +10,9 @@ public class GoodsReviewVO {
 	private String member_id;
 	private int order_num;
 	private int rating;
-	private String subject;
 	private String content;
 	private String file_name;
+	private String goods_name;
 	
 	private Date created_at;
 	private Date updated_at;
@@ -40,12 +40,6 @@ public class GoodsReviewVO {
 	}
 	public void setRating(int rating) {
 		this.rating = rating;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
 	}
 	public String getContent() {
 		return content;
@@ -76,6 +70,12 @@ public class GoodsReviewVO {
 	}
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
+	}
+	public String getGoods_name() {
+		return goods_name;
+	}
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
 	}
 	
 	

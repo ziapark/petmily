@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <!DOCTYPE html>
@@ -28,17 +30,18 @@
 	<div class="col">
 	<form name="writeForm" action="${contextPath}/mypage/addReview.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
-	    <input type="hidden" name="order_id" value="${param.order_id}" />
+	    <input type="hidden" name="order_num" value="${order_num}" />
+	    <input type="hidden" name="order_num" value="${review_id}" />
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">작성자 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${param.order_id}" readonly>
+			     <input type="text" name="member_id" class="form-control" value="${order_name}" readonly>
 			  </div>
 		</div>
 		<div class="mb-3 row">
-			<label for="subject" class="col-sm-2 col-form-label">제목 </label>
+			<label for="name" class="col-sm-2 col-form-label">주문 상품 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="subject" class="form-control" placeholder="제목을 입력하세요">
+			     <input type="text" name="member_id" class="form-control" value="${goods_name}" readonly>
 			  </div>
 		</div>		
 		<div class="mb-3 row">
@@ -47,6 +50,31 @@
 				<textarea class="form-control writearea" name="content"></textarea>  
 			</div>
 		</div>	
+		<div class="mb-3 row">
+		  <label class="col-sm-2 col-form-label">평가</label>
+		  <div class="col-sm-10 d-flex">
+		    <div class="form-check me-3">
+		      <input class="form-check-input" type="radio" name="rating" id="rating1" value="1">
+		      <label class="form-check-label" for="rating1">★</label>
+		    </div>
+		    <div class="form-check me-3">
+		      <input class="form-check-input" type="radio" name="rating" id="rating2" value="2">
+		      <label class="form-check-label" for="rating2">★★</label>
+		    </div>
+		    <div class="form-check me-3">
+		      <input class="form-check-input" type="radio" name="rating" id="rating3" value="3">
+		      <label class="form-check-label" for="rating3">★★★</label>
+		    </div>
+		    <div class="form-check me-3">
+		      <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
+		      <label class="form-check-label" for="rating4">★★★★</label>
+		    </div>
+		    <div class="form-check">
+		      <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
+		      <label class="form-check-label" for="rating5">★★★★★</label>
+		    </div>
+		  </div>
+		</div>
 		<div class="mb-3 row">
 			<label for="" class="col-sm-2 col-form-label">사진첨부</label>
 			<div class="col-sm-10">
@@ -65,13 +93,9 @@
 	<script>
 		//게시글 등록 유효성검사
 		function write_check(){
-		    var subject = document.writeForm.subject.value.trim();
+
 		    var content = document.writeForm.content.value.trim();
 		
-		    if(subject === "") {
-		        alert("제목을 입력하세요.");
-		        return false;
-		    }
 		    if(content === "") {
 		        alert("내용을 입력하세요.");
 		        return false;
