@@ -38,8 +38,6 @@
         border-bottom: 2px solid #3498db;
         padding-bottom: 15px;
     }
-
-    /* 예약 정보 섹션 */
     .info-section {
         background-color: #ecf0f1;
         border-radius: 8px;
@@ -59,8 +57,6 @@
         color: #34495e;
         margin-right: 8px;
     }
-
-    /* 예약 폼 */
     .reservation-form .form-group {
         margin-bottom: 20px;
     }
@@ -79,7 +75,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 1rem;
-        box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+        box-sizing: border-box;
     }
     .reservation-form input:focus {
         border-color: #3498db;
@@ -93,8 +89,6 @@
     .date-inputs .form-group {
         flex: 1;
     }
-
-    /* 총 결제 금액 */
     .total-price-section {
         text-align: right;
         margin-top: 30px;
@@ -106,8 +100,6 @@
         font-weight: bold;
         color: #e74c3c;
     }
-
-    /* 예약 버튼 */
     .submit-btn {
         display: block;
         width: 100%;
@@ -134,10 +126,6 @@
 </head>
 <body>
 
-<%-- 
-    컨트롤러에서 pension과 room 객체를 모델에 담아 전달했다고 가정합니다.
-    (예: model.addAttribute("pension", pensionDTO); model.addAttribute("room", roomDTO);)
---%>
 <div class="reservation-container">
     <h2>객실 예약</h2>
 
@@ -148,26 +136,18 @@
         <p><strong>최대 인원:</strong> ${room.max_capacity}명</p>
     </div>
 
-<%--     <form name="reservationForm" class="reservation-form" method="post" action="${contextPath}/reservation/makeReservation.do" onsubmit="return validateForm()"> --%>
-<%--         서버로 전송해야 할 숨겨진 데이터 --%>
-<%--         <input type="hidden" name="p_num" value="${pension.p_num}"> --%>
-<%--         <input type="hidden" name="room_id" value="${room.room_id}"> --%>
-<%--         <input type="hidden" name="price" value="${room.price}"> --%>
+    <form name="reservationForm" class="reservation-form" method="post" action="${contextPath}/reservation/makeReservation.do" onsubmit="return validateForm()">
+        <%-- 서버로 전송해야 할 숨겨진 데이터 --%>
+        <input type="hidden" name="p_num" value="${pension.p_num}">
+        <input type="hidden" name="room_id" value="${room.room_id}">
+        <input type="hidden" name="price" value="${room.price}">
+        <input type="hidden" name="business_id" value="${pension.business_id}">
+        
+        <!-- ▼▼▼▼▼ [수정 1] 총액을 서버로 보내기 위한 숨겨진 input 추가 ▼▼▼▼▼ -->
+        <input type="hidden" id="total_price_input" name="total_price" value="0">
+        <!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
 
-<!--         <div class="date-inputs"> -->
-<form name="reservationForm" class="reservation-form" method="post" action="${contextPath}/reservation/makeReservation.do" onsubmit="return validateForm()">
-    <%-- 서버로 전송해야 할 숨겨진 데이터 --%>
-    <input type="hidden" name="p_num" value="${pension.p_num}">
-    <input type="hidden" name="room_id" value="${room.room_id}">
-    <input type="hidden" name="price" value="${room.price}">
-    
-    <!-- ▼▼▼▼▼ [ 이 줄을 추가해주세요 ] ▼▼▼▼▼ -->
-    <input type="hidden" name="business_id" value="${pension.business_id}">
-    <!-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ -->
-
-    <div class="date-inputs">
-    
-
+        <div class="date-inputs">
             <div class="form-group">
                 <label for="checkin_date">체크인</label>
                 <input type="date" id="checkin_date" name="checkin_date" required>
@@ -208,6 +188,10 @@
     const guestsInput = document.getElementById('guests');
     const totalPriceSpan = document.getElementById('total_price');
     const submitBtn = document.getElementById('submit_btn');
+    
+    // ▼▼▼▼▼ [수정 2] 숨겨진 input 요소를 변수에 할당 ▼▼▼▼▼
+    const totalPriceInput = document.getElementById('total_price_input');
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     // 1박 요금 (JSP EL을 사용하여 JavaScript 변수에 할당)
     const pricePerNight = parseInt('${room.price}');
@@ -244,20 +228,24 @@
         // 날짜가 유효하고, 체크아웃이 체크인보다 늦은 경우에만 계산
         if (checkinInput.value && checkoutInput.value && checkoutDate > checkinDate) {
             const timeDiff = checkoutDate.getTime() - checkinDate.getTime();
-            nights = Math.ceil(timeDiff / (1000 * 3600 * 24)); // 1박 = 1일
+            nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
             
             if (nights > 0) {
                 totalPrice = nights * pricePerNight;
-                submitBtn.disabled = false; // 유효한 경우 버튼 활성화
+                submitBtn.disabled = false;
             } else {
                  submitBtn.disabled = true;
             }
         } else {
-            submitBtn.disabled = true; // 날짜가 유효하지 않으면 버튼 비활성화
+            submitBtn.disabled = true;
         }
         
         // 화면에 총 요금 표시 (세자리 콤마 포맷)
         totalPriceSpan.textContent = totalPrice.toLocaleString();
+        
+        // ▼▼▼▼▼ [수정 3] 숨겨진 input의 값을 계산된 총액으로 업데이트 ▼▼▼▼▼
+        totalPriceInput.value = totalPrice;
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
     }
     
     // 폼 제출 전 최종 유효성 검사
@@ -265,20 +253,20 @@
         if (guestsInput.value > parseInt('${room.max_capacity}')) {
             alert('최대 수용 인원을 초과할 수 없습니다. (최대 ${room.max_capacity}명)');
             guestsInput.focus();
-            return false; // 폼 제출 중단
+            return false;
         }
 
         const nights = (new Date(checkoutInput.value) - new Date(checkinInput.value)) / (1000 * 3600 * 24);
         if (nights <= 0) {
             alert('체크인 날짜는 체크아웃 날짜보다 이전이어야 합니다.');
             checkinInput.focus();
-            return false; // 폼 제출 중단
+            return false;
         }
         
         if (confirm("예약을 진행하시겠습니까?")) {
-            return true; // 폼 제출 진행
+            return true;
         } else {
-            return false; // 폼 제출 취소
+            return false;
         }
     }
 </script>
