@@ -155,12 +155,12 @@
 </resultMap>
 
 	<!-- 펜션 등록 -->
-	<insert id="insertpension" parameterType="pensionVO">
+	<insert id="insertpension" parameterType="pensionVO" useGeneratedKeys="true" keyProperty="p_num">
 	<![CDATA[
 		insert into pension(
-		p_num, business_id, p_name, tel1, tel2, tel3, room_count, facilities, description)
+		business_id, p_name, tel1, tel2, tel3, checkin_time, checkout_time, room_count, facilities, description)
 		values(
-		#{p_num}, #{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{room_count}, #{facilities}, #{description})
+		#{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{checkin_time}, #{checkout_time}, #{room_count}, #{facilities}, #{description})
 	]]>
 </insert>
 <!-- 펜션 정보 조회 -->
@@ -171,8 +171,18 @@
 </select>	
 <update id="updatepension" parameterType="pensionVO">
 	<![CDATA[
-	update pension set p_name = #{p_name}, tel1 = #{tel1}, tel2 = #{tel2}, tel3 = #{tel3}, room_count = #{room_count},
-	facilities = #{facilities}, description = #{description}
+	update pension 
+	set 
+		p_name = #{p_name}, 
+		tel1 = #{tel1}, 
+		tel2 = #{tel2}, 
+		tel3 = #{tel3}, 
+		checkin_time = #{checkin_time},
+		checkout_time = #{checkout_time},
+		room_count = #{room_count},
+		facilities = #{facilities}, 
+		description = #{description}
+	where p_num = #{p_num}
 	]]>
 </update>
 <update id="removepension" parameterType="int">

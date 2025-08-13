@@ -39,6 +39,26 @@
 					<td>
 					</td>	
 				</tr>
+						
+					
+				<tr class="dot_line">
+					<td class="fixed_join">체크인 시간</td>
+					<td>
+					   <input type="time" name="checkin_time" id="checkin_time" />
+				    </td>
+					<td>
+					</td>	
+				</tr>
+				
+				<tr class="dot_line">
+					<td class="fixed_join">체크아웃 시간</td>
+					<td>
+					   <input type="time" name="checkout_time" id="checkout_time" />
+				    </td>
+					<td>
+					</td>	
+				</tr>
+			
 									
 				<tr class="dot_Line">
 				<td class="fixed_join">보유 객실 수</td>
@@ -61,6 +81,8 @@
 					<input type="text" id="description" name="description" size=5/>
 				</td>
 				</tr>
+				
+				
 				
 			</tbody>
 		</table>
