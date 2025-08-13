@@ -172,57 +172,7 @@
  
 </div>
 
-	<!DOCTYPE html>
-	<html>
-	<head>
-	  <meta charset="utf-8">
-	  <title>카카오맵 마커 테스트</title>
-	  <style>
-	    #map {
-	      width: 100%;
-	      height: 400px;
-	    }
-	  </style>
-	  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4ba40da625f31c62dc8b1b85842e096b&libraries=services"></script>
-	</head>
-	<body>
 
-	<h2>마커 테스트</h2>
-	<div id="map"></div>
-
-	<script>
-	  var container = document.getElementById('map');
-	  var options = {
-	    center: new kakao.maps.LatLng(37.5665, 126.9780),
-	    level: 3
-	  };
-
-	  var map = new kakao.maps.Map(container, options);
-	  var geocoder = new kakao.maps.services.Geocoder();
-
-	  var address = "서울특별시 중구 퇴계로 100";
-
-	  geocoder.addressSearch(address, function(result, status) {
-	    if (status === kakao.maps.services.Status.OK) {
-	      var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-	      console.log("좌표:", coords);
-
-	      var marker = new kakao.maps.Marker({
-	        map: map,
-	        position: coords
-	      });
-
-	      console.log("마커 생성 완료");
-
-	      map.setCenter(coords);
-	    } else {
-	      alert("주소 찾기 실패");
-	    }
-	  });
-	</script>
-
-	</body>
-	</html>
 
 
 <!-- 메인하단 본문영역 end -->

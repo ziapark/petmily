@@ -1,6 +1,6 @@
 package com.petmillie.goods.vo;
 
-import java.sql.Date; // java.util.Date 대신 java.sql.Date 사용
+import java.util.Date; // java.util.Date 대신 java.sql.Date 사용
 
 import org.springframework.stereotype.Component;
 @Component("GoodsVO")

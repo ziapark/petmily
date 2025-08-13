@@ -13,7 +13,6 @@ import com.petmillie.reservation.dao.ReservaionDAO;
 import com.petmillie.reservation.vo.ReservationDTO;
 
 @Service("ReservaionService")
-// 클래스 레벨에 트랜잭션을 적용하여 모든 public 메서드가 하나의 트랜잭션 단위로 묶이도록 합니다.
 @Transactional(propagation = Propagation.REQUIRED)
 public class ReservaionServiceImpl implements ReservaionService {
 
@@ -38,16 +37,24 @@ public class ReservaionServiceImpl implements ReservaionService {
 		return reservaionDAO.selectRoomList(p_num);
 	}
 
-
-    // --- 신규 기능 메서드 (수정됨) ---
+	// 객실 상세 조회
 	@Override
 	public RoomVO getRoomDetail(int roomId) throws Exception {
 		return reservaionDAO.selectRoomDetail(roomId);
 	}
 
+	// 예약 추가
 	@Override
-	// 파라미터 타입을 ReservationDTO로 변경
 	public int addReservation(ReservationDTO reservationDTO) throws Exception {
 		return reservaionDAO.insertReservation(reservationDTO);
+	}
+
+	/**
+	 * [추가] 사업자 ID로 예약 목록을 조회하는 메서드 구현
+	 * 이 메서드는 DAO를 호출하여 DB에서 데이터를 가져옵니다.
+	 */
+	@Override
+	public List<ReservationDTO> getReservationsByBusinessId(String business_id) throws Exception {
+		return reservaionDAO.selectReservationsByBusinessId(business_id);
 	}
 }
