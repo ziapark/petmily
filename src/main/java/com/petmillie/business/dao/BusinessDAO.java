@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.reservation.vo.ReservaionVO;
 
 public interface BusinessDAO {
@@ -30,4 +31,7 @@ public interface BusinessDAO {
 	public int removepension(int id) throws DataAccessException;
     List<ReservaionVO> reservationList(String business_id) throws DataAccessException;
 	public int removeMember(String business_number) throws DataAccessException;
+	public int selectOverlappedGoodsName(String goods_name) throws Exception;
+	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException;
+	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
 }

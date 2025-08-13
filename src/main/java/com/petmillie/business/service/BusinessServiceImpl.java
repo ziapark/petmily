@@ -76,7 +76,6 @@ public class BusinessServiceImpl implements BusinessService {
 	@Override
 	public PensionVO pension(String business_id) throws Exception {
 		return 	businessDAO.pensionList(business_id);
-
 	}
 
 	@Override
@@ -137,6 +136,16 @@ public class BusinessServiceImpl implements BusinessService {
 	
 	@Override
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception{
-		return adminGoodsDAO.selectNewGoodsList(condMap);
+		return businessDAO.selectNewGoodsList(condMap);
 	}
+	
+	@Override
+	public int checkOverlappedGoodsName(String goods_name) throws Exception {
+	    return businessDAO.selectOverlappedGoodsName(goods_name);
+	}
+	
+    @Override
+    public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception {
+        return businessDAO.updateGoodsStatus(paramMap);
+    }
 }

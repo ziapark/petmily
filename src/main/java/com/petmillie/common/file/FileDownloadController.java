@@ -21,10 +21,10 @@ public class FileDownloadController {
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
-		                 	@RequestParam("goods_id") String goods_id,
+		                 	@RequestParam("goods_num") String goods_num,
 			                 HttpServletResponse response) throws Exception {
 		OutputStream out = response.getOutputStream();
-		String filePath=CURR_IMAGE_REPO_PATH+"\\"+goods_id+"\\"+fileName;
+		String filePath=CURR_IMAGE_REPO_PATH+"\\"+goods_num+"\\"+fileName;
 		File image=new File(filePath);
 
 		response.setHeader("Cache-Control","no-cache");
@@ -32,8 +32,8 @@ public class FileDownloadController {
 		FileInputStream in=new FileInputStream(image); 
 		byte[] buffer=new byte[1024*8];
 		while(true){
-			int count=in.read(buffer); //���ۿ� �о���� ���ڰ���
-			if(count==-1)  //������ �������� �����ߴ��� üũ
+			int count=in.read(buffer);
+			if(count==-1)
 				break;
 			out.write(buffer,0,count);
 		}

@@ -249,14 +249,13 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	    }
 	}
 	
-	@RequestMapping(value="/deleteMember.do", method= {RequestMethod.GET,RequestMethod.POST})
+	@RequestMapping(value="/deleteMember.do", method={RequestMethod.GET,RequestMethod.POST})
 	public String deleteMember(@RequestParam("member_id") String member_id, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
 	    memberService.removeMember(member_id);
 	    session.invalidate(); // 세션도 끊자!
 	    redirectAttributes.addFlashAttribute("message", "회원탈퇴가 완료되었습니다.");
 	    return "redirect:/main/main.do";
-	}
-	
+	}	
 	
 	@RequestMapping(value="/findId.do", method=RequestMethod.POST)
 	public ModelAndView findId(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
