@@ -165,7 +165,7 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
  
                 <tr>
                     <td class="fixed">포인트적립</td>
-                    <td class="active">${goods.goods_point}P(10%적립)</td>
+                    <td class="active">${goods.goods_sales_price * goods.goods_point * 0.01}P(10%적립)</td>
                 </tr>
               
                 <tr>
