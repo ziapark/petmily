@@ -29,6 +29,37 @@
 		    <result property="reg_date" column="reg_date"/>
 		    <result property="del_yn" column="del_yn"/>
 		</resultMap>
+		<!-- 상품 ResultMap -->
+		<resultMap id="goodsResult" type="GoodsVO">
+			<result property="goods_num" column="goods_num" />
+			<result property="goods_name" column="goods_name" />
+			<result property="seller_id" column="seller_id" />
+			<result property="goods_maker" column="goods_maker" />
+			<result property="goods_category" column="goods_category" />
+	
+			<result property="goods_sales_price" column="goods_sales_price" />
+			<result property="goods_point" column="goods_point" />
+			<result property="goods_stock" column="goods_stock" />
+			<result property="goods_delivery_price"
+				column="goods_delivery_price" />
+			<result property="goods_fileName" column="goods_fileName" />
+			<result property="goods_status" column="goods_status" />
+			<result property="goods_goods_writer_intro"
+				column="goods_goods_writer_intro" />
+			<result property="goods_contents_order"
+				column="goods_contents_order" />
+			<result property="goods_credate" column="goods_credate" />
+		</resultMap>
+	
+		<!-- 이미지 ResultMap -->
+		<resultMap id="imageResult" type="imageFileVO">
+			<result property="image_id" column="image_id" />
+			<result property="goods_num" column="goods_num" />
+			<result property="fileName" column="fileName" />
+			<result property="fileType" column="fileType" />
+			<result property="reg_id" column="reg_id" />
+			<result property="reg_day" column="reg_day" />
+		</resultMap>
 		<!-- 사업자 로그인 -->
 		<select id="busilogin" resultType="BusinessVO"  parameterType="BusinessVO"  >
 	    	<![CDATA[
@@ -257,4 +288,30 @@
 		]]>
 	</delete>
 	
+	<select id="selectOverlappedGoodsName" resultType="int" parameterType="String">
+        <![CDATA[
+            SELECT count(*)
+            FROM goods
+            WHERE goods_name = #{goods_name}
+        ]]>
+    </select>
+	
+	<select id="selectNewGoodsList" resultMap="goodsResult" parameterType="java.util.Map">
+		<![CDATA[
+			SELECT *
+			FROM goods
+			WHERE DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate}
+			AND seller_id = #{seller_id}
+			ORDER BY goods_credate DESC
+			LIMIT #{offset}, #{limit}
+		]]>
+	</select>
+	<update id="updateGoodsStatus" parameterType="java.util.Map">
+		<![CDATA[
+		    UPDATE goods
+		    SET goods_status = #{goods_status}
+		    WHERE goods_num = #{goods_num}
+		      AND seller_id = #{seller_id}
+		]]>
+	</update>
 </mapper>

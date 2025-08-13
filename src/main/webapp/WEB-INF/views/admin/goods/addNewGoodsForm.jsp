@@ -12,6 +12,7 @@
 </style>
 <script>
 	let isBusinessIdVerified = false; // 아이디 확인 여부 전역 변수
+	let isGoodsNameVerified = false; // 상품명 확인 여부 전역 변수
 	
 	function fn_checkBusinessId() {
 	    const _id = $("#seller_id").val().trim();
@@ -45,11 +46,47 @@
 	    });
 	}
 	
+	function fn_checkGoodsName() {
+	    const _name = $("#goods_name").val().trim();
+	
+	    if (_name === '') {
+	        alert("상품명을 입력하세요");
+	        return;
+	    }
+	
+	    $.ajax({
+	        type: "post",
+	        async: false, // 결과를 받고 다음으로 넘어가기 위해 동기 처리
+	        url: "${contextPath}/business/checkGoodsName.do",
+	        dataType: "text",
+	        data: { goods_name: _name },
+	        success: function(data, textStatus) {
+	            if (data.trim() === 'true') {
+	                alert("사용 가능한 상품명입니다.");
+	                $('#btnCheckGoodsName').prop("disabled", true); // 버튼 비활성화
+	                $('#goods_name').prop("readonly", true);      // 입력창 잠금
+	                isGoodsNameVerified = true;                 // 확인 완료 플래그
+	            } else {
+	                alert("이미 사용 중인 상품명입니다.");
+	                isGoodsNameVerified = false;
+	            }
+	        },
+	        error: function(data, textStatus) {
+	            alert("에러가 발생했습니다.");
+	            isGoodsNameVerified = false;
+	        }
+	    });
+	}
+	
 	$(document).ready(function() {
 	    // 폼 제출 이벤트 가로채기
 	    $(".add_new_goods_form").on("submit", function(e) {
 	        if (!isBusinessIdVerified) {
 	            alert("아이디를 확인해주세요.");
+	            e.preventDefault(); // 제출 중단
+	        }
+	        if (!isGoodsNameVerified) {
+	            alert("상품명 중복 확인을 해주세요.");
 	            e.preventDefault(); // 제출 중단
 	        }
 	    });
@@ -71,7 +108,9 @@
 		<table>
 			<tr>
 				<td><label class="form-label">상품명</label></td>
-				<td><input type="text" class="form-control" name="goods_name" required></td>
+				<td><input type="text" class="form-control" name="goods_name" id="goods_name" required>
+				<button type="button" class="btn btn-secondary" id="btnCheckGoodsName" onclick="fn_checkGoodsName()">중복 확인</button>
+				</td>
 			</tr>
 			<tr>
 				<td><label class="form-label">판매자 아이디</td>
@@ -80,7 +119,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td><label class="form-label">판매자</td>
+				<td><label class="form-label">제조사</td>
 				<td><input type="text" class="form-control" name="goods_maker" required></td>
 			</tr>
 			<tr>

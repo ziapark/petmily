@@ -59,7 +59,7 @@ public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 	}
 	
 	@Override
-	public void updateGoodsInfo(Map goodsMap) throws DataAccessException{
+	public void modifyGoods(Map goodsMap) throws DataAccessException{
 		sqlSession.update("mapper.admin.goods.updateGoodsInfo",goodsMap);
 	}
 	

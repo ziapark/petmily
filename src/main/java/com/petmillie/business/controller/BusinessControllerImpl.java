@@ -665,10 +665,9 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	}
 	
 
+	//사업자 등록 상품 리스트 보기
 	@RequestMapping(value="/businessGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView businessGoodsMain(@RequestParam Map<String, String> dateMap,
-			 HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+	public ModelAndView businessGoodsMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session=request.getSession();
 		session=request.getSession();
 		String viewName=(String)request.getAttribute("viewName");
@@ -700,16 +699,17 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		condMap.put("pageNum",pageNum);
 		condMap.put("beginDate",beginDate);
 		condMap.put("endDate", endDate);
-
+		
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+	    String seller_id = businessVO.getSeller_id();
+	    condMap.put("seller_id", seller_id);
+	    
         int pageSize = 10;
         int currentPage = Integer.parseInt(pageNum);
         int offset = (currentPage - 1) * pageSize;
 
         condMap.put("offset", offset);
         condMap.put("limit", pageSize);
-
-	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
-	    String reg_id = businessVO.getBusiness_number();
 	    
 		List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
 		mav.addObject("newGoodsList", newGoodsList);
@@ -727,6 +727,46 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		mav.addObject("pageNum", pageNum);
 		return mav;
 
+	}
+	
+	//사업자 상품 상태 변경
+	@RequestMapping(value = "/updateGoodsStatus.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateGoodsStatus(@RequestParam("goods_num") int goods_num, @RequestParam("goods_status") String goods_status, HttpServletRequest request) {
+	    HttpSession session = request.getSession();
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+	    String seller_id = businessVO.getSeller_id();
+
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("goods_num", goods_num);
+	    paramMap.put("goods_status", goods_status);
+	    paramMap.put("seller_id", seller_id); // 소유자 확인용
+	    
+	    try {
+	        int result = businessService.updateGoodsStatus(paramMap);
+	        if (result > 0) {
+	            return "success"; // 성공
+	        } else {
+	            return "fail";    // 실패 (상품 소유자가 아니거나, DB 오류)
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "fail";
+	    }
+	}
+	
+	// 상품명 중복 체크(사업자/관리자 같이 사용)
+	@RequestMapping(value = "/checkGoodsName.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String checkGoodsName(HttpServletRequest request) throws Exception {
+	    String goods_name = request.getParameter("goods_name");
+	    int count = businessService.checkOverlappedGoodsName(goods_name);
+
+	    if (count == 0) {
+	        return "true"; // 사용하는 사람이 없으면 true
+	    } else {
+	        return "false"; // 이미 사용 중이면 false
+	    }
 	}
 }
 

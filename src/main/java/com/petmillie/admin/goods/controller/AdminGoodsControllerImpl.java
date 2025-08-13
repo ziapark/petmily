@@ -219,23 +219,111 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 		return mav;
 	}
 
-	@RequestMapping(value="/modifyGoodsInfo.do" ,method={RequestMethod.POST})
-	public ResponseEntity modifyGoodsInfo( @RequestParam("goods_num") String goods_num,
-			 @RequestParam("attribute") String attribute,
-			 @RequestParam("value") String value,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping(value="/modifyGoods.do" ,method={RequestMethod.POST})
+	public ResponseEntity modifyGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception {
 
-		Map<String,String> goodsMap=new HashMap<String,String>();
-		goodsMap.put("goods_num", goods_num);
-		goodsMap.put(attribute, value);
-		adminGoodsService.modifyGoodsInfo(goodsMap);
+	    // 1. 기본 설정
+	    multipartRequest.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html; charset=utf-8");
+	    
+	    Map<String, Object> goodsMap = new HashMap<>();
+	    
+	    // 2. 폼의 텍스트 파라미터들을 Map에 담기
+	    Enumeration<String> enu = multipartRequest.getParameterNames();
+	    while (enu.hasMoreElements()) {
+	        String name = enu.nextElement();
+	        // 이미지 파일 자체(<input type="file">)는 파라미터로 담지 않음
+	        if (!name.startsWith("main_image") && !name.startsWith("detail_image")) {
+	            String value = multipartRequest.getParameter(name);
+	            goodsMap.put(name, value);
+	        }
+	    }
+	    
+	    // 3. 숫자여야 하는 값들을 String에서 숫자 타입으로 직접 변환
+	    if (goodsMap.get("goods_num") != null) {
+	        goodsMap.put("goods_num", Integer.parseInt((String)goodsMap.get("goods_num")));
+	    }
+	    if (goodsMap.get("goods_sales_price") != null && !((String)goodsMap.get("goods_sales_price")).isEmpty()) {
+	        goodsMap.put("goods_sales_price", Integer.parseInt((String)goodsMap.get("goods_sales_price")));
+	    }
+	    if (goodsMap.get("goods_point") != null && !((String)goodsMap.get("goods_point")).isEmpty()) {
+	        goodsMap.put("goods_point", Integer.parseInt((String)goodsMap.get("goods_point")));
+	    }
+	    if (goodsMap.get("goods_stock") != null && !((String)goodsMap.get("goods_stock")).isEmpty()) {
+	        goodsMap.put("goods_stock", Integer.parseInt((String)goodsMap.get("goods_stock")));
+	    }
+	    
+	    // 4. (중요) 이미지 파일 업로드 로직을 여기에 직접 구현
+	    List<ImageFileVO> imageFileList = new ArrayList<>();
+	    File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	    if (!tempDir.exists()) {
+	        tempDir.mkdirs(); // 임시 폴더 생성
+	    }
+	    
+	    Iterator<String> fileNames = multipartRequest.getFileNames();
+	    while(fileNames.hasNext()) {
+	        String formFieldName = fileNames.next();
+	        MultipartFile mFile = multipartRequest.getFile(formFieldName);
+	        
+	        if (mFile != null && !mFile.isEmpty()) {
+	            ImageFileVO imageFileVO = new ImageFileVO();
+	            imageFileVO.setFileType(formFieldName);
+	            
+	            String originalFileName = new File(mFile.getOriginalFilename()).getName(); // 순수 파일명 추출
+	            String extension = FilenameUtils.getExtension(originalFileName);
+	            String newFileName = UUID.randomUUID().toString() + "." + extension; // 중복 방지 파일명 생성
+	            imageFileVO.setFileName(newFileName);
+	            
+	            File fileToSave = new File(tempDir, newFileName); // 임시 폴더에 저장할 파일 객체 생성
+	            mFile.transferTo(fileToSave); // 파일 저장
+	            
+	            imageFileList.add(imageFileVO);
+	        }
+	    }
+	    
+	    if (!imageFileList.isEmpty()) {
+	        goodsMap.put("imageFileList", imageFileList);
+	        for (ImageFileVO imageFileVO : imageFileList) {
+	            if ("main_image".equals(imageFileVO.getFileType())) {
+	                goodsMap.put("goods_fileName", imageFileVO.getFileName());
+	                break;
+	            }
+	        }
+	    }
+	    
+	    // 5. DB 업데이트 및 결과 처리
+	    String goods_num = String.valueOf(goodsMap.get("goods_num"));
+	    String message;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+	    
+	    try {
+	        adminGoodsService.modifyGoods(goodsMap); // 서비스 호출
 
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		message = "mod_success";
-		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
+	        // 6. DB 성공 시 임시 파일을 최종 폴더로 이동
+	        if (!imageFileList.isEmpty()) {
+	            for (ImageFileVO imageFileVO : imageFileList) {
+	                String imageFileName = imageFileVO.getFileName();
+	                File srcFile = new File(tempDir, imageFileName);
+	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                if (!destDir.exists()) {
+	                    destDir.mkdirs(); // 최종 폴더 생성
+	                }
+	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
+	            }
+	        }
+	        
+	        message = "<script> alert('상품 정보를 성공적으로 수정했습니다.'); location.href='" + multipartRequest.getContextPath() + "/admin/goods/modifyGoodsForm.do?goods_num=" + goods_num + "'; </script>";
+
+	    } catch (Exception e) {
+	        // ... (에러 처리: temp 파일 삭제 등)
+	        e.printStackTrace();
+	        message = "<script> alert('수정 중 오류가 발생했습니다.'); location.href='" + multipartRequest.getContextPath() + "/admin/goods/modifyGoodsForm.do?goods_num=" + goods_num + "'; </script>";
+	    }
+	    
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
 	}
 
 
@@ -387,54 +475,78 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 		}
 	}
 
-    // --- 상품 삭제 메서드  ---
-    @RequestMapping(value="/removeGoods.do", method={RequestMethod.POST})
-    @ResponseBody // JSP의 AJAX 요청에 응답할 때 필수!
-    public ResponseEntity removeGoods(@RequestParam("goods_num") int goods_num,
-                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String message = null;
-        ResponseEntity resEntity = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/html; charset=utf-8"); // 응답 헤더 설정
+	// --- 상품 삭제 메서드 ---
+	@RequestMapping(value="/removeGoods.do", method={RequestMethod.POST})
+	public ResponseEntity removeGoods(@RequestParam("goods_num") int goods_num,
+	                                HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    String message;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-        try {
-            // !!! 이 라인을 추가하세요 !!!
-            adminGoodsService.removeGoods(goods_num); // <---- 이 부분이 누락되었습니다!
+	    try {
+	        adminGoodsService.removeGoods(goods_num);
 
-            message = "remove_success"; // JSP로 보낼 성공 메시지
-        } catch (Exception e) {
-            System.err.println("상품 삭제 중 컨트롤러에서 오류 발생: " + e.getMessage()); // 에러 로그 강화
-            e.printStackTrace(); // 서버 콘솔에 에러 스택 트레이스 출력
-            message = "failed"; // JSP로 보낼 실패 메시지
-        }
+	        // ✅ 1. 세션에서 로그인 정보 확인
+	        HttpSession session = request.getSession();
+	        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	        String redirectUrl;
 
-        resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-        return resEntity;
-    }
+	        // ✅ 2. 로그인한 사용자가 admin인지 확인
+	        if (memberInfo != null && "admin".equals(memberInfo.getMember_id())) {
+	            // admin이면 관리자 목록으로
+	            redirectUrl = request.getContextPath() + "/admin/goods/adminGoodsMain.do";
+	        } else {
+	            // admin이 아니면(사업자면) 사업자 목록으로
+	            redirectUrl = request.getContextPath() + "/business/businessGoodsMain.do";
+	        }
+
+	        // ✅ 3. 역할에 맞는 URL로 이동하는 스크립트 생성
+	        message = "<script>";
+	        message += " alert('상품을 성공적으로 삭제했습니다.');";
+	        message += " location.href='" + redirectUrl + "';";
+	        message += "</script>";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        message = "<script>";
+	        message += " alert('삭제 중 오류가 발생했습니다.');";
+	        message += " history.back();";
+	        message += "</script>";
+	    }
+
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
+	}
     
-    // --- 상품 복원 메서드 (del_yn='N'으로 업데이트) ---
-    @RequestMapping(value="/restoreGoods.do", method={RequestMethod.POST})
-    @ResponseBody
-    public ResponseEntity restoreGoods(@RequestParam("goods_num") int goods_num,
-                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String message = null;
-        ResponseEntity resEntity = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+	// --- 상품 복원 메서드 ---
+	@RequestMapping(value="/restoreGoods.do", method={RequestMethod.POST})
+	public ResponseEntity restoreGoods(@RequestParam("goods_num") int goods_num,
+	                                HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    String message;
+	    ResponseEntity resEntity = null;
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-        try {
-            adminGoodsService.restoreGoods(goods_num); // 서비스 계층을 호출하여 상품의 del_yn을 'N'으로 업데이트합니다.
+	    try {
+	        adminGoodsService.restoreGoods(goods_num);
 
-            message = "restore_success"; // 성공 메시지
-        } catch (Exception e) {
-            System.err.println("상품 복원 중 컨트롤러에서 오류 발생: " + e.getMessage());
-            e.printStackTrace();
-            message = "failed"; // 실패 메시지
-        }
+	        message = "<script>";
+	        message += " alert('상품을 성공적으로 복원했습니다.');";
+	        message += " location.href='" + request.getContextPath() + "/admin/goods/modifyGoodsForm.do?goods_num=" + goods_num + "';";
+	        message += "</script>";
 
-        resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-        return resEntity;
-    }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        message = "<script>";
+	        message += " alert('복원 중 오류가 발생했습니다.');";
+	        message += " history.back();";
+	        message += "</script>";
+	    }
+
+	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    return resEntity;
+	}
 
 	@RequestMapping(value="/addNewGoodsForm.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView addNewGoodsForm(@RequestParam Map<String, String> dateMap,

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.reservation.vo.ReservaionVO;
 
 @Repository("businessDAO")
@@ -112,10 +113,8 @@ public class BusinessDAOImpl implements BusinessDAO {
 		return sqlSession.update("mapper.business.removepension", id);
 	}
 
-
     @Override
     public List<ReservaionVO> reservationList(String business_id) throws DataAccessException {
-        // XML 파일의 네임스페이스와 일치하도록 "mapper.reser"를 "mapper.adminReser"로 수정
         return sqlSession.selectList("mapper.adminReser.reservationList", business_id);
     }
 
@@ -124,4 +123,20 @@ public class BusinessDAOImpl implements BusinessDAO {
 		int re = sqlSession.update("mapper.business.removebusiness", business_number);
 		return re ;
 	}
+	
+	@Override
+	public int selectOverlappedGoodsName(String goods_name) throws Exception {
+	    return sqlSession.selectOne("mapper.business.selectOverlappedGoodsName", goods_name);
+	}
+	
+	@Override
+	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException {
+		List<GoodsVO>  goodsList=sqlSession.selectList("mapper.business.selectNewGoodsList",condMap);
+		return goodsList;
+	}
+	
+    @Override
+    public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception {
+        return sqlSession.update("mapper.business.updateGoodsStatus", paramMap);
+    }
 }

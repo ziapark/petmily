@@ -8,6 +8,7 @@
 <resultMap id="goodsResult" type="GoodsVO">
     <result property="goods_num" column="goods_num"/>
     <result property="goods_name" column="goods_name"/>
+    <result property="seller_id" column="seller_id"/>
     <result property="goods_maker" column="goods_maker"/>
     <result property="goods_category" column="goods_category"/>
     <result property="goods_price" column="goods_price"/>
