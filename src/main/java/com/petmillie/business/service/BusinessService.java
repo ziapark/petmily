@@ -30,4 +30,6 @@ public interface BusinessService {
 	public int removeMember(String business_number)throws Exception;
 	public int addNewGoods(Map newGoodsMap) throws Exception;
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception;
+	public int checkOverlappedGoodsName(String goods_name) throws Exception;
+	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;;
 }

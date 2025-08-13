@@ -53,8 +53,8 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
 	}
 	
 	@Override
-	public void modifyGoodsInfo(Map goodsMap) throws Exception{
-		adminGoodsDAO.updateGoodsInfo(goodsMap);
+	public void modifyGoods(Map goodsMap) throws Exception{
+		adminGoodsDAO.modifyGoods(goodsMap);
 		
 	}	
 	@Override

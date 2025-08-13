@@ -8,103 +8,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>사업자 상품 조회</title>
-<style>
-    table {width: 100%;border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
-    table th {background-color: #f2f2f2;}
-    .clear {clear: both;height: 10px;}
-    input[type="text"], select {padding: 5px;border: 1px solid #ccc;border-radius: 3px;}
-    input[type="button"], input[type="submit"] {padding: 8px 15px;background-color: #007bff;color: white;border: none;border-radius: 5px;cursor: pointer;font-size: 14px;}
-    input[type="button"]:hover, input[type="submit"]:hover {background-color: #0056b3;}
-    input[type="button"][disabled], input[type="text"][disabled], select[disabled] {background-color: #e9ecef;cursor: not-allowed;}
-    #search a img {vertical-align: middle;border: 0;}
-    /* 페이징 스타일 */
-    .fixed a {display: inline-block;padding: 5px 10px;margin: 0 2px;border: 1px solid #ddd;border-radius: 3px;text-decoration: none;color: #007bff;}
-    .fixed a:hover {background-color: #e9ecef;}
-    .fixed a b {color: #dc3545;font-weight: bold;}
-    /* 판매 상태 표시를 위한 스타일 */
-    .status-deleted {color: #dc3545;font-weight: bold;}
-    .status-active {color: #28a745;}
-</style>
-<script>
-	function search_goods_list(fixedSearchPeriod) {
-		var formObj = document.createElement("form");
-		var i_fixedSearch_period = document.createElement("input");
-		i_fixedSearch_period.name = "fixedSearchPeriod";
-		i_fixedSearch_period.value = fixedSearchPeriod;
-		formObj.appendChild(i_fixedSearch_period);
-		document.body.appendChild(formObj);
-		formObj.method = "get";
-		formObj.action = "${contextPath}/admin/goods/adminGoodsMain.do";
-		formObj.submit();
-	}
-	
-	function calcPeriod(search_period) {
-		var dt = new Date();
-		var beginYear, endYear;
-		var beginMonth, endMonth;
-		var beginDay, endDay;
-		var beginDate, endDate;
-	
-		endYear = dt.getFullYear();
-		endMonth = dt.getMonth() + 1;
-		endDay = dt.getDate();
-		if (search_period == 'today') {
-			beginYear = endYear;
-			beginMonth = endMonth;
-			beginDay = endDay;
-		} else if (search_period == 'one_week') {
-			beginYear = dt.getFullYear();
-			beginMonth = dt.getMonth() + 1;
-			dt.setDate(endDay - 7);
-			beginDay = dt.getDate();
-		} else if (search_period == 'two_week') {
-			beginYear = dt.getFullYear();
-			beginMonth = dt.getMonth() + 1;
-			dt.setDate(endDay - 14);
-			beginDay = dt.getDate();
-		} else if (search_period == 'one_month') {
-			beginYear = dt.getFullYear();
-			dt.setMonth(endMonth - 1);
-			beginMonth = dt.getMonth();
-			beginDay = dt.getDate();
-		} else if (search_period == 'two_month') {
-			beginYear = dt.getFullYear();
-			dt.setMonth(endMonth - 2);
-			beginMonth = dt.getMonth();
-			beginDay = dt.getDate();
-		} else if (search_period == 'three_month') {
-			beginYear = dt.getFullYear();
-			dt.setMonth(endMonth - 3);
-			beginMonth = dt.getMonth();
-			beginDay = dt.getDate();
-		} else if (search_period == 'four_month') {
-			beginYear = dt.getFullYear();
-			dt.setMonth(endMonth - 4);
-			beginMonth = dt.getMonth();
-			beginDay = dt.getDate();
+	<meta charset="utf-8">
+	<title>사업자 상품 조회</title>
+	<style>
+	    table {width: 100%;border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
+	    table th {background-color: #f2f2f2;}
+	    .clear {clear: both;height: 10px;}
+	    input[type="text"], select {padding: 5px;border: 1px solid #ccc;border-radius: 3px;}
+	    input[type="button"], input[type="submit"] {padding: 8px 15px;background-color: #007bff;color: white;border: none;border-radius: 5px;cursor: pointer;font-size: 14px;}
+	    input[type="button"]:hover, input[type="submit"]:hover {background-color: #0056b3;}
+	    input[type="button"][disabled], input[type="text"][disabled], select[disabled] {background-color: #e9ecef;cursor: not-allowed;}
+	    #search a img {vertical-align: middle;border: 0;}
+	    /* 페이징 스타일 */
+	    .fixed a {display: inline-block;padding: 5px 10px;margin: 0 2px;border: 1px solid #ddd;border-radius: 3px;text-decoration: none;color: #007bff;}
+	    .fixed a:hover {background-color: #e9ecef;}
+	    .fixed a b {color: #dc3545;font-weight: bold;}
+	    /* 판매 상태 표시를 위한 스타일 */
+	    .status-deleted {color: #dc3545;font-weight: bold;}
+	    .status-active {color: #28a745;}
+	</style>
+	<script>
+		function search_goods_list(fixedSearchPeriod) {
+			var formObj = document.createElement("form");
+			var i_fixedSearch_period = document.createElement("input");
+			i_fixedSearch_period.name = "fixedSearchPeriod";
+			i_fixedSearch_period.value = fixedSearchPeriod;
+			formObj.appendChild(i_fixedSearch_period);
+			document.body.appendChild(formObj);
+			formObj.method = "get";
+			formObj.action = "${contextPath}/admin/goods/adminGoodsMain.do";
+			formObj.submit();
 		}
-	
-		if (beginMonth < 10) {
-			beginMonth = '0' + beginMonth;
-			if (beginDay < 10) {
-				beginDay = '0' + beginDay;
+		
+		function calcPeriod(search_period) {
+			var dt = new Date();
+			var beginYear, endYear;
+			var beginMonth, endMonth;
+			var beginDay, endDay;
+			var beginDate, endDate;
+		
+			endYear = dt.getFullYear();
+			endMonth = dt.getMonth() + 1;
+			endDay = dt.getDate();
+			if (search_period == 'today') {
+				beginYear = endYear;
+				beginMonth = endMonth;
+				beginDay = endDay;
+			} else if (search_period == 'one_week') {
+				beginYear = dt.getFullYear();
+				beginMonth = dt.getMonth() + 1;
+				dt.setDate(endDay - 7);
+				beginDay = dt.getDate();
+			} else if (search_period == 'two_week') {
+				beginYear = dt.getFullYear();
+				beginMonth = dt.getMonth() + 1;
+				dt.setDate(endDay - 14);
+				beginDay = dt.getDate();
+			} else if (search_period == 'one_month') {
+				beginYear = dt.getFullYear();
+				dt.setMonth(endMonth - 1);
+				beginMonth = dt.getMonth();
+				beginDay = dt.getDate();
+			} else if (search_period == 'two_month') {
+				beginYear = dt.getFullYear();
+				dt.setMonth(endMonth - 2);
+				beginMonth = dt.getMonth();
+				beginDay = dt.getDate();
+			} else if (search_period == 'three_month') {
+				beginYear = dt.getFullYear();
+				dt.setMonth(endMonth - 3);
+				beginMonth = dt.getMonth();
+				beginDay = dt.getDate();
+			} else if (search_period == 'four_month') {
+				beginYear = dt.getFullYear();
+				dt.setMonth(endMonth - 4);
+				beginMonth = dt.getMonth();
+				beginDay = dt.getDate();
 			}
-		}
-		if (endMonth < 10) {
-			endMonth = '0' + endMonth;
-			if (endDay < 10) {
-				endDay = '0' + endDay;
+		
+			if (beginMonth < 10) {
+				beginMonth = '0' + beginMonth;
+				if (beginDay < 10) {
+					beginDay = '0' + beginDay;
+				}
 			}
+			if (endMonth < 10) {
+				endMonth = '0' + endMonth;
+				if (endDay < 10) {
+					endDay = '0' + endDay;
+				}
+			}
+			endDate = endYear + '-' + endMonth + '-' + endDay;
+			beginDate = beginYear + '-' + beginMonth + '-' + beginDay;
+			//alert(beginDate+","+endDate);
+			return beginDate + "," + endDate;
 		}
-		endDate = endYear + '-' + endMonth + '-' + endDay;
-		beginDate = beginYear + '-' + beginMonth + '-' + beginDay;
-		//alert(beginDate+","+endDate);
-		return beginDate + "," + endDate;
-	}
-</script>
+		
+		function updateGoodsStatus(selectElement, goodsNum) {
+		    const selectedStatus = selectElement.value;
+
+		    $.ajax({
+		        type: "POST",
+		        url: "${contextPath}/business/updateGoodsStatus.do",
+		        data: {
+		            goods_num: goodsNum,
+		            goods_status: selectedStatus
+		        },
+		        success: function(response) {
+		            if(response.trim() === "success") {
+		                alert("상태가 변경되었습니다.");
+		            } else {
+		                alert("상태 변경에 실패했습니다.");
+		            }
+		        },
+		        error: function(xhr, status, error) {
+		            alert("상태 변경 중 오류가 발생했습니다.");
+		            console.error(error);
+		        }
+		    });
+		}
+	</script>
 </head>
 <body>
 <div class="container text-center mt-3 mb-3">
@@ -249,16 +273,22 @@
                             <td>
                                 <strong><fmt:formatDate value="${item.goods_credate}" pattern="yyyy-MM-dd" /></strong>
                             </td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${item.del_yn eq 'Y'}">
-                                        <strong class="status-deleted">삭제됨</strong>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <strong class="status-active">${item.goods_status}</strong>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
+							<td>
+							    <c:choose>
+							        <c:when test="${item.goods_status == '승인대기'}">
+							            <select disabled>
+							                <option>승인대기</option>
+							            </select>
+							        </c:when>
+							        <c:otherwise>
+							            <select name="goods_status" onchange="updateGoodsStatus(this, '${item.goods_num}')">
+							                <option value="판매중" ${item.goods_status == '판매중' ? 'selected' : ''}>판매중</option>
+							                <option value="품절" ${item.goods_status == '품절' ? 'selected' : ''}>품절</option>
+							                <option value="삭제" ${item.goods_status == '삭제' ? 'selected' : ''}>삭제</option>
+							            </select>
+							        </c:otherwise>
+							    </c:choose>
+							</td>
                         </TR>
                     </c:forEach>
                 </c:otherwise>

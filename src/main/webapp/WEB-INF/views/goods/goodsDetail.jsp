@@ -165,15 +165,16 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
  
                 <tr>
                     <td class="fixed">포인트적립</td>
-                    <td class="active">${goods.goods_sales_price * goods.goods_point * 0.01}P(10%적립)</td>
+                    <td class="active"> <fmt:formatNumber value= "${goods.goods_sales_price * goods.goods_point * 0.01}" maxFractionDigits="0"/>     P(10%적립)</td>
                 </tr>
               
-                <tr>
-                    <td class="fixed">발행일</td>
-                    <td class="fixed">
-                        <c:out value="${goods.goods_credate}"/>
-                    </td>
-                </tr>
+
+<!-- <tr> -->
+<!--     <td class="fixed">발행일</td> -->
+<!--     <td class="fixed"> -->
+<%--         <fmt:formatDate value="${goods.goods_credate}" pattern="yyyy-MM-dd" /> --%>
+<!--     </td> -->
+<!-- </tr> -->
                 <tr>
                     <td class="fixed">배송료</td>
                     <td class="fixed"><strong>무료</strong></td>
@@ -209,10 +210,8 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
     <!-- 탭 영역 -->
     <div id="container">
         <ul class="tabs">
-            <li><a href="#tab1">책소개</a></li>
-            <li><a href="#tab2">저자소개</a></li>
-            <li><a href="#tab3">책목차</a></li>
-            <li><a href="#tab4">출판사서평</a></li>
+            <li><a href="#tab1">상품소개</a></li>
+
           
             <li><a href="#tab6">리뷰</a></li>
         </ul>
@@ -231,10 +230,10 @@ function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName)
                 <p>${fn:replace(goods.goods_goods_writer_intro, "/n", "<br/>")}</p>
             </div>
            
-            <div class="tab_content" id="tab4">
-                <h4>출판사서평</h4>
-                <p></p>
-            </div>
+<!--             <div class="tab_content" id="tab4"> -->
+<!--                 <h4>출판사서평</h4> -->
+<!--                 <p></p> -->
+<!--             </div> -->
            
             <div class="tab_content" id="tab6">
                 <h4>리뷰</h4>
