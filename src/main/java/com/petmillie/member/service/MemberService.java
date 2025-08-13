@@ -9,4 +9,5 @@ public interface MemberService {
 	public String overlappedByEmail(String email1, String email2) throws Exception;
 	public int removeMember(String id)throws Exception;
 	public MemberVO findkakaoid(String kakaoid)throws Exception;
+	public String findId(MemberVO memberVO) throws Exception;
 }

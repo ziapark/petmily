@@ -11,4 +11,5 @@ public interface MemberDAO {
 	public String overlappedByEmail(String email1, String email2) throws DataAccessException;
 	public int removeMember(String id) throws DataAccessException;
 	public MemberVO findkakaoid(String id) throws DataAccessException;
+	public String findId(MemberVO memberVO) throws Exception;
 }

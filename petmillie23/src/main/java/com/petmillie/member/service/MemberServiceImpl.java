@@ -40,4 +40,8 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVO findkakaoid(String kakaoid) throws Exception {
 		return memberDAO.findkakaoid(kakaoid);
 	}
+	 @Override
+	    public String findId(MemberVO memberVO) throws Exception {
+	        return memberDAO.findId(memberVO);
+	    }
 }

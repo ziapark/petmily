@@ -256,6 +256,35 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	    redirectAttributes.addFlashAttribute("message", "회원탈퇴가 완료되었습니다.");
 	    return "redirect:/main/main.do";
 	}
+	
+	
+	@RequestMapping(value="/findId.do", method=RequestMethod.POST)
+	public ModelAndView findId(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 레이아웃을 사용하는 ModelAndView 객체 생성
+		ModelAndView mav = new ModelAndView("/common/layout");
+		// 아이디 찾기 폼 페이지를 body로 설정
+		mav.addObject("body", "/WEB-INF/views/member/findIdForm.jsp");
+		mav.addObject("title", "아이디 찾기");
+
+		// 서비스를 호출하여 이름과 이메일로 아이디를 조회
+		String memberId = memberService.findId(memberVO);
+		
+		if(memberId != null) {
+			// 아이디를 찾았을 경우, message에 결과 저장
+			mav.addObject("message", "회원님의 아이디는 [ " + memberId + " ] 입니다.");
+		} else {
+			// 아이디를 찾지 못했을 경우, message에 실패 문구 저장
+			mav.addObject("message", "입력하신 정보와 일치하는 회원이 없습니다.");
+		}
+		
+		// 설정된 ModelAndView 객체 반환
+		return mav;
+	}
+
+	
+	
+	
+	
 	}
 
 

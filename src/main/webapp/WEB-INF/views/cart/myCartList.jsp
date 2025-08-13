@@ -262,8 +262,8 @@ function fn_order_all_cart_goods(){
 								<a href="javascript:fn_order_each_goods('${item.goods_num }','${item.goods_name }','${item.goods_sales_price}','${item.goods_fileName}');">
 									<img width="75" alt="" src="${contextPath}/resources/image/btn_order.jpg">
 								</a><br>
-								<a href="#"><img width="75" alt="" src="${contextPath}/resources/image/btn_order_later.jpg"></a><br>
-								<a href="#"><img width="75" alt="" src="${contextPath}/resources/image/btn_add_list.jpg"></a><br>
+<%-- 								<a href="#"><img width="75" alt="" src="${contextPath}/resources/image/btn_order_later.jpg"></a><br> --%>
+<%-- 								<a href="#"><img width="75" alt="" src="${contextPath}/resources/image/btn_add_list.jpg"></a><br> --%>
 								<a href="javascript:delete_cart_goods('${cart_id}');">
 									<img width="75" alt="" src="${contextPath}/resources/image/btn_delete.jpg">
 								</a>

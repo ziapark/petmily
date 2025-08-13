@@ -12,16 +12,14 @@
 <title>객실 예약</title>
 <style>
     body {
-        font-family: 'Malgun Gothic', sans-serif;
-        background-color: #f4f7f6;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
+    margin: 0;
+    padding: 40px 20px; /* 위아래 여백을 늘려 보기 좋게 조정 (선택 사항) */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 컨텐츠를 위에서부터 정렬하도록 변경 */
+    min-height: 100vh;
+    box-sizing: border-box; /* padding이 전체 크기에 영향을 주지 않도록 설정 */
+}
     .reservation-container {
         width: 100%;
         max-width: 650px;

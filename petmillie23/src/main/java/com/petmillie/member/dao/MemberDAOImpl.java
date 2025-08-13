@@ -40,4 +40,9 @@ public class MemberDAOImpl  implements MemberDAO{
 	public MemberVO findkakaoid(String id) throws DataAccessException{
 		return sqlSession.selectOne("mapper.member.findkakaoid", id);
 	}	
+	 @Override
+	    public String findId(MemberVO memberVO) throws Exception {
+	        String memberId = sqlSession.selectOne("mapper.member.findId", memberVO);
+	        return memberId;
+	    }
 }

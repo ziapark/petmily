@@ -110,19 +110,19 @@ public class ReservaionControllerImpl implements ReservaionController {
 	/**
 	 * 예약하기 폼 페이지 요청
 	 */
-//	@Override
-//	@RequestMapping(value = "/reservationForm.do", method = RequestMethod.GET)
-//	public ModelAndView reservationForm(@RequestParam("p_num") int p_num, @RequestParam("roomId") int roomId,
-//			HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		ModelAndView mav = new ModelAndView("/common/layout");
-//		mav.addObject("body", "/WEB-INF/views/reservation/roomReservation.jsp");
-//		mav.addObject("title", "객실 예약하기");
-//		PensionVO pension = reservationService.getPensionDetail(p_num);
-//		RoomVO room = reservationService.getRoomDetail(roomId);
-//		mav.addObject("pension", pension);
-//		mav.addObject("room", room);
-//		return mav;
-//	}
+	@Override
+	@RequestMapping(value = "/reservationForm.do", method = RequestMethod.GET)
+	public ModelAndView reservationForm(@RequestParam("p_num") int p_num, @RequestParam("roomId") int roomId,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("body", "/WEB-INF/views/reservation/roomReservation.jsp");
+		mav.addObject("title", "객실 예약하기");
+		PensionVO pension = reservationService.getPensionDetail(p_num);
+		RoomVO room = reservationService.getRoomDetail(roomId);
+		mav.addObject("pension", pension);
+		mav.addObject("room", room);
+		return mav;
+	}
 
 	@Override
 	@RequestMapping(value = "/makeReservation.do", method = RequestMethod.POST)

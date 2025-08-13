@@ -104,4 +104,13 @@
   		select * from member where kakao_id = #{kakao_id}
   ]]>
   </select>
+  
+  
+  <select id="findId" resultType="String" parameterType="memberVO">
+        <![CDATA[
+            SELECT member_id
+            FROM t_shopping_member
+            WHERE member_name = #{member_name} AND email1 = #{email1} AND email2 = #{email2} AND del_yn='N'
+        ]]>
+    </select>
 </mapper>
