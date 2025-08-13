@@ -298,7 +298,6 @@
 		]]>
 	</delete>
 	
-<<<<<<< HEAD
 	<select id="selectOverlappedGoodsName" resultType="int" parameterType="String">
         <![CDATA[
             SELECT count(*)
@@ -326,6 +325,3 @@
 		]]>
 	</update>
 </mapper>
-=======
-</mapper>
->>>>>>> feabb39b20e57cd8cdc0ade745f6a49c5e1755b4

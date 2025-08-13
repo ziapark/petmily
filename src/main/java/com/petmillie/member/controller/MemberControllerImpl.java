@@ -255,15 +255,7 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	    session.invalidate(); // 세션도 끊자!
 	    redirectAttributes.addFlashAttribute("message", "회원탈퇴가 완료되었습니다.");
 	    return "redirect:/main/main.do";
-	}
-<<<<<<< HEAD
-
-	//아이디 찾기
-
-	//비밀번호 찾기
-}
-=======
-	
+	}	
 	
 	@RequestMapping(value="/findId.do", method=RequestMethod.POST)
 	public ModelAndView findId(@ModelAttribute("memberVO") MemberVO memberVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -308,7 +300,6 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	
 	
 	}
->>>>>>> feabb39b20e57cd8cdc0ade745f6a49c5e1755b4
 
 
 
