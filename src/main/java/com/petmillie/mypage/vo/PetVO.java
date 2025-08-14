@@ -12,8 +12,9 @@ public class PetVO {
 	private String pet_gender;
 	private String pet_favorite_toy;
 	private String pet_favorite_snack;
+	private String fileName;
 	private Date reg_date;
-
+	
 	public int getPet_id() {
 		return pet_id;
 	}
@@ -86,27 +87,19 @@ public class PetVO {
 		this.pet_favorite_snack = pet_favorite_snack;
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public Date getReg_date() {
 		return reg_date;
 	}
 
 	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
-	}
-
-	@Override
-	public String toString() {
-		return "PetVO{" +
-				"pet_id=" + pet_id +
-				", member_id='" + member_id + '\'' +
-				", pet_name='" + pet_name + '\'' +
-				", pet_birth_date=" + pet_birth_date +
-				", pet_species='" + pet_species + '\'' +
-				", pet_breed='" + pet_breed + '\'' +
-				", pet_gender='" + pet_gender + '\'' +
-				", pet_favorite_toy='" + pet_favorite_toy + '\'' +
-				", pet_favorite_snack='" + pet_favorite_snack + '\'' +
-				", reg_date=" + reg_date +
-				'}';
 	}
 }

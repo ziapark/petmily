@@ -119,6 +119,7 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	    
 	    JSONObject userObj = new JSONObject(userInfo);
 	    long kakaoid = userObj.getLong("id");
+	    String kakaoIdStr = "kakao_" + kakaoid;
 	    String nickname = "";
 
 	    if(userObj.has("properties")){
@@ -128,11 +129,11 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	        }
 	    }
 
-	    MemberVO memberVO = memberService.findkakaoid(String.valueOf(kakaoid), nickname);
+	    MemberVO memberVO = memberService.findkakaoid(kakaoIdStr, nickname);
 	    
 	    if(memberVO == null){	
 	        // 최초 카카오 로그인(데이터베이스에 아이디/이름 저장)
-	    	memberService.insertkakao(String.valueOf(kakaoid), nickname);
+	    	memberService.insertkakao(kakaoIdStr, nickname);
 	    }
 	    
 		session.setAttribute("isLogOn", true);

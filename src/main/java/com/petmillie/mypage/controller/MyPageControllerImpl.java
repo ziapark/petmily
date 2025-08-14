@@ -36,14 +36,11 @@ import com.petmillie.order.vo.OrderVO;
 @RequestMapping(value="/mypage")
 public class MyPageControllerImpl extends BaseController  implements MyPageController{
 	@Autowired
-	private MyPageService myPageService;
-	
+	private MyPageService myPageService;	
 	@Autowired
-	private GoodsReviewVO goodsReviewVO;
-	
+	private GoodsReviewVO goodsReviewVO;	
 	@Autowired
-	private MemberVO memberVO;
-	
+	private MemberVO memberVO;	
 	@Autowired
 	private MemberService memberService;
 	
