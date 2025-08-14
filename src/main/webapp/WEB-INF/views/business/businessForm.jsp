@@ -106,119 +106,120 @@
 </script>
 </head>
 <body>
-	<h3>필수입력사항</h3>
-	<form action="${contextPath}/business/addSeller.do" method="post">
-  		<div id="detail_table">
-    		<table>
-      			<tbody>
-        			<tr class="dot_line">
-	          			<td class="fixed_join">판매자아이디</td>
-	          			<td>
-	            			<input type="text" name="seller_id" id="seller_id" size="20" required />
-	            			<input type="button" id="btnOverlapped" value="중복체크" onclick="fn_overlapped()" />
-	          			</td>
-        			</tr>
-        			<tr class="dot_line">
-         	 			<td class="fixed_join">비밀번호</td>
-          				<td>
-            				<input name="seller_pw" type="password" id="seller_pw" size="20" required />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">사업자명</td>
-          				<td>
-            				<input name="business_name" type="text" size="30" required />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">업체 유형</td>
-          				<td>
-            				<input name="business_type" type="text" size="20" placeholder="예: 펜션, 병원 등" required />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">대표자명</td>
-          				<td>
-            				<input name="owner_name" type="text" size="20" required />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">사업자등록번호</td>
-          				<td>
-            				<input name="business_number" type="text" size="20" required />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">대표 전화번호</td>
-          				<td>
-            				<input name="phone1" type="text" size="4" required/> -
-            				<input name="phone2" type="text" size="4" required/> -
-            				<input name="phone3" type="text" size="4" required/>
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">이메일</td>
-   						<td><input size="10px"   type="text" name="email1" required/> @ <input  size="10px"  type="text" name="email2" id="email2_direct" required/> 
-						<select name="email2_select" id="email2_select" onChange="changeEmailDomain()"	title="직접입력">
-							<option value="non">직접입력</option>
-							<option value="hanmail.net">hanmail.net</option>
-							<option value="naver.com">naver.com</option>
-							<option value="yahoo.co.kr">yahoo.co.kr</option>
-							<option value="hotmail.com">hotmail.com</option>
-							<option value="paran.com">paran.com</option>
-							<option value="nate.com">nate.com</option>
-							<option value="google.com">google.com</option>
-							<option value="gmail.com">gmail.com</option>
-							<option value="empal.com">empal.com</option>
-							<option value="korea.com">korea.com</option>
-							<option value="freechal.com">freechal.com</option>
-						</select>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">주소</td>
-						<td>
-					   		<input type="text" id="zipcode" name="zipcode" size="10" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
-					  		<br>
-					  		<p> 
-					   			지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50"><br><br>
-					  			도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50"><br><br>
-					  			나머지 주소: <input type="text"  name="namujiAddress" size="50" />
-					   			<span id="guide" style="color:#999"></span>
-					   		</p>
-						</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">업체 설명</td>
-          				<td>
-            				<textarea name="description" rows="2" cols="45"></textarea>
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">정산 은행명</td>
-          				<td>
-            				<input name="bank_name" type="text" size="15" />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">정산 계좌번호</td>
-          				<td>
-            				<input name="bank_account" type="text" size="25" />
-          				</td>
-        			</tr>
-        			<tr class="dot_line">
-          				<td class="fixed_join">예금주</td>
-          				<td>
-            				<input name="bank_holder" type="text" size="15" />
-          				</td>
-        			</tr>
-      			</tbody>
-    		</table>
-    		<div style="margin-top:20px;">
-      			<input type="hidden" name="role" value="seller" />
-      			<input type="submit" value="사업자 회원가입" />
-      			<input type="reset" value="다시입력" />
-    		</div>
-  		</div>
-	</form>	
+	<div class="container text-center mt-3 mb-3">
+		<div class="row row-cols-1">
+			<h3 class="mt-5 mb-4">회원가입</h3>
+			<form action="${contextPath}/business/addSeller.do" method="post">
+  				<div class="card p-4">
+    				<table class="table table-bordered align-middle">
+      					<tbody>
+        					<tr>
+	          					<th class="bg-light">아이디</th>
+	          					<td>
+	          						<div class="d-flex align-items-center">
+	          							<input type="text" name="seller_id" id="seller_id" class="form-control me-2" required />
+	            						<input type="button" class="btn btn-secondary"  id="btnOverlapped" value="중복체크" onclick="fn_overlapped()" />
+	          						</div>
+	          					</td>
+        					</tr>
+        					<tr>
+         	 					<th class="bg-light">비밀번호</th>
+          						<td><input class="form-control" name="seller_pw" type="password" id="seller_pw" required /></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">상호명</th>
+          						<td><input class="form-control" name="business_name" type="text" required /></td>
+        					</tr>
+        					<tr>
+  								<th class="bg-light">업종</th>
+							    <td>
+							    	<label><input type="checkbox" name="business_type[]" value="숙박업소" /> 숙박업소</label>
+							    	<label><input type="checkbox" name="business_type[]" value="물건판매" /> 물건판매</label>
+							    </td>
+							</tr>
+        					<tr>
+          						<th class="bg-light">대표자명</th>
+          						<td><input name="owner_name" type="text" class="form-control" required /></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">사업자번호</th>
+          						<td><input name="business_number" type="text" class="form-control" required /></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">대표 전화번호</th>
+          						<td>
+          							<div class="d-flex align-items-center">
+	          							<select name="phone1" class="form-select w-auto me-1">
+	          								<option value="없음">없음</option>
+											<option value="010" selected>010</option>
+											<option value="011">011</option>
+											<option value="016">016</option>
+											<option value="017">017</option>
+											<option value="018">018</option>
+											<option value="019">019</option>
+										</select> - <input type="text" name="phone2" class="form-control w-auto mx-1" required /> - <input
+											type="text" name="phone3" class="form-control w-auto ms-1" required />
+									</div>
+          						</td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">이메일</th>
+   								<td>
+	   								<div class="d-flex align-items-center mb-2">
+										<input type="text" name="email1" id="email1" class="form-control w-auto me-1" required /> <span>@</span>
+										<input type="text" name="email2" id="email2_direct"	class="form-control w-auto mx-1" required /> <select
+											name="email2_select" id="email2_select" class="form-select w-auto" onchange="changeEmailDomain()">
+											<option value="non">직접입력</option>
+											<option value="hanmail.net">hanmail.net</option>
+											<option value="naver.com">naver.com</option>
+											<option value="gmail.com">gmail.com</option>
+											<option value="korea.com">korea.com</option>
+											<!-- 필요하면 더 추가 -->
+										</select>
+									</div>
+								</td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">사업장 주소</th>
+								<td>
+									<div class="mb-2 d-flex">
+										<input type="text" name="zipcode" id="zipcode"
+											class="form-control me-2" size="10" readonly /> <a
+											href="javascript:execDaumPostcode()"
+											class="btn btn-secondary">우편번호 검색</a>
+									</div>
+									<input type="text" name="roadAddress" id="roadAddress" class="form-control mb-2" placeholder="도로명 주소" readonly />
+									<input type="text" name="jibunAddress" id="jibunAddress" class="form-control mb-2" placeholder="지번 주소" readonly />
+									<input type="text" name="namujiAddress" class="form-control" placeholder="상세 주소" /> <span id="guide" class="text-muted"></span>
+								</td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">업체 설명</th>
+          						<td><textarea name="description" class="form-control" rows="2" cols="45"></textarea></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">정산 은행</th>
+          						<td><input name="bank_name" type="text" class="form-control"/></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">정산 계좌번호</th>
+          						<td><input name="bank_account" type="text" class="form-control" /></td>
+        					</tr>
+        					<tr>
+          						<th class="bg-light">예금주</th>
+          						<td><input name="bank_holder" type="text" class="form-control" /></td>
+        					</tr>
+      					</tbody>
+    				</table>
+    				<div class="text-center mt-4">
+					<div class="text-center mt-4">
+						<button type="submit" class="btn btn-primary">회원 가입</button>
+						<button type="reset" class="btn btn-outline-secondary ms-2">다시입력</button>
+					</div>
+  				</div>
+  			</div>
+			</form>
+		</div>
+	</div>
 </body>
 </html>

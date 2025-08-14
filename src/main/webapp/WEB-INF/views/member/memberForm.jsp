@@ -29,39 +29,26 @@
 		function execDaumPostcode() {
 			new daum.Postcode({
 				oncomplete : function(data) {
-					// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-					// 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
-					// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
 					var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
 					var extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
-					// 법정동명이 있을 경우 추가한다. (법정리는 제외)
-					// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
 					if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
 						extraRoadAddr += data.bname;
 					}
-					// 건물명이 있고, 공동주택일 경우 추가한다.
 					if (data.buildingName !== '' && data.apartment === 'Y') {
 						extraRoadAddr += (extraRoadAddr !== '' ? ', '
 								+ data.buildingName : data.buildingName);
 					}
-					// 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
 					if (extraRoadAddr !== '') {
 						extraRoadAddr = ' (' + extraRoadAddr + ')';
 					}
-					// 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
 					if (fullRoadAddr !== '') {
 						fullRoadAddr += extraRoadAddr;
 					}
-
-					// 우편번호와 주소 정보를 해당 필드에 넣는다.
 					document.getElementById('zipcode').value = data.zonecode; //5자리 새우편번호 사용
 					document.getElementById('roadAddress').value = fullRoadAddr;
 					document.getElementById('jibunAddress').value = data.jibunAddress;
 
-					// 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
 					if (data.autoRoadAddress) {
-						//예상되는 도로명 주소에 조합형 주소를 추가한다.
 						var expRoadAddr = data.autoRoadAddress
 								+ extraRoadAddr;
 						document.getElementById('guide').innerHTML = '(예상 도로명 주소 : '
@@ -184,14 +171,8 @@
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
-		<div class="row row-cols-1 mb-3">
-			<div class="col bg-light p-5 text-start">
-				<h2 class="fw-bold h2h2">회원가입</h2>
-				<p class="h2p"></p>
-			</div>
-		</div>
 		<div class="row row-cols-1">
-			<h3 class="mt-5 mb-4">필수입력사항</h3>
+			<h3 class="mt-5 mb-4">회원가입</h3>
 			<form action="${contextPath}/member/addMember.do" method="post">
 				<div class="card p-4">
 					<table class="table table-bordered align-middle">
@@ -200,22 +181,18 @@
 								<th class="bg-light">아이디</th>
 								<td>
 									<div class="d-flex align-items-center">
-										<input type="text" name="member_id" id="member_id"
-											class="form-control me-2" required />
-										<button type="button" class="btn btn-secondary"
-											id="btnOverlapped" onclick="fn_overlapped()">중복체크</button>
+										<input type="text" name="member_id" id="member_id" class="form-control me-2" required />
+										<button type="button" class="btn btn-secondary" id="btnOverlapped" onclick="fn_overlapped()">중복체크</button>
 									</div>
 								</td>
 							</tr>
 							<tr>
 								<th class="bg-light">비밀번호</th>
-								<td><input type="password" name="member_pw"
-									class="form-control" required /></td>
+								<td><input type="password" name="member_pw"	class="form-control" required /></td>
 							</tr>
 							<tr>
 								<th class="bg-light">이름</th>
-								<td><input type="text" name="member_name"
-									class="form-control" required /></td>
+								<td><input type="text" name="member_name" class="form-control" required /></td>
 							</tr>
 							<tr>
 								<th class="bg-light">성별</th>
@@ -280,10 +257,8 @@
 											<option value="017">017</option>
 											<option value="018">018</option>
 											<option value="019">019</option>
-										</select> - <input type="text" name="tel2"
-											class="form-control w-auto mx-1" required /> - <input
-											type="text" name="tel3" class="form-control w-auto ms-1"
-											required />
+										</select> - <input type="text" name="tel2" class="form-control w-auto mx-1" required /> - <input
+											type="text" name="tel3" class="form-control w-auto ms-1" required />
 									</div>
 									<div class="form-check mt-2">
 										<input type="checkbox" name="smssts_yn"
@@ -296,12 +271,9 @@
 								<th class="bg-light">이메일</th>
 								<td>
 									<div class="d-flex align-items-center mb-2">
-										<input type="text" name="email1" id="email1"
-											class="form-control w-auto me-1" required /> <span>@</span>
-										<input type="text" name="email2" id="email2_direct"
-											class="form-control w-auto mx-1" required /> <select
-											name="email2_select" id="email2_select"
-											class="form-select w-auto" onchange="changeEmailDomain()">
+										<input type="text" name="email1" id="email1" class="form-control w-auto me-1" required /> <span>@</span>
+										<input type="text" name="email2" id="email2_direct"	class="form-control w-auto mx-1" required /> <select
+											name="email2_select" id="email2_select" class="form-select w-auto" onchange="changeEmailDomain()">
 											<option value="non">직접입력</option>
 											<option value="hanmail.net">hanmail.net</option>
 											<option value="naver.com">naver.com</option>
@@ -334,12 +306,10 @@
 											class="form-control me-2" size="10" readonly /> <a
 											href="javascript:execDaumPostcode()"
 											class="btn btn-secondary">우편번호 검색</a>
-									</div> <input type="text" name="roadAddress" id="roadAddress"
-									class="form-control mb-2" placeholder="도로명 주소" readonly /> <input
-									type="text" name="jibunAddress" id="jibunAddress"
-									class="form-control mb-2" placeholder="지번 주소" readonly /> <input
-									type="text" name="namujiAddress" class="form-control"
-									placeholder="상세 주소" /> <span id="guide" class="text-muted"></span>
+									</div>
+									<input type="text" name="roadAddress" id="roadAddress" class="form-control mb-2" placeholder="도로명 주소" readonly />
+									<input type="text" name="jibunAddress" id="jibunAddress" class="form-control mb-2" placeholder="지번 주소" readonly />
+									<input type="text" name="namujiAddress" class="form-control" placeholder="상세 주소" /> <span id="guide" class="text-muted"></span>
 								</td>
 							</tr>
 						</tbody>
@@ -352,6 +322,6 @@
 				</div>
 			</form>
 		</div>
-		</div>
+	</div>
 </body>
 </html>
