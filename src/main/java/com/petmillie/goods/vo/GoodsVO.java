@@ -9,22 +9,13 @@ public class GoodsVO {
 	private String goods_name; // 상품 이름 (이전 goods_title)
 	private String seller_id;
 	private String goods_maker; // 제조사/저자 (이전 goods_writer)
-	private String goods_publisher; // 출판사 (새로 추가, 만약 DB에 없다면 필요에 따라 추가 또는 제거)
-
 	private String goods_category; // 상품 분류 (이전 goods_sort)
 	private String goods_sales_price; // 상품 판매 가격
 	private String goods_point; // 상품 구매 포인트
 	private String goods_stock; // 상품 재고 수량
 	private String goods_delivery_price; // 상품 배송비
-	private Date goods_delivery_date; // 상품 도착 예정일
-	private String goods_fileName; // 메인 이미지 파일명
 	private String goods_status; // 상품 종류 (베스트셀러, 스테디셀러 등)
-
-	private String goods_goods_writer_intro; // 저자/제조사 소개 (이전 goods_writer_intro)
-	private String goods_contents_order; // 상품 목차
 	private Date goods_credate; // 상품 등록일 (기존 필드)
-	private String goods_intro; // 상품 소개 (새로 추가)
-
 	private String del_yn; // 'Y' 또는 'N' 값을 저장할 필드
 
 	public int getGoods_num() {
@@ -59,13 +50,6 @@ public class GoodsVO {
 		this.goods_maker = goods_maker;
 	}
 
-	public String getGoods_publisher() {
-		return goods_publisher;
-	}
-
-	public void setGoods_publisher(String goods_publisher) {
-		this.goods_publisher = goods_publisher;
-	}
 
 	public String getGoods_category() {
 		return goods_category;
@@ -107,21 +91,6 @@ public class GoodsVO {
 		this.goods_delivery_price = goods_delivery_price;
 	}
 
-	public Date getGoods_delivery_date() {
-		return goods_delivery_date;
-	}
-
-	public void setGoods_delivery_date(Date goods_delivery_date) {
-		this.goods_delivery_date = goods_delivery_date;
-	}
-
-	public String getGoods_fileName() {
-		return goods_fileName;
-	}
-
-	public void setGoods_fileName(String goods_fileName) {
-		this.goods_fileName = goods_fileName;
-	}
 
 	public String getGoods_status() {
 		return goods_status;
@@ -131,21 +100,6 @@ public class GoodsVO {
 		this.goods_status = goods_status;
 	}
 
-	public String getGoods_goods_writer_intro() {
-		return goods_goods_writer_intro;
-	}
-
-	public void setGoods_goods_writer_intro(String goods_goods_writer_intro) {
-		this.goods_goods_writer_intro = goods_goods_writer_intro;
-	}
-
-	public String getGoods_contents_order() {
-		return goods_contents_order;
-	}
-
-	public void setGoods_contents_order(String goods_contents_order) {
-		this.goods_contents_order = goods_contents_order;
-	}
 
 	public Date getGoods_credate() {
 		return goods_credate;
@@ -155,13 +109,7 @@ public class GoodsVO {
 		this.goods_credate = goods_credate;
 	}
 
-	public String getGoods_intro() {
-		return goods_intro;
-	}
 
-	public void setGoods_intro(String goods_intro) {
-		this.goods_intro = goods_intro;
-	}
 
 	public String getDel_yn() {
 		return del_yn;

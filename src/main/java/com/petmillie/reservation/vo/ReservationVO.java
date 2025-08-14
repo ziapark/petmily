@@ -3,24 +3,21 @@ package com.petmillie.reservation.vo;
 import java.sql.Date;
 import org.springframework.stereotype.Component;
 
-@Component("reservationDTO")
-public class ReservationDTO {
+@Component("reservationVO")
+public class ReservationVO {
 	
 	private int reservation_id;
-	private String member_id;
 	private int p_num; 
 	private int room_id;
 	private String business_id;
-	
-	// DB 테이블 컬럼명과 일치시켰습니다.
+	private String member_id;
 	private Date checkin_date;
 	private Date checkout_date;
-	
 	private int guests;
 	private String reserver_name;
 	private String reserver_tel;
 	private int total_price;
-	private String status;
+	private String reservation_status;
 	
 	// JSP에서 추가로 필요했던 필드들
 	private String p_name; // 펜션명
@@ -29,10 +26,17 @@ public class ReservationDTO {
     private String room_type; // 객실 타입
 	private String bed_type; // 침대 타입
 	
-	public ReservationDTO() {
+	public String getReservation_status() {
+		return reservation_status;
 	}
 
-	// --- 모든 필드에 대한 Getter & Setter ---
+	public void setReservation_status(String reservation_status) {
+		this.reservation_status = reservation_status;
+	}
+
+	public ReservationVO() {
+	}
+
 	
 	public String getP_name() {
         return p_name;
@@ -162,11 +166,5 @@ public class ReservationDTO {
 		this.total_price = total_price;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	
 }

@@ -8,16 +8,28 @@ public class RoomVO {
 	private String p_num;
 	private String room_name;
 	private String room_type;
-	private String price;
+	private int price;
 	private String max_capacity;
 	private String bed_type;
 	private String room_size;
 	private String room_description;
 	private String amenities;
 	private String reg_date;
-	private String del_yn;
-	private String fileimage;
+	private String room_status;
+
 	
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getRoom_status() {
+		return room_status;
+	}
+	public void setRoom_status(String room_status) {
+		this.room_status = room_status;
+	}
 	public String getRoom_id() {
 		return room_id;
 	}
@@ -42,12 +54,8 @@ public class RoomVO {
 	public void setRoom_type(String room_type) {
 		this.room_type = room_type;
 	}
-	public String getPrice() {
-		return price;
-	}
-	public void setPrice(String price) {
-		this.price = price;
-	}
+	
+	
 	public String getMax_capacity() {
 		return max_capacity;
 	}
@@ -84,17 +92,6 @@ public class RoomVO {
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	public String getDel_yn() {
-		return del_yn;
-	}
-	public void setDel_yn(String del_yn) {
-		this.del_yn = del_yn;
-	}
-	public String getFileimage() {
-		return fileimage;
-	}
-	public void setFileimage(String fileimage) {
-		this.fileimage = fileimage;
-	}
+
 	
 }
