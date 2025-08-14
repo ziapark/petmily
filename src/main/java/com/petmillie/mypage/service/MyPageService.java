@@ -14,7 +14,7 @@ public interface MyPageService{
 	public List<OrderVO> listMyOrderGoods(Map<String, Object> params) throws Exception;
 	public List findMyOrderInfo(String order_id) throws Exception;
 	public List<OrderVO> listMyOrderHistory(Map dateMap) throws Exception;
-	public MemberVO modifyMyInfo(Map memberMap) throws Exception;
+	public int updateMember(MemberVO memberVO) throws Exception;
 	public void cancelOrder(String order_id) throws Exception;
 	public MemberVO myDetailInfo(String member_id) throws Exception;
 	public void writeGoodsReview(GoodsReviewVO goodsReviewVO) throws Exception;

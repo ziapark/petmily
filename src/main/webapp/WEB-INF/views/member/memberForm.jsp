@@ -145,6 +145,15 @@
 	
 		        if(userInputCode === serverAuthCode){
 		            $("#mailCheckResult").text("이메일 인증이 완료되었습니다.").css("color", "blue");
+		            // 이메일 입력 필드 수정 불가능하게 설정
+		            $("#email1").prop("readonly", true);
+		            $("#email2_direct").prop("readonly", true);
+		            $("#email2_select").prop("disabled", true); // select는 선택 불가로
+
+		            // 버튼과 입력창 비활성화
+		            $("#sendAuthCodeBtn").prop("disabled", true);
+		            $("#authCodeInput").prop("disabled", true);
+		            $("#verifyAuthCodeBtn").prop("disabled", true);
 	    	        isEmailVerified = true;
 	    	    }else{
 	     	        $("#mailCheckResult").text("인증번호가 일치하지 않습니다.").css("color", "red");
@@ -198,14 +207,12 @@
 								<th class="bg-light">성별</th>
 								<td>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="radio"
-											name="member_gender" value="102" id="female" /> <label
-											class="form-check-label" for="female">여성</label>
+										<input class="form-check-input" type="radio" name="member_gender" value="여성" id="female" />
+										<label class="form-check-label" for="female">여성</label>
 									</div>
 									<div class="form-check form-check-inline ms-4">
-										<input class="form-check-input" type="radio"
-											name="member_gender" value="101" id="male" checked /> <label
-											class="form-check-label" for="male">남성</label>
+										<input class="form-check-input" type="radio"name="member_gender" value="남성" id="male" checked />
+										<label class="form-check-label" for="male">남성</label>
 									</div>
 								</td>
 							</tr>
@@ -218,14 +225,12 @@
 												<option value="${1920+year}"
 													<c:if test="${year==80}">selected</c:if>>${1920+year}</option>
 											</c:forEach>
-										</select>년 <select name="member_birth_m"
-											class="form-select w-auto mx-1">
+										</select>년 <select name="member_birth_m" class="form-select w-auto mx-1">
 											<c:forEach var="month" begin="1" end="12">
 												<option value="${month}"
 													<c:if test="${month==5}">selected</c:if>>${month}</option>
 											</c:forEach>
-										</select>월 <select name="member_birth_d"
-											class="form-select w-auto mx-1">
+										</select>월 <select name="member_birth_d" class="form-select w-auto mx-1">
 											<c:forEach var="day" begin="1" end="31">
 												<option value="${day}"
 													<c:if test="${day==10}">selected</c:if>>${day}</option>
@@ -233,9 +238,8 @@
 										</select>일
 
 										<div class="form-check form-check-inline ms-3">
-											<input type="radio" class="form-check-input"
-												name="member_birth_gn" value="양력" id="solar" checked /> <label
-												class="form-check-label" for="solar">양력</label>
+											<input type="radio" class="form-check-input" name="member_birth_gn" value="양력" id="solar" checked />
+											<label class="form-check-label" for="solar">양력</label>
 										</div>
 										<div class="form-check form-check-inline">
 											<input type="radio" class="form-check-input"
@@ -250,7 +254,6 @@
 								<td>
 									<div class="d-flex align-items-center">
 										<select name="tel1" class="form-select w-auto me-1">
-											<option value="없음">없음</option>
 											<option value="010" selected>010</option>
 											<option value="011">011</option>
 											<option value="016">016</option>
@@ -281,9 +284,8 @@
 											<option value="korea.com">korea.com</option>
 											<!-- 필요하면 더 추가 -->
 										</select>
-										<button type="button" class="btn btn-secondary"
-											id="sendAuthCodeBtn" onclick="fn_sendAuthCode()">인증번호 발송</button>
-									</div> <input type="hidden" name="member_email" id="member_email" />
+										<button type="button" class="btn btn-secondary" id="sendAuthCodeBtn" onclick="fn_sendAuthCode()">인증번호 발송</button>
+									</div>
 									<div class="form-group">
 	                            		<div style="display: flex; align-items: center; margin-top: 5px;">
 	                                		<input type="text" id="authCodeInput" class="form-control" placeholder="인증번호를 입력하세요" disabled>

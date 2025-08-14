@@ -125,7 +125,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    mav.addObject("endMonth", endDateArr[1]);
 	    mav.addObject("endDay", endDateArr[2]);
 
-	 // 주문 내역 조회
+	    // 주문 내역 조회
 	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
 
 	    // 각 주문별 리뷰 여부 체크
@@ -157,7 +157,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		HttpSession session=request.getSession();
 		String viewName=(String)request.getAttribute("viewName");
 		String id = (String)session.getId();
-		System.out.println(session.getId());
+
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("title", "회원정보관리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
@@ -170,55 +170,28 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 
 	
 	@Override
-	@RequestMapping(value="/modifyMyInfo.do" ,method = RequestMethod.POST)
-	public ResponseEntity modifyMyInfo(@RequestParam("attribute")  String attribute,
-			                 @RequestParam("value")  String value,
-			               HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		Map<String,String> memberMap=new HashMap<String,String>();
-		String val[]=null;
-		HttpSession session=request.getSession();
-		memberVO=(MemberVO)session.getAttribute("memberInfo");
-		String  member_id=memberVO.getMember_id();
-		if(attribute.equals("member_birth")){
-			val=value.split(",");
-			memberMap.put("member_birth_y",val[0]);
-			memberMap.put("member_birth_m",val[1]);
-			memberMap.put("member_birth_d",val[2]);
-			memberMap.put("member_birth_gn",val[3]);
-		}else if(attribute.equals("tel")){
-			val=value.split(",");
-			memberMap.put("tel1",val[0]);
-			memberMap.put("tel2",val[1]);
-			memberMap.put("tel3",val[2]);
-			memberMap.put("smssts_yn", val[3]);
-		}else if(attribute.equals("email")){
-			val=value.split(",");
-			memberMap.put("email1",val[0]);
-			memberMap.put("email2",val[1]);
-			memberMap.put("emailsts_yn", val[2]);
-		}else if(attribute.equals("address")){
-			val=value.split(",");
-			memberMap.put("zipcode",val[0]);
-			memberMap.put("roadAddress",val[1]);
-			memberMap.put("jibunAddress", val[2]);
-			memberMap.put("namujiAddress", val[3]);
-		}else {
-			memberMap.put(attribute,value);	
-		}
+	@RequestMapping(value="/updateMember.do" ,method = RequestMethod.POST)
+	public ModelAndView updateMember(@ModelAttribute MemberVO memberVO, HttpSession session, HttpServletRequest request, HttpServletResponse response)  throws Exception {
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("title", "회원정보관리");
+		mav.addObject("body", "/WEB-INF/views/mypage/myDetailInfo.jsp");
 		
-		memberMap.put("member_id", member_id);
-		
-		memberVO=(MemberVO)myPageService.modifyMyInfo(memberMap);
-		session.removeAttribute("memberInfo");
-		session.setAttribute("memberInfo", memberVO);
-		
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		message  = "mod_success";
-		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
-	}	
+		try {
+			int result = myPageService.updateMember(memberVO);
+			
+	        if (result > 0) {
+	        	mav.addObject("message", "회원정보가 성공적으로 수정되었습니다.");
+	            session.setAttribute("memberInfo", memberVO);
+	        } else {
+	        	mav.addObject("message", "회원정보 수정에 실패했습니다.");
+	        }                 
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }				
+		return mav;
+	}
+	
 	@Override
 	@RequestMapping(value="/removeMember.do", method=RequestMethod.POST)
 	@ResponseBody
@@ -242,10 +215,8 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 	
-	
 	@RequestMapping("/writeReviewForm.do")
 	public ModelAndView writeForm(@ModelAttribute OrderVO orderVO,HttpServletRequest request) {
-		
 		
 		String viewName = (String) request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView("/common/layout");
@@ -369,10 +340,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	@Override
 	@RequestMapping("/updateReview.do")
-	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, 
-									@RequestParam("uploadFile") MultipartFile file,
-						            @RequestParam("originalFileName") String originalFileName, 
-						            HttpServletRequest request) throws Exception {
+	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, @RequestParam("originalFileName") String originalFileName, HttpServletRequest request) throws Exception {
 	
 		String saveDir = "C:\\petupload\\goodsreivew\\";	
 	    File uploadPath = new File(saveDir);
@@ -401,6 +369,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    myPageService.updateReview(goodsReviewVO);
 	    return new ModelAndView("redirect:/mypage/myReview.do");
 	}
+	
 	@Override
 	@RequestMapping("/likeGoods.do")
 	public ModelAndView likeGoods(HttpServletRequest request) throws Exception {
@@ -445,32 +414,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    return (result > 0) ? "success" : "fail";
 	 
 	}
-	
-	
-	
-//	@RequestMapping(value="/myPetInfo.do", method=RequestMethod.GET)
-//	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//	    HttpSession session = request.getSession();
-//	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-//
-//	    if (memberInfo == null) {
-//	        return new ModelAndView("redirect:/member/loginForm.do");
-//	    }
-//	    
-//	    // 사이드 메뉴 활성화 처리를 위해 session에 "my_pet_info"를 저장합니다.
-//	    session.setAttribute("side_menu", "my_pet_info"); 
-//	    
-//	    String viewName = (String) request.getAttribute("viewName");
-//	    ModelAndView mav = new ModelAndView("/common/layout");
-//	    mav.addObject("title", "나의 반려동물 정보");
-//	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-//	    
-//	    // 나중에 MyPageService를 통해 반려동물 목록을 조회하여 mav에 추가할 예정입니다.
-//	    // List<PetVO> petList = myPageService.listMyPets(memberInfo.getMember_id());
-//	    // mav.addObject("petList", petList);
-//	    
-//	    return mav;
-//	}
 	
 	@Override
 	@RequestMapping(value="/myPetInfo.do", method=RequestMethod.GET)
