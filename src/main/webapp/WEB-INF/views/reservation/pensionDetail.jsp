@@ -207,7 +207,7 @@
                             <p class="room-price">
                                 1박 <strong><fmt:formatNumber value="${room.price}" pattern="#,###" />원</strong>
                             </p>
-                            <a href="${contextPath}/reservation/reservationForm.do?roomId=${room.room_id}&p_num=${pension.p_num}" class="btn-reserve">
+                            <a href="${contextPath}/reservation/roomReservation.do?roomId=${room.room_id}&p_num=${pension.p_num}" class="btn-reserve">
                                 예약하기
                             </a>
                         </div>

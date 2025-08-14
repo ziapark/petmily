@@ -19,6 +19,7 @@
     align-items: flex-start; /* 컨텐츠를 위에서부터 정렬하도록 변경 */
     min-height: 100vh;
     box-sizing: border-box; /* padding이 전체 크기에 영향을 주지 않도록 설정 */
+    font-family: 'Inter', sans-serif; /* 폰트 추가 */
 }
     .reservation-container {
         width: 100%;
@@ -132,10 +133,17 @@
         <p><strong>객실 이름:</strong> ${room.room_name}</p>
         <p><strong>1박 요금:</strong> <fmt:formatNumber value="${room.price}" pattern="#,###" />원</p>
         <p><strong>최대 인원:</strong> ${room.max_capacity}명</p>
+        <%-- 추가된 객실 정보 --%>
+        <p><strong>객실 타입:</strong> ${room.room_type}</p>
+        <p><strong>침대 종류:</strong> ${room.bed_type}</p>
+        <p><strong>객실 크기:</strong> ${room.room_size}</p>
+        <p><strong>편의시설:</strong> ${room.amenities}</p>
+        <p><strong>객실 설명:</strong> ${room.room_description}</p>
     </div>
 
     <form name="reservationForm" class="reservation-form" method="post" action="${contextPath}/reservation/makeReservation.do" onsubmit="return validateForm()">
         <%-- 서버로 전송해야 할 숨겨진 데이터 --%>
+        
         <input type="hidden" name="p_num" value="${pension.p_num}">
         <input type="hidden" name="room_id" value="${room.room_id}">
         <input type="hidden" name="price" value="${room.price}">
