@@ -25,7 +25,6 @@ public class BusinessVO {
 	private String bank_account;
 	private String bank_holder;
 	private String approval_status;
-	private String role;
 	private String reg_date;
 	private String del_yn;
 	
@@ -155,12 +154,7 @@ public class BusinessVO {
 	public void setApproval_status(String approval_status) {
 		this.approval_status = approval_status;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
+	
 	public String getReg_date() {
 		return reg_date;
 	}
