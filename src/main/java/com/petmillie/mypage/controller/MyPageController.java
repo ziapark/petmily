@@ -8,12 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
+import com.petmillie.mypage.vo.PetVO;
 
 public interface MyPageController {
 	public ModelAndView myPageMain(@RequestParam Map<String, String> dateMap, @RequestParam(required = false,value="message")  String message,
@@ -41,4 +40,11 @@ public interface MyPageController {
 
 	// ✅ 새로 추가된 반려동물 정보 페이지 메서드
 	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception;
-}
+	// ✅ 새로 추가된 반려동물 등록 관련 메서드
+		public ModelAndView addPetForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
+		public ModelAndView addPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+		// ✅ 새로 추가된 반려동물 수정/삭제 관련 메서드
+		public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+		public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+		public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	}

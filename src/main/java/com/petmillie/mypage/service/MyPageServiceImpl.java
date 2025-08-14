@@ -20,47 +20,51 @@ import com.petmillie.order.vo.OrderVO;
 
 @Service("myPageService")
 @Transactional(propagation=Propagation.REQUIRED)
-public class MyPageServiceImpl  implements MyPageService{
+public class MyPageServiceImpl implements MyPageService{
 	@Autowired
 	private MyPageDAO myPageDAO;
-
+	
+	@Override
 	public List<OrderVO> listMyOrderGoods(Map<String, Object> params) throws Exception {
-	   
-	    return myPageDAO.selectMyOrderList(params);
+
+ return myPageDAO.selectMyOrderList(params);
 	}
 	
+	@Override
 	public List findMyOrderInfo(String order_id) throws Exception{
 		return myPageDAO.selectMyOrderInfo(order_id);
 	}
 	
+	@Override
 	public List<OrderVO> listMyOrderHistory(Map dateMap) throws Exception{
 		return myPageDAO.selectMyOrderHistoryList(dateMap);
 	}
 	
-	public MemberVO  modifyMyInfo(Map memberMap) throws Exception{
+	@Override
+	public MemberVO modifyMyInfo(Map memberMap) throws Exception{
 		 String member_id=(String)memberMap.get("member_id");
 		 myPageDAO.updateMyInfo(memberMap);
 		 return myPageDAO.selectMyDetailInfo(member_id);
 	}
 	
+	@Override
 	public void cancelOrder(String order_id) throws Exception{
 		myPageDAO.updateMyOrderCancel(order_id);
 	}
+	
+	@Override
 	public MemberVO myDetailInfo(String member_id) throws Exception{
 		return myPageDAO.selectMyDetailInfo(member_id);
 	}
 	
     @Override
     public void writeGoodsReview(GoodsReviewVO goodsReviewVO) {
-
     	myPageDAO.insertGoodsReview(goodsReviewVO);
     }
 
 	@Override
 	public List<GoodsReviewVO> getReviewById(String member_id) throws Exception {
-		
 		return myPageDAO.selectGoodsReview(member_id);
-		
 	}
 
 	@Override
@@ -71,14 +75,11 @@ public class MyPageServiceImpl  implements MyPageService{
 	@Override
 	public void deleteReview(int review_id) throws Exception {
 		myPageDAO.deleteReview(review_id);
-		
 	}
 
 	@Override
 	public void updateReview(GoodsReviewVO goodsReviewVO) throws Exception {
-		
 		myPageDAO.updateReview(goodsReviewVO);
-		
 	}
 
 	@Override
@@ -94,31 +95,31 @@ public class MyPageServiceImpl  implements MyPageService{
 
 	@Override
 	public Map<String, Object> toggleLikeGoods(String member_id, int goods_num) throws Exception {
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("member_id", member_id);
-	    params.put("goods_num", goods_num);
+		Map<String, Object> params = new HashMap<>();
+		params.put("member_id", member_id);
+		params.put("goods_num", goods_num);
 
-	    Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 
-	    int count = myPageDAO.existsLikeGoods(params);
+		int count = myPageDAO.existsLikeGoods(params);
 
-	    if(count > 0) {
-	        myPageDAO.deleteLikeGoods(params);
-	        result.put("success", true);
-	        result.put("status", "deleted");
-	    } else {
-	        myPageDAO.insertLikeGoods(params);
-	        result.put("success", true);
-	        result.put("status", "added");
-	    }
+		if(count > 0) {
+			myPageDAO.deleteLikeGoods(params);
+			result.put("success", true);
+			result.put("status", "deleted");
+		} else {
+			myPageDAO.insertLikeGoods(params);
+			result.put("success", true);
+			result.put("status", "added");
+		}
 
-	    return result;
+		return result;
 	}
 
 	@Override
 	public Set<Integer> getLikedGoodsSet(String member_id) throws Exception {
 		List<Integer> likedGoodsList = myPageDAO.selectLikedGoodsNums(member_id);
-	    return new HashSet<>(likedGoodsList);
+		return new HashSet<>(likedGoodsList);
 	}
 
 	@Override
@@ -126,6 +127,7 @@ public class MyPageServiceImpl  implements MyPageService{
 		return myPageDAO.likeGoodsDelete(like_goods_id);
 	}
 	
+	// ✅ 반려동물 관리 기능 추가
 	@Override
 	public List<PetVO> listMyPets(String member_id) throws Exception {
 		return myPageDAO.selectMyPetList(member_id);
@@ -155,5 +157,4 @@ public class MyPageServiceImpl  implements MyPageService{
 	public void removePet(int pet_id) throws Exception {
 		myPageDAO.deletePet(pet_id);
 	}
-
 }

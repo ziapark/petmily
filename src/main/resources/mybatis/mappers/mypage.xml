@@ -48,7 +48,7 @@
 		<result property="goods_fileName" column="goods_fileName"/>
 	</resultMap>
 
-	<!-- ✅ resultMap 정의 -->
+	<!-- 반려동물 resultMap 정의 -->
 	<resultMap id="petResult" type="com.petmillie.mypage.vo.PetVO">
 		<result property="pet_id" column="pet_id"/>
 		<result property="member_id" column="member_id"/>
@@ -252,7 +252,7 @@
 		DELETE FROM goods_review WHERE review_id = #{review_id}
 	</delete>
 
-	<!-- ✅ 새로 추가된 반려동물 관련 쿼리 -->
+	<!-- 반려동물 관련 쿼리 -->
 	<select id="selectMyPetList" parameterType="string" resultMap="petResult">
 		<![CDATA[
 			SELECT * FROM pet

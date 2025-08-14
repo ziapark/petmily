@@ -29,6 +29,7 @@ import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
+import com.petmillie.mypage.vo.PetVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Controller("myPageController")
@@ -450,6 +451,31 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	
 	
+//	@RequestMapping(value="/myPetInfo.do", method=RequestMethod.GET)
+//	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//	    HttpSession session = request.getSession();
+//	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+//
+//	    if (memberInfo == null) {
+//	        return new ModelAndView("redirect:/member/loginForm.do");
+//	    }
+//	    
+//	    // 사이드 메뉴 활성화 처리를 위해 session에 "my_pet_info"를 저장합니다.
+//	    session.setAttribute("side_menu", "my_pet_info"); 
+//	    
+//	    String viewName = (String) request.getAttribute("viewName");
+//	    ModelAndView mav = new ModelAndView("/common/layout");
+//	    mav.addObject("title", "나의 반려동물 정보");
+//	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+//	    
+//	    // 나중에 MyPageService를 통해 반려동물 목록을 조회하여 mav에 추가할 예정입니다.
+//	    // List<PetVO> petList = myPageService.listMyPets(memberInfo.getMember_id());
+//	    // mav.addObject("petList", petList);
+//	    
+//	    return mav;
+//	}
+	
+	@Override
 	@RequestMapping(value="/myPetInfo.do", method=RequestMethod.GET)
 	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    HttpSession session = request.getSession();
@@ -459,7 +485,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	        return new ModelAndView("redirect:/member/loginForm.do");
 	    }
 	    
-	    // 사이드 메뉴 활성화 처리를 위해 session에 "my_pet_info"를 저장합니다.
 	    session.setAttribute("side_menu", "my_pet_info"); 
 	    
 	    String viewName = (String) request.getAttribute("viewName");
@@ -467,12 +492,106 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    mav.addObject("title", "나의 반려동물 정보");
 	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 	    
-	    // 나중에 MyPageService를 통해 반려동물 목록을 조회하여 mav에 추가할 예정입니다.
-	    // List<PetVO> petList = myPageService.listMyPets(memberInfo.getMember_id());
-	    // mav.addObject("petList", petList);
+		List<PetVO> petList = myPageService.listMyPets(memberInfo.getMember_id());
+		mav.addObject("petList", petList);
 	    
 	    return mav;
 	}
 	
+	// ✅ 반려동물 등록 폼 페이지로 이동하는 메서드
+    @RequestMapping(value="/addPetForm.do", method=RequestMethod.GET)
+    public ModelAndView addPetForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+        
+        if (memberInfo == null) {
+            return new ModelAndView("redirect:/member/loginForm.do");
+        }
+        
+        String viewName = (String) request.getAttribute("viewName");
+        ModelAndView mav = new ModelAndView("/common/layout");
+        mav.addObject("title", "반려동물 등록");
+        mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+        
+        boolean canAddMorePets = myPageService.canAddMorePets(memberInfo.getMember_id());
+        mav.addObject("canAddMorePets", canAddMorePets);
+        
+        if (!canAddMorePets) {
+            mav.addObject("message", "최대 3마리까지 등록 가능합니다.");
+        }
+        
+        return mav;
+    }
+    
+	// ✅ 반려동물 등록 처리 메서드
+    @RequestMapping(value="/addPet.do", method=RequestMethod.POST)
+    public ModelAndView addPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+        
+        if (memberInfo == null) {
+            return new ModelAndView("redirect:/member/loginForm.do");
+        }
+        
+        petVO.setMember_id(memberInfo.getMember_id());
+        
+        myPageService.addPet(petVO);
+        
+        ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
+        return mav;
+    }
+
+	// ✅ 반려동물 수정 폼 페이지로 이동하는 메서드
+	@RequestMapping(value="/modifyPetForm.do", method=RequestMethod.GET)
+	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+		if (memberInfo == null) {
+			return new ModelAndView("redirect:/member/loginForm.do");
+		}
+		
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("title", "반려동물 정보 수정");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+
+		PetVO petVO = myPageService.findPetInfo(pet_id);
+		mav.addObject("petVO", petVO);
+
+		return mav;
+	}
+
+	// ✅ 반려동물 수정 처리 메서드
+	@RequestMapping(value="/modifyPet.do", method=RequestMethod.POST)
+	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+		if (memberInfo == null) {
+			return new ModelAndView("redirect:/member/loginForm.do");
+		}
+		
+		myPageService.modifyPet(petVO);
+		
+		ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
+		return mav;
+	}
+
+	// ✅ 반려동물 삭제 처리 메서드
+	@RequestMapping(value="/removePet.do", method=RequestMethod.GET)
+	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+		
+		if (memberInfo == null) {
+			return new ModelAndView("redirect:/member/loginForm.do");
+		}
+
+		myPageService.removePet(pet_id);
+
+		ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
+		return mav;
+	}
 	
 }

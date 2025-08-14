@@ -124,7 +124,6 @@ public class MyPageDAOImpl implements MyPageDAO{
 		return sqlSession.delete("mapper.mypage.likeGoodsDelete", like_goods_id);
 	}
 
-	// ✅ 새로 추가된 반려동물 관련 메서드
 	@Override
 	public List<PetVO> selectMyPetList(String member_id) throws Exception {
 		return sqlSession.selectList("mapper.mypage.selectMyPetList", member_id);
