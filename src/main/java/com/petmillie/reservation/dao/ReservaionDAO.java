@@ -1,6 +1,9 @@
 package com.petmillie.reservation.dao;
 
 import java.util.List;
+
+import org.springframework.dao.DataAccessException;
+
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.reservation.vo.ReservationDTO;
@@ -28,6 +31,7 @@ public interface ReservaionDAO {
 	 * 서비스 계층에서 이 기능을 호출하므로 인터페이스에 선언이 필요합니다.
 	 */
 	public List<ReservationDTO> selectReservationsByBusinessId(String business_id) throws Exception;
-
+	public List<ReservationDTO> selectReservationsByMemberId(String memberId) throws DataAccessException;
+	
 }
 

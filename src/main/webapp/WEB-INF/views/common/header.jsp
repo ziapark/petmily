@@ -210,6 +210,7 @@
 						<li><a href="#">나의 주소록</a></li>
 						<li><a href="#">개인정보 동의내역</a></li>
 						<li><a href="#">회원탈퇴</a></li>
+						<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
 					</ul>
 				</c:if>
 				

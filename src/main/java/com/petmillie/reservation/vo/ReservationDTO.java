@@ -8,7 +8,7 @@ public class ReservationDTO {
 	
 	private int reservation_id;
 	private String member_id;
-	private int p_num; // JSP 등 다른 곳에서 펜션 정보를 넘기기 위해 유지합니다.
+	private int p_num; 
 	private int room_id;
 	private String business_id;
 	
@@ -22,14 +22,42 @@ public class ReservationDTO {
 	private int total_price;
 	private String status;
 	
-	private String room_name;
-    private String room_type;
+	// JSP에서 추가로 필요했던 필드들
+	private String p_name; // 펜션명
+	private String roadAddress; // 펜션 주소
+	private String room_name; // 객실명
+    private String room_type; // 객실 타입
+	private String bed_type; // 침대 타입
 	
 	public ReservationDTO() {
 	}
 
 	// --- 모든 필드에 대한 Getter & Setter ---
 	
+	public String getP_name() {
+        return p_name;
+    }
+
+    public void setP_name(String p_name) {
+        this.p_name = p_name;
+    }
+
+    public String getRoadAddress() {
+        return roadAddress;
+    }
+
+    public void setRoadAddress(String roadAddress) {
+        this.roadAddress = roadAddress;
+    }
+    
+    public String getBed_type() {
+        return bed_type;
+    }
+
+    public void setBed_type(String bed_type) {
+        this.bed_type = bed_type;
+    }
+    
 	public String getRoom_name() {
 		return room_name;
 	}

@@ -142,4 +142,26 @@ public class ReservaionControllerImpl implements ReservaionController {
 		mav.addObject("title", "예약 완료");
 		return mav;
 	}
+	
+	@Override
+	@RequestMapping(value = "/myReservations.do", method = RequestMethod.GET)
+	public ModelAndView listMyReservations(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+
+	    if (memberVO == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+
+	    String memberId = memberVO.getMember_id();
+	    List<ReservationDTO> reservationList = reservationService.getReservationsByMemberId(memberId);
+	    
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("body", "/WEB-INF/views/reservation/myReservations.jsp");
+	    mav.addObject("title", "나의 예약 내역");
+	    mav.addObject("myReservations", reservationList);
+	    return mav;
+	}
+	
+	
 }

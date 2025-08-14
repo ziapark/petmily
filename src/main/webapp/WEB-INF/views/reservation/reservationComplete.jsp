@@ -48,7 +48,7 @@
     <div class="complete-container">
         <h2>예약이 성공적으로 완료되었습니다.</h2>
         <p>예약 내역은 마이페이지에서 확인하실 수 있습니다.</p>
-        <a href="${contextPath}/main.do" class="btn-home">홈으로 가기</a>
+        <a href="${contextPath}/main/main.do" class="btn-home">홈으로 가기</a>
     </div>
 </body>
 </html>

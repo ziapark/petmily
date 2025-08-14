@@ -3,7 +3,9 @@ package com.petmillie.reservation.dao;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.reservation.vo.ReservationDTO;
@@ -14,7 +16,7 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	private static final String NAMESPACE = "mapper.reservation"; // 네임스페이스를 하나로 통일
+	private static final String NAMESPACE = "mapper.reservation"; 
 
 	@Override
 	public List<PensionVO> selectAllPensionList() throws Exception {
@@ -42,12 +44,14 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 		return reservationDTO.getReservation_id();
 	}
 
-	/**
-	 * [추가] 사업자 ID로 예약 목록을 조회하는 메서드 구현
-	 * 이 메서드는 매퍼 XML의 쿼리를 호출합니다.
-	 */
 	@Override
 	public List<ReservationDTO> selectReservationsByBusinessId(String business_id) throws Exception {
 		return sqlSession.selectList(NAMESPACE + ".selectReservationsByBusinessId", business_id);
+	}
+	
+	// [추가] 회원 ID로 예약 목록을 조회하는 메서드 구현
+	@Override
+	public List<ReservationDTO> selectReservationsByMemberId(String memberId) throws DataAccessException {
+		return sqlSession.selectList(NAMESPACE + ".selectReservationsByMemberId", memberId);
 	}
 }
