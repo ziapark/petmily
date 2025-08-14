@@ -209,4 +209,41 @@ position:relative;
 .side_menu ul li {text-align:left;}
 .mypage_content{float:right; width: calc(100% - 200px);}
 
+/* 동물병원 & 채팅 고정바 */
+
+#sticky {   display: flex;
+    flex-direction: column;
+    gap: 10px;will-change: transform;
+    backface-visibility: hidden;
+    z-index: 9999;}
+#sticky .pp_don {border-radius:50%; width:100px; height:100px; margin-bottom:10px; transition: transform 0.2s;}
+#sticky.pp_don:hover {transform: scale(1.05); }
+#sticky .pp_don.hospital_pp {background:#c8f9ff; }
+.hospital_pp a {background: url(/petmillie/resources/image/pharmacy.png) center 15px no-repeat;
+			    width: 100%;
+			    height: 100px;
+			    box-sizing: border-box;
+			    padding: 5px;
+			    background-size: 60%;
+			    display: inline-block;
+			    padding-top: 75px;
+			    font-size: 13px;
+			    font-weight: bold;
+			    color: black;
+			    text-align: center;box-shadow: 1px 1px 8px 0px rgb(15 116 151 / 25%); border-radius: 50%;
+				}
+#sticky .pp_don.chat_pp {background:#c8ffe3; }
+.chat_pp a {background: url(/petmillie/resources/image/chat.png) center 15px no-repeat;
+			    width: 100%;
+			    height: 100px;
+			    box-sizing: border-box;
+			    padding: 5px;
+			    background-size: 60%;
+			    display: inline-block;
+			    padding-top: 75px;
+			    font-size: 13px;
+			    font-weight: bold;
+			    color: black;
+			    text-align: center;box-shadow: 1px 1px 8px 0px rgb(15 116 151 / 25%); border-radius: 50%;
+				 }
 

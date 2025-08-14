@@ -57,8 +57,9 @@
 			<footer>
         		<jsp:include page="footer.jsp"/>
         	</footer>
+        	<jsp:include page="quickMenu.jsp"/>
 		</div>
-		 <jsp:include page="quickMenu.jsp"/>
+		 
     </div>        	
     <script>
     

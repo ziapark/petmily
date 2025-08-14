@@ -24,6 +24,8 @@
     <typeAlias type="com.petmillie.board.vo.LikeVO" alias="LikeVO" />
     <typeAlias type="com.petmillie.reservation.vo.ReservaionVO" alias="ReservaionVO" />
     <typeAlias type="com.petmillie.order.vo.PayVO" alias="PayVO" />
+    <typeAlias type="com.petmillie.medi.vo.AnimalHospitalVO" alias="AnimalHospitalVO" />
+    <typeAlias type="com.petmillie.medi.vo.AnimalPharmacyVO" alias="AnimalPharmacyVO" />
   </typeAliases>
 </configuration>
 

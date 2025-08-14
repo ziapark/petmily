@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.medi">
+
+<resultMap id="animalHospitalResult" type="AnimalHospitalVO">
+    <result property="hospital_id" column="hospital_id"/>
+    <result property="frnm_nm" column="frnm_nm"/>
+    <result property="rn_addr" column="rn_addr"/>
+    <result property="opr_time_info" column="opr_time_info"/>
+    <result property="rprs_telno" column="rprs_telno"/>
+    <result property="hmpg_url" column="hmpg_url"/>
+    <result property="la_vlue" column="la_vlue"/>
+    <result property="lo_vlue" column="lo_vlue"/>
+</resultMap>
+
+<resultMap id="animalPharmacyResult" type="AnimalPharmacyVO">
+    <result property="pharmacy_id" column="pharmacy_id"/>
+    <result property="frnm_nm" column="frnm_nm"/>
+    <result property="rn_addr" column="rn_addr"/>
+    <result property="opr_time_info" column="opr_time_info"/>
+    <result property="rprs_telno" column="rprs_telno"/>
+    <result property="hmpg_url" column="hmpg_url"/>
+    <result property="la_vlue" column="la_vlue"/>
+    <result property="lo_vlue" column="lo_vlue"/>
+</resultMap>
+    
+</mapper>

@@ -348,32 +348,6 @@ footer ul li a {
 footer img {
 	margin: 10px 0px 0px 40px; width: 150px; float: left;
 }
-#sticky {
-	/* padding: 10px 5px; border-radius: 10px; top: 115px; width: 82px; font-size: 0.75em; float: right; position: relative; background-color: rgb(153, 153, 153); */
-	padding: 10px 5px; border-radius: 10px; top: 115px; width: 82px; font-size: 0.75em; float: right; position: relative; background-color:#66cc00;
-	
-}
-#sticky ul {
-	list-style: none;
-}
-#sticky ul li {
-	background-position: bottom; background-image: url("../imgs/sticky_line.gif"); background-repeat: repeat-x;
-}
-#sticky ul li a {
-	padding: 3px 0px; height: 27px; color: rgb(255, 255, 255); display: block;
-}
-#sticky .recent {
-	background: rgb(255, 255, 255); margin: 7px 0px; padding: 5px 0px; border-radius: 5px; text-align: center;
-}
-#sticky .recent h3 {
-	margin: 0px 0px 5px; color: rgb(0, 0, 0); font-size: 1em;
-}
-#sticky .recent ul {
-	list-style: none; margin: 0px; padding: 0px;
-}
-#sticky .recent ul li {
-	padding: 5px 0px; background-image: none;
-}
 
 
 .list_view {
