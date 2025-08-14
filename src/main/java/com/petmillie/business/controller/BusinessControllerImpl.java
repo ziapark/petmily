@@ -194,11 +194,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		    }
 		}
 	    List<RoomVO> list = businessService.roomList(p_num);
-	    String del_yn = pension.getDel_yn();
-		System.out.println("business_id : " +business_id);
-		System.out.println("business_number : " +business_number);
-		System.out.println("p_num : " +p_num);
-		System.out.println("del_yn : " +del_yn);
 		
 		mav.addObject("message", message);
 		mav.addObject("pensionList", mypension);
@@ -416,7 +411,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        File saveFile = new File(uploadPath, savedFileName);
 	        fileimage.transferTo(saveFile);  // 실제 파일 저장
 
-	        roomVO.setFileimage(savedFileName);  // 🔧 UUID 적용된 이름으로 저장
 	        businessService.addpension2(roomVO);
 
 	        HttpSession session = request.getSession();

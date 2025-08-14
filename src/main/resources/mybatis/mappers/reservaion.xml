@@ -42,7 +42,7 @@
 	</resultMap>
 	
 	<!-- [수정] ReservationDTO에 모든 필드 추가 -->
-	<resultMap id="reservationResult" type="com.petmillie.reservation.vo.ReservationDTO">
+	<resultMap id="reservationResult" type="com.petmillie.reservation.vo.ReservationVO">
 		<result property="reservation_id" column="reservation_id"/>
 		<result property="member_id" column="member_id"/>
 		<result property="business_id" column="business_id"/>
@@ -98,7 +98,7 @@
 	
 	<!-- 예약 정보 추가 -->
 	<insert id="insertReservation" 
-			parameterType="com.petmillie.reservation.vo.ReservationDTO"
+			parameterType="com.petmillie.reservation.vo.ReservationVO"
 			useGeneratedKeys="true"
 			keyProperty="reservation_id">
 		<![CDATA[

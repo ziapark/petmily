@@ -6,8 +6,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
-import com.petmillie.reservation.vo.ReservationDTO;
-// 사용하지 않는 ReservaionVO import는 제거해도 됩니다.
+import com.petmillie.reservation.vo.ReservationVO;
 
 public interface ReservaionDAO {
 
@@ -24,14 +23,14 @@ public interface ReservaionDAO {
 	public RoomVO selectRoomDetail(int roomId) throws Exception;
 
 	// 예약 추가
-	public int insertReservation(ReservationDTO reservationDTO) throws Exception;
+	public int insertReservation(ReservationVO reservationVO) throws Exception;
 	
 	/**
 	 * [추가] 사업자 ID로 예약 목록을 조회하는 메서드
 	 * 서비스 계층에서 이 기능을 호출하므로 인터페이스에 선언이 필요합니다.
 	 */
-	public List<ReservationDTO> selectReservationsByBusinessId(String business_id) throws Exception;
-	public List<ReservationDTO> selectReservationsByMemberId(String memberId) throws DataAccessException;
+	public List<ReservationVO> selectReservationsByBusinessId(String business_id) throws Exception;
+	public List<ReservationVO> selectReservationsByMemberId(String memberId) throws DataAccessException;
 	
 }
 

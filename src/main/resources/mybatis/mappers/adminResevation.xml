@@ -5,7 +5,7 @@
 
 <mapper namespace="mapper.adminReser">
 
-    <resultMap id="reserResult" type="com.petmillie.reservation.vo.ReservaionVO">
+    <resultMap id="reserResult" type="com.petmillie.reservation.vo.ReservationVO">
         <result property="reservaion_id" column="reservation_id"/>
         <result property="business_id" column="business_id"/>
         <result property="member_id" column="member_id"/>

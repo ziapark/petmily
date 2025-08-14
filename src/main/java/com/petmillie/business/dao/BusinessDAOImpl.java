@@ -12,7 +12,7 @@ import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
-import com.petmillie.reservation.vo.ReservaionVO;
+import com.petmillie.reservation.vo.ReservationVO;
 
 @Repository("businessDAO")
 public class BusinessDAOImpl implements BusinessDAO {
@@ -114,7 +114,7 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
     @Override
-    public List<ReservaionVO> reservationList(String business_id) throws DataAccessException {
+    public List<ReservationVO> reservationList(String business_id) throws DataAccessException {
         return sqlSession.selectList("mapper.adminReser.reservationList", business_id);
     }
 

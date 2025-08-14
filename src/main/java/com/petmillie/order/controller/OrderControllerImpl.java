@@ -107,11 +107,9 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 					OrderVO _orderVO=new OrderVO();
 					String goods_title=goodsVO.getGoods_name();
 					String goods_sales_price=goodsVO.getGoods_sales_price();
-					String goods_fileName=goodsVO.getGoods_fileName();
 					_orderVO.setGoods_num(goods_id);
 					_orderVO.setGoods_name(goods_title);
 					_orderVO.setGoods_sales_price(goods_sales_price);
-					_orderVO.setGoods_fileName(goods_fileName);
 					_orderVO.setGoods_qty(Integer.parseInt(cart_goods[1]));
 					myOrderList.add(_orderVO);
 					break;

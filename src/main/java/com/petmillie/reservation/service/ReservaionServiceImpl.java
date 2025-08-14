@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
-import com.petmillie.reservation.vo.ReservationDTO;
+import com.petmillie.reservation.vo.ReservationVO;
 
 @Service("ReservaionService")
 @Transactional(propagation = Propagation.REQUIRED)
@@ -45,7 +45,7 @@ public class ReservaionServiceImpl implements ReservaionService {
 
 	// 예약 추가
 	@Override
-	public int addReservation(ReservationDTO reservationDTO) throws Exception {
+	public int addReservation(ReservationVO reservationDTO) throws Exception {
 		return reservaionDAO.insertReservation(reservationDTO);
 	}
 
@@ -54,12 +54,12 @@ public class ReservaionServiceImpl implements ReservaionService {
 	 * 이 메서드는 DAO를 호출하여 DB에서 데이터를 가져옵니다.
 	 */
 	@Override
-	public List<ReservationDTO> getReservationsByBusinessId(String business_id) throws Exception {
+	public List<ReservationVO> getReservationsByBusinessId(String business_id) throws Exception {
 		return reservaionDAO.selectReservationsByBusinessId(business_id);
 	}
 	
 	@Override
-	public List<ReservationDTO> getReservationsByMemberId(String memberId) throws Exception {
+	public List<ReservationVO> getReservationsByMemberId(String memberId) throws Exception {
 	    return reservaionDAO.selectReservationsByMemberId(memberId);
 	}
 }

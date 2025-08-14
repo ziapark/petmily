@@ -15,7 +15,7 @@ import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
-import com.petmillie.reservation.vo.ReservaionVO;
+import com.petmillie.reservation.vo.ReservationVO;
 
 @Service("businessService")
 public class BusinessServiceImpl implements BusinessService {
@@ -113,8 +113,8 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public List<ReservaionVO> reservationList(String business_id) throws Exception {
-		List<ReservaionVO> list = businessDAO.reservationList(business_id);
+	public List<ReservationVO> reservationList(String business_id) throws Exception {
+		List<ReservationVO> list = businessDAO.reservationList(business_id);
 		return list;
 	}
 

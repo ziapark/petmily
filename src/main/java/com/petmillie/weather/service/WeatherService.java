@@ -46,7 +46,6 @@ public class WeatherService {
         GoodsVO goods = new GoodsVO();
         goods.setGoods_num(num);
         goods.setGoods_name(name);
-        goods.setGoods_fileName(fileName);
         return goods;
     }
 

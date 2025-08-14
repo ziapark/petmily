@@ -20,7 +20,7 @@ import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.reservation.service.ReservaionService;
-import com.petmillie.reservation.vo.ReservationDTO;
+import com.petmillie.reservation.vo.ReservationVO;
 
 @Controller("ReservationController")
 @RequestMapping("/reservation")
@@ -50,7 +50,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 
 		// 2. [수정] ReservaionVO 대신 ReservationDTO 리스트를 가져오도록 변경
 		// (이 기능을 ReservaionService에 추가해야 합니다)
-		List<ReservationDTO> reservationList = reservationService.getReservationsByBusinessId(business_id);
+		List<ReservationVO> reservationList = reservationService.getReservationsByBusinessId(business_id);
 
 		// 3. ModelAndView에 데이터와 뷰 경로를 설정합니다.
 		ModelAndView mav = new ModelAndView("/common/layout");
@@ -119,15 +119,15 @@ public class ReservaionControllerImpl implements ReservaionController {
 	 */
 	@Override
 	@RequestMapping(value = "/makeReservation.do", method = RequestMethod.POST)
-	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationDTO reservationDTO,
+	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationVO reservationVO,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
 		if(memberVO == null) {
 			return new ModelAndView("redirect:/member/loginForm.do");
 		}
-		reservationDTO.setMember_id(memberVO.getMember_id());
-		int reservationId = reservationService.addReservation(reservationDTO);
+		reservationVO.setMember_id(memberVO.getMember_id());
+		int reservationId = reservationService.addReservation(reservationVO);
 		ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
 		mav.addObject("reservationId", reservationId);
 		return mav;
@@ -154,7 +154,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	    }
 
 	    String memberId = memberVO.getMember_id();
-	    List<ReservationDTO> reservationList = reservationService.getReservationsByMemberId(memberId);
+	    List<ReservationVO> reservationList = reservationService.getReservationsByMemberId(memberId);
 	    
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("body", "/WEB-INF/views/reservation/myReservations.jsp");

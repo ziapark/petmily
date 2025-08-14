@@ -2,11 +2,12 @@ package com.petmillie.reservation.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.petmillie.reservation.vo.ReservationDTO;
+import com.petmillie.reservation.vo.ReservationVO;
 
 public interface ReservaionController {
 
@@ -33,7 +34,7 @@ public interface ReservaionController {
 	/**
 	 * 예약 실행
 	 */
-	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationDTO reservationDTO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationVO reservationVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	/**
 	 * 예약 완료 페이지
