@@ -1,8 +1,10 @@
 package com.petmillie.goods.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.service.GoodsService;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.member.vo.MemberVO;
+import com.petmillie.mypage.service.MyPageService;
 
 import net.sf.json.JSONObject;
 
@@ -29,6 +33,8 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	private GoodsService goodsService;
 	@Autowired
 	private GoodsVO goodsVO;
+	@Autowired
+	private MyPageService myPageService;
 	
 	@RequestMapping(value="/goodsDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView goodsDetail(@RequestParam("goods_num") int goods_num,
@@ -163,17 +169,22 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	    ModelAndView mav = new ModelAndView("/common/layout");
 
 	    mav.addObject("title", "전체 상품");
-
-	    // viewName은 직접 지정하는 것이 안전함
 	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
 
 	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
 	    List<GoodsVO> goodsList = goodsService.listAllGoods();
-	    for (GoodsVO goodsVO : goodsList) {
-	        System.out.println(goodsVO.getGoods_fileName());  // 각 상품의 이미지 파일명 출력
-	    }
-	    
 	    mav.addObject("goodsList", goodsList); // JSP로 전달
+
+	    // 로그인 유저 기준으로 관심상품 Set 가져오기
+	    HttpSession session = request.getSession();
+	    MemberVO member = (MemberVO) session.getAttribute("memberInfo");
+	    Set<Integer> likedGoodsSet = new HashSet<>();
+	    if (member != null) {
+	        likedGoodsSet = myPageService.getLikedGoodsSet(member.getMember_id()); 
+	        // DB에서 해당 유저의 관심상품 번호만 뽑아서 Set<Integer>로 반환
+	    }
+	    mav.addObject("likedGoodsSet", likedGoodsSet); // JSP로 전달
+
 	    return mav;
 	}
 

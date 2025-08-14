@@ -22,22 +22,28 @@
 				<td>상품이미지</td>
 				<td>관심상품</td>
 				<td>가격</td>
+				<td>삭제</td>
 			</tr>
 			<c:choose>	
 				<c:when test="${empty likeGoodsList}">
 					<tr>
 						<td colspan="3" class="fixed">
-							<strong>주문한 상품이 없습니다.</strong>
+							<strong>관심상품이 없습니다.</strong>
 						</td>
 					</tr>
 				</c:when>
 				 <c:otherwise>
 				 	<c:forEach var="item" items="${likeGoodsList}">
-						<tr>
-							<td><img src="${contextPath}/mypage/image.do?file_name=${item.file_name}&goods_num=${item.goods_num}" style="width:100px;"/></td>
-							<td><a href="#">${item.goods_name}</a></td>
-							<td>${item.goods_sales_price}</td>		
-						</tr>
+					    <tr>
+					        <td>
+					            <img src="${contextPath}/mypage/image.do?file_name=${item.goods_fileName}&goods_num=${item.goods_num}" style="width:100px;"/>
+					        </td>
+					        <td><a href="#">${item.goods_name}</a></td>
+					        <td>${item.goods_sales_price}</td>  
+					        <td>
+					            <input type="button" class="btn btn-danger" onclick="likeGoodsDelete(${item.like_goods_id})" value="삭제"/>
+					        </td> 
+					    </tr>
 					</c:forEach>
 				 </c:otherwise>
 			</c:choose>
@@ -46,5 +52,27 @@
 	
 	</form>	
 </div>
+<script>
+
+function likeGoodsDelete(likeGoodsId) {
+    $.ajax({
+        type: "POST",
+        url: "${contextPath}/mypage/likeGoodsDelete.do",
+        data: { like_goods_id: likeGoodsId },
+        success: function(response) {
+            if (response === "success") {
+                alert("삭제 완료");
+                location.reload();
+            } else {
+                alert("삭제 실패");
+            }
+        },
+        error: function() {
+            alert("서버 요청 중 오류 발생");
+        }
+    });
+}
+
+</script>
 </body>
 </html>

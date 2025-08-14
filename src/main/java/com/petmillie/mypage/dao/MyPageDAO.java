@@ -33,4 +33,5 @@ public interface MyPageDAO {
 	public int existsLikeGoods(Map<String, Object> params) throws Exception ;
 	public void insertLikeGoods(Map<String, Object> params) throws Exception;
 	public void deleteLikeGoods(Map<String, Object> params) throws Exception;
+	public int likeGoodsDelete(int like_goods_id) throws Exception;
 }

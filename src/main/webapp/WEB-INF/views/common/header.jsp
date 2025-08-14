@@ -210,13 +210,14 @@
 						<li><a href="#">나의 주소록</a></li>
 						<li><a href="#">개인정보 동의내역</a></li>
 						<li><a href="#">회원탈퇴</a></li>
+						<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
 					</ul>
 				</c:if>
 				
 				<c:if test="${not empty businessInfo}">
 					<ul class="submenu">
 						<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
-						<li><a href="${contextPath}/reservation/reserForm.do">예약 확인</a></li>
+						<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
 						<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
 						<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
 						<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>

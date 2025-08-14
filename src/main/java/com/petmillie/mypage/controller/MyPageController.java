@@ -35,8 +35,8 @@ public interface MyPageController {
 	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file,
             						@RequestParam("originalFileName") String originalFileName, 
             						HttpServletRequest request) throws Exception;
-	public ModelAndView likeGoods(HttpServletRequest request,String member_id) throws Exception;
+	public ModelAndView likeGoods(HttpServletRequest request) throws Exception;
 	public Map<String, Object> toggleLikeGoods(@RequestParam String member_id, @RequestParam int goods_num)  throws Exception;
-
+	public String likeGoodsDelete(@RequestParam int like_goods_id) throws Exception;
 
 }

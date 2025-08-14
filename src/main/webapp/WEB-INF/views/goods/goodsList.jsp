@@ -104,7 +104,7 @@ function toggleLikeGoods(btn) {
         alert("로그인 후 이용 가능합니다.");
         return;
     }
-    alert("관심상품추가 스크립트 진입");
+    
     var goods_num = $(btn).data("goods-num");  // data-goods-num에서 값 가져오기
     var isLiked = $(btn).hasClass("like_on");  // 클릭한 버튼 기준으로 상태 확인
 
@@ -116,8 +116,10 @@ function toggleLikeGoods(btn) {
         success: function(response) {
             if(response.success) {
                 if(response.status === "added") {
+                	alert("나의 관심상품에 추가되었습니다.");
                     $(btn).removeClass("like_off").addClass("like_on");
                 } else if(response.status === "deleted") {
+                	alert("나의 관심상품에서 해제되었습니다.");
                     $(btn).removeClass("like_on").addClass("like_off");
                 }
             } else {

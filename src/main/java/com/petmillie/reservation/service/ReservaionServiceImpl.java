@@ -57,4 +57,9 @@ public class ReservaionServiceImpl implements ReservaionService {
 	public List<ReservationDTO> getReservationsByBusinessId(String business_id) throws Exception {
 		return reservaionDAO.selectReservationsByBusinessId(business_id);
 	}
+	
+	@Override
+	public List<ReservationDTO> getReservationsByMemberId(String memberId) throws Exception {
+	    return reservaionDAO.selectReservationsByMemberId(memberId);
+	}
 }

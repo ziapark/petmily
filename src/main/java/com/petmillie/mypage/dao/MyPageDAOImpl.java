@@ -93,7 +93,6 @@ public class MyPageDAOImpl implements MyPageDAO{
 	}
 	@Override
 	public List<LikeGoodsVO> likeGoodsList(String member_id) throws DataAccessException {
-
 		return sqlSession.selectList("mapper.mypage.selectLikeGoodsList", member_id);
 	}
 
@@ -114,6 +113,11 @@ public class MyPageDAOImpl implements MyPageDAO{
 	@Override
 	public void deleteLikeGoods(Map<String, Object> params) throws Exception {
 	    sqlSession.delete("mapper.mypage.deleteLikeGoods", params);
+	}
+
+	@Override
+	public int likeGoodsDelete(int like_goods_id) throws Exception {
+		return sqlSession.delete("mapper.mypage.likeGoodsDelete", like_goods_id);
 	}
 
 

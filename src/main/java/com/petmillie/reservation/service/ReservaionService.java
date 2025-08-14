@@ -28,5 +28,6 @@ public interface ReservaionService {
 	 * 컨트롤러에서 이 기능을 호출하므로 인터페이스에 선언이 필요합니다.
 	 */
 	public List<ReservationDTO> getReservationsByBusinessId(String business_id) throws Exception;
-
+	public List<ReservationDTO> getReservationsByMemberId(String memberId) throws Exception;
+	
 }
