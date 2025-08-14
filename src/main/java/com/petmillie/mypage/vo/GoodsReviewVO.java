@@ -9,14 +9,15 @@ public class GoodsReviewVO {
 	private String review_id;
 	private String member_id;
 	private int order_num;
+	private int reservation_id;
 	private int rating;
 	private String content;
 	private String file_name;
-	private String goods_name;
-	
 	private Date created_at;
 	private Date updated_at;
 	private String del_yn;
+	private String review_type;
+	
 	public String getReview_id() {
 		return review_id;
 	}
@@ -34,6 +35,12 @@ public class GoodsReviewVO {
 	}
 	public void setOrder_num(int order_num) {
 		this.order_num = order_num;
+	}
+	public int getReservation_id() {
+		return reservation_id;
+	}
+	public void setReservation_id(int reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 	public int getRating() {
 		return rating;
@@ -71,13 +78,10 @@ public class GoodsReviewVO {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
-	public String getGoods_name() {
-		return goods_name;
+	public String getReview_type() {
+		return review_type;
 	}
-	public void setGoods_name(String goods_name) {
-		this.goods_name = goods_name;
+	public void setReview_type(String review_type) {
+		this.review_type = review_type;
 	}
-	
-	
-
 }

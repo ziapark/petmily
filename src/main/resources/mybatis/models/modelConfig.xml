@@ -18,7 +18,6 @@
     <typeAlias type="com.petmillie.business.vo.BusinessVO" alias="BusinessVO" />
     <typeAlias type="com.petmillie.business.vo.PensionVO" alias="PensionVO" />
     <typeAlias type="com.petmillie.business.vo.RoomVO" alias="RoomVO" />
-    <typeAlias type="com.petmillie.comunity.vo.ComunityVO" alias="ComunityVO" />
     <typeAlias type="com.petmillie.board.vo.BoardVO" alias="BoardVO" />
     <typeAlias type="com.petmillie.board.vo.CommentVO" alias="CommentVO" />
     <typeAlias type="com.petmillie.board.vo.LikeVO" alias="LikeVO" />

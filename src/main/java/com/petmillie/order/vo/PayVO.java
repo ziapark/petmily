@@ -2,25 +2,31 @@ package com.petmillie.order.vo;
 
 import org.springframework.stereotype.Component;
 
+//payment
 @Component("payVO")
 public class PayVO {
-	private String payment_id;
+	private int payment_id;
+	private int order_num;
 	private String pay_method;
 	private String card_com_name;
 	private String card_pay_month;
-	private int final_total_price;
-	private String pay_order_time;
-	private int order_num;
+	private String pay_order_tel;
 	private String payment_amount;
 	private String payment_status;
 	private String pg_tid;
 	private String payment_time;
-	private String pay_order_tel;
-	public String getPayment_id() {
+	
+	public int getPayment_id() {
 		return payment_id;
 	}
-	public void setPayment_id(String payment_id) {
+	public void setPayment_id(int payment_id) {
 		this.payment_id = payment_id;
+	}
+	public int getOrder_num() {
+		return order_num;
+	}
+	public void setOrder_num(int order_num) {
+		this.order_num = order_num;
 	}
 	public String getPay_method() {
 		return pay_method;
@@ -40,23 +46,11 @@ public class PayVO {
 	public void setCard_pay_month(String card_pay_month) {
 		this.card_pay_month = card_pay_month;
 	}
-	public int getFinal_total_price() {
-		return final_total_price;
+	public String getPay_order_tel() {
+		return pay_order_tel;
 	}
-	public void setFinal_total_price(int final_total_price) {
-		this.final_total_price = final_total_price;
-	}
-	public String getPay_order_time() {
-		return pay_order_time;
-	}
-	public void setPay_order_time(String pay_order_time) {
-		this.pay_order_time = pay_order_time;
-	}
-	public int getOrder_num() {
-		return order_num;
-	}
-	public void setOrder_num(int order_num) {
-		this.order_num = order_num;
+	public void setPay_order_tel(String pay_order_tel) {
+		this.pay_order_tel = pay_order_tel;
 	}
 	public String getPayment_amount() {
 		return payment_amount;
@@ -82,13 +76,5 @@ public class PayVO {
 	public void setPayment_time(String payment_time) {
 		this.payment_time = payment_time;
 	}
-	public String getPay_order_tel() {
-		return pay_order_tel;
-	}
-	public void setPay_order_tel(String pay_order_tel) {
-		this.pay_order_tel = pay_order_tel;
-	}
-	
-	
 	
 }

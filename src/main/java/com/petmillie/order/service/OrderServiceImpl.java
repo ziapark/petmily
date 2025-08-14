@@ -45,7 +45,8 @@ public class OrderServiceImpl implements OrderService {
     public void removeCartItem(String member_id, int goods_num) throws Exception {
         CartVO cartVO = new CartVO();
         cartVO.setMember_id(member_id);
-        cartVO.setgoods_num(goods_num);
+        cartVO.setGoods_num(goods_num);
+        
 
         Integer cart_id = orderDAO.selectCartIdByMemberAndGoods(cartVO);
         if (cart_id != null) {

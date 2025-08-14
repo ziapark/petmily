@@ -248,7 +248,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
         // 2️⃣ 결제 정보 저장
         PayVO payVO = new PayVO();
         payVO.setOrder_num(generatedOrderNum);
-        payVO.setPayment_id((String) payData.get("paymentId"));
+        payVO.setPayment_id((int) payData.get("paymentId"));
         payVO.setPay_method((String) payData.get("pay_method"));
         payVO.setCard_com_name((String) payData.get("card_com_name"));
         payVO.setCard_pay_month((String) payData.get("card_pay_month"));
@@ -260,9 +260,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 
         // 결제 시간은 현재 시간으로 넣는 것도 방법
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        payVO.setFinal_total_price(final_price);
         payVO.setPayment_amount(priceStr);
-        payVO.setPay_order_time(now);
         payVO.setPayment_time(now);
 
         // 결제 insert    

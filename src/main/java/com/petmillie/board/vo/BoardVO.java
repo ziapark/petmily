@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
+//community
 @Component("BoardVO")
 public class BoardVO {
 	private int comu_id;
@@ -12,10 +13,11 @@ public class BoardVO {
 	private String content;
 	private String board_type;
 	private String file_name;
-	private Date reg_date;
-	private Date update_date;
 	private int views;
 	private int likes;
+	private Date reg_date;
+	private Date update_date;
+	private String del_yn;
 	
 	public int getComu_id() {
 		return comu_id;
@@ -41,7 +43,6 @@ public class BoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 	public String getBoard_type() {
 		return board_type;
 	}
@@ -53,18 +54,6 @@ public class BoardVO {
 	}
 	public void setFile_name(String file_name) {
 		this.file_name = file_name;
-	}
-	public Date getReg_date() {
-		return reg_date;
-	}
-	public void setReg_date(Date reg_date) {
-		this.reg_date = reg_date;
-	}
-	public Date getUpdate_date() {
-		return update_date;
-	}
-	public void setUpdate_date(Date update_date) {
-		this.update_date = update_date;
 	}
 	public int getViews() {
 		return views;
@@ -78,7 +67,22 @@ public class BoardVO {
 	public void setLikes(int likes) {
 		this.likes = likes;
 	}
-	
-	
-	
+	public Date getReg_date() {
+		return reg_date;
+	}
+	public void setReg_date(Date reg_date) {
+		this.reg_date = reg_date;
+	}
+	public Date getUpdate_date() {
+		return update_date;
+	}
+	public void setUpdate_date(Date update_date) {
+		this.update_date = update_date;
+	}
+	public String getDel_yn() {
+		return del_yn;
+	}
+	public void setDel_yn(String del_yn) {
+		this.del_yn = del_yn;
+	}
 }

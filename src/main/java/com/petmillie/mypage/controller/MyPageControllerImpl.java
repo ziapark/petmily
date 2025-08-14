@@ -75,6 +75,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 
 	    return mav;
 	}
+	
 	@Override
 	@RequestMapping(value="/myOrderDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView myOrderDetail(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception {
@@ -129,11 +130,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
 
 	    // 각 주문별 리뷰 여부 체크
-	    for (OrderVO order : myOrderHistList) {
-	    	
-	        boolean hasReview = myPageService.existsReview(order.getOrder_num(), member_id);
-	        order.setHasReview(hasReview);
-	    }
 
 	    mav.addObject("myOrderHistList", myOrderHistList);
 	    
@@ -168,7 +164,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 
-	
 	@Override
 	@RequestMapping(value="/updateMember.do" ,method = RequestMethod.POST)
 	public ModelAndView updateMember(@ModelAttribute MemberVO memberVO, HttpSession session, HttpServletRequest request, HttpServletResponse response)  throws Exception {
@@ -195,9 +190,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	@Override
 	@RequestMapping(value="/removeMember.do", method=RequestMethod.POST)
 	@ResponseBody
-	public String removeMember(@RequestParam("id")String id, HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		System.out.println("컨트롤러로 넘어온 아이디 : " + id);
+	public String removeMember(@RequestParam("id")String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		int result = memberService.removeMember(id);
 		return (result == 0 ) ? "false" : "true";
 	}

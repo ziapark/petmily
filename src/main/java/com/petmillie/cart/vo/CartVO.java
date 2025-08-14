@@ -5,11 +5,10 @@ import org.springframework.stereotype.Component;
 @Component("cartVO")
 public class CartVO {
 	private int cart_id;
-	private int goods_num;
 	private String member_id;
+	private int goods_num;
 	private int cart_goods_qty;
 	private String creDate;
-	
 	
 	public int getCart_id() {
 		return cart_id;
@@ -17,23 +16,18 @@ public class CartVO {
 	public void setCart_id(int cart_id) {
 		this.cart_id = cart_id;
 	}
-	
-	
-
-	public int getgoods_num() {
-		return goods_num;
-	}
-	public void setgoods_num(int goods_num) {
-		this.goods_num = goods_num;
-	}
 	public String getMember_id() {
 		return member_id;
 	}
 	public void setMember_id(String member_id) {
 		this.member_id = member_id;
 	}
-	
-	
+	public int getGoods_num() {
+		return goods_num;
+	}
+	public void setGoods_num(int goods_num) {
+		this.goods_num = goods_num;
+	}
 	public int getCart_goods_qty() {
 		return cart_goods_qty;
 	}
@@ -46,8 +40,4 @@ public class CartVO {
 	public void setCreDate(String creDate) {
 		this.creDate = creDate;
 	}
-	
-	
-	
-
 }

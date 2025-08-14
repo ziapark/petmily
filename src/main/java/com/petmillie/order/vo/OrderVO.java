@@ -9,24 +9,23 @@ public class OrderVO {
 	private int order_id;
 	private int goods_num;
 	private String goods_name;
-	private String goods_sales_price; 
+	private String goods_sales_price;
+	private String total_price;
 	private int goods_qty;
 	private String order_name;
 	private String receiver_name;
 	private String tel1;
 	private String tel2;
 	private String tel3;
-	private String total_price;
+	private String delivery_message;
+	private String delivery_state; //기본값 배송준비중
+	private String goods_fileName;
+	private String order_time;
 	private String zipcode;
 	private String roadAddress;
 	private String jibunAddress;
 	private String namujiAddress;
 	private String delivery_method;
-	private String delivery_message;
-	private String delivery_state; //기본값 배송준비중
-	private String goods_fileName;
-	private String order_time;
-	private boolean hasReview;
 
 	public String getTotal_price() {
 		return total_price;
@@ -160,13 +159,5 @@ public class OrderVO {
 	public void setOrder_time(String order_time) {
 		this.order_time = order_time;
 	}
-	public boolean isHasReview() {
-		return hasReview;
-	}
-	public void setHasReview(boolean hasReview) {
-		this.hasReview = hasReview;
-	}
-	
-	
 
 }

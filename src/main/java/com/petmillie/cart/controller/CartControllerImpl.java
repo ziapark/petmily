@@ -57,7 +57,7 @@ public class CartControllerImpl extends BaseController implements CartController
 		 
 		CartVO cartVO = new CartVO(); // 이렇게 직접 생성
 	    cartVO.setMember_id(member_id);
-	    cartVO.setgoods_num(goods_num);
+	    cartVO.setGoods_num(goods_num);
 	    cartVO.setCart_goods_qty(1);
 		
 	    String result = cartService.addOrIncreaseGoodsInCart(cartVO);
@@ -74,7 +74,7 @@ public class CartControllerImpl extends BaseController implements CartController
 		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
 		String member_id=memberVO.getMember_id();
 		CartVO cartVO = new CartVO(); 
-		cartVO.setgoods_num(goods_num);
+		cartVO.setGoods_num(goods_num);
 		cartVO.setMember_id(member_id);
 		cartVO.setCart_goods_qty(cart_goods_qty);
 		boolean result=cartService.modifyCartQty(cartVO);
