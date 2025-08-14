@@ -37,7 +37,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	 * 이 메서드가 reservation_check.jsp 페이지를 담당하도록 수정합니다.
 	 */
 	@Override
-	@RequestMapping(value = "/reserForm.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/reservation_check.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView serachReservaion(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
@@ -101,7 +101,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	 * 예약하기 폼 페이지 요청 (기존 코드 유지)
 	 */
 	@Override
-	@RequestMapping(value = "/reservationForm.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/roomReservation.do", method = RequestMethod.GET)
 	public ModelAndView reservationForm(@RequestParam("p_num") int p_num, @RequestParam("roomId") int roomId,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView("/common/layout");

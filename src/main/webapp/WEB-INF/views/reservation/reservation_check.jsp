@@ -24,6 +24,8 @@
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <h5 class="card-title">예약 번호: ${reservationItem.reservation_id}</h5>
+                                <p class="card-text mb-1"><strong>객실 이름:</strong> ${reservationItem.room_name}</p>
+                                <p class="card-text mb-1"><strong>객실 타입:</strong> ${reservationItem.room_type}</p>
                                 <p class="card-text mb-1"><strong>회원 아이디:</strong> ${reservationItem.member_id}</p>
                                 <p class="card-text mb-1"><strong>예약자명:</strong> ${reservationItem.reserver_name}</p>
                                 <p class="card-text mb-1"><strong>연락처:</strong> ${reservationItem.reserver_tel}</p>

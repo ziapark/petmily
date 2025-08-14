@@ -22,11 +22,30 @@ public class ReservationDTO {
 	private int total_price;
 	private String status;
 	
+	private String room_name;
+    private String room_type;
+	
 	public ReservationDTO() {
 	}
 
 	// --- 모든 필드에 대한 Getter & Setter ---
 	
+	public String getRoom_name() {
+		return room_name;
+	}
+
+	public void setRoom_name(String room_name) {
+		this.room_name = room_name;
+	}
+
+	public String getRoom_type() {
+		return room_type;
+	}
+
+	public void setRoom_type(String room_type) {
+		this.room_type = room_type;
+	}
+
 	public int getReservation_id() {
 		return reservation_id;
 	}

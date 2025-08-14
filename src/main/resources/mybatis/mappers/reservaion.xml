@@ -41,7 +41,7 @@
 		<result property="fileimage" column="fileimage"/>
 	</resultMap>
 	
-	<!-- [추가] ReservationDTO를 위한 resultMap -->
+	<!-- [수정] ReservationDTO에 room_name과 room_type 필드 추가 -->
 	<resultMap id="reservationResult" type="com.petmillie.reservation.vo.ReservationDTO">
 		<result property="reservation_id" column="reservation_id"/>
 		<result property="member_id" column="member_id"/>
@@ -54,6 +54,9 @@
 		<result property="reserver_tel" column="reserver_tel"/>
 		<result property="total_price" column="total_price"/>
 		<result property="status" column="status"/>
+		<!-- 추가된 객실 정보 필드 -->
+		<result property="room_name" column="room_name"/>
+		<result property="room_type" column="room_type"/>
 	</resultMap>
 
 	<select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
@@ -128,12 +131,14 @@
 	  ===================================================================
 	-->
 	
-	<!-- [추가] 사업자 ID로 예약 목록 조회 -->
+	<!-- [수정] 사업자 ID로 예약 목록 조회 -->
 	<select id="selectReservationsByBusinessId" resultMap="reservationResult" parameterType="String">
 		<![CDATA[
-			SELECT * FROM reservation
-			WHERE business_id = #{business_id}
-			ORDER BY checkin_date DESC
+			SELECT r.*, rm.room_name, rm.room_type
+			FROM reservation r
+			JOIN room rm ON r.room_id = rm.room_id
+			WHERE r.business_id = #{business_id}
+			ORDER BY r.checkin_date DESC
 		]]>
 	</select>
 	
