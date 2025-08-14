@@ -450,7 +450,29 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	
 	
-	
+	@RequestMapping(value="/myPetInfo.do", method=RequestMethod.GET)
+	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+	    if (memberInfo == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    
+	    // 사이드 메뉴 활성화 처리를 위해 session에 "my_pet_info"를 저장합니다.
+	    session.setAttribute("side_menu", "my_pet_info"); 
+	    
+	    String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "나의 반려동물 정보");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    
+	    // 나중에 MyPageService를 통해 반려동물 목록을 조회하여 mav에 추가할 예정입니다.
+	    // List<PetVO> petList = myPageService.listMyPets(memberInfo.getMember_id());
+	    // mav.addObject("petList", petList);
+	    
+	    return mav;
+	}
 	
 	
 }

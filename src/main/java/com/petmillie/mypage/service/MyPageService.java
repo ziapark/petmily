@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
+import com.petmillie.mypage.vo.PetVO;
 import com.petmillie.order.vo.OrderVO;
 
 public interface MyPageService{
@@ -28,5 +27,10 @@ public interface MyPageService{
 	public Map<String, Object> toggleLikeGoods(String member_id, int goods_num) throws Exception;
 	Set<Integer> getLikedGoodsSet(String member_id) throws Exception;
 	public int likeGoodsDelete(int like_goods_id) throws Exception;
-	
+	public List<PetVO> listMyPets(String member_id) throws Exception;
+	public boolean canAddMorePets(String member_id) throws Exception;
+	public void addPet(PetVO petVO) throws Exception;
+	public PetVO findPetInfo(int pet_id) throws Exception;
+	public void modifyPet(PetVO petVO) throws Exception;
+	public void removePet(int pet_id) throws Exception;
 }

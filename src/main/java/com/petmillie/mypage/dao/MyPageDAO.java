@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
+import com.petmillie.mypage.vo.PetVO;
 import com.petmillie.order.vo.OrderVO;
 
 public interface MyPageDAO {
@@ -34,4 +35,13 @@ public interface MyPageDAO {
 	public void insertLikeGoods(Map<String, Object> params) throws Exception;
 	public void deleteLikeGoods(Map<String, Object> params) throws Exception;
 	public int likeGoodsDelete(int like_goods_id) throws Exception;
+	
+	
+	public List<PetVO> selectMyPetList(String member_id) throws Exception;
+	public int selectPetCount(String member_id) throws Exception;
+	public int insertPet(PetVO petVO) throws Exception;
+	public PetVO selectPet(int pet_id) throws Exception;
+	public int updatePet(PetVO petVO) throws Exception;
+	public int deletePet(int pet_id) throws Exception;
+	
 }

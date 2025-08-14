@@ -17,26 +17,28 @@ import com.petmillie.mypage.vo.GoodsReviewVO;
 
 public interface MyPageController {
 	public ModelAndView myPageMain(@RequestParam Map<String, String> dateMap, @RequestParam(required = false,value="message")  String message,
-			   HttpServletRequest request, HttpServletResponse response)  throws Exception
-;	public ModelAndView myOrderDetail(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception;
+			HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView myOrderDetail(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView cancelMyOrder(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView myDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ResponseEntity modifyMyInfo(@RequestParam("attribute")  String attribute,
-					            @RequestParam("value")  String value,
-					            HttpServletRequest request, HttpServletResponse response)  throws Exception;
+					@RequestParam("value")  String value,
+					HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public String removeMember(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public ModelAndView addReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request) throws Exception;
-	public ModelAndView myReview(HttpServletRequest request) throws Exception ;
-	public ModelAndView myReviewDetail(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception ;
-	public ModelAndView deleteReview(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception ;
-	public ModelAndView updateReviewForm(HttpServletRequest request, int review_id) throws Exception ;
+	public ModelAndView myReview(HttpServletRequest request) throws Exception;
+	public ModelAndView myReviewDetail(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception;
+	public ModelAndView deleteReview(HttpServletRequest request, @RequestParam("review_id") int review_id) throws Exception;
+	public ModelAndView updateReviewForm(HttpServletRequest request, int review_id) throws Exception;
 	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file,
-            						@RequestParam("originalFileName") String originalFileName, 
-            						HttpServletRequest request) throws Exception;
+  						@RequestParam("originalFileName") String originalFileName, 
+  						HttpServletRequest request) throws Exception;
 	public ModelAndView likeGoods(HttpServletRequest request) throws Exception;
 	public Map<String, Object> toggleLikeGoods(@RequestParam String member_id, @RequestParam int goods_num)  throws Exception;
 	public String likeGoodsDelete(@RequestParam int like_goods_id) throws Exception;
 
+	// ✅ 새로 추가된 반려동물 정보 페이지 메서드
+	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

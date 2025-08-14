@@ -15,6 +15,7 @@ import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.dao.MyPageDAO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
+import com.petmillie.mypage.vo.PetVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Service("myPageService")
@@ -125,5 +126,34 @@ public class MyPageServiceImpl  implements MyPageService{
 		return myPageDAO.likeGoodsDelete(like_goods_id);
 	}
 	
+	@Override
+	public List<PetVO> listMyPets(String member_id) throws Exception {
+		return myPageDAO.selectMyPetList(member_id);
+	}
+
+	@Override
+	public boolean canAddMorePets(String member_id) throws Exception {
+		return myPageDAO.selectPetCount(member_id) < 3;
+	}
+
+	@Override
+	public void addPet(PetVO petVO) throws Exception {
+		myPageDAO.insertPet(petVO);
+	}
+
+	@Override
+	public PetVO findPetInfo(int pet_id) throws Exception {
+		return myPageDAO.selectPet(pet_id);
+	}
+
+	@Override
+	public void modifyPet(PetVO petVO) throws Exception {
+		myPageDAO.updatePet(petVO);
+	}
+
+	@Override
+	public void removePet(int pet_id) throws Exception {
+		myPageDAO.deletePet(pet_id);
+	}
 
 }
