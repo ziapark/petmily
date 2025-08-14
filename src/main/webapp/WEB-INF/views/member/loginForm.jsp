@@ -23,7 +23,7 @@
 		</form>
 			
 		<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
-		&client_id=69cca3f6669288cd3162c12fa845a93d
+		&client_id=c28b7c96f79b9dda87ba1aa60d5900c9
 		&redirect_uri=http://localhost:8090/petmillie/member/kakaoLogin.do">
 		<img alt="카카오로그인" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
 		</a>

@@ -32,7 +32,7 @@
     <result property="social_type" column="social_type"/>
 </resultMap>	
 
-	<select id="login" resultType="memberVO"  parameterType="memberVO"  >
+	<select id="login" resultType="memberVO" parameterType="memberVO"  >
 	    <![CDATA[
 			select * from member 
 			where member_id=#{member_id}
@@ -40,6 +40,18 @@
 		]]>
 	</select>
 	
+	<select id="findkakaoid" resultType="memberVO" parameterType="memberVO">
+  		<![CDATA[
+  			select * from member where member_id = #{member_id} and member_name = #{member_name}
+  		]]>
+  	</select>
+  	
+  	<insert id="insertkakao" parameterType="memberVO">
+  		<![CDATA[
+  			insert into member(member_id, member_name) values (#{member_id}, #{member_name})
+  		]]>
+  	</insert>
+  	
 	<select id="selectOverlappedID" parameterType="String" resultType="int">
 	    <![CDATA[
 	        select 
@@ -48,6 +60,15 @@
 	        as total_count
 	    ]]>
 	</select>
+	
+  	<select id="selectOverlappedEmail" parameterType="memberVO" resultType="String">
+		<![CDATA[
+			SELECT IF(COUNT(*) > 0, 'true', 'false')
+			FROM member
+			WHERE email1 = #{email1} AND email2 = #{email2} 
+		]]>
+	</select>
+  		
 	<insert id="insertNewMember"  parameterType="memberVO">
   		<![CDATA[
     	insert into member(member_id,
@@ -94,24 +115,12 @@
                         #{namujiAddress})                                  
    		]]>      
   	</insert>
+  	
   	<update id="removeMember" parameterType="String">
   		<![CDATA[
   			update member set del_yn='Y' where member_id = #{member_id}
  	 	]]>
   	</update>
-  	<select id="findkakaoid" resultType="memberVO"  parameterType="String">
-  		<![CDATA[
-  			select * from member where kakao_id = #{kakao_id}
-  		]]>
-  	</select>
-  	<select id="selectOverlappedEmail" parameterType="memberVO" resultType="String">
-		<![CDATA[
-			SELECT IF(COUNT(*) > 0, 'true', 'false')
-			FROM member
-			WHERE email1 = #{email1} AND email2 = #{email2} 
-		]]>
-	</select>
-	
 	
 	<select id="findId" resultType="String" parameterType="memberVO">
 		(SELECT member_id FROM member
@@ -132,6 +141,5 @@
 		(SELECT seller_pw FROM business
 		 WHERE seller_id = #{member_id} AND email1 = #{email1} AND email2 = #{email2} AND (del_yn = 'N' OR del_yn IS NULL))
 	</select>
-	
 	
 </mapper>

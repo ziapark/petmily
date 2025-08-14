@@ -24,6 +24,22 @@ public class MemberDAOImpl  implements MemberDAO{
 	}
 	
 	@Override
+	public MemberVO findkakaoid(String kakaoid, String nickname) throws DataAccessException{
+		memberVO.setMember_id(kakaoid);
+		memberVO.setMember_name(nickname);
+		
+		return sqlSession.selectOne("mapper.member.findkakaoid", memberVO);
+	}	
+	
+	@Override
+	public void insertkakao(String kakaoid, String nickname) throws DataAccessException{
+		memberVO.setMember_id(kakaoid);
+		memberVO.setMember_name(nickname);
+		
+		sqlSession.insert("mapper.member.insertkakao", memberVO);
+	}
+	
+	@Override
 	public void insertNewMember(MemberVO memberVO) throws DataAccessException{
 		sqlSession.insert("mapper.member.insertNewMember",memberVO);
 	}
@@ -47,10 +63,6 @@ public class MemberDAOImpl  implements MemberDAO{
 		return sqlSession.delete("mapper.member.removeMember", id);
 	}
 	
-	@Override
-	public MemberVO findkakaoid(String id) throws DataAccessException{
-		return sqlSession.selectOne("mapper.member.findkakaoid", id);
-	}	
 	@Override
     public String findId(MemberVO memberVO) throws Exception {
         String memberId = sqlSession.selectOne("mapper.member.findId", memberVO);

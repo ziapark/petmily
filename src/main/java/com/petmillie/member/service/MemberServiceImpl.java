@@ -20,6 +20,15 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
+	public MemberVO findkakaoid(String kakaoid, String nickname) throws Exception {
+		return memberDAO.findkakaoid(kakaoid, nickname);
+	}
+	
+	@Override
+	public void insertkakao(String kakaoid, String nickname) throws Exception{
+		memberDAO.insertkakao(kakaoid, nickname);
+	}
+	@Override
 	public void addMember(MemberVO memberVO) throws Exception{
 		memberDAO.insertNewMember(memberVO);
 	}
@@ -38,19 +47,14 @@ public class MemberServiceImpl implements MemberService {
 	public int removeMember(String id) throws Exception {
 		return memberDAO.removeMember(id);
 	}
-
+	
 	@Override
-	public MemberVO findkakaoid(String kakaoid) throws Exception {
-		return memberDAO.findkakaoid(kakaoid);
+    public String findId(MemberVO memberVO) throws Exception {
+        return memberDAO.findId(memberVO);
+    }
+	
+	@Override
+	public String findPw(MemberVO memberVO) throws Exception {
+		return memberDAO.findPw(memberVO);
 	}
-	
-	
-	 @Override
-	    public String findId(MemberVO memberVO) throws Exception {
-	        return memberDAO.findId(memberVO);
-	    }
-	 @Override
-		public String findPw(MemberVO memberVO) throws Exception {
-			return memberDAO.findPw(memberVO);
-		}
 }

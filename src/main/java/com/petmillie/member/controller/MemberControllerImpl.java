@@ -85,14 +85,87 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	}
 
 	@Override
+	@RequestMapping(value="/kakaoLogin.do", method= {RequestMethod.GET})
+	public String kakaoLogin(@RequestParam("code") String code, HttpSession session) throws Exception {
+		String reqUrl = "https://kauth.kakao.com/oauth/token";
+	    RestTemplate restTemplate = new RestTemplate();
+
+	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+	    params.add("grant_type", "authorization_code");
+	    params.add("client_id", "c28b7c96f79b9dda87ba1aa60d5900c9");
+	    params.add("redirect_uri", "http://localhost:8090/petmillie/member/kakaoLogin.do");
+	    params.add("code", code);
+	    params.add("client_secret", "8naClxcT2e7KP5VVZjyn1LtAiFrTGuUW");
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+	    HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
+	    
+	    ResponseEntity<String> response = restTemplate.postForEntity(reqUrl, httpEntity, String.class);
+	    String body = response.getBody();
+	    
+	    JSONObject jsonObj = new JSONObject(body);
+	    String accessToken = jsonObj.getString("access_token");
+	    
+	    String infoUrl = "https://kapi.kakao.com/v2/user/me";
+	    HttpHeaders infoHeaders = new HttpHeaders();
+	    infoHeaders.add("Authorization", "Bearer " + accessToken);
+
+	    HttpEntity<String> infoEntity = new HttpEntity<>(infoHeaders);
+
+	    ResponseEntity<String> infoResponse = restTemplate.exchange(infoUrl, HttpMethod.GET, infoEntity, String.class);
+	    String userInfo = infoResponse.getBody();    
+	    
+	    JSONObject userObj = new JSONObject(userInfo);
+	    long kakaoid = userObj.getLong("id");
+	    String nickname = "";
+
+	    if(userObj.has("properties")){
+	        JSONObject properties = userObj.getJSONObject("properties");
+	        if(properties.has("nickname")){
+	            nickname = properties.getString("nickname");
+	        }
+	    }
+
+	    MemberVO memberVO = memberService.findkakaoid(String.valueOf(kakaoid), nickname);
+	    
+	    if(memberVO == null){	
+	        // 최초 카카오 로그인(데이터베이스에 아이디/이름 저장)
+	    	memberService.insertkakao(String.valueOf(kakaoid), nickname);
+	    }
+	    
+		session.setAttribute("isLogOn", true);
+		session.setAttribute("memberInfo", memberVO);
+		session.setAttribute("social_type", "kakao");
+    	return "redirect:/main/main.do";
+	}
+	
+	@Override
 	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
+		
+        String socialType = (String) session.getAttribute("social_type");
+
+        if (socialType != null && socialType.equals("kakao")) {
+            String clientId = "c28b7c96f79b9dda87ba1aa60d5900c9";
+            String logoutRedirectUri = "http://localhost:8090/petmillie/main/main.do";
+            
+            String kakaoLogoutUrl = "https://kauth.kakao.com/oauth/logout"
+                                  + "?client_id=" + clientId
+                                  + "&logout_redirect_uri=" + logoutRedirectUri;
+            
+            mav.setViewName("redirect:" + kakaoLogoutUrl);
+        } else {
+            mav.setViewName("redirect:/main/main.do");
+        }
+        
 		session.setAttribute("isLogOn", false);
 		session.removeAttribute("memberInfo");
 		session.removeAttribute("businessInfo");
-		mav.setViewName("redirect:/main/main.do");
+
 		return mav;
 	}
 
@@ -160,93 +233,6 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 		mav.addObject("title", "메인페이지");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		return mav;
-	}
-
-	@Override
-	@RequestMapping(value="/kakaoLogin.do", method= {RequestMethod.GET, RequestMethod.POST})
-	public String kakaoLogin(@RequestParam("code") String code, @RequestParam Map<String, String> loginMap, HttpSession session, Model model) throws Exception {
-		// 1. code 파라미터가 잘 들어왔는지 확인!
-	    System.out.println("카카오 인증코드: " + code);
-	    
-	    String reqUrl = "https://kauth.kakao.com/oauth/token";
-	    RestTemplate restTemplate = new RestTemplate();
-
-	    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-	    params.add("grant_type", "authorization_code");
-	    params.add("client_id", "69cca3f6669288cd3162c12fa845a93d");
-	    params.add("redirect_uri", "http://localhost:8090/petmillie/member/kakaoLogin.do");
-	    params.add("code", code);
-	    params.add("client_secret", "pPyFlBfKwC0yp4VrrO58yOLD1ksvY1Fu");
-	    
-	    System.out.println("client_id: 69cca3f6669288cd3162c12fa845a93d");
-	    System.out.println("redirect_uri: http://localhost:8090/petmillie/member/kakaoLogin.do");
-	    System.out.println("code: " + code);
-
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-
-	    HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
-
-	    ResponseEntity<String> response = restTemplate.postForEntity(reqUrl, httpEntity, String.class);
-	    String body = response.getBody();
-	    System.out.println("카카오 토큰 응답: " + body);
-	    
-	    JSONObject jsonObj = new JSONObject(body);
-	    String accessToken = jsonObj.getString("access_token");
-	    System.out.println("카카오 access_token: " + accessToken);
-	    
-	    String infoUrl = "https://kapi.kakao.com/v2/user/me";
-	    HttpHeaders infoHeaders = new HttpHeaders();
-	    infoHeaders.add("Authorization", "Bearer " + accessToken);
-
-	    HttpEntity<String> infoEntity = new HttpEntity<>(infoHeaders);
-
-	    ResponseEntity<String> infoResponse = restTemplate.exchange(infoUrl, HttpMethod.GET, infoEntity, String.class);
-	    String userInfo = infoResponse.getBody();
-	    System.out.println("카카오 회원정보: " + userInfo);
-	    
-	    JSONObject userObj = new JSONObject(userInfo);
-	    long kakaoid = userObj.getLong("id");
-	    String email1 = "";
-	    String email2 = "";
-	    String nickname = "";
-
-	    if(userObj.has("kakao_account")){
-	        JSONObject account = userObj.getJSONObject("kakao_account");
-	        if(account.has("email")){
-	            String email = account.getString("email");   // 예: sample@naver.com
-	            int idx = email.indexOf("@");
-	            if (idx > 0) {
-	                email1 = email.substring(0, idx);     // sample
-	                email2 = email.substring(idx + 1);    // naver.com
-	        }
-	    }
-	    }
-	    if(userObj.has("properties")){
-	        JSONObject properties = userObj.getJSONObject("properties");
-	        if(properties.has("nickname")){
-	            nickname = properties.getString("nickname");
-	        }
-	    }
-
-	    // 1) DB에서 kakaoId로 회원 조회
-	    MemberVO memberVO = memberService.findkakaoid(String.valueOf(kakaoid));
-	    
-	    if(memberVO != null){
-	        // 이미 가입된 회원 → 로그인 처리
-			session.setAttribute("isLogOn", true);
-			session.setAttribute("memberInfo", memberVO);
-	    	return "redirect:/main/main.do";
-	    }else {
-			
-	        // 최초 카카오 로그인 → 회원가입 유도
-	    	session.setAttribute("kakao_id", kakaoid);
-	    	session.setAttribute("kakao_name", nickname);
-	    	session.setAttribute("kakao_email1", email1);
-	    	session.setAttribute("kakao_email2", email2);
-	    	session.setAttribute("social_type", "kakao");
-	        return "redirect:/member/kakaoForm.do"; // 회원가입 폼으로 이동
-	    }
 	}
 	
 	@RequestMapping(value="/deleteMember.do", method={RequestMethod.GET,RequestMethod.POST})
