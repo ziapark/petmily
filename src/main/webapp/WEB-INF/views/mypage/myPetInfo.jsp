@@ -17,6 +17,26 @@
 	.btn-container {margin-top: 15px;}
 	.btn-container .btn {margin-right: 10px;}
 </style>
+<script>
+// 반려동물 삭제 함수
+function fn_delete_pet(pet_id){
+	var answer=confirm("정말로 이 반려동물 정보를 삭제하시겠습니까?");
+	if(answer==true){
+		var formObj=document.createElement("form");
+		var i_pet_id = document.createElement("input"); 
+	    
+	    i_pet_id.name="pet_id";
+	    i_pet_id.value=pet_id;
+		
+	    formObj.appendChild(i_pet_id);
+	    document.body.appendChild(formObj); 
+	    formObj.method="get";
+	    formObj.action="${contextPath}/mypage/removePet.do";
+	    formObj.submit();	
+	}
+}
+
+</script>
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
@@ -57,7 +77,7 @@
                             		<p><strong>좋아하는 장난감:</strong> ${pet.pet_favorite_toy}</p>
                             		<p><strong>좋아하는 간식:</strong> ${pet.pet_favorite_snack}</p>
                             		<div class="btn-container">
-                                		<a href="${contextPath}/mypage/modifyPetForm.do?petId=${pet.pet_id}" class="btn btn-warning">수정</a>
+                                		<a href="${contextPath}/mypage/modifyPetForm.do?pet_id=${pet.pet_id}" class="btn btn-warning">수정</a>
                                 		<a href="javascript:void(0)" onclick="fn_delete_pet('${pet.pet_id}')" class="btn btn-danger">삭제</a>
                             		</div>
                         		</div>
