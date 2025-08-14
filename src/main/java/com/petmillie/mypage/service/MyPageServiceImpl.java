@@ -41,10 +41,8 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 	
 	@Override
-	public MemberVO modifyMyInfo(Map memberMap) throws Exception{
-		 String member_id=(String)memberMap.get("member_id");
-		 myPageDAO.updateMyInfo(memberMap);
-		 return myPageDAO.selectMyDetailInfo(member_id);
+	public int updateMember(MemberVO memberVO) throws Exception{
+		 return myPageDAO.updateMember(memberVO);
 	}
 	
 	@Override

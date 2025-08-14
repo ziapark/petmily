@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.PetVO;
 
@@ -21,9 +23,7 @@ public interface MyPageController {
 	public ModelAndView cancelMyOrder(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView myDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception;
-	public ResponseEntity modifyMyInfo(@RequestParam("attribute")  String attribute,
-					@RequestParam("value")  String value,
-					HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView updateMember(@ModelAttribute MemberVO memberVO, HttpSession session, HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public String removeMember(@RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 	public ModelAndView addReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, HttpServletRequest request) throws Exception;

@@ -40,8 +40,8 @@ public class MyPageDAOImpl implements MyPageDAO{
 	}
 	
 	@Override
-	public void updateMyInfo(Map memberMap) throws DataAccessException{
-		sqlSession.update("mapper.mypage.updateMyInfo",memberMap);
+	public int updateMember(MemberVO memberVO) throws DataAccessException{
+		return sqlSession.update("mapper.mypage.updateMember",memberVO);
 	}
 	
 	@Override

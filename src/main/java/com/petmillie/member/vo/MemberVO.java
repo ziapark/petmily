@@ -13,7 +13,6 @@ public class MemberVO {
 	private String member_birth_m;
 	private String member_birth_d;
 	private String member_birth_gn;
-	private String member_address;
 	private String tel1;
 	private String tel2;
 	private String tel3;
@@ -27,10 +26,6 @@ public class MemberVO {
 	private String namujiAddress;
 	private String member_join;
 	private String del_yn;
-	private String role;
-	
-	private String kakao_id;
-	private String social_type;
 	
 	public String getMember_num() {
 		return member_num;
@@ -46,12 +41,6 @@ public class MemberVO {
 	}
 	public String getMember_pw() {
 		return member_pw;
-	}
-	public String getSocial_type() {
-		return social_type;
-	}
-	public void setSocial_type(String social_type) {
-		this.social_type = social_type;
 	}
 	public void setMember_pw(String member_pw) {
 		this.member_pw = member_pw;
@@ -110,12 +99,6 @@ public class MemberVO {
 	public void setTel3(String tel3) {
 		this.tel3 = tel3;
 	}
-	public String getMember_address() {
-		return member_address;
-	}
-	public void setMember_address(String member_address) {
-		this.member_address = member_address;
-	}
 	public String getSmssts_yn() {
 		return smssts_yn;
 	}
@@ -128,7 +111,6 @@ public class MemberVO {
 	public void setEmail1(String email1) {
 		this.email1 = email1;
 	}
-	
 	public String getEmail2() {
 		return email2;
 	}
@@ -177,19 +159,5 @@ public class MemberVO {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
-	public String getKakao_id() {
-		return kakao_id;
-	}
-	public void setKakao_id(String kakao_id) {
-		this.kakao_id = kakao_id;
-	}
-	
-	
 }
 
