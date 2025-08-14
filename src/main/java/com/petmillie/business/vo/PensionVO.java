@@ -13,16 +13,16 @@ public class PensionVO {
 	private String checkin_time;
 	private String checkout_time;
 	private String room_count;
-	private String max_capacity;
 	private String facilities;
 	private String description;
+	private String fileName;
 	private String reg_date;
-	private String del_yn;
+	private String pension_status;
+	
 
-	// ▼▼▼ [이 부분 추가] ▼▼▼
-	// JOIN된 사업자(업체) 정보를 담기 위한 필드
+	
 	private BusinessVO business;
-	// ▲▲▲ [여기까지 추가] ▲▲▲
+	
 
 	public String getP_num() {
 		return p_num;
@@ -78,17 +78,24 @@ public class PensionVO {
 	public void setRoom_count(String room_count) {
 		this.room_count = room_count;
 	}
-	public String getMax_capacity() {
-		return max_capacity;
-	}
-	public void setMax_capacity(String max_capacity) {
-		this.max_capacity = max_capacity;
-	}
+	
 	public String getFacilities() {
 		return facilities;
 	}
 	public void setFacilities(String facilities) {
 		this.facilities = facilities;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getPension_status() {
+		return pension_status;
+	}
+	public void setPension_status(String pension_status) {
+		this.pension_status = pension_status;
 	}
 	public String getDescription() {
 		return description;
@@ -102,19 +109,14 @@ public class PensionVO {
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	public String getDel_yn() {
-		return del_yn;
-	}
-	public void setDel_yn(String del_yn) {
-		this.del_yn = del_yn;
-	}
 	
-	// ▼▼▼ [아래 Getter/Setter 추가] ▼▼▼
+	
+	
 	public BusinessVO getBusiness() {
 		return business;
 	}
 	public void setBusiness(BusinessVO business) {
 		this.business = business;
 	}
-	// ▲▲▲ [여기까지 추가] ▲▲▲
+	
 }
