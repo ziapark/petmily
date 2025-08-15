@@ -196,9 +196,8 @@ public class MainController extends BaseController {
 
         // 현재 날씨 판단 (추천상품용)
         String currentWeather = determineCurrentWeather(timeWeatherMap);
-        WeatherProductRecommendation rec = weatherService.getRecommendation(currentWeather);
+        WeatherProductRecommendation rec = weatherService.getRecommendationFromDB(currentWeather);
         mav.addObject("weatherRecommendation", rec);
-        mav.addObject("weatherMap", timeWeatherMap);
 
         return mav;
     }
@@ -254,21 +253,26 @@ public class MainController extends BaseController {
     private String determineCurrentWeather(Map<String, Map<String, String>> timeWeatherMap) {
         String currentWeather = "맑음";
         String checkTime = "0900";
-        Map<String, String> weatherDataAt0900 = timeWeatherMap.get(checkTime);
+        Map<String, String> weatherData = timeWeatherMap.get(checkTime);
 
-        if (weatherDataAt0900 != null) {
-            String pty = weatherDataAt0900.get("PTY");
-            String sky = weatherDataAt0900.get("SKY");
-            if (pty != null && !pty.equals("0")) {
-                currentWeather = "비";
+        if (weatherData != null) {
+            String pty = weatherData.get("PTY");
+            String sky = weatherData.get("SKY");
+
+            if (pty != null && !"0".equals(pty)) {
+                switch (pty) {
+                    case "1": case "4":
+                        return "비";
+                    case "2": case "3":
+                        return "눈";
+                }
             } else if (sky != null) {
                 if ("4".equals(sky) || "3".equals(sky)) {
-                    currentWeather = "흐림";
-                } else {
-                    currentWeather = "맑음";
+                    return "흐림";
                 }
             }
         }
+
         return currentWeather;
     }
 

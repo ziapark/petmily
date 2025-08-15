@@ -5,9 +5,10 @@ import java.util.List;
 import com.petmillie.goods.vo.GoodsVO;
 
 public class WeatherProductRecommendation {
-	private String weatherCondition; // ex. "맑음", "비", "흐림"
-    private String comment; // 날씨 멘트
+	private String weatherCondition;
+    private String comment;
     private List<GoodsVO> goodsList;
+    
 	public String getWeatherCondition() {
 		return weatherCondition;
 	}
@@ -26,6 +27,4 @@ public class WeatherProductRecommendation {
 	public void setGoodsList(List<GoodsVO> goodsList) {
 		this.goodsList = goodsList;
 	}
-
-    
 }

@@ -13,8 +13,7 @@ public interface GoodsDAO {
 	public GoodsVO selectGoodsDetail(int goods_num) throws DataAccessException;
 	public List<ImageFileVO> selectGoodsDetailImage(int goods_num) throws DataAccessException;
 	public List<GoodsVO> selectGoodsBySearchWord(String searchWord) throws DataAccessException;
-	// --- 추가해야 할 부분 시작 ---
-    // 전체 상품 목록을 가져오는 메서드 추가
     public List<GoodsVO> selectAllGoodsList() throws DataAccessException;
-    // --- 추가해야 할 부분 끝 ---
+
+    public List<GoodsVO> selectGoodsByRecommendation(String weatherKeyword);
 }

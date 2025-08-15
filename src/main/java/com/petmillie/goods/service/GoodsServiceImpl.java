@@ -51,13 +51,9 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsList;
 	}
 	
-
-	 // --- 추가해야 할 부분 시작 ---
     @Override
     public List<GoodsVO> listAllGoods() throws Exception {
-        // DAO를 호출하여 모든 상품 목록을 가져옵니다.
-        return goodsDAO.selectAllGoodsList(); // 새로운 DAO 메서드 호출
+        return goodsDAO.selectAllGoodsList();
     }
-    // --- 추가해야 할 부분 끝 ---
 
 }

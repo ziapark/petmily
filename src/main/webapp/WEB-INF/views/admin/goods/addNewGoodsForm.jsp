@@ -154,6 +154,22 @@
 				</select></td>
 			</tr>
 			<tr>
+			    <td><label class="form-label">추천 날씨</label></td>
+			    <td>
+			        <input type="radio" id="weather_sunny" name="goods_recommend" value="1" checked>
+			        <label for="weather_sunny">맑음</label>
+			
+			        <input type="radio" id="weather_cloudy" name="goods_recommend" value="2">
+			        <label for="weather_cloudy">흐림</label>
+			
+			        <input type="radio" id="weather_rain" name="goods_recommend" value="3">
+			        <label for="weather_rain">비</label>
+			
+			        <input type="radio" id="weather_snow" name="goods_recommend" value="4">
+			        <label for="weather_snow">눈</label>
+			    </td>
+			</tr>
+			<tr>
 				<td><label class="form-label">판매 가격</td>
 				<td><input type="text" class="form-control" name="goods_sales_price" required></td>
 			</tr>
