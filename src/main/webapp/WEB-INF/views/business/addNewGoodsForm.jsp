@@ -118,16 +118,16 @@
 				<tr>
 				    <td><label class="form-label">추천 날씨</label></td>
 				    <td>
-				        <input type="radio" id="weather_sunny" name="goods_recommend" value="1" checked>
+				        <input type="radio" id="weather_sunny" name="goods_recommend" value="맑음" checked>
 				        <label for="weather_sunny">맑음</label>
 				
-				        <input type="radio" id="weather_cloudy" name="goods_recommend" value="2">
+				        <input type="radio" id="weather_cloudy" name="goods_recommend" value="흐림">
 				        <label for="weather_cloudy">흐림</label>
 				
-				        <input type="radio" id="weather_rain" name="goods_recommend" value="3">
+				        <input type="radio" id="weather_rain" name="goods_recommend" value="비">
 				        <label for="weather_rain">비</label>
 				
-				        <input type="radio" id="weather_snow" name="goods_recommend" value="4">
+				        <input type="radio" id="weather_snow" name="goods_recommend" value="눈">
 				        <label for="weather_snow">눈</label>
 				    </td>
 				</tr>
@@ -149,10 +149,10 @@
 				</tr>
 				<tr>
 					<td><label class="form-label">대표이미지</td>
-					<td><input type="file" class="form-control" name="goods_fileName" required></td>
+					<td><input type="file" class="form-control" name="main_image" required></td>
 				</tr>
 					<td><label class="form-label">제품상세이미지</label></td> 
-			        <td><input type="file" class="form-control" name="goods_fileName" required></td>
+			        <td><input type="file" class="form-control" name="sub_image" required></td>
 				</tr>  
 	           <tr>
 	               <td colspan="2" style="text-align:center;">

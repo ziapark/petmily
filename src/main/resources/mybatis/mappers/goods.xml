@@ -93,10 +93,18 @@
 	
 	<select id="selectGoodsByRecommendation" resultType="GoodsVO" parameterType="String">
 	    <![CDATA[
-	    	SELECT g.*, gi.*
-			FROM goods g
-			JOIN goods_image gi ON g.goods_num = gi.goods_num
-			WHERE g.goods_recommend = #{weatherKeyword}
+		    SELECT 
+		        g.goods_num, 
+		        g.goods_name, 
+		        g.goods_sales_price, 
+		        i.fileName
+		    FROM 
+		        goods g 
+		    LEFT JOIN 
+		        goods_image i ON g.goods_num = i.goods_num
+		    WHERE 
+		        i.fileType = 'main'
+		        AND g.goods_recommend = #{weatherKeyword}
     	]]>		
 	</select>
 </mapper>

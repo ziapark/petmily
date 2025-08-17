@@ -37,7 +37,7 @@ import com.petmillie.member.vo.MemberVO;
 @Controller("adminGoodsController")
 @RequestMapping(value="/admin/goods")
 public class AdminGoodsControllerImpl extends BaseController implements AdminGoodsController{
-	private static final String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
+	private static final String CURR_IMAGE_GOODS_REPO_PATH = "C:\\petupload\\goods";
 	@Autowired
 	private AdminGoodsService adminGoodsService;
 	@Autowired
@@ -117,15 +117,16 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	        String value = multipartRequest.getParameter(name);
 	        newGoodsMap.put(name, value);
 	    }
-
+	    
 	    HttpSession session = multipartRequest.getSession();
 	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
 	    String reg_id = memberVO.getMember_id();
 
-	    // ✅ 이미지 업로드 처리
+	    //이미지 업로드 처리
 	    List<ImageFileVO> imageFileList = new ArrayList<>();
 	    Iterator<String> fileNames = multipartRequest.getFileNames();
 
+	    int fileOrder = 0;
 	    while (fileNames.hasNext()) {
 	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
 
@@ -134,26 +135,25 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	            String ext = originalName.substring(originalName.lastIndexOf("."));
 	            String newFileName = UUID.randomUUID().toString() + ext;
 
-	            File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	            File tempDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp");
 	            if (!tempDir.exists()) {
 	                tempDir.mkdirs();
 	            }
 
 	            File destFile = new File(tempDir, newFileName);
-	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
+	            multipartFile.transferTo(destFile); //실제 파일 저장
 
 	            ImageFileVO imageFileVO = new ImageFileVO();
 	            imageFileVO.setFileName(newFileName);
 	            imageFileVO.setReg_id(reg_id);
-
-	            String extension = ext.toLowerCase();
-	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
-	                imageFileVO.setFileType("image");
+	            if (fileOrder == 0) {
+	                imageFileVO.setFileType("main"); // 첫 번째 파일
 	            } else {
-	                imageFileVO.setFileType("etc");
+	                imageFileVO.setFileType("sub");  // 두 번째부터
 	            }
 
 	            imageFileList.add(imageFileVO);
+	            fileOrder++;
 	        }
 	    }
 
@@ -174,14 +174,14 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
-	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File destDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + goods_num);
 	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
 	            }
 	        }
 
 	        message = "<script>";
-	        message += " alert('등록성공.');";
+	        message += " alert('상품이 등록되었습니다.');";
 	        message += " location.href='" + multipartRequest.getContextPath() + "/admin/goods/adminGoodsMain.do';";
 	        message += "</script>";
 
@@ -189,13 +189,13 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
 	                if (srcFile.exists()) srcFile.delete();
 	            }
 	        }
 
 	        message = "<script>";
-	        message += " alert('등록실패');";
+	        message += " alert('상품 등록에 실패했습니다. 다시 시도해주세요.');";
 	        message += " location.href='" + multipartRequest.getContextPath() + "/admin/goods/addNewGoodsForm.do';";
 	        message += "</script>";
 
@@ -207,14 +207,15 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	}
 
 	@RequestMapping(value="/modifyGoodsForm.do" ,method={RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView modifyGoodsForm(@RequestParam("goods_num") int goods_num,
-			 HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView modifyGoodsForm(@RequestParam("goods_num") int goods_num, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("body", "/WEB-INF/views/" + viewName + ".jsp");
 
-		Map goodsMap=adminGoodsService.goodsDetail(goods_num);
-		mav.addObject("goodsMap",goodsMap);
+		GoodsVO goodsVO = adminGoodsService.goodsDetail(goods_num);
+		List<ImageFileVO> goodsImageList = adminGoodsService.goodsDetailImage(goods_num);
+		mav.addObject("goodsVO", goodsVO);
+		mav.addObject("goodsImageList", goodsImageList);
 
 		return mav;
 	}
@@ -255,7 +256,7 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	    
 	    // 4. (중요) 이미지 파일 업로드 로직을 여기에 직접 구현
 	    List<ImageFileVO> imageFileList = new ArrayList<>();
-	    File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	    File tempDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp");
 	    if (!tempDir.exists()) {
 	        tempDir.mkdirs(); // 임시 폴더 생성
 	    }
@@ -306,7 +307,7 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                String imageFileName = imageFileVO.getFileName();
 	                File srcFile = new File(tempDir, imageFileName);
-	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                File destDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + goods_num);
 	                if (!destDir.exists()) {
 	                    destDir.mkdirs(); // 최종 폴더 생성
 	                }
@@ -366,8 +367,8 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	                imageFileVO.setReg_id(reg_id);
 
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + "\\temp\\" + imageFileName);
-	                File destDir = new File(CURR_IMAGE_REPO_PATH + "\\" + goods_num);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + "\\temp\\" + imageFileName);
+	                File destDir = new File(CURR_IMAGE_GOODS_REPO_PATH + "\\" + goods_num);
 
 	                if (!destDir.exists()) {
 	                    destDir.mkdirs();
@@ -396,7 +397,7 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	        if (imageFileList != null) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + "\\temp\\" + imageFileName);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + "\\temp\\" + imageFileName);
 	                if (srcFile.exists()) {
 	                    srcFile.delete();
 	                }
@@ -442,8 +443,8 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
             adminGoodsService.addNewGoodsImage(imageFileList);
 				for(ImageFileVO imageFileVO:imageFileList) {
 					imageFileName = imageFileVO.getFileName();
-					File srcFile = new File(CURR_IMAGE_REPO_PATH+"//"+"temp"+"//"+imageFileName);
-					File destDir = new File(CURR_IMAGE_REPO_PATH+"//"+goods_num);
+					File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH+"//"+"temp"+"//"+imageFileName);
+					File destDir = new File(CURR_IMAGE_GOODS_REPO_PATH+"//"+goods_num);
 					FileUtils.moveFileToDirectory(srcFile, destDir,true);
 				}
 			}
@@ -451,7 +452,7 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 			if(imageFileList!=null && imageFileList.size()!=0) {
 				for(ImageFileVO imageFileVO:imageFileList) {
 					imageFileName = imageFileVO.getFileName();
-					File srcFile = new File(CURR_IMAGE_REPO_PATH+"\\"+"temp"+"\\"+imageFileName);
+					File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH+"\\"+"temp"+"\\"+imageFileName);
 					srcFile.delete();
 				}
 			}
@@ -468,7 +469,7 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 
 		adminGoodsService.removeGoodsImage(image_id);
 		try{
-			File srcFile = new File(CURR_IMAGE_REPO_PATH+"\\"+goods_num+"\\"+imageFileName);
+			File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH+"\\"+goods_num+"\\"+imageFileName);
 			srcFile.delete();
 		}catch(Exception e) {
 			e.printStackTrace();

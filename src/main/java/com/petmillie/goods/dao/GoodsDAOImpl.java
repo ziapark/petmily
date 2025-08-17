@@ -36,11 +36,7 @@ public class GoodsDAOImpl  implements GoodsDAO{
 	
 	@Override
 	public GoodsVO selectGoodsDetail(int goods_num) throws DataAccessException{
-		System.out.println("dao 진입");
-		System.out.println("전달받은 goods_num = " + goods_num);
-		GoodsVO goodsVO=(GoodsVO)sqlSession.selectOne("mapper.goods.selectGoodsDetail",goods_num);
-		System.out.println("dao 결과: " + goodsVO);
-		return goodsVO;
+		return (GoodsVO)sqlSession.selectOne("mapper.goods.selectGoodsDetail",goods_num);
 	}
 	
 	@Override

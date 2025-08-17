@@ -15,9 +15,9 @@ import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 public class FileDownloadController {
-	private static String CURR_BOARD_REPO_PATH = "C:\\petupload"; // 게시판 전용 경로
-	private static String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods"; // 상품 전용 경로
-	private static String CURR_ROOM_REPO_PATH = "C:\\petupload\\room";
+	private static String CURR_BOARD_REPO_PATH = "C:\\petrepo"; // 게시판 전용 경로
+	private static String CURR_IMAGE_REPO_PATH = "C:\\petrepo\\goods"; // 상품 전용 경로
+	private static String CURR_ROOM_REPO_PATH = "C:\\petrepo\\room";
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
@@ -28,7 +28,20 @@ public class FileDownloadController {
 		File image=new File(filePath);
 
 		response.setHeader("Cache-Control","no-cache");
-		response.addHeader("Content-disposition", "attachment; fileName="+fileName);
+		
+        String contentType = "application/octet-stream"; // 기본값 설정
+        String lowerFileName = fileName.toLowerCase(); // 확장자 비교를 위해 소문자로 변경
+        
+        if (lowerFileName.endsWith(".png")) {
+            contentType = "image/png";
+        } else if (lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".jpeg")) {
+            contentType = "image/jpeg";
+        } else if (lowerFileName.endsWith(".gif")) {
+            contentType = "image/gif";
+        }
+        
+        response.setContentType(contentType);
+        
 		FileInputStream in=new FileInputStream(image); 
 		byte[] buffer=new byte[1024*8];
 		while(true){

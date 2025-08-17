@@ -5,19 +5,19 @@ import java.util.Date; // java.util.Date 대신 java.sql.Date 사용
 import org.springframework.stereotype.Component;
 @Component("GoodsVO")
 public class GoodsVO {
-	private int goods_num; // 상품 고유 번호
-	private String goods_name; // 상품 이름 (이전 goods_title)
+	private int goods_num;
+	private String goods_name;
 	private String seller_id;
-	private String goods_maker; // 제조사/저자 (이전 goods_writer)
-	private String goods_category; // 상품 분류 (이전 goods_sort)
-	private String goods_sales_price; // 상품 판매 가격
-	private String goods_point; // 상품 구매 포인트
-	private String goods_stock; // 상품 재고 수량
-	private String goods_delivery_price; // 상품 배송비
-	private String goods_status; // 상품 종류 (베스트셀러, 스테디셀러 등)
+	private String goods_maker;
+	private String goods_category;
+	private String goods_sales_price;
+	private String goods_point;
+	private String goods_stock;
+	private String goods_delivery_price;
+	private String goods_status;
 	private String goods_recommend;
-	private Date goods_credate; // 상품 등록일 (기존 필드)
-	private String del_yn; // 'Y' 또는 'N' 값을 저장할 필드
+	private Date goods_credate;
+	private String del_yn;
 
 	private int image_id;
 	private String fileName;

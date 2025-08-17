@@ -37,19 +37,15 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception{
 		return adminGoodsDAO.selectNewGoodsList(condMap);
 	}
+	
 	@Override
-	public Map goodsDetail(int goods_num) throws Exception {
-		Map goodsMap = new HashMap();
-		GoodsVO goodsVO=adminGoodsDAO.selectGoodsDetail(goods_num);
-		List imageFileList =adminGoodsDAO.selectGoodsImageFileList(goods_num);
-		goodsMap.put("goods", goodsVO);
-		goodsMap.put("imageFileList", imageFileList);
-		return goodsMap;
+	public GoodsVO goodsDetail(int goods_num) throws Exception {
+		return adminGoodsDAO.goodsDetail(goods_num);
 	}
+	
 	@Override
-	public List goodsImageFile(int goods_num) throws Exception{
-		List imageList =adminGoodsDAO.selectGoodsImageFileList(goods_num);
-		return imageList;
+	public List goodsDetailImage(int goods_num) throws Exception{
+		return adminGoodsDAO.goodsDetailImage(goods_num);
 	}
 	
 	@Override

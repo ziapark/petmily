@@ -10,19 +10,18 @@
 		<result property="seller_id" column="seller_id" />
 		<result property="goods_maker" column="goods_maker" />
 		<result property="goods_category" column="goods_category" />
-
 		<result property="goods_sales_price" column="goods_sales_price" />
 		<result property="goods_point" column="goods_point" />
 		<result property="goods_stock" column="goods_stock" />
-		<result property="goods_delivery_price"
-			column="goods_delivery_price" />
-		<result property="goods_fileName" column="goods_fileName" />
+		<result property="goods_delivery_price" column="goods_delivery_price" />
 		<result property="goods_status" column="goods_status" />
-		<result property="goods_goods_writer_intro"
-			column="goods_goods_writer_intro" />
-		<result property="goods_contents_order"
-			column="goods_contents_order" />
+		<result property="goods_recommend" column="goods_recommend" />
 		<result property="goods_credate" column="goods_credate" />
+		<result property="image_id" column="image_id" />
+		<result property="fileName" column="fileName" />
+		<result property="fileType" column="fileType" />
+		<result property="reg_id" column="reg_id" />
+		<result property="reg_day" column="reg_day" />
 	</resultMap>
 
 	<resultMap id="imageResult" type="imageFileVO">
@@ -63,13 +62,9 @@
 	<insert id="insertNewGoods" parameterType="GoodsVO">
 		<![CDATA[
 			INSERT INTO goods (
-			goods_name, seller_id, goods_maker, goods_category,goods_sales_price,
-			goods_point, goods_stock,
-			goods_delivery_price, goods_fileName, goods_status
+			seller_id, goods_name, goods_maker, goods_category, goods_sales_price, goods_point, goods_stock, goods_delivery_price, goods_status, goods_recommend
 			) VALUES (
-			#{goods_name}, #{seller_id}, #{goods_maker}, #{goods_category}, 
-			#{goods_sales_price}, #{goods_point}, #{goods_stock},
-			#{goods_delivery_price}, #{goods_fileName}, #{goods_status})
+			#{seller_id}, #{goods_name}, #{goods_maker}, #{goods_category}, #{goods_sales_price}, #{goods_point}, #{goods_stock}, #{goods_delivery_price}, #{goods_status}, #{goods_recommend})
 		]]>
 		<selectKey resultType="int" keyProperty="goods_num" order="AFTER">
 			<![CDATA[
@@ -78,15 +73,14 @@
 		</selectKey>
 	</insert>
 
-	<!-- 상품 이미지 등록 -->
-	<insert id="insertGoodsImageFile" parameterType="imageFileVO">
-		<![CDATA[
-			INSERT INTO goods_image (
-			goods_num, fileName, fileType, reg_id
-			) VALUES (
-			#{goods_num}, #{fileName}, #{fileType}, #{reg_id}
-			)
-		]]>
+	<insert id="insertGoodsImageFile" parameterType="java.util.List">
+	    INSERT INTO goods_image (
+	        goods_num, fileName, fileType, reg_id
+	    ) 
+	    VALUES
+	    <foreach collection="list" item="image" separator=",">
+	        (#{image.goods_num}, #{image.fileName}, #{image.fileType}, #{image.reg_id})
+	    </foreach>
 	</insert>
 
 	<select id="selectNewGoodsList" resultMap="goodsResult" parameterType="java.util.Map">
@@ -123,14 +117,13 @@
 	</select>
 
 	<!-- 상품 상세조회 -->
-	<select id="selectGoodsDetail" parameterType="int" resultMap="goodsResult">
+	<select id="goodsDetail" parameterType="int" resultMap="goodsResult">
 		<![CDATA[
 			SELECT * FROM goods WHERE goods_num = #{goods_num}
 		]]>
 	</select>
 
-	<!-- 상품 이미지 리스트 -->
-	<select id="selectGoodsImageFileList" resultMap="imageResult" parameterType="int">
+	<select id="goodsDetailImage" resultMap="imageResult" parameterType="int">
 		<![CDATA[
 			SELECT * FROM goods_image
 			WHERE goods_num = #{goods_num}

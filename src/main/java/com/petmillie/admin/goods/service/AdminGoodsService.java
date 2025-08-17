@@ -10,8 +10,8 @@ import com.petmillie.order.vo.OrderVO;
 public interface AdminGoodsService {
 	public int addNewGoods(Map newGoodsMap) throws Exception;
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception;
-	public Map goodsDetail(int goods_id) throws Exception;
-	public List goodsImageFile(int goods_id) throws Exception;
+	public GoodsVO goodsDetail(int goods_id) throws Exception;
+	public List goodsDetailImage(int goods_num) throws Exception;
 	public void modifyGoods(Map goodsMap) throws Exception;
 	public void modifyGoodsImage(List<ImageFileVO> imageFileList) throws Exception;
 	public List<OrderVO> listOrderGoods(Map condMap) throws Exception;

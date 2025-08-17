@@ -15,10 +15,7 @@ public interface AdminGoodsController {
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)  throws Exception;
 	public ResponseEntity modifyGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
-	public void  removeGoodsImage(@RequestParam("goods_id") int goods_id,
-            @RequestParam("image_id") int image_id,
-            @RequestParam("imageFileName") String imageFileName,
-            HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public void  removeGoodsImage(@RequestParam("goods_id") int goods_id, @RequestParam("image_id") int image_id, @RequestParam("imageFileName") String imageFileName, HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public void  addNewGoodsImage(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)  throws Exception;
 	public void modifyGoodsImageInfo(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)  throws Exception;
 }

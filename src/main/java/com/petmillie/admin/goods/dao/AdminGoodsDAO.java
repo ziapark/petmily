@@ -12,9 +12,9 @@ import com.petmillie.order.vo.OrderVO;
 public interface AdminGoodsDAO {
 	public int insertNewGoods(Map newGoodsMap) throws DataAccessException;
 	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException;
-	public GoodsVO selectGoodsDetail(int goods_id) throws DataAccessException;
-	public List selectGoodsImageFileList(int goods_id) throws DataAccessException;
-	public void insertGoodsImageFile(List fileList)  throws DataAccessException;
+	public GoodsVO goodsDetail(int goods_num) throws DataAccessException;
+	public List goodsDetailImage(int goods_num) throws DataAccessException;
+	public void insertGoodsImageFile(List<ImageFileVO> fileList) throws DataAccessException;
 	public void modifyGoods(Map goodsMap) throws DataAccessException;
 	public void updateGoodsImage(List<ImageFileVO> imageFileList) throws DataAccessException;
 	public void deleteGoodsImage(int image_id) throws DataAccessException;
@@ -22,8 +22,7 @@ public interface AdminGoodsDAO {
 	public List<OrderVO> selectOrderGoodsList(Map condMap) throws DataAccessException;
 	public void updateOrderGoods(Map orderMap) throws DataAccessException;
 	public void modifyMemberInfo(Map MemberMap) throws DataAccessException;
-//	 public void removeGoods(int goods_num) throws Exception; 
-	 public int updateGoodsDelYn(Map<String, Object> goodsMap) throws Exception;
-	 public int updateGoodsStatus(GoodsVO goodsVO) throws Exception;
+	public int updateGoodsDelYn(Map<String, Object> goodsMap) throws Exception;
+	public int updateGoodsStatus(GoodsVO goodsVO) throws Exception;
 	
 }

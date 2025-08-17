@@ -95,9 +95,10 @@
 		  			<c:forEach var="goods" items="${weatherRecommendation.goodsList}">
 		    		<li class="goods_item">
 		      		<a href="/goods/detail?goods_num=${goods.goods_num}">
-<%-- 		        <img src="${pageContext.request.contextPath}/resources/image/${goods.goods_fileName}" alt="${goods.goods_name}" width="120">		         --%>
+		        		<img src="${contextPath}/download.do?goods_num=${goods.goods_num}&fileName=${goods.fileName}" alt="${goods.goods_name}" width="120">		        
 		      		</a>
-		      <p>${goods.goods_name}</p>
+		      		<p>${goods.goods_name}</p>
+		      		<p>${goods.goods_sales_price}</p>
 		    </li>
 		  </c:forEach>
 		</ul>

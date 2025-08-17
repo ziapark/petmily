@@ -41,7 +41,8 @@ import com.petmillie.goods.vo.ImageFileVO;
 @Controller("businessController")
 @RequestMapping("/business")
 public class BusinessControllerImpl extends BaseController implements BusinessController {
-	private static final String CURR_IMAGE_REPO_PATH = "C:\\petupload\\goods";
+	private static final String CURR_IMAGE_GOODS_REPO_PATH = "C:\\petrepo\\goods";
+	private static final String CURR_IMAGE_PENSION_REPO_PATH = "C:\\petrepo\\pension";
 	@Autowired
 	private BusinessService businessService;
 	@Autowired
@@ -281,36 +282,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return "redirect:/main/main.do";
 	}
 
-//	@Override
-//	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
-//	public ResponseEntity addpension(@ModelAttribute("PensionVO")PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		response.setContentType("text/html; charset=UTF-8");
-//		request.setCharacterEncoding("utf-8");
-//		System.out.println("업체명 : " + pensionVO.getP_name());
-//		String message = null;
-//		ResponseEntity resEntity = null;
-//		HttpHeaders responseHeaders = new HttpHeaders();
-//		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-//		try {
-//			businessService.addpension(pensionVO);
-//			HttpSession session = request.getSession();
-//		    session.setAttribute("pensionInfo", pensionVO);
-//			message = "<script>";
-//			message += " alert('등록 성공');";
-//			message += " location.href='" + request.getContextPath() + "/business//mypension.do';";
-//			message += " </script>";
-//
-//		} catch (Exception e) {
-//			message = "<script>";
-//			message += " alert('등록 실패');";
-//			message += " location.href='" + request.getContextPath() + "/business/addpensionForm.do';";
-//			message += " </script>";
-//
-//			e.printStackTrace();
-//		}
-//		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-//		return resEntity;
-//	}
 	@Override
 	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public ResponseEntity addpension(@ModelAttribute("PensionVO") PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -323,13 +294,10 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    HttpHeaders responseHeaders = new HttpHeaders();
 	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-	    // ================== 🔧 수정 부분 시작 🔧 ==================
 	    try {
-	        // 1. 세션에서 로그인한 사업자 정보를 가져옵니다.
 	        HttpSession session = request.getSession();
 	        BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
 	        
-	        // (안전장치) 만약 로그인 정보가 없다면, 다시 로그인 페이지로 보낼 수 있습니다.
 	        if (loginBusinessVO == null) {
 	            message = "<script>";
 	            message += " alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');";
@@ -339,19 +307,11 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	            return resEntity;
 	        }
 
-	        // 2. 가져온 사업자 정보에서 business_id를 추출합니다.
 	        String business_id = loginBusinessVO.getBusiness_id();
 
-	        // 3. pensionVO 객체에 business_id를 설정(set)합니다.
 	        pensionVO.setBusiness_id(business_id);
-	        
-	        // 로그로 확인
-	        System.out.println("세션에서 가져온 business_id: " + pensionVO.getBusiness_id());
 
-	        // 4. business_id가 설정된 pensionVO를 서비스로 전달합니다.
 	        businessService.addpension(pensionVO);
-
-	    // ================== 🔧 수정 부분 끝 🔧 ====================
 
 	        session.setAttribute("pensionInfo", pensionVO);
 	        message = "<script>";
@@ -394,23 +354,19 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        File uploadPath = new File(saveDir);
 	        if (!uploadPath.exists()) uploadPath.mkdirs();
 
-	        // 🔧 UUID로 파일명 변환
 	        String originalFileName = fileimage.getOriginalFilename();
 	        String uuid = UUID.randomUUID().toString();
 	        String extension = "";
 
-	        // 확장자 추출
 	        int dotIndex = originalFileName.lastIndexOf(".");
 	        if (dotIndex != -1) {
 	            extension = originalFileName.substring(dotIndex);
 	        }
 
 	        String savedFileName = uuid + extension;
-	        System.out.println("저장할 파일명: " + savedFileName);
 
 	        File saveFile = new File(uploadPath, savedFileName);
-	        fileimage.transferTo(saveFile);  // 실제 파일 저장
-
+	        fileimage.transferTo(saveFile);
 	        businessService.addpension2(roomVO);
 
 	        HttpSession session = request.getSession();
@@ -546,11 +502,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	@RequestMapping(value="/removepension.do", method={RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
 	public String removepension(@RequestParam ("p_num")String p_num, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("펜션 번호 : " + p_num );
 		int id = Integer.parseInt(p_num);
-		System.out.println(id);
 		int result = businessService.removepension(id);
-		System.out.println(result);
 		return (result == 0 ) ? "false" : "true";
 	}
 	
@@ -574,10 +527,11 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
 	    String reg_id = businessVO.getSeller_id();
 
-	    // ✅ 이미지 업로드 처리
+	    //이미지 업로드 처리
 	    List<ImageFileVO> imageFileList = new ArrayList<>();
 	    Iterator<String> fileNames = multipartRequest.getFileNames();
-
+	    
+	    int fileOrder = 0;
 	    while (fileNames.hasNext()) {
 	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
 
@@ -586,26 +540,26 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	            String ext = originalName.substring(originalName.lastIndexOf("."));
 	            String newFileName = UUID.randomUUID().toString() + ext;
 
-	            File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
+	            File tempDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp");
 	            if (!tempDir.exists()) {
 	                tempDir.mkdirs();
 	            }
 
 	            File destFile = new File(tempDir, newFileName);
-	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
+	            multipartFile.transferTo(destFile); //실제 파일 저장
 
 	            ImageFileVO imageFileVO = new ImageFileVO();
+	       
 	            imageFileVO.setFileName(newFileName);
 	            imageFileVO.setReg_id(reg_id);
-
-	            String extension = ext.toLowerCase();
-	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
-	                imageFileVO.setFileType("image");
+	            if (fileOrder == 0) {
+	                imageFileVO.setFileType("main"); // 첫 번째 파일
 	            } else {
-	                imageFileVO.setFileType("etc");
+	                imageFileVO.setFileType("sub");  // 두 번째부터
 	            }
 
 	            imageFileList.add(imageFileVO);
+	            fileOrder++;
 	        }
 	    }
 
@@ -626,14 +580,14 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
-	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File destDir = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + goods_num);
 	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
 	            }
 	        }
 
 	        message = "<script>";
-	        message += " alert('등록성공.');";
+	        message += " alert('상품이 등록되었습니다.');";
 	        message += " location.href='" + multipartRequest.getContextPath() + "/business/businessGoodsMain.do';";
 	        message += "</script>";
 
@@ -641,13 +595,13 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
 	                imageFileName = imageFileVO.getFileName();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
+	                File srcFile = new File(CURR_IMAGE_GOODS_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
 	                if (srcFile.exists()) srcFile.delete();
 	            }
 	        }
 
 	        message = "<script>";
-	        message += " alert('등록실패');";
+	        message += " alert('상품 등록에 실패했습니다. 다시 시도해주세요.');";
 	        message += " location.href='" + multipartRequest.getContextPath() + "/business/addNewGoodsForm.do';";
 	        message += "</script>";
 
