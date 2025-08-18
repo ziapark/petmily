@@ -17,7 +17,15 @@ public class RoomVO {
 	private String reg_date;
 	private String room_status;
 
-	
+	private String fileimage;
+
+	public String getFileimage() {
+	    return fileimage;
+	}
+
+	public void setFileimage(String fileimage) {
+	    this.fileimage = fileimage;
+	}
 	public int getPrice() {
 		return price;
 	}

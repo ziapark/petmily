@@ -120,17 +120,21 @@ public class ReservaionControllerImpl implements ReservaionController {
 	@Override
 	@RequestMapping(value = "/makeReservation.do", method = RequestMethod.POST)
 	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationVO reservationVO,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
-		if(memberVO == null) {
-			return new ModelAndView("redirect:/member/loginForm.do");
-		}
-		reservationVO.setMember_id(memberVO.getMember_id());
-		int reservationId = reservationService.addReservation(reservationVO);
-		ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
-		mav.addObject("reservationId", reservationId);
-		return mav;
+	        HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+	    if(memberVO == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    reservationVO.setMember_id(memberVO.getMember_id());
+
+	    // ▼▼▼ 바로 이 부분을 추가하시면 됩니다! ▼▼▼
+	    reservationVO.setReservation_status("예약완료"); 
+
+	    int reservationId = reservationService.addReservation(reservationVO);
+	    ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
+	    mav.addObject("reservationId", reservationId);
+	    return mav;
 	}
 	/**
 	 * 예약 완료 페이지 (기존 코드 유지)

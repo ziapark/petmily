@@ -96,7 +96,8 @@ function pensiondelete(p_num) {
  </div>
 </div>
 <c:choose>
-  <c:when test="${not empty pensionInfo and pensionInfo.del_yn == 'N'}">
+  <%-- 펜션 정보가 있고, 삭제 상태가 'N'일 때의 조건에서 del_yn 체크 로직 제거 --%>
+  <c:when test="${not empty pensionInfo}">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
         <input type="hidden" name="p_num" value="${pensionInfo.p_num}" />
@@ -125,10 +126,7 @@ function pensiondelete(p_num) {
     </div>
   </c:when>
   
-
-  <c:when test="${pensionInfo.del_yn == 'Y'}">
-    <div class="alert alert-warning">삭제된 펜션 정보입니다.</div>
-  </c:when>
+  <%-- del_yn == 'Y' 조건 블록 전체 삭제 --%>
 </c:choose>
     
 
@@ -188,18 +186,17 @@ function submitdelete(room_id) {
 <h3 class="mb-4" style="display: block; text-align:left;">등록된 객실 리스트</h3>
 
 <c:choose>
-  <c:when test="${not empty roomInfo and not empty pensionInfo and pensionInfo.del_yn == 'N'}">
+  <%-- 객실 리스트 조건에서 del_yn 체크 로직 제거 --%>
+  <c:when test="${not empty roomInfo and not empty pensionInfo}">
     <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
   <c:forEach var="room" items="${roomInfo}">
     <div class="col">
       <div class="card h-100 shadow-sm">
         <div class="row g-0">
-          <!-- 이미지 영역 -->
           <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
             <img src="http://localhost:8090/petupload/room/${room.fileimage}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
           </div>
 
-          <!-- 텍스트 정보 -->
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title left">${room.room_name}</h5>
@@ -227,9 +224,7 @@ function submitdelete(room_id) {
 </div>
   </c:when>
 
-  <c:when test="${pensionInfo.del_yn == 'Y'}">
-    <div class="alert alert-warning mt-3">삭제된 펜션 정보입니다.</div>
-  </c:when>
+  <%-- del_yn == 'Y' 조건 블록 전체 삭제 --%>
 
   <c:otherwise>
     <div class="alert alert-secondary mt-3">객실 정보가 없습니다.</div>
