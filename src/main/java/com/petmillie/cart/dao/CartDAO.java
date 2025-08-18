@@ -8,13 +8,11 @@ import com.petmillie.cart.vo.CartVO;
 import com.petmillie.goods.vo.GoodsVO;
 
 public interface CartDAO {
-	public List<CartVO> selectCartList(CartVO cartVO) throws DataAccessException;
-	public List<GoodsVO> selectGoodsList(List<CartVO> cartList) throws DataAccessException;
 	public int selectCountInCart(CartVO cartVO) throws DataAccessException;
+	public void increaseCartQty(CartVO cartVO) throws DataAccessException;
 	public void insertGoodsInCart(CartVO cartVO) throws DataAccessException;
+	public List<CartVO> myCartList(String member_id) throws DataAccessException;
+	
 	public void updateCartGoodsQty(CartVO cartVO) throws DataAccessException;
 	public void deleteCartGoods(int cart_id) throws DataAccessException;
-	public void increaseCartQty(CartVO cartVO) throws DataAccessException;
-	
-
 }

@@ -19,7 +19,14 @@
 	<script type="text/javascript">
 		var contextPath = "${pageContext.request.contextPath}";
 
-		function add_cart(goods_num) {
+		function add_cart(goods_num) {	
+		    var isLogOn = document.getElementById("isLogOn").value;
+		    if (isLogOn == "false" || isLogOn == '') {
+		        alert("로그인 후 장바구니 이용이 가능합니다.");
+		        window.location.href = contextPath + '/member/loginForm.do';
+		        return;
+		    }
+		    
     		$.ajax({
         		type: "post",
         		url: contextPath + "/cart/addGoodsInCart.do",
@@ -27,28 +34,17 @@
         		success: function(data) {
 	            	console.log("서버 응답:", data);
 
-	            	if (data === 'add_success' || data === 'plus_success') {
-	                	imagePopup('open');
-            		} else if (data === 'already_existed') {
-                		alert("이미 카트에 등록된 상품입니다."); 
-            		} else {
-                		alert("장바구니에 상품을 1개 추가하였습니다.: " + data);
-            		}
+	            	if(data === 'increase_success'){
+	            		alert("이미 카트에 등록된 상품입니다. 상품 수량 1개 증가했습니다.");
+	            	}else{
+	            		alert("장바구니에 상품을 추가했습니다.");
+	            	}
         		},
         		error: function(xhr, status, error) {
             		console.error("Ajax 에러:", error);
             		alert("에러가 발생했습니다.");
         		}
     		});
-		}
-
-		function imagePopup(type) {
-	    	if (type == 'open') {
-	        	$('#layer').css('visibility', 'visible');
-	        	$('#layer').height($(document).height());
-	    	} else if (type == 'close') {
-	        	$('#layer').css('visibility', 'hidden');
-	    	}
 		}
 	
 		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName){
@@ -68,7 +64,7 @@
 	    	i_goods_num.name = "goods_num";
 	    	i_goods_name.name = "goods_name";
 	    	i_goods_sales_price.name = "goods_sales_price";
-	    	i_fileName.name = "goods_fileName";
+	    	i_fileName.name = "fileName";
 	    	i_order_goods_qty.name = "order_goods_qty";
 	    	i_goods_num.value = goods_num;
 	    	i_goods_name.value = goods_name;
@@ -128,16 +124,8 @@
                     <td class="fixed"><strong>${goodsVO.goods_delivery_price}</strong></td>
                 </tr>         
                 <tr>
-                    <td class="fixed">수량</td>
-                    <td class="fixed">
-                        <select style="width: 60px;" id="order_goods_qty">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </td>
+                    <td class="fixed">재고</td>
+                    <td class="fixed"><strong>${goodsVO.goods_stock}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -171,22 +159,6 @@
     </div>
 
     <div class="clear"></div>
-
-    <div id="layer" style="visibility: hidden;">
-        <div id="popup">
-            <a href="javascript:" onclick="imagePopup('close');">
-                <img src="${contextPath}/resources/image/close.png" id="close" alt="닫기"/>
-        </a>
-            <br/>
-            <font size="12" id="contents">장바구니에 담았습니다.</font><br/>
-            <form action="${contextPath}/cart/myCartList.do">
-                <input type="submit" value="장바구니 보기"/>
-            </form>
-        </div>
-    </div>
-
     <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>
-
-
 </body>
 </html>

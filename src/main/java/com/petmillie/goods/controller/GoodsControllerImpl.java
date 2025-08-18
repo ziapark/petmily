@@ -70,7 +70,7 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 		List<ImageFileVO> goodsImageList = goodsService.goodsDetailImage(goods_num);
 		mav.addObject("goodsVO", goodsVO);
 		mav.addObject("goodsImageList", goodsImageList);
-
+		//리뷰가져오는거 추가 필요
 		return mav;
 	}
 	

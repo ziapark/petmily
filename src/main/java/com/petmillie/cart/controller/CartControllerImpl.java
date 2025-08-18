@@ -25,45 +25,41 @@ import com.petmillie.member.vo.MemberVO;
 public class CartControllerImpl extends BaseController implements CartController{
 	@Autowired
 	private CartService cartService;
+	@Autowired
+	private CartVO cartVO;
 	
-	
-	@RequestMapping(value="/myCartList.do" ,method = RequestMethod.GET)
-	public ModelAndView myCartMain(HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "내 장바구니");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-		HttpSession session=request.getSession();
-		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
-		String member_id=memberVO.getMember_id();
-		CartVO cartVO = new CartVO();
-		cartVO.setMember_id(member_id);
-		Map<String ,List> cartMap=cartService.myCartList(cartVO);
-		session.setAttribute("cartMap", cartMap);//��ٱ��� ��� ȭ�鿡�� ��ǰ �ֹ� �� ����ϱ� ���ؼ� ��ٱ��� ����� ���ǿ� �����Ѵ�.
-		//mav.addObject("cartMap", cartMap);
-		return mav;
-	}
+	@Override
 	@RequestMapping(value="/addGoodsInCart.do" ,method = RequestMethod.POST,produces = "application/text; charset=utf8")
-	public  @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num,
-			                    HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		
-		
+	public @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num, HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		HttpSession session=request.getSession();
 		
-		MemberVO memberVO = (MemberVO)session.getAttribute("memberInfo");	
-		
-		String member_id=memberVO.getMember_id();
-		
-		 
-		CartVO cartVO = new CartVO(); // 이렇게 직접 생성
+		MemberVO memberVO = (MemberVO)session.getAttribute("memberInfo");			
+		String member_id=memberVO.getMember_id();	
+
 	    cartVO.setMember_id(member_id);
 	    cartVO.setGoods_num(goods_num);
 	    cartVO.setCart_goods_qty(1);
 		
 	    String result = cartService.addOrIncreaseGoodsInCart(cartVO);
-	    System.out.println("result:" + result);
 	    return result;
 				
+	}
+	
+	@Override
+	@RequestMapping(value="/myCartList.do" ,method = RequestMethod.GET)
+	public ModelAndView myCartList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "내 장바구니");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+
+		HttpSession session=request.getSession();
+		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
+		String member_id=memberVO.getMember_id();	
+		
+		List<CartVO> cartList=cartService.myCartList(member_id);
+		session.setAttribute("cartList", cartList);
+		return mav;
 	}
 	
 	@RequestMapping(value="/modifyCartQty.do" ,method = RequestMethod.POST)

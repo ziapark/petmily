@@ -15,27 +15,26 @@ public class CartDAOImpl  implements  CartDAO{
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<CartVO> selectCartList(CartVO cartVO) throws DataAccessException {
-		List<CartVO> cartList =(List)sqlSession.selectList("mapper.cart.selectCartList",cartVO);
-		return cartList;
-	}
-
-	public List<GoodsVO> selectGoodsList(List<CartVO> cartList) throws DataAccessException {
-		
-		List<GoodsVO> myGoodsList;
-		myGoodsList = sqlSession.selectList("mapper.cart.selectGoodsList",cartList);
-		return myGoodsList;
-	}
+	@Override
 	public int selectCountInCart(CartVO cartVO) throws DataAccessException {
 		return sqlSession.selectOne("mapper.cart.selectCountInCart",cartVO);
 	}
-
+	
+	@Override
+	public void increaseCartQty(CartVO cartVO) throws DataAccessException {
+	    sqlSession.update("mapper.cart.increaseCartQty", cartVO);
+	}
+	
+	@Override
 	public void insertGoodsInCart(CartVO cartVO) throws DataAccessException{
-		int cart_id=selectMaxCartId();
-		cartVO.setCart_id(cart_id);
 		sqlSession.insert("mapper.cart.insertGoodsInCart",cartVO);
 	}
 	
+	@Override
+	public List<CartVO> myCartList(String member_id) throws DataAccessException {
+		return sqlSession.selectList("mapper.cart.myCartList", member_id);
+	}
+
 	public void updateCartGoodsQty(CartVO cartVO) throws DataAccessException{
 		sqlSession.insert("mapper.cart.updateCartGoodsQty",cartVO);
 	}
@@ -43,15 +42,4 @@ public class CartDAOImpl  implements  CartDAO{
 	public void deleteCartGoods(int cart_id) throws DataAccessException{
 		sqlSession.delete("mapper.cart.deleteCartGoods",cart_id);
 	}
-
-	private int selectMaxCartId() throws DataAccessException{
-		int cart_id = sqlSession.selectOne("mapper.cart.selectMaxCartId");
-		return cart_id;
-	}
-
-	@Override
-	public void increaseCartQty(CartVO cartVO) throws DataAccessException {
-	    sqlSession.update("mapper.cart.increaseCartQty", cartVO);
-	}
-
 }
