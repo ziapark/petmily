@@ -35,4 +35,6 @@ public interface BusinessDAO {
 	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException;
 	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
 	 public void updateRoomStatus(int roomId) throws Exception;
+	 public int restoreroom(int room_id) throws Exception;
+	 
 }

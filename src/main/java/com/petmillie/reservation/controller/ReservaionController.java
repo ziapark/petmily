@@ -51,4 +51,9 @@ public interface ReservaionController {
 	 * 일반 회원용 나의 예약 내역 조회
 	 */
 	public ModelAndView listMyReservations(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+	public ModelAndView modifyForm(@RequestParam("reservationId") int reservationId, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView updateReservation(@ModelAttribute("reservation") ReservationVO reservationVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	
 }

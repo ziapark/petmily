@@ -71,4 +71,15 @@ public class ReservaionServiceImpl implements ReservaionService {
 	public List<ReservationVO> getReservationsByMemberId(String memberId) throws Exception {
 	    return reservaionDAO.selectReservationsByMemberId(memberId);
 	}
+	
+	@Override
+	public ReservationVO getReservationById(int reservationId) throws Exception {
+	    return reservaionDAO.selectReservationById(reservationId);
+	}
+
+	@Override
+	public void updateReservation(ReservationVO reservationVO) throws Exception {
+	    reservaionDAO.updateReservation(reservationVO);
+	}
+	
 }

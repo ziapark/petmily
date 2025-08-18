@@ -55,4 +55,14 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 	public List<ReservationVO> selectReservationsByMemberId(String memberId) throws DataAccessException {
 		return sqlSession.selectList(NAMESPACE + ".selectReservationsByMemberId", memberId);
 	}
+	@Override
+	public ReservationVO selectReservationById(int reservationId) throws Exception {
+	    return sqlSession.selectOne("mapper.reservation.selectReservationById", reservationId);
+	}
+
+	@Override
+	public void updateReservation(ReservationVO reservationVO) throws Exception {
+	    sqlSession.update("mapper.reservation.updateReservation", reservationVO);
+	}
+
 }

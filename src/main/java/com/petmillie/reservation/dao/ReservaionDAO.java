@@ -32,5 +32,7 @@ public interface ReservaionDAO {
 	public List<ReservationVO> selectReservationsByBusinessId(String business_id) throws Exception;
 	public List<ReservationVO> selectReservationsByMemberId(String memberId) throws DataAccessException;
 	
+	public ReservationVO selectReservationById(int reservationId) throws Exception;
+	public void updateReservation(ReservationVO reservationVO) throws Exception;
 }
 

@@ -166,5 +166,29 @@ public class ReservaionControllerImpl implements ReservaionController {
 	    return mav;
 	}
 	
+	@Override
+	@RequestMapping(value="/modifyForm.do", method=RequestMethod.GET)
+	public ModelAndView modifyForm(@RequestParam("reservationId") int reservationId, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    ReservationVO reservation = reservationService.getReservationById(reservationId);
+
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("body", "/WEB-INF/views/reservation/modifyForm.jsp");
+	    mav.addObject("title", "예약 정보 수정");
+	    mav.addObject("reservation", reservation);
+	    return mav;
+	}
+
+	// 수정된 내용을 DB에 저장하는 메소드
+	@Override
+	@RequestMapping(value="/updateReservation.do", method=RequestMethod.POST)
+	public ModelAndView updateReservation(@ModelAttribute("reservation") ReservationVO reservationVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    reservationService.updateReservation(reservationVO);
+
+	    ModelAndView mav = new ModelAndView("redirect:/reservation/myReservations.do");
+	    return mav;
+	}
+	
+	
+	
 	
 }

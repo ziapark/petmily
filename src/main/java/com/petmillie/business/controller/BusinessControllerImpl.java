@@ -716,6 +716,15 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        return "false"; // 이미 사용 중이면 false
 	    }
 	}
+	
+	@RequestMapping(value="/restoreroom.do", method={RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public String restoreroom(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    System.out.println("객실 복구 번호 : " + room_id );
+	    int id = Integer.parseInt(room_id);
+	    int result = businessService.restoreroom(id);
+	    return (result > 0) ? "true" : "false";
+	}
 }
 
 

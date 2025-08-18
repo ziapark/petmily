@@ -13,10 +13,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="css/common.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function pensiondelete(p_num) {
     console.log("탈퇴요청 p_num:", p_num);
-    if (confirm("정말로 업체를 삭제 하시겠습니까?\n(탈퇴 후 복구가 불가능합니다.)")) {
+    if (confirm("정말로 업체를 삭제 하시겠습니까?\n(삭제된 업체는 복구할 수 없습니다.)")) {
         $.ajax({
             type: "POST",
             url: "${contextPath}/business/removepension.do",
@@ -54,6 +55,77 @@ function pensiondelete(p_num) {
         });
     } else {
         console.log("업체 삭제 취소");
+    }
+}
+
+// ▼▼▼ 객실 복구 JavaScript 함수 추가 ▼▼▼
+function restoreroom(room_id) {
+    console.log("복구요청 room_id:", room_id);
+    if (confirm("이 객실을 다시 '예약가능' 상태로 복구하시겠습니까?")) {
+        $.ajax({
+            type: "POST",
+            url: "${contextPath}/business/restoreroom.do", // 복구를 처리할 URL
+            data: {room_id: room_id},
+            dataType: "text",
+            success: function(data) {
+                if ($.trim(data) === "true") {
+                    alert("객실이 복구되었습니다.");
+                    window.location.href = "${contextPath}/business/mypension.do";
+                } else {
+                    alert("객실 복구에 실패했습니다.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error 발생!", xhr, status, error);
+                alert("서버와 통신 중 오류가 발생했습니다.");
+            }
+        });
+    } else {
+        console.log("객실 복구 취소");
+    }
+}
+
+function submitdelete(room_id) {
+    console.log("삭제요청 room_id:", room_id);
+    // ▼▼▼ 확인 메시지 수정 ▼▼▼
+    if (confirm("정말로 이 객실을 삭제하시겠습니까?\n('삭제됨' 상태로 변경되며, 나중에 복구할 수 있습니다.)")) {
+        $.ajax({
+            type: "POST",
+            url: "${contextPath}/business/removeroom.do",
+            data: {room_id: room_id},
+            dataType: "text",
+            beforeSend: function(xhr) {
+                console.log("AJAX beforeSend 실행");
+            },
+            success: function(data) {
+                console.log("AJAX success, 응답:", data);
+                if ($.trim(data) === "true") {
+                    alert("객실이 '삭제됨' 상태로 변경되었습니다.");
+                    window.location.href = "${contextPath}/business/mypension.do";
+                } else {
+                    alert("객실 삭제에 실패했습니다. 다시 시도해 주세요.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error 발생!", xhr, status, error);
+                alert(
+                    "서버와 통신 중 오류가 발생했습니다.\n" +
+                    "status: " + status + "\n" +
+                    "HTTP 상태코드: " + xhr.status + "\n" +
+                    "오류 메시지: " + error + "\n" +
+                    "응답 내용: " + xhr.responseText
+                );
+    		    console.log("에러가 발생했습니다.\n" +
+  			          "상태: " + status + "\n" +
+  			          "에러: " + error + "\n" +
+  			          "응답내용: " + xhr.responseText);
+            },
+            complete: function(xhr, status) {
+                console.log("AJAX complete - status:", status);
+            }
+        });
+    } else {
+        console.log("객실 삭제 취소");
     }
 }
 </script>
@@ -96,7 +168,6 @@ function pensiondelete(p_num) {
  </div>
 </div>
 <c:choose>
-  <%-- 펜션 정보가 있고, 삭제 상태가 'N'일 때의 조건에서 del_yn 체크 로직 제거 --%>
   <c:when test="${not empty pensionInfo}">
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
@@ -125,8 +196,6 @@ function pensiondelete(p_num) {
       </div>
     </div>
   </c:when>
-  
-  <%-- del_yn == 'Y' 조건 블록 전체 삭제 --%>
 </c:choose>
     
 
@@ -136,57 +205,10 @@ function pensiondelete(p_num) {
   <br>
 </c:if>
 
-
-<script>
-function submitdelete(room_id) {
-    console.log("탈퇴요청 room_id:", room_id);
-    if (confirm("정말로 객실을 삭제 하시겠습니까?\n(삭제 후 복구가 불가능합니다.)")) {
-        $.ajax({
-            type: "POST",
-            url: "${contextPath}/business/removeroom.do",
-            data: {room_id: room_id},
-            dataType: "text",
-            beforeSend: function(xhr) {
-                console.log("AJAX beforeSend 실행");
-            },
-            success: function(data) {
-                console.log("AJAX success, 응답:", data);
-                if ($.trim(data) === "true") {
-                    alert("객실 삭제가 완료되었습니다.");
-                    window.location.href = "${contextPath}/business/mypension.do";
-                } else {
-                    alert("객실 삭제에 실패했습니다. 다시 시도해 주세요.");
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX error 발생!", xhr, status, error);
-                alert(
-                    "서버와 통신 중 오류가 발생했습니다.\n" +
-                    "status: " + status + "\n" +
-                    "HTTP 상태코드: " + xhr.status + "\n" +
-                    "오류 메시지: " + error + "\n" +
-                    "응답 내용: " + xhr.responseText
-                );
-    		    console.log("에러가 발생했습니다.\n" +
-  			          "상태: " + status + "\n" +
-  			          "에러: " + error + "\n" +
-  			          "응답내용: " + xhr.responseText);
-            },
-            complete: function(xhr, status) {
-                console.log("AJAX complete - status:", status);
-            }
-        });
-    } else {
-        console.log("객실 삭제 취소");
-    }
-}
-</script>
-
 </div>
 <h3 class="mb-4" style="display: block; text-align:left;">등록된 객실 리스트</h3>
 
 <c:choose>
-  <%-- 객실 리스트 조건에서 del_yn 체크 로직 제거 --%>
   <c:when test="${not empty roomInfo and not empty pensionInfo}">
     <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
   <c:forEach var="room" items="${roomInfo}">
@@ -200,6 +222,22 @@ function submitdelete(room_id) {
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title left">${room.room_name}</h5>
+              
+              <p class="card-text mb-1 left">
+                  <strong>객실 상태:</strong> 
+                  <c:choose>
+                      <c:when test="${room.room_status == '예약가능'}">
+                          <span style="color: green; font-weight: bold;">${room.room_status}</span>
+                      </c:when>
+                      <c:when test="${room.room_status == '삭제됨'}">
+                          <span style="color: gray; font-weight: bold;">${room.room_status}</span>
+                      </c:when>
+                      <c:otherwise>
+                          <span style="color: red; font-weight: bold;">${room.room_status}</span>
+                      </c:otherwise>
+                  </c:choose>
+              </p>
+              
               <p class="card-text mb-1 left"><strong>객실 번호:</strong> ${room.room_id}</p>
               <p class="card-text mb-1 left"><strong>가격:</strong> <fmt:formatNumber value="${room.price}" type="currency" currencySymbol="₩"/></p>
               <p class="card-text mb-1 left"><strong>타입:</strong> ${room.room_type} / ${room.bed_type}</p>
@@ -209,12 +247,21 @@ function submitdelete(room_id) {
             </div>
 
             <div class="card-footer bg-white border-top-0 d-flex justify-content-end gap-2">
-              <a href="${contextPath}/business/roomdetailInfo.do?room_id=${room.room_id}" class="btn btn-sm btn-outline-primary">
-                수정
-              </a>
-              <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitdelete(${room.room_id})">
-                삭제
-              </button>
+              <c:choose>
+                <c:when test="${room.room_status == '삭제됨'}">
+                  <button type="button" class="btn btn-sm btn-success" onclick="restoreroom(${room.room_id})">
+                    복구
+                  </button>
+                </c:when>
+                <c:otherwise>
+                  <a href="${contextPath}/business/roomdetailInfo.do?room_id=${room.room_id}" class="btn btn-sm btn-outline-primary">
+                    수정
+                  </a>
+                  <button type="button" class="btn btn-sm btn-outline-danger" onclick="submitdelete(${room.room_id})">
+                    삭제
+                  </button>
+                </c:otherwise>
+              </c:choose>
             </div>
           </div>
         </div>
@@ -223,8 +270,6 @@ function submitdelete(room_id) {
   </c:forEach>
 </div>
   </c:when>
-
-  <%-- del_yn == 'Y' 조건 블록 전체 삭제 --%>
 
   <c:otherwise>
     <div class="alert alert-secondary mt-3">객실 정보가 없습니다.</div>
