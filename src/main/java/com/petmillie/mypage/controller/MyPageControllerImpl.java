@@ -249,7 +249,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    
 	    
 	    // **C드라이브에 저장할 경로 설정** 
-	    String saveDir = "C:\\petupload\\goodsreivew\\";
+	    String saveDir = "C:\\petrepo\\goodsreivew\\";
 	    File uploadPath = new File(saveDir);
 	    if (!uploadPath.exists()) uploadPath.mkdirs();
 
@@ -335,7 +335,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	@RequestMapping("/updateReview.do")
 	public ModelAndView updateReview(@ModelAttribute GoodsReviewVO goodsReviewVO, @RequestParam("uploadFile") MultipartFile file, @RequestParam("originalFileName") String originalFileName, HttpServletRequest request) throws Exception {
 	
-		String saveDir = "C:\\petupload\\goodsreivew\\";	
+		String saveDir = "C:\\petrepo\\goodsreivew\\";	
 	    File uploadPath = new File(saveDir);
 	    if (!uploadPath.exists()) uploadPath.mkdirs();
 

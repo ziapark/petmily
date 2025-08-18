@@ -87,17 +87,13 @@
 			and goods_num=#{goods_num}
     	]]>
 	</select>
-	
-   <select id="selectGoodsBySearchWord" resultMap="goodsResult" parameterType="String">
-    	<![CDATA[
-        	select g.*, d.fileName 
-        	from goods g, goods_image d
-        	where g.goods_num = d.goods_num
-          	and d.filetype = 'main_image'
-          	and g.goods_title like CONCAT('%', #{searchWord}, '%')
-        	order by g.goods_creDate desc
-    	]]>
-	</select>
+
+    <!-- 상품명으로만 검색 -->
+    <select id="selectGoodsBySearchWord" parameterType="string" resultType="com.petmillie.goods.vo.GoodsVO">
+        SELECT *
+        FROM goods
+        WHERE goods_name LIKE CONCAT('%', #{searchWord}, '%')
+    </select>
 	
 	<select id="selectKeywordSearch" resultType="String" parameterType="String">
     	<![CDATA[

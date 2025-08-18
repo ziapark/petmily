@@ -49,11 +49,11 @@ public class GoodsDAOImpl implements GoodsDAO{
 	   return list;
 	}
 	
+	
 	@Override
-	public ArrayList selectGoodsBySearchWord(String searchWord) throws DataAccessException{
-		ArrayList list=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsBySearchWord",searchWord);
-		 return list;
-	}
+    public List<GoodsVO> selectGoodsBySearchWord(String searchWord) throws DataAccessException {
+        return sqlSession.selectList("mapper.goods.selectGoodsBySearchWord", searchWord);
+    }
 		
 	@Override
 	public List<ImageFileVO> selectGoodsDetailImage(int goods_num) throws DataAccessException{

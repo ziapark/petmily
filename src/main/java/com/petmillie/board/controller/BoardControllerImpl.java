@@ -108,7 +108,7 @@ public class BoardControllerImpl implements BoardController{
 	    boardVO.setMember_id(memberId);
 	    boardVO.setBoard_type(board_type);
 	    // **C드라이브에 저장할 경로 설정** 
-	    String saveDir = "C:\\petupload\\";
+	    String saveDir = "C:\\petrepo\\board";
 	    File uploadPath = new File(saveDir);
 	    if (!uploadPath.exists()) uploadPath.mkdirs();
 
@@ -116,7 +116,7 @@ public class BoardControllerImpl implements BoardController{
 	        String originalFileName = file.getOriginalFilename();
 	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
 
-	        file.transferTo(new File(saveDir + savedFileName));
+	        file.transferTo(new File(saveDir + "\\" + savedFileName));
 	        boardVO.setFile_name(savedFileName);
 	    } else {
 	        boardVO.setFile_name(null);
@@ -149,7 +149,7 @@ public class BoardControllerImpl implements BoardController{
 	                           @RequestParam("originalFileName") String originalFileName,
 	                           HttpServletRequest request) throws Exception {
 
-	    String saveDir = "C:\\petupload\\";
+	    String saveDir = "C:\\petrepo\\board";
 	    File uploadPath = new File(saveDir);
 	    if (!uploadPath.exists()) uploadPath.mkdirs();
 
@@ -166,7 +166,7 @@ public class BoardControllerImpl implements BoardController{
 	        // 새 파일 저장
 	        String originalFileNameNew = file.getOriginalFilename();
 	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileNameNew;
-	        file.transferTo(new File(saveDir + savedFileName));
+	        file.transferTo(new File(saveDir + "\\" + savedFileName));
 	        boardVO.setFile_name(savedFileName);
 	    } else {
 	        // 파일 안 바꿨으면 기존 파일 유지

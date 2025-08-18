@@ -10,6 +10,10 @@ public class CartVO {
 	private int cart_goods_qty;
 	private String creDate;
 	
+    private String goods_name;
+    private int goods_sales_price;
+    private String fileName;
+    
 	public int getCart_id() {
 		return cart_id;
 	}
@@ -39,5 +43,23 @@ public class CartVO {
 	}
 	public void setCreDate(String creDate) {
 		this.creDate = creDate;
+	}
+	public String getGoods_name() {
+		return goods_name;
+	}
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
+	}
+	public int getGoods_sales_price() {
+		return goods_sales_price;
+	}
+	public void setGoods_sales_price(int goods_sales_price) {
+		this.goods_sales_price = goods_sales_price;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }
