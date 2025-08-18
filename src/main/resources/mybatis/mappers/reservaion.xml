@@ -64,10 +64,10 @@
 	</resultMap>
 
 	<select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
-		<![CDATA[
-			SELECT * FROM pension WHERE del_yn = 'N' ORDER BY p_num DESC
-		]]>
-	</select>
+    <![CDATA[
+        SELECT * FROM pension ORDER BY p_num DESC
+    ]]>
+</select>
 	
 	<select id="selectPensionDetail" resultMap="pensionDetailResult" parameterType="int">
 		<![CDATA[
