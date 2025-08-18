@@ -5,26 +5,64 @@
 
 <mapper namespace="mapper.medi">
 
-<resultMap id="animalHospitalResult" type="AnimalHospitalVO">
-    <result property="hospital_id" column="hospital_id"/>
-    <result property="frnm_nm" column="frnm_nm"/>
-    <result property="rn_addr" column="rn_addr"/>
-    <result property="opr_time_info" column="opr_time_info"/>
-    <result property="rprs_telno" column="rprs_telno"/>
-    <result property="hmpg_url" column="hmpg_url"/>
-    <result property="la_vlue" column="la_vlue"/>
-    <result property="lo_vlue" column="lo_vlue"/>
-</resultMap>
+    <!-- 통합 검색 결과 MediVO 매핑 -->
+    <resultMap id="mediResult" type="MediVO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="addr" column="addr"/>
+        <result property="oprTime" column="oprTime"/>
+        <result property="tel" column="tel"/>
+        <result property="homepage" column="homepage"/>
+        <result property="lat" column="lat"/>
+        <result property="lng" column="lng"/>
+        <result property="type" column="type"/>
+    </resultMap>
 
-<resultMap id="animalPharmacyResult" type="AnimalPharmacyVO">
-    <result property="pharmacy_id" column="pharmacy_id"/>
-    <result property="frnm_nm" column="frnm_nm"/>
-    <result property="rn_addr" column="rn_addr"/>
-    <result property="opr_time_info" column="opr_time_info"/>
-    <result property="rprs_telno" column="rprs_telno"/>
-    <result property="hmpg_url" column="hmpg_url"/>
-    <result property="la_vlue" column="la_vlue"/>
-    <result property="lo_vlue" column="lo_vlue"/>
-</resultMap>
-    
+    <!-- 병원+약국 통합 검색 -->
+    <select id="searchAll" parameterType="map" resultType="com.petmillie.medi.vo.MediVO">
+	  SELECT hospital_id AS id,
+	         frnm_nm AS name,
+	         rn_addr AS addr,
+	         opr_time_info AS oprTime,
+	         rprs_telno AS tel,
+	         hmpg_url AS homepage,
+	         la_vlue AS lat,
+	         lo_vlue AS lng,
+	         'HOSPITAL' AS type
+	  FROM animal_hospital
+	  WHERE 1=1
+	    <if test="sido != null and sido != ''">
+	        AND rn_addr LIKE CONCAT('%', #{sido}, '%')
+	    </if>
+	    <if test="gungu != null and gungu != ''">
+	        AND rn_addr LIKE CONCAT('%', #{gungu}, '%')
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND frnm_nm LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	  UNION ALL
+	  SELECT pharmacy_id AS id,
+	         frnm_nm AS name,
+	         rn_addr AS addr,
+	         opr_time_info AS oprTime,
+	         rprs_telno AS tel,
+	         hmpg_url AS homepage,
+	         la_vlue AS lat,
+	         lo_vlue AS lng,
+	         'PHARMACY' AS type
+	  FROM animal_pharmacy
+	  WHERE 1=1
+	    <if test="sido != null and sido != ''">
+	        AND rn_addr LIKE CONCAT('%', #{sido}, '%')
+	    </if>
+	    <if test="gungu != null and gungu != ''">
+	        AND rn_addr LIKE CONCAT('%', #{gungu}, '%')
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND frnm_nm LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	</select>
+
+
+
 </mapper>
