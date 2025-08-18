@@ -139,4 +139,9 @@ public class BusinessDAOImpl implements BusinessDAO {
     public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception {
         return sqlSession.update("mapper.business.updateGoodsStatus", paramMap);
     }
+    
+    @Override
+    public void updateRoomStatus(int roomId) throws Exception {
+        sqlSession.update("mapper.business.updateRoomStatus", roomId);
+    }
 }

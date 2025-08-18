@@ -1,7 +1,7 @@
 package com.petmillie.reservation.service;
 
 import java.util.List;
-
+import com.petmillie.business.dao.BusinessDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,6 +16,9 @@ import com.petmillie.reservation.vo.ReservationVO;
 @Transactional(propagation = Propagation.REQUIRED)
 public class ReservaionServiceImpl implements ReservaionService {
 
+	@Autowired
+    private BusinessDAO businessDAO;
+	
 	@Autowired
 	private ReservaionDAO reservaionDAO;
 
@@ -44,11 +47,17 @@ public class ReservaionServiceImpl implements ReservaionService {
 	}
 
 	// 예약 추가
+	
 	@Override
-	public int addReservation(ReservationVO reservationDTO) throws Exception {
-		return reservaionDAO.insertReservation(reservationDTO);
+	public int addReservation(ReservationVO reservationVO) throws Exception {
+	    // 첫 번째 일: 예약 기록하기
+	    reservaionDAO.insertReservation(reservationVO);
+	    
+	    // 두 번째 일: 객실 상태 변경하기 (새로 추가된 부분)
+	    businessDAO.updateRoomStatus(reservationVO.getRoom_id());
+	    
+	    return 1;
 	}
-
 	/**
 	 * [추가] 사업자 ID로 예약 목록을 조회하는 메서드 구현
 	 * 이 메서드는 DAO를 호출하여 DB에서 데이터를 가져옵니다.
