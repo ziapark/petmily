@@ -1,6 +1,8 @@
 package com.petmillie.reservation.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,4 +67,10 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 	    sqlSession.update("mapper.reservation.updateReservation", reservationVO);
 	}
 
-}
+	@Override
+	public void updateReservationStatus(int reservationId, String status) throws DataAccessException {
+		Map<String, Object> params = new HashMap<>();
+		params.put("reservationId", reservationId);
+		params.put("status", status);
+		sqlSession.update("mapper.reservation.updateReservationStatus", params);
+}}

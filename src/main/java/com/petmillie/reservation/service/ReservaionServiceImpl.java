@@ -81,5 +81,8 @@ public class ReservaionServiceImpl implements ReservaionService {
 	public void updateReservation(ReservationVO reservationVO) throws Exception {
 	    reservaionDAO.updateReservation(reservationVO);
 	}
-	
+	@Override
+	public void updateReservationStatus(int reservationId, String status) throws Exception {
+		reservaionDAO.updateReservationStatus(reservationId, status);
+	}
 }

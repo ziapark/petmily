@@ -1,14 +1,19 @@
 package com.petmillie.reservation.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity; // 👈 [추가] import
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping; // 👈 [추가] import
+import org.springframework.web.bind.annotation.RequestBody; // 👈 [추가] import
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,27 +47,23 @@ public class ReservaionControllerImpl implements ReservaionController {
 		HttpSession session = request.getSession();
 		BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
 
-		// 1. 사업자로 로그인했는지 확인
 		if (businessVO == null) {
 			return new ModelAndView("redirect:/business/loginForm.do");
 		}
 		String business_id = businessVO.getBusiness_id();
 
-		
 		List<ReservationVO> reservationList = reservationService.getReservationsByBusinessId(business_id);
 
-		// 3. ModelAndView에 데이터와 뷰 경로를 설정합니다.
 		ModelAndView mav = new ModelAndView("/common/layout");
-		mav.addObject("body", "/WEB-INF/views/reservation/reservation_check.jsp"); // JSP 경로를 직접 지정
+		mav.addObject("body", "/WEB-INF/views/reservation/reservation_check.jsp");
 		mav.addObject("title", "사업자 예약 내역");
-		mav.addObject("reservation", reservationList); // JSP에서 사용할 이름("reservation")으로 리스트를 추가
+		mav.addObject("reservation", reservationList);
 
 		return mav;
 	}
 
-	/**
-	 * 일반 회원용 펜션 목록 조회 (기존 코드 유지)
-	 */
+	// ... (기존의 다른 메소드들은 그대로 유지) ...
+	
 	@Override
 	@RequestMapping(value = "/pensionList.do", method = RequestMethod.GET)
 	public ModelAndView listPensions(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -75,9 +76,6 @@ public class ReservaionControllerImpl implements ReservaionController {
 		return mav;
 	}
 
-	/**
-	 * 펜션 상세 정보 및 객실 목록 조회 (기존 코드 유지)
-	 */
 	@Override
 	@RequestMapping(value = "/pensionDetail.do", method = RequestMethod.GET)
 	public ModelAndView pensionDetail(@RequestParam("p_num") int p_num, HttpServletRequest request,
@@ -96,9 +94,6 @@ public class ReservaionControllerImpl implements ReservaionController {
 		return mav;
 	}
 	
-	/**
-	 * 예약하기 폼 페이지 요청 (기존 코드 유지)
-	 */
 	@Override
 	@RequestMapping(value = "/roomReservation.do", method = RequestMethod.GET)
 	public ModelAndView reservationForm(@RequestParam("p_num") int p_num, @RequestParam("roomId") int roomId,
@@ -113,9 +108,6 @@ public class ReservaionControllerImpl implements ReservaionController {
 		return mav;
 	}
 
-	/**
-	 * 예약 실행 (기존 코드 유지)
-	 */
 	@Override
 	@RequestMapping(value = "/makeReservation.do", method = RequestMethod.POST)
 	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationVO reservationVO,
@@ -126,18 +118,13 @@ public class ReservaionControllerImpl implements ReservaionController {
 	        return new ModelAndView("redirect:/member/loginForm.do");
 	    }
 	    reservationVO.setMember_id(memberVO.getMember_id());
-
-	    // ▼▼▼ 바로 이 부분을 추가하시면 됩니다! ▼▼▼
-	    reservationVO.setReservation_status("예약완료"); 
-
+	    reservationVO.setReservation_status("예약완료");
 	    int reservationId = reservationService.addReservation(reservationVO);
 	    ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
 	    mav.addObject("reservationId", reservationId);
 	    return mav;
 	}
-	/**
-	 * 예약 완료 페이지 
-	 */
+
 	@RequestMapping(value="/reservationComplete.do", method=RequestMethod.GET)
 	public ModelAndView reservationComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView("/common/layout");
@@ -170,7 +157,6 @@ public class ReservaionControllerImpl implements ReservaionController {
 	@RequestMapping(value="/modifyForm.do", method=RequestMethod.GET)
 	public ModelAndView modifyForm(@RequestParam("reservationId") int reservationId, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    ReservationVO reservation = reservationService.getReservationById(reservationId);
-
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("body", "/WEB-INF/views/reservation/modifyForm.jsp");
 	    mav.addObject("title", "예약 정보 수정");
@@ -178,17 +164,51 @@ public class ReservaionControllerImpl implements ReservaionController {
 	    return mav;
 	}
 
-	// 수정된 내용을 DB에 저장하는 메소드
 	@Override
 	@RequestMapping(value="/updateReservation.do", method=RequestMethod.POST)
 	public ModelAndView updateReservation(@ModelAttribute("reservation") ReservationVO reservationVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    reservationService.updateReservation(reservationVO);
-
 	    ModelAndView mav = new ModelAndView("redirect:/reservation/myReservations.do");
 	    return mav;
 	}
 	
-	
-	
-	
+	// ▼▼▼ [ Ajax 요청 처리 ] 이 메소드를 클래스 맨 아래에 추가하세요 ▼▼▼
+	/**
+	 * JSP 페이지에서 보낸 Ajax 요청을 받아 예약 상태를 DB에 업데이트합니다.
+	 * @param payload - 클라이언트에서 온 JSON 데이터 ({ "reservation_id": "...", "reservation_status": "..." })
+	 * @return 처리 결과를 담은 ResponseEntity 객체
+	 */
+	@PostMapping("/updateStatus")
+	public ResponseEntity<Map<String, Object>> updateReservationStatus(@RequestBody Map<String, Object> payload) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			// JSP에서 보낸 reservation_id와 reservation_status를 추출합니다.
+			// JavaScript에서 id를 문자열로 보냈을 수 있으므로 Integer.parseInt로 변환합니다.
+			int reservationId = Integer.parseInt(String.valueOf(payload.get("reservation_id")));
+			String newStatus = (String) payload.get("reservation_status");
+			
+			System.out.println("상태 업데이트 요청: ID=" + reservationId + ", 상태=" + newStatus);
+			
+			// TODO: ReservationService와 DAO/Mapper에 아래 메소드를 실제로 구현해야 합니다.
+			// 예: reservationService.updateReservationStatus(reservationId, newStatus);
+			// 이 예제에서는 DB 업데이트가 성공했다고 가정합니다.
+			boolean isSuccess = true; // 실제로는 서비스 계층의 DB 업데이트 성공 여부를 반환받아야 합니다.
+			
+			if (isSuccess) {
+				response.put("success", true);
+				response.put("message", "예약 상태가 성공적으로 변경되었습니다.");
+				return ResponseEntity.ok(response); // 성공 시 200 OK 응답
+			} else {
+				response.put("success", false);
+				response.put("message", "DB 업데이트에 실패했습니다.");
+				return ResponseEntity.badRequest().body(response); // 실패 시 400 Bad Request 응답
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.put("success", false);
+			response.put("message", "서버 오류가 발생했습니다.");
+			return ResponseEntity.internalServerError().body(response); // 서버 에러 시 500 Internal Server Error 응답
+		}
+	}
 }

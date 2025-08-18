@@ -201,4 +201,10 @@
 </update>
 	
 	
+	<update id="updateReservationStatus" parameterType="map">
+    UPDATE reservation_table
+    SET reservation_status = #{status}
+    WHERE reservation_id = #{id}
+</update>
+	
 </mapper>

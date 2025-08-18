@@ -34,5 +34,7 @@ public interface ReservaionDAO {
 	
 	public ReservationVO selectReservationById(int reservationId) throws Exception;
 	public void updateReservation(ReservationVO reservationVO) throws Exception;
+	public void updateReservationStatus(int reservationId, String status) throws DataAccessException;
+
 }
 
