@@ -12,7 +12,7 @@ import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 
 @Repository("goodsDAO")
-public class GoodsDAOImpl  implements GoodsDAO{
+public class GoodsDAOImpl implements GoodsDAO{
 	@Autowired
 	private SqlSession sqlSession;
 
