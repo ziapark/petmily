@@ -247,3 +247,16 @@ position:relative;
 			    text-align: center;box-shadow: 1px 1px 8px 0px rgb(15 116 151 / 25%); border-radius: 50%;
 				 }
 
+/* 전국 동물병원 & 약국 */
+
+.search_medi {width: 100%;
+		    padding: 25px 10px;
+		    border-radius: 10px;
+		    box-sizing: border-box;
+		    text-align: center;
+		    margin: 10px 0 20px 0;
+		    background: linear-gradient(120deg, #c9ffe3 0%, #66f6ff 100%); 
+		    }
+.search_medi select {width:150px; display:inline-block;}
+.search_medi input[type="text"] {width:300px; display:inline-block;}
+

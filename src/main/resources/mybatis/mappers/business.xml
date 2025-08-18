@@ -61,13 +61,23 @@
 			<result property="reg_day" column="reg_day" />
 		</resultMap>
 		<!-- 사업자 로그인 -->
-		<select id="busilogin" resultType="BusinessVO"  parameterType="BusinessVO"  >
-	    	<![CDATA[
-				select * from business 
-			 	where seller_id=#{seller_id}
-			 	and seller_pw=#{seller_pw}
-			]]>
-		</select>	
+<!-- 		<select id="busilogin" resultType="BusinessVO"  parameterType="BusinessVO"  > -->
+<!-- 	    	<![CDATA[ -->
+<!-- 				select * from business  -->
+<!-- 			 	where seller_id=#{seller_id} -->
+<!-- 			 	and seller_pw=#{seller_pw} -->
+<!-- 			]]> -->
+<!-- 		</select>	 -->
+		
+		
+		<select id="busilogin" resultMap="businessResult"  parameterType="BusinessVO"  >
+    <![CDATA[
+        select * from business 
+        where seller_id=#{seller_id}
+        and seller_pw=#{seller_pw}
+    ]]>
+</select>
+		
 		<!-- 사업자 회원가입 -->
 		<insert id="insertNewBusinesspartner" parameterType="BusinessVO">
 			<![CDATA[
@@ -239,19 +249,22 @@
 </resultMap>
 <!-- 펜션 세부 등록 -->
 	<insert id="insertroom" parameterType="roomVO">
-		<![CDATA[
-		insert into room(
-		room_id, p_num, room_name, room_type, price, max_capacity, bed_type, room_size, room_description, amenities, fileimage)
-		values(
-		#{room_id}, #{p_num}, #{room_name}, #{room_type}, #{price}, #{max_capacity}, #{bed_type}, #{room_size}, #{room_description}, #{amenities}, #{fileimage})
-		]]>
-	</insert>
+    <![CDATA[
+    insert into room(
+    room_id, p_num, room_name, room_type, price, max_capacity, bed_type, room_size, room_description, amenities, room_status)
+    values(
+    #{room_id}, #{p_num}, #{room_name}, #{room_type}, #{price}, #{max_capacity}, #{bed_type}, #{room_size}, #{room_description}, #{amenities}, '예약가능')
+    ]]>
+</insert>
 	<!-- 펜션 세부정보 조회 -->
-	<select id="selectroomList" parameterType="String" resultMap="roomResult">
-		<![CDATA[
-		select * from room where p_num = #{p_num}
-		]]>
-	</select>
+	
+
+<select id="selectroomList" parameterType="String" resultMap="roomResult">
+    <![CDATA[
+    select * from room 
+    where p_num = #{p_num} AND room_status = '예약가능'
+    ]]>
+</select>
 	<!-- 사업자 정보 불러오기 -->
 	<select id="roomDetailInfo" parameterType="roomVO" resultType="roomVO">
 	<![CDATA[
@@ -324,4 +337,11 @@
 		      AND seller_id = #{seller_id}
 		]]>
 	</update>
+	
+	
+	<update id="updateRoomStatus" parameterType="int">
+    UPDATE room
+    SET room_status = '예약중'
+    WHERE room_id = #{room_id}
+</update>
 </mapper>

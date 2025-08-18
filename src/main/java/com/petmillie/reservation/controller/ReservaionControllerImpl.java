@@ -48,8 +48,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 		}
 		String business_id = businessVO.getBusiness_id();
 
-		// 2. [수정] ReservaionVO 대신 ReservationDTO 리스트를 가져오도록 변경
-		// (이 기능을 ReservaionService에 추가해야 합니다)
+		
 		List<ReservationVO> reservationList = reservationService.getReservationsByBusinessId(business_id);
 
 		// 3. ModelAndView에 데이터와 뷰 경로를 설정합니다.
@@ -120,20 +119,24 @@ public class ReservaionControllerImpl implements ReservaionController {
 	@Override
 	@RequestMapping(value = "/makeReservation.do", method = RequestMethod.POST)
 	public ModelAndView makeReservation(@ModelAttribute("reservation") ReservationVO reservationVO,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
-		if(memberVO == null) {
-			return new ModelAndView("redirect:/member/loginForm.do");
-		}
-		reservationVO.setMember_id(memberVO.getMember_id());
-		int reservationId = reservationService.addReservation(reservationVO);
-		ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
-		mav.addObject("reservationId", reservationId);
-		return mav;
+	        HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+	    if(memberVO == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    reservationVO.setMember_id(memberVO.getMember_id());
+
+	    // ▼▼▼ 바로 이 부분을 추가하시면 됩니다! ▼▼▼
+	    reservationVO.setReservation_status("예약완료"); 
+
+	    int reservationId = reservationService.addReservation(reservationVO);
+	    ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
+	    mav.addObject("reservationId", reservationId);
+	    return mav;
 	}
 	/**
-	 * 예약 완료 페이지 (기존 코드 유지)
+	 * 예약 완료 페이지 
 	 */
 	@RequestMapping(value="/reservationComplete.do", method=RequestMethod.GET)
 	public ModelAndView reservationComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
