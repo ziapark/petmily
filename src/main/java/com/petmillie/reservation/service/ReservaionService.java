@@ -29,5 +29,9 @@ public interface ReservaionService {
 	 */
 	public List<ReservationVO> getReservationsByBusinessId(String business_id) throws Exception;
 	public List<ReservationVO> getReservationsByMemberId(String memberId) throws Exception;
+
+	public ReservationVO getReservationById(int reservationId) throws Exception;
+	public void updateReservation(ReservationVO reservationVO) throws Exception;
+	public void updateReservationStatus(int reservationId, String status) throws Exception;
 	
 }

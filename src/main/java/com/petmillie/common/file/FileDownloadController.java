@@ -15,7 +15,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 public class FileDownloadController {
-	private static String CURR_BOARD_REPO_PATH = "C:\\petrepo"; // 게시판 전용 경로
+	private static String CURR_BOARD_REPO_PATH = "C:\\petrepo\\board"; // 게시판 전용 경로
 	private static String CURR_IMAGE_REPO_PATH = "C:\\petrepo\\goods"; // 상품 전용 경로
 	private static String CURR_ROOM_REPO_PATH = "C:\\petrepo\\room";
 	

@@ -35,4 +35,5 @@ public interface BusinessController {
 	String addpension2(RoomVO roomVO, MultipartFile fileimage, HttpServletRequest request, HttpServletResponse response,
 			Model model, RedirectAttributes redirectAttributes) throws Exception;
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
+	public String restoreroom(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

@@ -172,4 +172,39 @@
 		]]>
 	</select>
 	
+	<select id="selectReservationById" resultMap="reservationResult" parameterType="int">
+    <![CDATA[
+        SELECT 
+            r.*, 
+            p.p_name,
+            rm.room_name
+        FROM reservation r
+        JOIN pension p ON r.p_num = p.p_num
+        JOIN room rm ON r.room_id = rm.room_id
+        WHERE r.reservation_id = #{reservation_id}
+    ]]>
+</select>
+
+<!-- 예약 정보 수정 -->
+<update id="updateReservation" parameterType="com.petmillie.reservation.vo.ReservationVO">
+    <![CDATA[
+        UPDATE reservation
+        SET 
+            reserver_name = #{reserver_name},
+            reserver_tel = #{reserver_tel},
+            checkin_date = #{checkin_date},
+            checkout_date = #{checkout_date},
+            guests = #{guests}
+        WHERE 
+            reservation_id = #{reservation_id}
+    ]]>
+</update>
+	
+	
+	<update id="updateReservationStatus" parameterType="map">
+    UPDATE reservation_table
+    SET reservation_status = #{status}
+    WHERE reservation_id = #{id}
+</update>
+	
 </mapper>

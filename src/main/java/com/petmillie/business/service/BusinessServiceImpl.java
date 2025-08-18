@@ -148,4 +148,8 @@ public class BusinessServiceImpl implements BusinessService {
     public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception {
         return businessDAO.updateGoodsStatus(paramMap);
     }
+    @Override
+    public int restoreroom(int room_id) throws Exception {
+        return businessDAO.restoreroom(room_id);
+    }
 }
