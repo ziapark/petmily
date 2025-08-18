@@ -132,6 +132,7 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 		
 	}
 	
+
 //	private void addGoodsInQuick(String goods_num,GoodsVO goodsVO,HttpSession session){
 //		boolean already_existed=false;
 //		List<GoodsVO> quickGoodsList; //ֱ  ǰ  ArrayList

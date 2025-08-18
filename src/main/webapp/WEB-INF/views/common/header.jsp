@@ -105,12 +105,11 @@
 		</div>
 		<div class="clear"></div>
 		<div id="search">
-			<form name="frmSearch" action="${contextPath}/goods/searchGoods.do">
-				<input name="searchWord" class="form-control search_input"
-					type="text" onKeyUp="keywordSearch()" placeholder="검색어를 입력하세요">
-				<input type="submit" name="search" class="btn-primary btn-sm"
-					value="검색">
-			</form>
+		    <form name="frmSearch" action="${contextPath}/goods/searchGoods.do" method="get">
+		        <input name="searchWord" class="form-control search_input"
+		               type="text" placeholder="검색어를 입력하세요">
+		        <input type="submit" name="search" class="btn-primary btn-sm" value="검색">
+		    </form>
 		</div>
 		<div id="suggest">
 			<div id="suggestList"></div>
