@@ -16,6 +16,27 @@ public class GoodsDAOImpl  implements GoodsDAO{
 	@Autowired
 	private SqlSession sqlSession;
 
+    @Override
+    public List<GoodsVO> goodsListByCategory(String goods_category) throws DataAccessException {
+    	return sqlSession.selectList("mapper.goods.goodsListByCategory", goods_category); 
+    }
+    
+	@Override
+	public GoodsVO goodsDetail(int goods_num) throws DataAccessException{
+		return sqlSession.selectOne("mapper.goods.goodsDetail", goods_num);
+	}
+
+	@Override
+	public List<ImageFileVO> goodsDetailImage(int goods_num) throws DataAccessException{
+		return sqlSession.selectList("mapper.goods.goodsDetailImage", goods_num);
+	}
+	
+    @Override
+    public List<GoodsVO> selectAllGoodsList() throws DataAccessException {
+        List<GoodsVO> goodsList = sqlSession.selectList("mapper.goods.selectAllGoodsList");
+        return goodsList;
+    }
+    
 	@Override
 	public List<GoodsVO> selectGoodsList(String goodsStatus ) throws DataAccessException {
 		List<GoodsVO> goodsList=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsList",goodsStatus);
@@ -33,23 +54,14 @@ public class GoodsDAOImpl  implements GoodsDAO{
 		ArrayList list=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsBySearchWord",searchWord);
 		 return list;
 	}
-	
-	@Override
-	public GoodsVO selectGoodsDetail(int goods_num) throws DataAccessException{
-		return (GoodsVO)sqlSession.selectOne("mapper.goods.selectGoodsDetail",goods_num);
-	}
-	
+		
 	@Override
 	public List<ImageFileVO> selectGoodsDetailImage(int goods_num) throws DataAccessException{
 		List<ImageFileVO> imageList=(ArrayList)sqlSession.selectList("mapper.goods.selectGoodsDetailImage",goods_num);
 		return imageList;
 	}
 
-    @Override
-    public List<GoodsVO> selectAllGoodsList() throws DataAccessException {
-        List<GoodsVO> goodsList = sqlSession.selectList("mapper.goods.selectAllGoodsList");
-        return goodsList;
-    }
+
     
     @Override
     public List<GoodsVO> selectGoodsByRecommendation(String weatherKeyword){

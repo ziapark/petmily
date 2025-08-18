@@ -34,6 +34,39 @@
     	<result property="reg_day" column="reg_day"/>
 	</resultMap>
 
+	<select id="goodsListByCategory" resultMap="goodsResult" parameterType="String">
+		<![CDATA[
+			SELECT g.*, gi.fileName
+		  	FROM goods g
+		  	LEFT JOIN goods_image gi ON g.goods_num = gi.goods_num AND gi.fileType = 'main'
+		  	WHERE g.goods_status = '판매중'
+		  	AND g.goods_category = #{goods_category}
+		  	ORDER BY g.goods_creDate DESC
+		]]>
+	</select>
+	
+	<select id="goodsDetail" resultMap="goodsResult" parameterType="int">
+    	<![CDATA[
+        	SELECT *         
+         	FROM goods
+         	WHERE goods_num = #{goods_num}
+    	]]>
+	</select>
+	
+	<select id="goodsDetailImage" resultMap="goodsResult" parameterType="int">
+    	<![CDATA[
+        	SELECT *         
+         	FROM goods_image
+         	WHERE goods_num = #{goods_num}
+    	]]>
+	</select>
+	
+	<select id="seSlectAllGoodsList" resultMap="goodsResult">
+  		<![CDATA[
+    		SELECT * FROM goods WHERE del_yn = 'n' ORDER BY goods_creDate DESC
+  		]]>
+	</select>
+	
 	<select id="selectGoodsList" parameterType="String" resultMap="goodsResult">
 	    <![CDATA[
 	        select g.*, d.fileName
@@ -46,24 +79,7 @@
 	    ]]>
 	</select>
 
-	<select id="selectAllGoodsList" resultMap="goodsResult">
-  		<![CDATA[
-    		SELECT * FROM goods  WHERE del_yn = 'n' ORDER BY goods_creDate DESC
-  		]]>
-	</select>
-	<select id="selectGoodsDetail" resultMap="goodsResult"   parameterType="int"  >
-    	<![CDATA[
-        	 SELECT
-             g.goods_num,
-             g.goods_name,
-             g.goods_sales_price,
-             g.goods_point,
-             d.fileName
-         	FROM goods g
-         	JOIN goods_image d ON g.goods_num = d.goods_num
-         	WHERE g.goods_num = #{goods_num}
-    	]]>
-	</select>
+
 	<select id="selectGoodsDetailImage" resultMap="imageResult"   parameterType="int"  >
 	    <![CDATA[
 		    select * from  goods_image 
