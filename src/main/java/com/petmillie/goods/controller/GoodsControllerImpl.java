@@ -3,7 +3,6 @@ package com.petmillie.goods.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.service.GoodsService;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
 
@@ -36,28 +36,66 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	@Autowired
 	private MyPageService myPageService;
 	
+	@RequestMapping(value="/goodsListByCategory.do", method = RequestMethod.GET)
+	public ModelAndView goodsListByCategory(@RequestParam("goods_category") String goods_category, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "전체 상품");
+	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
+
+	    List<GoodsVO> goodsListByCategory = goodsService.goodsListByCategory(goods_category);
+	    mav.addObject("goodsListByCategory", goodsListByCategory);
+
+	    // 로그인 유저 기준으로 관심상품 Set 가져오기
+	    HttpSession session = request.getSession();
+	    MemberVO member = (MemberVO) session.getAttribute("memberInfo");
+	    Set<Integer> likedGoodsSet = new HashSet<>();
+	    if (member != null) {
+	        likedGoodsSet = myPageService.getLikedGoodsSet(member.getMember_id()); 
+	        // DB에서 해당 유저의 관심상품 번호만 뽑아서 Set<Integer>로 반환
+	    }
+	    mav.addObject("likedGoodsSet", likedGoodsSet);
+
+	    return mav;
+	}
+	
 	@RequestMapping(value="/goodsDetail.do" ,method = RequestMethod.GET)
-	public ModelAndView goodsDetail(@RequestParam("goods_num") int goods_num,
-			                       HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("제품상세진입");
+	public ModelAndView goodsDetail(@RequestParam("goods_num") int goods_num, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
 		HttpSession session=request.getSession();
 		ModelAndView mav=new ModelAndView("/common/layout");
 		mav.addObject("title", "제품상세");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
-		System.out.println("서비스 진입전 ");
-		Map goodsMap=goodsService.goodsDetail(goods_num);
-		System.out.println("서비스 진입 후: " +goodsMap);
-		
-		mav.addObject("goodsMap", goodsMap);
-		GoodsVO goodsVO=(GoodsVO)goodsMap.get("goodsVO");
-		mav.addObject("goodsVO", goodsVO); 
-		addGoodsInQuick(goods_num,goodsVO,session);
+		goodsVO = goodsService.goodsDetail(goods_num);
+		List<ImageFileVO> goodsImageList = goodsService.goodsDetailImage(goods_num);
+		mav.addObject("goodsVO", goodsVO);
+		mav.addObject("goodsImageList", goodsImageList);
 
-		
-		System.out.println("가격 확인: " + goodsVO.getGoods_sales_price());
 		return mav;
+	}
+	
+	@RequestMapping(value="/goodsList.do", method = RequestMethod.GET)
+	public ModelAndView goodsList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("/common/layout");
+
+	    mav.addObject("title", "전체 상품");
+	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
+
+	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
+	    List<GoodsVO> goodsList = goodsService.listAllGoods();
+	    mav.addObject("goodsList", goodsList); // JSP로 전달
+
+	    // 로그인 유저 기준으로 관심상품 Set 가져오기
+	    HttpSession session = request.getSession();
+	    MemberVO member = (MemberVO) session.getAttribute("memberInfo");
+	    Set<Integer> likedGoodsSet = new HashSet<>();
+	    if (member != null) {
+	        likedGoodsSet = myPageService.getLikedGoodsSet(member.getMember_id()); 
+	        // DB에서 해당 유저의 관심상품 번호만 뽑아서 Set<Integer>로 반환
+	    }
+	    mav.addObject("likedGoodsSet", likedGoodsSet); // JSP로 전달
+
+	    return mav;
 	}
 	
 	@RequestMapping(value="/keywordSearch.do",method = RequestMethod.GET,produces = "application/text; charset=utf8")
@@ -154,41 +192,6 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	    session.setAttribute("quickGoodsList", quickGoodsList);
 	    session.setAttribute("quickGoodsListNum", quickGoodsList.size());
 	}
-
-	
-	// 이 부분은 아마도 GoodsController 인터페이스의 추상 메소드를 구현한 것으로 보입니다.
-	// 실제 웹 요청을 처리하는 @RequestMapping 메소드가 아니므로 이대로 두어도 됩니다.
-	@Override
-	public Map<String, List<GoodsVO>> listGoods() throws Exception {
-	    // 이 메소드는 직접적인 HTTP 요청을 처리하지 않고, 다른 서비스나 컨트롤러에서 호출될 수 있습니다.
-	    return goodsService.listGoods(); // goodsService의 listGoods() 호출
-	}
-
-	@RequestMapping(value="/goodsList.do", method = RequestMethod.GET)
-	public ModelAndView goodsList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    ModelAndView mav = new ModelAndView("/common/layout");
-
-	    mav.addObject("title", "전체 상품");
-	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
-
-	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기
-	    List<GoodsVO> goodsList = goodsService.listAllGoods();
-	    mav.addObject("goodsList", goodsList); // JSP로 전달
-
-	    // 로그인 유저 기준으로 관심상품 Set 가져오기
-	    HttpSession session = request.getSession();
-	    MemberVO member = (MemberVO) session.getAttribute("memberInfo");
-	    Set<Integer> likedGoodsSet = new HashSet<>();
-	    if (member != null) {
-	        likedGoodsSet = myPageService.getLikedGoodsSet(member.getMember_id()); 
-	        // DB에서 해당 유저의 관심상품 번호만 뽑아서 Set<Integer>로 반환
-	    }
-	    mav.addObject("likedGoodsSet", likedGoodsSet); // JSP로 전달
-
-	    return mav;
-	}
-
-    // --- 상품 목록을 표시하기 위해 추가/수정된 부분 끝 ---
 	
 }
 

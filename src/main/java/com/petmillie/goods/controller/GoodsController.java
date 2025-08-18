@@ -14,8 +14,8 @@ import com.petmillie.goods.vo.GoodsVO; // GoodsVO import 추가
 
 public interface GoodsController {
     // 기존 메서드들
+	public ModelAndView goodsListByCategory(@RequestParam("goods_category") String goods_category, HttpServletRequest request, HttpServletResponse response) throws Exception;
     public ModelAndView goodsDetail(@RequestParam("goods_num") int goods_num, HttpServletRequest request, HttpServletResponse response) throws Exception;
     public @ResponseBody String keywordSearch(@RequestParam("keyword") String keyword, HttpServletRequest request, HttpServletResponse response) throws Exception;
     public ModelAndView searchGoods(@RequestParam("searchWord") String searchWord, HttpServletRequest request, HttpServletResponse response) throws Exception;
-    public Map<String, List<GoodsVO>> listGoods() throws Exception; 
 }
