@@ -82,11 +82,14 @@
 		]]>
 	</select>
 
+	
 	<select id="selectRoomList" resultMap="roomResult" parameterType="int">
-		<![CDATA[
-			SELECT * FROM room WHERE p_num = #{p_num}  ORDER BY price ASC
-		]]>
-	</select>
+    <![CDATA[
+        SELECT * FROM room 
+        WHERE p_num = #{p_num} AND room_status = '예약가능' 
+        ORDER BY price ASC
+    ]]>
+</select>
 
 	<!-- 특정 객실 상세 정보 조회 -->
 	<select id="selectRoomDetail" resultMap="roomResult" parameterType="int">

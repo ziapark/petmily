@@ -19,7 +19,7 @@ public class ReservationVO {
 	private int total_price;
 	private String reservation_status;
 	
-	// JSP에서 추가로 필요했던 필드들
+	
 	private String p_name; // 펜션명
 	private String roadAddress; // 펜션 주소
 	private String room_name; // 객실명

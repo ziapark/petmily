@@ -118,11 +118,11 @@
 	<div class="nav-area" style="position: relative; clear: both;">
 		<div class="nav_inner">
 			<ul class="gnb">
-				<li><a href="#">식품</a></li>
-				<li><a href="#">장난감</a></li>
-				<li><a href="#">목욕/위생</a></li>
-				<li><a href="#">산책용품</a></li>
-				<li><a href="#">생활용품</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">식품</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">목욕/위생</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">산책용품</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">생활용품</a></li>
 				<li><a href="${contextPath}/reservation/pensionList.do">예약</a></li>
 				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
 				

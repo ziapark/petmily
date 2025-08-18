@@ -257,7 +257,9 @@
     ]]>
 </insert>
 	<!-- 펜션 세부정보 조회 -->
-	<select id="selectroomList" parameterType="String" resultMap="roomResult">
+	
+
+<select id="selectroomList" parameterType="String" resultMap="roomResult">
     <![CDATA[
     select * from room 
     where p_num = #{p_num} AND room_status = '예약가능'
@@ -335,4 +337,11 @@
 		      AND seller_id = #{seller_id}
 		]]>
 	</update>
+	
+	
+	<update id="updateRoomStatus" parameterType="int">
+    UPDATE room
+    SET room_status = '예약중'
+    WHERE room_id = #{room_id}
+</update>
 </mapper>

@@ -48,8 +48,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 		}
 		String business_id = businessVO.getBusiness_id();
 
-		// 2. [수정] ReservaionVO 대신 ReservationDTO 리스트를 가져오도록 변경
-		// (이 기능을 ReservaionService에 추가해야 합니다)
+		
 		List<ReservationVO> reservationList = reservationService.getReservationsByBusinessId(business_id);
 
 		// 3. ModelAndView에 데이터와 뷰 경로를 설정합니다.
@@ -137,7 +136,7 @@ public class ReservaionControllerImpl implements ReservaionController {
 	    return mav;
 	}
 	/**
-	 * 예약 완료 페이지 (기존 코드 유지)
+	 * 예약 완료 페이지 
 	 */
 	@RequestMapping(value="/reservationComplete.do", method=RequestMethod.GET)
 	public ModelAndView reservationComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
