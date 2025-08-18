@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.petmillie.cart.vo.CartVO;
+import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.dao.OrderDAO;
 import com.petmillie.order.dao.PayDAO;
 import com.petmillie.order.vo.OrderVO;
 import com.petmillie.order.vo.PayVO;
-
 
 @Service("orderService")
 @Transactional(propagation=Propagation.REQUIRED)
@@ -21,6 +21,11 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	@Autowired
 	private PayDAO payDAO;
+	
+    @Override
+    public GoodsVO goodsDetailForOrder(int goods_num) throws Exception {
+        return orderDAO.goodsDetailForOrder(goods_num);
+    }
 	
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception{
 		List<OrderVO> orderGoodsList;

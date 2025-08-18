@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petmillie.cart.vo.CartVO;
+import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.vo.OrderVO;
 
 @Repository("orderDAO")
@@ -16,6 +17,11 @@ public class OrderDAOImpl implements OrderDAO {
 	@Autowired
 	private SqlSession sqlSession;
 	
+    @Override
+    public GoodsVO goodsDetailForOrder(int goods_num) throws DataAccessException {
+        return sqlSession.selectOne("mapper.order.goodsDetailForOrder", goods_num);
+    }
+    
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws DataAccessException{
 		List<OrderVO> orderGoodsList=new ArrayList<OrderVO>();
 		orderGoodsList=(ArrayList)sqlSession.selectList("mapper.order.selectMyOrderList",orderVO);

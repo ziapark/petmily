@@ -11,24 +11,22 @@
 		<result property="member_id" column="member_id" />
 		<result property="order_id" column="order_id" />
 		<result property="goods_num" column="goods_num" />
+		<result property="fileName" column="fileName" />
 		<result property="goods_name" column="goods_name" />
 		<result property="goods_sales_price" column="goods_sales_price" />
-		<result property="total_price" column="total_price" />
 		<result property="goods_qty" column="goods_qty" />
-		<result property="order_name" column="order_name" />
+		<result property="point" column="point" />
 		<result property="receiver_name" column="receiver_name" />
 		<result property="tel1" column="tel1" />
 		<result property="tel2" column="tel2" />
 		<result property="tel3" column="tel3" />
+		<result property="delivery_message" column="delivery_message" />
 		<result property="zipcode" column="zipcode" />
 		<result property="roadAddress" column="roadAddress" />
 		<result property="jibunAddress" column="jibunAddress" />
 		<result property="namujiAddress" column="namujiAddress" />
-		<result property="delivery_method" column="delivery_method" />
-		<result property="delivery_message" column="delivery_message" />
-		<result property="delivery_state" column="delivery_state" />
-		<result property="goods_fileName" column="goods_fileName" />
 		<result property="order_time" column="order_time" />
+		<result property="delivery_state" column="delivery_state" />	
 	</resultMap>
 
 	<!-- memberVO용 ResultMap -->
@@ -55,6 +53,46 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 	
+	<resultMap id="goodsResult" type="GoodsVO">
+    	<result property="goods_num" column="goods_num"/>
+    	<result property="goods_name" column="goods_name"/>
+    	<result property="seller_id" column="seller_id"/>
+    	<result property="goods_maker" column="goods_maker"/>
+    	<result property="goods_category" column="goods_category"/>
+    	<result property="goods_sales_price" column="goods_sales_price"/>
+    	<result property="goods_point" column="goods_point"/>
+    	<result property="goods_stock" column="goods_stock"/>
+    	<result property="goods_delivery_price" column="goods_delivery_price"/>
+    	<result property="goods_status" column="goods_status"/>
+    	<result property="goods_recommend" column="goods_recommend"/>
+    	<result property="goods_credate" column="goods_credate"/>
+     	<result property="del_yn" column="del_yn"/>
+     	
+     	<result property="image_id" column="image_id"/>
+    	<result property="fileName" column="fileName"/>
+    	<result property="fileType" column="fileType"/>
+    	<result property="reg_id" column="reg_id"/>
+    	<result property="reg_day" column="reg_day"/>
+	</resultMap>
+	
+	<select id="goodsDetailForOrder" resultType="com.petmillie.goods.vo.GoodsVO" parameterType="int">
+    	<![CDATA[
+		    SELECT 
+		        g.goods_num, 
+		        g.goods_name, 
+		        g.goods_sales_price,
+		        g.goods_delivery_price,
+		        g.goods_point,
+		        i.fileName
+		    FROM 
+		        goods g 
+		    LEFT JOIN 
+		        goods_image i ON g.goods_num = i.goods_num
+		    WHERE 
+		        g.goods_num = #{goods_num}
+		        AND i.fileType = 'main'
+        ]]>
+	</select>
 	<insert id="insertNewOrder" parameterType="OrderVO" useGeneratedKeys="true" keyProperty="order_num">
   INSERT INTO userorder (
     member_id, order_id, goods_num, goods_name, goods_sales_price, total_price, goods_qty, order_name, receiver_name, tel1, tel2, tel3, 

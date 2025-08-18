@@ -122,33 +122,37 @@
 		}
 
 		function fn_order_all_cart_goods(){
-			var order_goods_qty;
-			var order_goods_num;
-			var objForm=document.frm_order_all_cart;
-			var cart_goods_qty=objForm.cart_goods_qty;
-			var h_order_each_goods_qty=objForm.h_order_each_goods_qty;
-			var checked_goods=objForm.checked_goods;
-			var length=checked_goods.length;
-	
-			if(length>1){
-				for(var i=0; i<length;i++){
-					if(checked_goods[i].checked==true){
-						order_goods_num=checked_goods[i].value;
-						order_goods_qty=cart_goods_qty[i].value;
-						cart_goods_qty[i].value="";
-						cart_goods_qty[i].value=order_goods_qty;
-						console.log(cart_goods_qty[i].value);
-					}
-				}	
-			}else{
-				order_goods_num=checked_goods.value;
-				order_goods_qty=cart_goods_qty.value;
-				cart_goods_qty.value=order_goods_qty;
-			}
-		
- 			objForm.method="post";
- 			objForm.action="${contextPath}/order/orderAllCartGoods.do";
-			objForm.submit();
+		    var checkedItems = $("input[name='checked_goods']:checked");
+
+		    if (checkedItems.length === 0) {
+		        alert("주문할 상품을 선택해주세요.");
+		        return;
+		    }
+		    
+		    var newForm = document.createElement("form");
+		    newForm.method = "post";
+		    newForm.action = "${contextPath}/order/orderAllCartGoods.do";
+
+		    checkedItems.each(function() {
+		        var row = $(this).closest('tr');
+		        var goods_num = $(this).val();
+		        var cart_goods_qty = row.find("input[name='cart_goods_qty']").val();
+
+		        var goodsNumInput = document.createElement("input");
+		        goodsNumInput.type = "hidden";
+		        goodsNumInput.name = "goods_num";
+		        goodsNumInput.value = goods_num;
+		        newForm.appendChild(goodsNumInput);
+
+		        var goodsQtyInput = document.createElement("input");
+		        goodsQtyInput.type = "hidden";
+		        goodsQtyInput.name = "cart_goods_qty";
+		        goodsQtyInput.value = cart_goods_qty;
+		        newForm.appendChild(goodsQtyInput);
+		    });
+
+		    document.body.appendChild(newForm);
+		    newForm.submit();
 		}
 	</script>
 </head>
