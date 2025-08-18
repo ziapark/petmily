@@ -53,7 +53,7 @@
 		<result property="reserver_name" column="reserver_name"/>
 		<result property="reserver_tel" column="reserver_tel"/>
 		<result property="total_price" column="total_price"/>
-		<result property="status" column="status"/>
+		<result property="reservation_status" column="reservation_status"/>
 		
 		<!-- 추가된 객실/펜션/사업자 정보 필드 -->
 		<result property="p_name" column="p_name"/>
@@ -64,10 +64,10 @@
 	</resultMap>
 
 	<select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
-		<![CDATA[
-			SELECT * FROM pension WHERE del_yn = 'N' ORDER BY p_num DESC
-		]]>
-	</select>
+    <![CDATA[
+        SELECT * FROM pension ORDER BY p_num DESC
+    ]]>
+</select>
 	
 	<select id="selectPensionDetail" resultMap="pensionDetailResult" parameterType="int">
 		<![CDATA[
@@ -84,7 +84,7 @@
 
 	<select id="selectRoomList" resultMap="roomResult" parameterType="int">
 		<![CDATA[
-			SELECT * FROM room WHERE p_num = #{p_num} AND del_yn = 'N' ORDER BY price ASC
+			SELECT * FROM room WHERE p_num = #{p_num}  ORDER BY price ASC
 		]]>
 	</select>
 
@@ -97,37 +97,33 @@
 	</select>
 	
 	<!-- 예약 정보 추가 -->
-	<insert id="insertReservation" 
-			parameterType="com.petmillie.reservation.vo.ReservationVO"
-			useGeneratedKeys="true"
-			keyProperty="reservation_id">
-		<![CDATA[
-			INSERT INTO reservation(
-				member_id,
-				business_id,
-				room_id,
-				checkin_date,
-				checkout_date,
-				guests,
-				reserver_name,
-				reserver_tel,
-				total_price,
-				status
-			)
-			VALUES (
-				#{member_id},
-				#{business_id},
-				#{room_id},
-				#{checkin_date},
-				#{checkout_date},
-				#{guests},
-				#{reserver_name},
-				#{reserver_tel},
-				#{total_price},
-				'예약완료'
-			)
-		]]>
-	</insert>
+	<insert id="insertReservation" parameterType="com.petmillie.reservation.vo.ReservationVO">
+  INSERT INTO reservation(
+      p_num,
+      member_id,
+      business_id,
+      room_id,
+      checkin_date,
+      checkout_date,
+      guests,
+      reserver_name,
+      reserver_tel,
+      total_price,
+      reservation_status
+  ) VALUES (
+      #{p_num},
+      #{member_id},
+      #{business_id},
+      #{room_id},
+      #{checkin_date},
+      #{checkout_date},
+      #{guests},
+      #{reserver_name},
+      #{reserver_tel},
+      #{total_price},
+      #{reservation_status}
+  )
+</insert>
 	
 	<!-- 
 	  ===================================================================

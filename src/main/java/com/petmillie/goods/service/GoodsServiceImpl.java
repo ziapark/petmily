@@ -19,7 +19,28 @@ public class GoodsServiceImpl implements GoodsService{
 	@Autowired
 	private GoodsDAO goodsDAO;
 	
+    @Override
+    public List<GoodsVO> goodsListByCategory(String goods_category) throws Exception {
+        return goodsDAO.goodsListByCategory(goods_category);
+    }
+    
+    @Override
+	public GoodsVO goodsDetail(int goods_num) throws Exception {
+		return goodsDAO.goodsDetail(goods_num);
+	}	
+    
+    @Override
+	public List<ImageFileVO> goodsDetailImage(int goods_num) throws Exception {
+		return goodsDAO.goodsDetailImage(goods_num);
+	}
+    
+    @Override
+    public List<GoodsVO> listAllGoods() throws Exception {
+        return goodsDAO.selectAllGoodsList();
+    }
+    
 	public Map<String,List<GoodsVO>> listGoods() throws Exception {
+		//bookshop 베스트 스터디 메인에 출력시 필요
 		Map<String,List<GoodsVO>> goodsMap=new HashMap<String,List<GoodsVO>>();
 		List<GoodsVO> goodsList=goodsDAO.selectGoodsList("bestseller");
 		goodsMap.put("bestseller",goodsList);
@@ -31,15 +52,7 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsMap;
 	}
 	
-	public Map goodsDetail(int goods_num) throws Exception {
-		Map goodsMap=new HashMap();
-		GoodsVO goodsVO = goodsDAO.selectGoodsDetail(goods_num);
-		System.out.println("서비스에서 받은 dao 결과: " + goodsVO);
-		goodsMap.put("goodsVO", goodsVO);
-		List<ImageFileVO> imageList =goodsDAO.selectGoodsDetailImage(goods_num);
-		goodsMap.put("imageList", imageList);
-		return goodsMap;
-	}
+
 	
 	public List<String> keywordSearch(String keyword) throws Exception {
 		List<String> list=goodsDAO.selectKeywordSearch(keyword);
@@ -50,10 +63,4 @@ public class GoodsServiceImpl implements GoodsService{
 		List goodsList=goodsDAO.selectGoodsBySearchWord(searchWord);
 		return goodsList;
 	}
-	
-    @Override
-    public List<GoodsVO> listAllGoods() throws Exception {
-        return goodsDAO.selectAllGoodsList();
-    }
-
 }

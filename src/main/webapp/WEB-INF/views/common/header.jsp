@@ -143,36 +143,30 @@
 
 			<div class="submenu-wrap">
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsList.do">사료</a></li>
-					<li><a href="#">간식</a></li>
-					<li><a href="#">영양제</a></li>
-					<li><a href="#">기타상품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">사료</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=간식">간식</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=영양제">영양제</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="#">봉제장난감</a></li>
-					<li><a href="#">공/원반</a></li>
-					<li><a href="#">라텍스장난감</a></li>
-					<li><a href="#">치실/로프</a></li>
-					<li><a href="#">터그놀이</a></li>
-					<li><a href="#">노즈워크</a></li>
-					<li><a href="#">기타상품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">봉제장난감</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=공/원반">공/원반</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=라텍스장난감">라텍스장난감</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=치실/로프">치실/로프</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">터그놀이</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=노즈워크">노즈워크</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="#">목욕용품</a></li>
-					<li><a href="#">기타상품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">목욕용품</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="#">칼라</a></li>
-					<li><a href="#">배변봉투</a></li>
-					<li><a href="#">하네스</a></li>
-					<li><a href="#">목줄</a></li>
-					<li><a href="#">유모차</a></li>
-					<li><a href="#">기타상품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">칼라</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">하네스</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄">목줄</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">유모차</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="#">생활용품모음</a></li>
-					<li><a href="#">추가하셈3</a></li>
-					<li><a href="#">추가하셈3-3</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">생활용품</a></li>
 				</ul>
 				
 				<ul class="submenu">
