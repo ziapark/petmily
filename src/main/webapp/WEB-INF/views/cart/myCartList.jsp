@@ -157,7 +157,12 @@
 	</script>
 </head>
 <body>
-	<div class="container text-center mt-3 mb-3">
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">장바구니</h2>
+        </div>
+    </div>
 		<form name="frm_order_all_cart">
 		<table class="table">
 			<tbody align=center>
@@ -192,7 +197,7 @@
 								    </a>
 								</td>
 								<td>
-								    <h2><a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">${item.goods_name}</a></h2>
+								    <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}" style="color:blue;">${item.goods_name}</a>
 								</td>
 								<td>
 								    <strong><fmt:formatNumber value="${item.goods_sales_price}" type="number" pattern="#,###원" /></strong>
@@ -207,12 +212,8 @@
 								    <strong><fmt:formatNumber value="${item.goods_sales_price * item.cart_goods_qty}" type="number" pattern="#,###원" /></strong>
 								</td>
 								<td>
-								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}');">
-										<img width="75" alt="주문하기" src="${contextPath}/resources/image/btn_order.jpg">
-									</a><br>
-									<a href="javascript:delete_cart_goods('${item.cart_id}');">
-										<img width="75" alt="삭제하기" src="${contextPath}/resources/image/btn_delete.jpg">
-								    </a>
+								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}');" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">주문하기</a>
+									<a href="javascript:delete_cart_goods('${item.cart_id}');" class="btn btn-danger"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">삭제하기</a>
 								</td>
 							</tr>
                             <c:set var="totalGoodsPrice" value="${totalGoodsPrice + (item.goods_sales_price * item.cart_goods_qty)}" />
@@ -262,12 +263,8 @@
 		</table>
 	<center>
 	<br><br> 
-		<a href="javascript:fn_order_all_cart_goods()">
-			<img width="75" alt="주문하기" src="${contextPath}/resources/image/btn_order_final.jpg">
-		</a>
-		<a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">
-			<img width="75" alt="쇼핑계속하기" src="${contextPath}/resources/image/btn_shoping_continue.jpg">
-		</a>
+		<a href="javascript:fn_order_all_cart_goods()" class="btn btn-primary">주문하기</a>
+		<a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료" class="btn btn-outline-secondary">쇼핑 계속하기</a>
 	<center>
 	</form>			
 </div>
