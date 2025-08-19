@@ -212,7 +212,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	
 	@RequestMapping(value="/payComplete.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView payComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 	    
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("title", "주문 완료");
