@@ -10,10 +10,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>상품 리스트</title>
+	<title>펫밀리</title>
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">상품리스트</h2>
+        </div>
+    </div>
 		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
 	  		<c:choose>
 	    		<c:when test="${not empty goodsListByCategory}">

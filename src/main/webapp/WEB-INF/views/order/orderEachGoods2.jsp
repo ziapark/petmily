@@ -196,14 +196,19 @@
 	</script>
 
 <BODY>
-	<H1>주문하기</H1>
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">주문하기</h2>
+        </div>
+    </div>
   	<form name="form_order">
         <c:set var="totalOrderPrice" value="0" />
         <c:set var="totalOrderPoints" value="0" />
         <c:set var="totalDeliveryPrice" value="0" />
         <c:set var="totalGoodsNum" value="0" />
     	
-    	<TABLE class="list_view">
+    	<TABLE class="table">
       		<TBODY align=center>
         		<tr style="background: #33ff00">
 	          		<td>번호</td>
@@ -224,7 +229,7 @@
 	              			</a>
             			</td>
             			<td>
-              				<h2><a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">${item.goods_name}</a></h2>
+              				<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">${item.goods_name}</a>
             			</td>
             			<td>
 						    <c:choose>
@@ -237,7 +242,7 @@
 						    </c:choose>
 						</td>
             			<td>${item.goods_qty}개</td>
-            			<td><h2>${item.goods_delivery_price}</h2></td>
+            			<td>${item.goods_delivery_price}</td>
 	            		<td>
 						    <c:choose>
 						        <c:when test="${not empty item.goods_sales_price}">
@@ -300,84 +305,103 @@
     	<input type="hidden" name="total_price" value="${totalOrderPrice + totalDeliveryPrice}">
 	    <DIV class="clear"></DIV>
 	    <br><br>
-	    <H1>2.배송지 정보</H1>
-	    <DIV class="detail_table">
-	    	<TABLE>
-	        	<TBODY>
-	          		<TR class="dot_line">
-	            		<TD class="fixed_join">수령인 </TD>
-	            		<TD>
-	              			<input type="text" name="receiver_name" id="receiver_name" value="${sessionScope.memberInfo.member_name}">
-	            		</TD>
-	          		</TR>
-	          		<TR class="dot_line">
-	            		<TD class="fixed_join">수령인 휴대폰번호</TD>
-	            		<TD>
-	              			<input type="text" size="4" name="tel1" id="tel1" value="${sessionScope.memberInfo.tel1}">-
-	              			<input type="text" size="4" name="tel2" id="tel2" value="${sessionScope.memberInfo.tel2}">-
-	              			<input type="text" size="4" name="tel3" id="tel3" value="${sessionScope.memberInfo.tel3}">
-	            		</TD>
-	          		</TR>
-	          		<TR class="dot_line">
-	            		<td class="fixed_join">배송지 주소</td>
-	            		<td>
-	              			<input type="text" id="zipcode" name="zipcode" size="10" value="${sessionScope.memberInfo.zipcode}"> 
-	              				<a href="javascript:execDaumPostcode()">우편번호검색</a><br>
-	              			<p>
-		              			지번 주소:<br>
-		               	 		<input type="text" id="roadAddress" name="roadAddress" size="50" value="${sessionScope.memberInfo.roadAddress}"><br><br>
-		                		도로명 주소: 
-		                		<input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${sessionScope.memberInfo.jibunAddress}"><br><br>
-		                		나머지 주소: <input type="text" name="namujiAddress" size="50" value="${sessionScope.memberInfo.namujiAddress}"/>
-		                		<span id="guide" style="color:#999"></span>
-	              			</p>
-	            		</td>
-	          		</TR>
-	          		<TR class="dot_line">
-	            		<TD class="fixed_join">배송 메시지</TD>
-	            		<TD>
-	              			<select name="delivery_message">
-	                			<option value="message1" selected>부재시 문 앞</option>
-	                			<option value="message2">직접 받고 부재시 문 앞</option>
-	                			<option value="message3">경비실</option>
-	                			<option value="message4">택배함</option>
-	              			</select>
-	            		</TD>
-	          		</TR>
-	        	</TBODY>
-	      	</TABLE>
-	    </DIV>
-	   	<div><br><br>
-	    	<h2>주문고객</h2>
-	      	<table>
-	        	<TBODY>
-	          		<tr class="dot_line">
-	            		<td><h2>이름</h2></td>
-	            		<td>
-	              			<input type="text" value="${sessionScope.memberInfo.member_name}" size="15" readonly />
-	            		</td>
-	          		</tr>
-	          		<tr class="dot_line">
-	            		<td><h2>핸드폰</h2></td>
-	            		<td>
-	              			<input type="text" name="pay_order_tel" id="pay_order_tel" value="${sessionScope.memberInfo.tel1}-${sessionScope.memberInfo.tel2}-${sessionScope.memberInfo.tel3}" size="15" readonly />
-	            		</td>
-	          		</tr>
-	          		<tr class="dot_line">
-	            		<td><h2>이메일</h2></td>
-	            		<td>
-	              			<input type="text" value="${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}" size="15" readonly />
-	            		</td>
-	          		</tr>
-	        	</TBODY>
-	      	</table>
-	    </div>
+	    <H1 style="font-size:1.2rem; text-align:left;">2.배송지 정보</H1>
+	    
+	    	<table class="table table-bordered align-middle">
+  <tbody>
+    <tr>
+      <td class="fw-bold" style="width: 150px;">수령인</td>
+      <td>
+        <input type="text" class="form-control" name="receiver_name" id="receiver_name" 
+               value="${sessionScope.memberInfo.member_name}">
+      </td>
+    </tr>
+    <tr>
+      <td class="fw-bold">수령인 휴대폰번호</td>
+      <td class="d-flex gap-2">
+        <input type="text" class="form-control w-25" name="tel1" id="tel1" value="${sessionScope.memberInfo.tel1}">
+        <span class="align-self-center">-</span>
+        <input type="text" class="form-control w-25" name="tel2" id="tel2" value="${sessionScope.memberInfo.tel2}">
+        <span class="align-self-center">-</span>
+        <input type="text" class="form-control w-25" name="tel3" id="tel3" value="${sessionScope.memberInfo.tel3}">
+      </td>
+    </tr>
+    <tr>
+      <td class="fw-bold">배송지 주소</td>
+      <td>
+        <div class="mb-2 d-flex gap-2">
+          <input type="text" class="form-control w-25" id="zipcode" name="zipcode" 
+                 value="${sessionScope.memberInfo.zipcode}">
+          <a href="javascript:execDaumPostcode()" class="btn btn-outline-primary">우편번호검색</a>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">지번 주소</label>
+          <input type="text" class="form-control" id="roadAddress" name="roadAddress" 
+                 value="${sessionScope.memberInfo.roadAddress}">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">도로명 주소</label>
+          <input type="text" class="form-control" id="jibunAddress" name="jibunAddress" 
+                 value="${sessionScope.memberInfo.jibunAddress}">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">나머지 주소</label>
+          <input type="text" class="form-control" name="namujiAddress" 
+                 value="${sessionScope.memberInfo.namujiAddress}">
+        </div>
+        <span id="guide" class="text-muted"></span>
+      </td>
+    </tr>
+    <tr>
+      <td class="fw-bold">배송 메시지</td>
+      <td>
+        <select name="delivery_message" class="form-select">
+          <option value="message1" selected>부재시 문 앞</option>
+          <option value="message2">직접 받고 부재시 문 앞</option>
+          <option value="message3">경비실</option>
+          <option value="message4">택배함</option>
+        </select>
+      </td>
+    </tr>
+  </tbody>
+</table>
+	    	
+	  
+<H1 style="font-size:1.2rem; text-align:left;">주문고객</h1>
+<table class="table table-bordered align-middle">
+  <tbody>
+    <tr>
+      <td class="fw-bold" style="width:150px;"><h6 class="mb-0">이름</h6></td>
+      <td>
+        <input type="text" class="form-control w-50" 
+               value="${sessionScope.memberInfo.member_name}" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td class="fw-bold"><h6 class="mb-0">핸드폰</h6></td>
+      <td>
+        <input type="text" class="form-control w-50" name="pay_order_tel" id="pay_order_tel"
+               value="${sessionScope.memberInfo.tel1}-${sessionScope.memberInfo.tel2}-${sessionScope.memberInfo.tel3}" 
+               readonly>
+      </td>
+    </tr>
+    <tr>
+      <td class="fw-bold"><h6 class="mb-0">이메일</h6></td>
+      <td>
+        <input type="text" class="form-control w-50" 
+               value="${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}" 
+               readonly>
+      </td>
+    </tr>
+  </tbody>
+</table>
+	      	
 	<DIV class="clear"></DIV>
-	<br><br>
+	<br>
 	<!-- 결제버튼 -->
-	<input type="button" value="최종결제하기" onclick="requestCardPayment()" />
-	<a href="${contextPath}/main/main.do">
-		<img width="75" alt="" src="${contextPath}/resources/image/btn_shoping_continue.jpg">
-	</a>
-	<DIV class="clear"></DIV>
+	<input type="button" value="최종결제하기" onclick="requestCardPayment()" class="btn btn-primary" />
+	<a href="${contextPath}/main/main.do" class="btn btn-outline-secondary">쇼핑계속하기</a>
+	<br><br>
+</form>
+</div>
 </BODY>
