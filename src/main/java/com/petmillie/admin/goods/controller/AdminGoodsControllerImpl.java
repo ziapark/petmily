@@ -37,7 +37,7 @@ import com.petmillie.member.vo.MemberVO;
 @Controller("adminGoodsController")
 @RequestMapping(value="/admin/goods")
 public class AdminGoodsControllerImpl extends BaseController implements AdminGoodsController{
-	private static final String CURR_IMAGE_GOODS_REPO_PATH = "C:\\petupload\\goods";
+	private static final String CURR_IMAGE_GOODS_REPO_PATH = "C:\\petrepo\\goods";
 	@Autowired
 	private AdminGoodsService adminGoodsService;
 	@Autowired
@@ -246,9 +246,6 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	    }
 	    if (goodsMap.get("goods_sales_price") != null && !((String)goodsMap.get("goods_sales_price")).isEmpty()) {
 	        goodsMap.put("goods_sales_price", Integer.parseInt((String)goodsMap.get("goods_sales_price")));
-	    }
-	    if (goodsMap.get("goods_point") != null && !((String)goodsMap.get("goods_point")).isEmpty()) {
-	        goodsMap.put("goods_point", Integer.parseInt((String)goodsMap.get("goods_point")));
 	    }
 	    if (goodsMap.get("goods_stock") != null && !((String)goodsMap.get("goods_stock")).isEmpty()) {
 	        goodsMap.put("goods_stock", Integer.parseInt((String)goodsMap.get("goods_stock")));

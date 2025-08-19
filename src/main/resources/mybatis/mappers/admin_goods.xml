@@ -168,6 +168,9 @@
 	        <if test="goods_contents_order != null and goods_contents_order != ''">
 	            goods_contents_order = #{goods_contents_order},
 	        </if>
+	        <if test="goods_recommend != null">
+    			goods_recommend = #{goods_recommend},
+			</if>
 	    </set>
 	    WHERE goods_num = #{goods_num}
 	</update>

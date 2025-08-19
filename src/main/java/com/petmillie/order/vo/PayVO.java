@@ -5,52 +5,33 @@ import org.springframework.stereotype.Component;
 //payment
 @Component("payVO")
 public class PayVO {
-	private int payment_id;
-	private int order_num;
-	private String pay_method;
-	private String card_com_name;
-	private String card_pay_month;
-	private String pay_order_tel;
+	private int payment_num;
+	private int order_id;
+	private String imp_uid;
 	private String payment_amount;
 	private String payment_status;
-	private String pg_tid;
+	private String pay_method;
 	private String payment_time;
+	private String buyer_name;
+	private String buyer_email;
 	
-	public int getPayment_id() {
-		return payment_id;
+	public int getPayment_num() {
+		return payment_num;
 	}
-	public void setPayment_id(int payment_id) {
-		this.payment_id = payment_id;
+	public void setPayment_num(int payment_num) {
+		this.payment_num = payment_num;
 	}
-	public int getOrder_num() {
-		return order_num;
+	public int getOrder_id() {
+		return order_id;
 	}
-	public void setOrder_num(int order_num) {
-		this.order_num = order_num;
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
 	}
-	public String getPay_method() {
-		return pay_method;
+	public String getImp_uid() {
+		return imp_uid;
 	}
-	public void setPay_method(String pay_method) {
-		this.pay_method = pay_method;
-	}
-	public String getCard_com_name() {
-		return card_com_name;
-	}
-	public void setCard_com_name(String card_com_name) {
-		this.card_com_name = card_com_name;
-	}
-	public String getCard_pay_month() {
-		return card_pay_month;
-	}
-	public void setCard_pay_month(String card_pay_month) {
-		this.card_pay_month = card_pay_month;
-	}
-	public String getPay_order_tel() {
-		return pay_order_tel;
-	}
-	public void setPay_order_tel(String pay_order_tel) {
-		this.pay_order_tel = pay_order_tel;
+	public void setImp_uid(String imp_uid) {
+		this.imp_uid = imp_uid;
 	}
 	public String getPayment_amount() {
 		return payment_amount;
@@ -64,11 +45,11 @@ public class PayVO {
 	public void setPayment_status(String payment_status) {
 		this.payment_status = payment_status;
 	}
-	public String getPg_tid() {
-		return pg_tid;
+	public String getPay_method() {
+		return pay_method;
 	}
-	public void setPg_tid(String pg_tid) {
-		this.pg_tid = pg_tid;
+	public void setPay_method(String pay_method) {
+		this.pay_method = pay_method;
 	}
 	public String getPayment_time() {
 		return payment_time;
@@ -76,5 +57,16 @@ public class PayVO {
 	public void setPayment_time(String payment_time) {
 		this.payment_time = payment_time;
 	}
-	
+	public String getBuyer_name() {
+		return buyer_name;
+	}
+	public void setBuyer_name(String buyer_name) {
+		this.buyer_name = buyer_name;
+	}
+	public String getBuyer_email() {
+		return buyer_email;
+	}
+	public void setBuyer_email(String buyer_email) {
+		this.buyer_email = buyer_email;
+	}
 }

@@ -45,138 +45,153 @@
 		}
 
 		async function requestCardPayment() {
-			console.log("함수 진입");
-  			const f = document.forms['form_order'];
-  			const orderName = "펫밀리 주문결제";
-  			const price = f['total_price'] ? f['total_price'].value : 1000;
-  			const or_idx = Number(f?.order_id?.value) > 0 ? f.order_id.value : new Date().getTime();
-  			console.log("or_idx:", or_idx);
-  			const ctx = "${pageContext.request.contextPath}";
+		    // --- 1단계: 기본 데이터 준비 ---
+		    console.log("✅ 1단계: 함수 진입 및 기본 데이터 수집 시작");
+		    const f = document.forms['form_order'];
+		    const orderName = "펫밀리 주문결제";
 
-			// 휴대폰 번호 3개 입력값 합치기
-			const tel1 = f['tel1']?.value.trim();
-			const tel2 = f['tel2']?.value.trim();
-			const tel3 = f['tel3']?.value.trim();
-			const phoneRaw = [tel1, tel2, tel3].join('');
-			// 휴대폰번호 필수 체크 (11자리)
-			if (!phoneRaw || phoneRaw.length !== 11 || !/^\d{11}$/.test(phoneRaw)) {
-				alert("휴대폰 번호를 정확히 입력해 주세요! (예: 010-1234-5678)");
-			    return;
-			}
-  			console.log("phoneRaw = [" + phoneRaw + "]");
-  			// 주소 필수값(도로명 or 지번)
-  			const roadAddress = f['roadAddress']?.value.trim();
-  			const jibunAddress = f['jibunAddress']?.value.trim();
-  			if (!roadAddress && !jibunAddress) {
-    			alert("주소를 입력해 주세요!");
-    			return;
-  			}
+		    // 장바구니 비었는지 확인
+		    const orderItems = [];
+		    document.querySelectorAll('.order-item').forEach(itemElement => {
+		        orderItems.push({
+		            goods_num: itemElement.dataset.goodsNum,
+		            goods_qty: itemElement.dataset.goodsQty,
+		            fileName: itemElement.dataset.fileName
+		        });
+		    });
 
-  			const data = {
-    			or_idx: or_idx,
-    			pd_name: orderName,
-    			price: price,
-    			receiver_name: f['receiver_name']?.value,
-    			tel1: tel1,
-			    tel2: tel2,
-			    tel3: tel3,
-			    goods_num: f['goods_num']?.value,
-			    goods_name: f['goods_name']?.value,
-			    goods_sales_price: f['goods_sales_price']?.value,
-			    order_name: f['order_name']?.value,
-			    order_num : f['order_num']?.value,
-			    zipcode: f['zipcode']?.value,
-			    roadAddress: roadAddress,
-			    jibunAddress: jibunAddress,
-			    namujiAddress: f['namujiAddress']?.value,
-			    delivery_message: f['delivery_message']?.value,
-			    pay_order_tel: f['pay_order_tel']?.value
-  			};
-  			const paymentId = `PAYMENT_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+		    if (orderItems.length === 0) {
+		        alert("주문할 상품이 없습니다.");
+		        return;
+		    }
+		    console.log("🛒 주문 상품 목록:", orderItems);
 
-  			console.log({
-	  			name: data.receiver_name,
-	  			phone: phoneRaw,
-	  			email: "${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}",
-	  
-	  			address: {
-	    			addressLine1: roadAddress || jibunAddress,
-	    			addressLine2: data.namujiAddress,
-	    			postalCode: data.zipcode
-	  			}
-			});
-  
-  			// 결제창 호출 (storeId, channelKey는 네 실제값으로 교체!!)
-  			const response = await PortOne.requestPayment({
-    			storeId:"store-292f1f91-b8c2-4608-9394-615315d5f811",   // ★교체필수
-    			channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc", // ★교체필수
-    			paymentId: paymentId,
-    			orderName: data.pd_name,
-    			totalAmount: data.price,
-    			currency: "CURRENCY_KRW",
-    			payMethod: "CARD",
-    			customer: {	
-      				fullName: data.receiver_name,
-      				phoneNumber: String(phoneRaw), // 11자리 숫자!
-      				email: "${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}",
-      				address: {
-        				addressLine1: roadAddress || jibunAddress,  // 필수(도로명/지번 둘 중 하나라도)
-        				addressLine2: data.namujiAddress,           // 상세주소(없으면 빈값)
-        				postalCode: data.zipcode                    // 우편번호(없으면 빈값)
-      				}
-    			}
-  			});
-  			console.log("💳 [PortOne 결제 응답 전체]", response);
-  			alert("[PortOne 결제 응답 전체]\n" + JSON.stringify(response, null, 2));
-  			// 결제 실패
-  			if (response.code != null) {
-    			alert(response.message);
-    			return;
-  			}
-  			// 결제 식별자 추출 (paymentKey, imp_uid, txId 중 실제로 오는 값!)
-  			const paymentKey = response.paymentKey || response.imp_uid || response.id || response.txId;
-  			const txId = response.txId;
-  			if (!paymentKey && !txId) {
-	  			alert("결제는 되었지만 paymentKey를 받지 못했습니다. 관리자에게 문의하세요.");
-	  			console.error("📛 결제 응답 이상:", response);
-	  			return;
-			}
-  
-			//어떤 식별자인지(프론트에서 서버로 함께 전달)
-  			let paymentKeyType = "unknown";
-  			if (response.paymentKey) paymentKeyType = "paymentKey";
-  			else if (response.imp_uid) paymentKeyType = "imp_uid";
-  			else if (response.id) paymentKeyType = "id";
-  			else if (response.txId) paymentKeyType = "txId";
-  
-  			// 결제 성공시 서버로 주문/결제 내역 전달
-  			try {
-  				const res = await fetch("/petmillie/order/payToOrderGoods.do", {
-	    			method: "POST",
-	    			headers: { "Content-Type": "application/json" },
-	    				body: JSON.stringify({
-	      				...data,
-	      				paymentId: paymentId,
-	      				portone_paymentKey: paymentKey,
-	      				paymentStatus: response.status
-	    			})
-  				});
-   				const text = await res.text();
-  				try {
-    				const result = JSON.parse(text);
-    				alert(result.message || "주문이 완료되었습니다!");
-    				if (result.success) {
-      					window.location.href = `${ctx}/order/payComplete.do`;
-    				}
-  				} catch (e) {
-    				console.error("❌ JSON 파싱 실패! 응답 텍스트:", text);
-    				alert("서버에서 이상한 응답이 왔어요. 관리자에게 문의해주세요.");
-  				}
+		    const price = Number(f['total_price']?.value) || 0;
+		    if (price <= 0) {
+		        alert("결제 금액이 올바르지 않습니다.");
+		        return;
+		    }
+		    console.log("💰 총 결제 금액:", price);
 
-			} catch (e) {
-	  			console.error("❌ fetch 요청 실패:", e);
-  				alert("서버와의 통신 중 오류 발생! 결제는 되었을 수 있으니 꼭 확인 부탁드립니다!");
-			}
+		    // --- 2단계: 사용자 입력 정보 검증 ---
+		    console.log("✅ 2단계: 배송지 정보 유효성 검사 시작");
+		    const receiver_name = f['receiver_name']?.value.trim();
+		    if (!receiver_name) {
+		        alert("수령인 이름을 입력해주세요.");
+		        return;
+		    }
+
+		    const tel1 = f['tel1']?.value.trim();
+		    const tel2 = f['tel2']?.value.trim();
+		    const tel3 = f['tel3']?.value.trim();
+		    const phoneRaw = [tel1, tel2, tel3].join('');
+		    if (!/^\d{10,11}$/.test(phoneRaw)) { // 10자리 또는 11자리 허용
+		        alert("휴대폰 번호를 정확히 입력해 주세요! (예: 01012345678)");
+		        return;
+		    }
+
+		    const roadAddress = f['roadAddress']?.value.trim();
+		    const jibunAddress = f['jibunAddress']?.value.trim();
+		    if (!roadAddress && !jibunAddress) {
+		        alert("주소를 입력해 주세요!");
+		        return;
+		    }
+		    console.log("📝 배송지 정보 검증 완료");
+
+		    // --- 3단계: 포트원 결제 요청 ---
+		    const paymentId = `PAYMENT_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+		    const portoneRequestPayload = {
+		        storeId: "store-292f1f91-b8c2-4608-9394-615315d5f811",
+		        channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc",
+		        paymentId: paymentId,
+		        orderName: orderName,
+		        totalAmount: price,
+		        currency: "CURRENCY_KRW",
+		        payMethod: "CARD",
+		        customer: {
+		            fullName: receiver_name,
+		            phoneNumber: phoneRaw,
+		            email: "${sessionScope.memberInfo.email1}@${sessionScope.memberInfo.email2}",
+		            address: {
+		                addressLine1: roadAddress || jibunAddress,
+		                addressLine2: f['namujiAddress']?.value.trim(),
+		                postalCode: f['zipcode']?.value.trim()
+		            }
+		        }
+		    };
+
+		    console.log("✅ 3단계: 포트원 결제창 호출 직전. 요청 데이터:", portoneRequestPayload);
+
+		    try {
+		        const response = await PortOne.requestPayment(portoneRequestPayload);
+		        console.log("✅ 4단계: 포트원 응답 받음:", response);
+
+		        if (response.code != null) {
+		            alert(`결제 실패: ${response.message}`);
+		            return;
+		        }
+
+		        const paymentKey = response.paymentKey || response.imp_uid || response.id || response.txId;
+		        if (!paymentKey) {
+		            alert("결제 응답에 고유 키가 없습니다. 관리자에게 문의하세요.");
+		            console.error("📛 결제 응답 이상:", response);
+		            return;
+		        }
+
+		        // --- 5단계: 서버에 결제 결과 전송 ---
+		        const serverPayload = {
+		            price: price,
+		            receiver_name: receiver_name,
+		            tel1: tel1,
+		            tel2: tel2,
+		            tel3: tel3,
+		            zipcode: f['zipcode']?.value.trim(),
+		            roadAddress: roadAddress,
+		            jibunAddress: jibunAddress,
+		            namujiAddress: f['namujiAddress']?.value.trim(),
+		            delivery_message: f['delivery_message']?.value,
+		            orderItems: orderItems,
+		            imp_uid: paymentKey,
+		            paymentStatus: response.status,
+		            pay_method: response.pg_provider
+		        };
+
+		        console.log("✅ 5단계: 백엔드 서버로 데이터 전송 직전. 전송 데이터:", serverPayload);
+		        
+		        const res = await fetch("/petmillie/order/payToOrderGoods.do", {
+		            method: "POST",
+		            headers: { "Content-Type": "application/json" },
+		            body: JSON.stringify(serverPayload)
+		        });
+
+		        console.log("✅ 6단계: 서버 응답 받음. 상태:", res.status);
+
+		        if (!res.ok) {
+		            alert(`서버 통신 오류가 발생했습니다. (상태: ${res.status})`);
+		            return;
+		        }
+
+		        const text = await res.text();
+		        console.log("✅ 7단계: 서버 응답 텍스트:", text);
+		        
+		        // --- 8단계: 최종 결과 처리 ---
+		        console.log("✅ 8단계: 서버 응답 처리 시작");
+		        try {
+		            const result = JSON.parse(text);
+		            alert(result.message || "주문이 완료되었습니다!");
+		            if (result.success) {
+		                const ctx = "${pageContext.request.contextPath}";
+		                window.location.href = `${ctx}/order/payComplete.do`;
+		            }
+		        } catch (e) {
+		            console.error("❌ 최종 결과 처리 중 JSON 파싱 실패!", e);
+		            alert("서버 응답을 처리하는 데 실패했습니다. 관리자에게 문의해주세요.");
+		        }
+
+		    } catch (error) {
+		        console.error("❌ 포트원 결제 또는 서버 통신 중 예측하지 못한 에러 발생!", error);
+		        alert("결제 과정 중 오류가 발생했습니다.");
+		    }
 		}
 	</script>
 
@@ -201,7 +216,7 @@
 	          		<td>예상적립금</td>
         		</tr>
         		<c:forEach var="item" items="${myOrderList}" varStatus="loop">
-          			<tr>
+          			<tr class="order-item" data-goods-num="${item.goods_num}" data-goods-qty="${item.goods_qty}" data-file-name="${item.fileName}">
             			<td>${loop.count}</td>
             			<td class="goods_image">
 	              			<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">

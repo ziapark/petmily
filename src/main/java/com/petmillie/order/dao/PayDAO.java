@@ -6,6 +6,4 @@ import com.petmillie.order.vo.PayVO;
 
 public interface PayDAO {
 	public void insertPay(PayVO payVO) throws DataAccessException;
-
-
 }

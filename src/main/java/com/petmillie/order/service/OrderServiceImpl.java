@@ -1,16 +1,19 @@
 package com.petmillie.order.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.petmillie.cart.vo.CartVO;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.dao.OrderDAO;
 import com.petmillie.order.dao.PayDAO;
+import com.petmillie.order.vo.OrderItemDto;
 import com.petmillie.order.vo.OrderVO;
 import com.petmillie.order.vo.PayVO;
 
@@ -23,6 +26,30 @@ public class OrderServiceImpl implements OrderService {
 	private PayDAO payDAO;
 	
     @Override
+    public void addNewOrder(OrderVO orderVO) throws Exception {
+        orderDAO.insertNewOrder(orderVO);
+    }
+    
+    @Override
+    public void addNewpay(PayVO payVO) throws Exception{
+        payDAO.insertPay(payVO);      
+    }
+    
+    @Override
+    public void removeOrderedItemsFromCart(List<OrderItemDto> orderItems, String member_id) throws Exception {
+        List<Integer> goodsNumList = new ArrayList<>();
+        for (OrderItemDto item : orderItems) {
+            goodsNumList.add(item.getGoods_num());
+        }
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("member_id", member_id);
+        params.put("goodsNumList", goodsNumList);
+
+        orderDAO.deleteCartItems(params);
+    }
+    
+    @Override
     public GoodsVO goodsDetailForOrder(int goods_num) throws Exception {
         return orderDAO.goodsDetailForOrder(goods_num);
     }
@@ -32,33 +59,10 @@ public class OrderServiceImpl implements OrderService {
 		orderGoodsList=orderDAO.listMyOrderGoods(orderVO);
 		return orderGoodsList;
 	}
-	
-	public void addNewOrder(List<OrderVO> myOrderList) throws Exception{
-		orderDAO.insertNewOrder(myOrderList);
-	}	
-    @Override
-    public void addNewpay(PayVO payVO) throws Exception{
-        payDAO.insertPay(payVO);
-        
-    }
+
+
     
     public OrderVO findMyOrder(String order_id) throws Exception{
         return orderDAO.findMyOrder(order_id);
-    }
-    
-    @Override
-    public void removeCartItem(String member_id, int goods_num) throws Exception {
-        CartVO cartVO = new CartVO();
-        cartVO.setMember_id(member_id);
-        cartVO.setGoods_num(goods_num);
-        
-
-        Integer cart_id = orderDAO.selectCartIdByMemberAndGoods(cartVO);
-        if (cart_id != null) {
-            orderDAO.deleteCartGoods(cart_id);
-        } else {
-            System.out.println("🟡 삭제할 장바구니 항목이 없습니다.");
-        }
-    }
-    
+    }    
 }
