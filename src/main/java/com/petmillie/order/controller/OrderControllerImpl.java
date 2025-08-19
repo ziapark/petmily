@@ -1,9 +1,7 @@
 package com.petmillie.order.controller;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,14 +25,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmillie.common.base.BaseController;
-import com.petmillie.goods.service.GoodsService;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.order.portone.PortoneService;
 import com.petmillie.order.service.OrderService;
 import com.petmillie.order.vo.ApiResponse;
+import com.petmillie.order.vo.OrderItemDto;
 import com.petmillie.order.vo.OrderVO;
 import com.petmillie.order.vo.PayVO;
+import com.petmillie.order.vo.PaymentRequestDto;
 
 @Controller("orderController")
 @RequestMapping(value="/order")
@@ -85,8 +85,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		
 		return mav;
 	}
-	
-	
+		
 	@RequestMapping(value="/orderAllCartGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView orderAllCartGoods(@RequestParam("goods_num") int[] goods_num_arr, @RequestParam("cart_goods_qty") int[] cart_goods_qty_arr, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mav = new ModelAndView("/common/layout");
@@ -119,84 +118,81 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 
 	    return mav;
 	}
-
 	
-	//포트원 결제 메서드
+	@Transactional // ServiceImpl 메소드에 붙여주세요!
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
-	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-	    // 필수값 추출
-	    String paymentKey = (String) payData.get("portone_paymentKey");
-        Object goodsNumObj = payData.get("goods_num");
-        Object orIdxObj = payData.get("or_idx");
-        if (orIdxObj == null) {
-            throw new IllegalArgumentException("or_idx가 null입니다!");
-        }
-        int orderId = ((Number) orIdxObj).intValue();
-	    // paymentKey가 null이면 에러 처리
-	    if (paymentKey == null || paymentKey.isBlank()) {
-	        return new ApiResponse(false, "결제 실패: paymentKey 없음");
+	public ApiResponse payToOrderGoods(@RequestBody PaymentRequestDto payDto, HttpServletRequest request) throws Exception {
+	    
+	    HttpSession session = request.getSession();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+	    int serverCalculatedPrice = 0;
+	    // DB에서 조회한 상품 정보를 임시로 담아둘 리스트
+	    List<GoodsVO> orderedGoodsList = new ArrayList<>(); 
+	    
+	    // 1. 주문된 상품 목록을 기반으로 DB에서 실제 상품 정보를 조회하고, 서버가 직접 가격을 계산합니다.
+	    for (OrderItemDto item : payDto.getOrderItems()) {
+	        GoodsVO goodsVO = orderService.goodsDetailForOrder(item.getGoods_num());
+	        orderedGoodsList.add(goodsVO); // 조회한 상품 정보를 리스트에 추가
+	        // DB에 저장된 실제 가격과 사용자가 주문한 수량을 곱하여 합산
+	        serverCalculatedPrice += Integer.parseInt(goodsVO.getGoods_sales_price()) * item.getGoods_qty();
+	    }
+
+	    // 2. 서버가 계산한 금액과 사용자가 보낸 금액이 일치하는지 확인합니다.
+	    if (serverCalculatedPrice != payDto.getPrice()) {
+	        return new ApiResponse(false, "결제 금액이 유효하지 않습니다. 주문이 취소되었습니다.");
 	    }
 	    
-	    // 주문/결제 DB 저장
-	    OrderVO orderVO = new OrderVO();
-	    orderVO.setMember_id(memberInfo.getMember_id());
-	    orderVO.setOrder_id(orderId);
-        orderVO.setGoods_name((String) payData.get("goods_name"));
-        orderVO.setReceiver_name((String) payData.get("receiver_name"));
-        orderVO.setGoods_sales_price((int)payData.get("goods_sales_price"));
+	    // --- [수정] 주문 정보 저장 로직 ---
+	    int orderId = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
-        int goodsNum = Integer.parseInt(goodsNumObj.toString());
-        orderVO.setGoods_num(goodsNum);
-	    orderVO.setTel1((String) payData.get("tel1"));
-	    orderVO.setTel2((String) payData.get("tel2"));
-	    orderVO.setTel3((String) payData.get("tel3"));
-	    orderVO.setZipcode((String) payData.get("zipcode"));
-	    orderVO.setRoadAddress((String) payData.get("roadAddress"));
-	    orderVO.setJibunAddress((String) payData.get("jibunAddress"));
-	    orderVO.setNamujiAddress((String) payData.get("namujiAddress"));
-	    orderVO.setDelivery_message((String) payData.get("delivery_message"));
+	    for (int i = 0; i < payDto.getOrderItems().size(); i++) {
+	        OrderItemDto item = payDto.getOrderItems().get(i); // 사용자가 보낸 주문 정보
+	        GoodsVO goodsVO = orderedGoodsList.get(i);         // 서버가 DB에서 조회한 상품 정보
 
-        // 결제 금액 파싱
-        String priceStr = String.valueOf(payData.get("price"));
-        int final_price;
-        try {
-            final_price = Integer.parseInt(priceStr);
-        } catch (NumberFormatException e) {
-            return new ApiResponse(false, "금액 데이터가 올바르지 않습니다.");
-        }
+	        OrderVO orderVO = new OrderVO();
 
-        // 현재 시간        
-        List<OrderVO> myOrderList = List.of(orderVO);
-        orderService.addNewOrder(myOrderList);
-        int generatedOrderNum = orderVO.getOrder_num();
-        PayVO payVO = new PayVO();
-        payVO.setOrder_num(generatedOrderNum);
-        payVO.setPayment_id((int) payData.get("paymentId"));
-        payVO.setPay_method((String) payData.get("pay_method"));
-        payVO.setCard_com_name((String) payData.get("card_com_name"));
-        payVO.setCard_pay_month((String) payData.get("card_pay_month"));
-        payVO.setPayment_status((String) payData.get("paymentStatus"));
-        payVO.setPg_tid((String) payData.get("portone_paymentKey"));
-        payVO.setPg_tid(paymentKey);
-        payVO.setPay_order_tel((String) payData.get("pay_order_tel"));
+	        orderVO.setOrder_id(orderId); 
+	        orderVO.setMember_id(memberInfo.getMember_id());
+	        orderVO.setReceiver_name(payDto.getReceiver_name());
+	        orderVO.setTel1(payDto.getTel1());
+	        orderVO.setTel2(payDto.getTel2());
+	        orderVO.setTel3(payDto.getTel3());
+	        orderVO.setZipcode(payDto.getZipcode());
+	        orderVO.setRoadAddress(payDto.getRoadAddress());
+	        orderVO.setJibunAddress(payDto.getJibunAddress());
+	        orderVO.setNamujiAddress(payDto.getNamujiAddress());
+	        orderVO.setDelivery_message(payDto.getDelivery_message());
+	        
+	        orderVO.setGoods_num(item.getGoods_num());
+	        orderVO.setGoods_qty(String.valueOf(item.getGoods_qty()));
+	        orderVO.setGoods_name(goodsVO.getGoods_name());
+	        orderVO.setGoods_sales_price(Integer.parseInt(goodsVO.getGoods_sales_price()));
+	        orderVO.setFileName(goodsVO.getFileName());
+	        
+	        orderService.addNewOrder(orderVO); 
+	    }
 
-        // 결제 시간은 현재 시간으로 넣는 것도 방법
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        payVO.setPayment_amount(priceStr);
-        payVO.setPayment_time(now);
+	    PayVO payVO = new PayVO();
+	    
+	    payVO.setOrder_id(orderId);
+	    payVO.setImp_uid(payDto.getImp_uid());
+	    payVO.setPayment_amount(String.valueOf(payDto.getPrice()));
+	    payVO.setPayment_status(payDto.getPaymentStatus());
+	    payVO.setBuyer_name(memberInfo.getMember_name());
+	    payVO.setBuyer_email(memberInfo.getEmail1() + "@" + memberInfo.getEmail2());
+	    payVO.setPay_method(payDto.getPay_method());
 
-        // 결제 insert    
-        orderService.addNewpay(payVO);    
-        orderService.removeCartItem(memberInfo.getMember_id(), orderVO.getGoods_num());
-        
-        session.setAttribute("PayVO", payVO);
-        session.setAttribute("OrderList", myOrderList);
+	    orderService.addNewpay(payVO);
 
-        return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
-    }
+	    orderService.removeOrderedItemsFromCart(payDto.getOrderItems(), memberInfo.getMember_id());
+
+	    session.setAttribute("myOrderList", orderedGoodsList); // DB에서 조회한 상품 정보 리스트
+	    session.setAttribute("myPayInfo", payVO);             // 방금 저장한 결제 정보
+	    
+	    return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
+	}
 	
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseBody
@@ -212,6 +208,28 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	        map.put("message", ex.getMessage());
 	    }
 	    return map;
+	}
+	
+	@RequestMapping(value="/payComplete.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView payComplete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "주문 완료");
+	    mav.addObject("body", "/WEB-INF/views/order/payComplete.jsp"); 
+	    
+	    // 이전 페이지에서 세션에 저장한 주문/결제 정보를 가져옵니다.
+	    List<GoodsVO> myOrderList = (List<GoodsVO>) session.getAttribute("myOrderList");
+	    PayVO myPayInfo = (PayVO) session.getAttribute("myPayInfo");
+	    
+	    // 사용이 끝난 세션 정보는 제거
+	    session.removeAttribute("myOrderList");
+	    session.removeAttribute("myPayInfo");
+	    
+	    mav.addObject("myOrderList", myOrderList);
+	    mav.addObject("myPayInfo", myPayInfo);
+
+	    return mav;
 	}
 
 }

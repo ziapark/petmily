@@ -2,6 +2,7 @@ package com.petmillie.order.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,16 @@ public class OrderDAOImpl implements OrderDAO {
 	private SqlSession sqlSession;
 	
     @Override
+    public void insertNewOrder(OrderVO orderVO) throws Exception {
+        sqlSession.insert("mapper.order.insertNewOrder", orderVO);
+    }
+    
+    @Override
+    public void deleteCartItems(Map<String, Object> params) throws Exception {
+        sqlSession.delete("mapper.order.deleteCart", params);
+    }
+    
+    @Override
     public GoodsVO goodsDetailForOrder(int goods_num) throws DataAccessException {
         return sqlSession.selectOne("mapper.order.goodsDetailForOrder", goods_num);
     }
@@ -27,16 +38,6 @@ public class OrderDAOImpl implements OrderDAO {
 		orderGoodsList=(ArrayList)sqlSession.selectList("mapper.order.selectMyOrderList",orderVO);
 		return orderGoodsList;
 	}
-	
-	public void insertNewOrder(List<OrderVO> myOrderList) throws DataAccessException{
-	//	int order_id=selectOrderID();
-		for(int i=0; i<myOrderList.size();i++){
-			OrderVO orderVO =(OrderVO)myOrderList.get(i);
-		//	orderVO.setOrder_id(order_id);
-			sqlSession.insert("mapper.order.insertNewOrder",orderVO);
-		}
-		
-	}	
 	
 	public OrderVO findMyOrder(String order_id) throws DataAccessException{
 		OrderVO orderVO=(OrderVO)sqlSession.selectOne("mapper.order.selectMyOrder",order_id);		
@@ -56,11 +57,6 @@ public class OrderDAOImpl implements OrderDAO {
     @Override
     public Integer selectCartIdByMemberAndGoods(CartVO cartVO) throws DataAccessException {
         return sqlSession.selectOne("mapper.cart.selectCartIdByMemberAndGoods", cartVO);
-    }
-
-    @Override
-    public void deleteCartGoods(int cart_id) throws DataAccessException {
-        sqlSession.delete("mapper.cart.deleteCartGoods", cart_id);
     }
 }
 

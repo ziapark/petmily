@@ -35,7 +35,4 @@ public class ApiResponse {
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
 	}
-    
-    
-	
 }
