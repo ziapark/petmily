@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 
 public interface GoodsDAO {
 	public List<GoodsVO> goodsListByCategory(String goods_category) throws DataAccessException;
@@ -17,5 +18,6 @@ public interface GoodsDAO {
 	public List<String> selectKeywordSearch(String keyword) throws DataAccessException;	
 	public List<ImageFileVO> selectGoodsDetailImage(int goods_num) throws DataAccessException;
 	public List<GoodsVO> selectGoodsBySearchWord(String searchWord) throws DataAccessException;   
-    public List<GoodsVO> selectGoodsByRecommendation(String weatherKeyword);
+    public List<GoodsVO> selectGoodsByRecommendation(String weatherKeyword) throws DataAccessException;
+    public List<GoodsReviewVO> goodsReview(int goods_num) throws DataAccessException;
 }

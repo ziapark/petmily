@@ -79,8 +79,7 @@
 	    ]]>
 	</select>
 
-
-	<select id="selectGoodsDetailImage" resultMap="imageResult"   parameterType="int"  >
+	<select id="selectGoodsDetailImage" resultMap="imageResult" parameterType="int"  >
 	    <![CDATA[
 		    select * from  goods_image 
 		    where  fileType!='main_image'
@@ -89,7 +88,7 @@
 	</select>
 
     <!-- 상품명으로만 검색 -->
-    <select id="selectGoodsBySearchWord" parameterType="string" resultType="com.petmillie.goods.vo.GoodsVO">
+    <select id="selectGoodsBySearchWord" parameterType="String" resultType="com.petmillie.goods.vo.GoodsVO">
         SELECT *
         FROM goods
         WHERE goods_name LIKE CONCAT('%', #{searchWord}, '%')
@@ -119,4 +118,13 @@
 		        AND g.goods_recommend = #{weatherKeyword}
     	]]>		
 	</select>
+	
+	<select id="goodsReview" parameterType="int" resultType="com.petmillie.mypage.vo.GoodsReviewVO">
+		<![CDATA[
+			SELECT gr.*
+			FROM goods_review gr
+			JOIN userorder uo ON gr.order_num = uo.order_id
+			WHERE uo.goods_num = #{goods_num}
+    	]]>
+    </select>
 </mapper>

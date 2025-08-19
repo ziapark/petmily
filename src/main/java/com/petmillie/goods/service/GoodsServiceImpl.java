@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.petmillie.goods.dao.GoodsDAO;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 
 @Service("goodsService")
 @Transactional(propagation=Propagation.REQUIRED)
@@ -63,6 +64,9 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsList;
 	}
 	
-	
+	@Override
+	public List<GoodsReviewVO> goodsReview(int goods_num) throws Exception{
+		return goodsDAO.goodsReview(goods_num);
+	}
 	
 }
