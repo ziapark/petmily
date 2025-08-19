@@ -13,7 +13,7 @@
 <body>
 	<div class="login_wrap">
 		<h3>사업자 회원 로그인</h3>
-		<div id="detail_table">
+		<div id="">
 			<form action="${contextPath}/business/busilogin.do" method="post" onsubmit="return Checklogin();">
 				<input name="seller_id" type="text" size="20" class="form-control login_input" placeholder="아이디" required/>
 				<input name="seller_pw" type="password" class="form-control login_input" placeholder="비밀번호" size="20" required/>

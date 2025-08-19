@@ -37,7 +37,7 @@
 	      			</c:forEach>
 	    		</c:when>
 	   	 		<c:otherwise>
-	      			<div class="col-12">
+	      			<div class="">
 	        			<p class="text-muted">현재 등록된 상품이 없습니다. 잠시 후 다시 시도해주세요.</p>
 	      			</div>
 	    		</c:otherwise>

@@ -84,10 +84,13 @@
 	</script>
 </head>
 <body>
-    <hgroup>
-        <h3>${goodsVO.goods_name}</h3>
-        <h4>${goodsVO.goods_maker} | ${goodsVO.goods_category}</h4>
-    </hgroup>
+<div class="container text-center mt-3 mb-3">
+    <div class="row row-cols-1 mb-3">
+    	<div class="col bg-light p-5 text-start">
+			<h2 class="fw-bold h2h2">${goodsVO.goods_name}</h2>
+			<p class="h2p">${goodsVO.goods_maker} | ${goodsVO.goods_category}</p>
+		</div>
+    </div>
 
 	<div id="goods_image">
     	<figure>
@@ -101,10 +104,14 @@
 
     <div id="detail_table">
         <table>
-            <tbody>       
+            <tbody>
+            	<tr>
+            		<td colspan="2" style="font-size:1.5rem;">${goodsVO.goods_name}</td>
+            	</tr>       
                 <tr class="dot_line">
-                    <td class="fixed">판매가</td>
-                    <td class="active">                
+                	
+                    
+                    <td colspan="2" class="active price_td">                
 		            	<c:choose>
 							<c:when test="${goodsVO.goods_sales_price != 0}">
 						    	<fmt:formatNumber value="${goodsVO.goods_sales_price}" pattern="#,###원" />
@@ -130,9 +137,9 @@
             </tbody>
         </table>
         <ul>
-            <li><a class="buy" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${image.fileName}');">구매하기</a></li>
-            <li><a class="cart" href="javascript:add_cart('${goodsVO.goods_num}');">장바구니</a></li>
-            <li><a class="wish" href="#">위시리스트</a></li>
+            <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${image.fileName}');">구매하기</a></li>
+            <li><a class="cart btn btn-primary" href="javascript:add_cart('${goodsVO.goods_num}');">장바구니</a></li>
+            <li><a class="wish btn  btn-pink" href="#">관심상품</a></li>
         </ul>
     </div>
 
@@ -160,5 +167,6 @@
 
     <div class="clear"></div>
     <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>
+</div>
 </body>
 </html>

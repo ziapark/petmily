@@ -70,6 +70,7 @@ article { width:100%; margin:0 auto; }
   opacity: 10;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  border-radius:0 0 40px 40px;
 }
 
 /* hover 시 보이게 설정 */
@@ -103,9 +104,11 @@ article { width:100%; margin:0 auto; }
   display: flex;
 }
 /* 헤더 검색창 */
-#search {float:right;margin: 50px 0 20px 0;}
-#search .search_input{display:inline; width:300px;}
-
+#search {float:right;margin: 32px 0 20px 0;}
+#search .search_input{display:inline; width:350px; height:50px; border:3px solid #0dcaf0; border-radius:10px;}
+#search .search_box {position:relative;}
+#search .search_box .search_btn {width:30px; height:40px; position:absolute;top:10px;right:10px; background:url(/petmillie/resources/image/search.png) no-repeat; background-size:contain; border:0;}
+#search .search_box .search_btn:hover {background:url(/petmillie/resources/image/search.png) no-repeat; background-size:contain;} 
 /* 본문 */
 #wrap {width:100%;}
 .contents_wrap {width:100%; max-width:1200px; margin:0 auto;}
@@ -142,13 +145,13 @@ article h3 { color: #242424;
 
 .weather_goods .goods_item a {display:inline-block; width:90%; margin:0 auto; overflow: hidden; border-radius: 10px; border:3px solid #fff;}
 .weather_goods .goods_item a img {width:100%; height:320px; overflow:hidden;}
-.weather_goods .goods_item a:hover {border:3px solid #83e7b3;}
+.weather_goods .goods_item a:hover {border:3px solid #c8f9ff;}
 .weather_goods .goods_item p {text-align:left; padding: 0px 20px 0 20px; font-weight:bold; margin:0;}
 
 
-.weather_box_wrap {width:100%; box-sizing:border-box; border-radius:10px; background:linear-gradient(120deg, #c9ffe3 0%, #66f6ff 100%); padding:10px;}
+.weather_box_wrap {width:100%; box-sizing:border-box; border-radius:10px; background:linear-gradient(120deg, #fbfbfb 0%, #e3f0f1 100%); padding:10px;}
 
-.wt_ct {width:47%; padding:20px; border-radius:10px; background:linear-gradient(120deg,#e2fff0 0%, #befff6 100%); display:inline-block; margin:5px;font-size:1.1rem; color: #006c7f; font-weight: 500;}
+.wt_ct {width:47%; padding:20px; border-radius:10px; background:#fff; display:inline-block; margin:5px;font-size:1.1rem; color: #006c7f; font-weight: 500;}
 .wt_ct .wt_tt {font-weight:bold; vertical-align:middle; color:#334355;}
 
 
@@ -206,8 +209,25 @@ position:relative;
 .goods-item input[type="button"].like_icon_btn.like_off {background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;}
 
 .cartAndLike_wrap {position:absolute;left:0;bottom:0;}
-.goods-item a {display: block; height: 200px;  width: 100%; overflow:hidden;}
+.goods-item a {display: block; height: 200px;  width: 100%; overflow:hidden; border-radius:10px;border:3px solid #fff;}
+.goods-item a:hover {border:3px solid #c8f9ff;}
 .goods-item a img {width:100%; border:0;}
+
+
+/* 상품상세 화면 */
+
+#goods_image figure {
+	padding: 0px; width: auto; text-align: center;
+}
+#goods_image figure img {width:570px; height:570px;}
+#detail_table {
+	width: calc(100% - 570px); font-size: 0.75em; float: left;
+	padding-left: 30px; box-sizing:border-box;
+}
+#detail_table table {width: 100%;}
+#detail_table table tr td {font-size:1.0rem;}
+#detail_table table tr td.price_td {font-size: 1.6rem; color: #38c5f5; padding:10px 0px 20px 0; border-bottom:1px solid #eee;}
+
 
 /* 사업자 페이지 */
 .pd { padding-top:20;}
@@ -273,6 +293,18 @@ position:relative;
 .search_medi select {width:150px; display:inline-block;}
 .search_medi input[type="text"] {width:300px; display:inline-block;}
 
+/* 펜션 */
+.pension_card_body{}
+.pension_card_body h5 {text-align:left;font-weight:bold; color:#38c5f7!important;}
+.pension_card_body p {text-align:left;font-size: 0.8rem;}
 
 /* footer */
-.footer_ct {width:100%; max-width:1200px; margin:0 auto; padding-top:20px;}
+.footer_ct {width:100%; max-width:1200px; margin:0 auto; padding:30px 0;}
+.footer_ct .footer_logo {float:left;}
+.footer_ct .footer_logo img{width:200px;}
+.footer_info {padding-left:220px; font-size:0.8rem;}
+footer {background:#6c6c6c; color:#fff;}
+footer ul {list-style: none;  margin: 0px 0px 0px 7px;}
+footer ul li {float:left; margin-right:5px;}
+footer ul li a {color:#fff; font-weight:400; font-size:0.8rem;}
+footer ul li a:hover {color:#c9ffe3;}

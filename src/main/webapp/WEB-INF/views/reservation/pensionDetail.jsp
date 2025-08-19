@@ -15,23 +15,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_APP_KEY&libraries=services"></script>
 
 <style>
-    body {
-        font-family: 'Malgun Gothic', sans-serif;
-        background-color: #f4f7f6;
-        color: #333;
-        margin: 0;
-    }
-    .main-container {
-        width: 90%;
-        max-width: 1100px;
-        margin: 30px auto;
-    }
-    .header-title {
-        text-align: center;
-        font-size: 2.5rem;
-        color: #2c3e50;
-        margin-bottom: 20px;
-    }
 
     /* 공통 카드 스타일 */
     .card {
@@ -163,7 +146,12 @@
 </style>
 </head>
 <body>
-
+<div class="container text-center mt-3 mb-3">
+    <div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">펜션 정보</h2>
+        </div>
+    </div>
 <div class="main-container">
     <h2 class="header-title">${pension.p_name}</h2>
 
@@ -220,7 +208,7 @@
         </c:choose>
     </div>
 </div>
-
+</div>
 <%-- 카카오맵 스크립트 (수정하지 않음) --%>
 <script>
     var mapContainer = document.getElementById('map');

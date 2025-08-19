@@ -19,18 +19,19 @@
 			<div class="login_btns">
 				<input type="submit" value="로그인" class="btn btn-primary"> 
 				<a href="${contextPath}/member/memberForm.do" class="btn btn-secondary">회원가입</a> 
+				<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
+					&client_id=c28b7c96f79b9dda87ba1aa60d5900c9
+					&redirect_uri=http://localhost:8090/petmillie/member/kakaoLogin.do">
+					<img alt="카카오로그인" style="height:38px;" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
+				</a>
 			</div>
 		</form>
 			
-		<a href="https://kauth.kakao.com/oauth/authorize?response_type=code
-		&client_id=c28b7c96f79b9dda87ba1aa60d5900c9
-		&redirect_uri=http://localhost:8090/petmillie/member/kakaoLogin.do">
-		<img alt="카카오로그인" src="${contextPath}/resources/image/kakao_login_medium_narrow.png"/>
-		</a>
+		
 		<br><br>
 	<a href="${contextPath}/member/findIdForm.do">아이디 찾기</a>| 
 	<a href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> |
-		<a href="#">고객 센터</a>
+	<a href="#">고객 센터</a>
 	</div>	
 </body>
 </html>

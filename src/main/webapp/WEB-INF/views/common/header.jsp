@@ -87,6 +87,7 @@
 						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
 					</c:when>
 					<c:when test="${isLogOn==true and not empty businessInfo}">
+					<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>
@@ -106,9 +107,12 @@
 		<div class="clear"></div>
 		<div id="search">
 		    <form name="frmSearch" action="${contextPath}/goods/searchGoods.do" method="get">
-		        <input name="searchWord" class="form-control search_input"
+		    	<div class="search_box">
+		    		<input name="searchWord" class="form-control search_input"
 		               type="text" placeholder="검색어를 입력하세요">
-		        <input type="submit" name="search" class="btn-primary btn-sm" value="검색">
+		        	<input type="submit" name="search" class="btn-primary btn-sm search_btn" value=" "/>
+		    	</div>
+		        
 		    </form>
 		</div>
 		<div id="suggest">
@@ -170,8 +174,6 @@
 				
 				<ul class="submenu">
 					<li><a href="${contextPath}/reservation/pensionList.do">펜션예약</a></li>
-					<li><a href="#">추가하셈3</a></li>
-					<li><a href="#">추가하셈3-3</a></li>
 				</ul>
 				
 				<ul class="submenu">

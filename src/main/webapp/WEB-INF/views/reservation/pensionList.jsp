@@ -9,8 +9,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>펜션 예약</title>
-<link rel="stylesheet" href="css/common.css">
+<title>펫밀리</title>
+
 <style>
     .pension-container {
         display: flex;
@@ -53,9 +53,13 @@
 </style>
 </head>
 <body>
+<div class="container text-center mt-3 mb-3">
+    <div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">펜션</h2>
+        </div>
+    </div>
 
-<div class="container text-center mt-3">
-    <h2>펜션 목록</h2>
     <div class="pension-container">
         <c:if test="${not empty pensionList}">
             <c:forEach var="pension" items="${pensionList}">
@@ -65,9 +69,9 @@
                     <img src="${contextPath}/thumbnails.do?goods_id=${pension.p_num}" alt="${pension.p_name} 이미지" 
                          onerror="this.onerror=null; this.src='${contextPath}/resources/image/default_pension.png';">
                     
-                    <div class="card-body">
+                    <div class="card-body pension_card_body">
                         <h5>${pension.p_name}</h5>
-                        <p><strong>설명:</strong> 
+                        <p>
                             <c:set var="desc" value="${pension.description}" />
                             <c:if test="${fn:length(desc) > 50}">
                                 ${fn:substring(desc, 0, 50)}...
