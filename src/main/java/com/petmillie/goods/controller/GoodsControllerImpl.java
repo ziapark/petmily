@@ -23,6 +23,7 @@ import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
+import com.petmillie.mypage.vo.GoodsReviewVO;
 
 import net.sf.json.JSONObject;
 
@@ -70,7 +71,10 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 		List<ImageFileVO> goodsImageList = goodsService.goodsDetailImage(goods_num);
 		mav.addObject("goodsVO", goodsVO);
 		mav.addObject("goodsImageList", goodsImageList);
-		//리뷰가져오는거 추가 필요
+
+		List<GoodsReviewVO> reviewList = goodsService.goodsReview(goods_num);
+		mav.addObject("reviewList", reviewList);
+		
 		return mav;
 	}
 	

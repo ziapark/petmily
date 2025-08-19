@@ -180,8 +180,7 @@
 		            const result = JSON.parse(text);
 		            alert(result.message || "주문이 완료되었습니다!");
 		            if (result.success) {
-		                const ctx = "${pageContext.request.contextPath}";
-		                window.location.href = `${ctx}/order/payComplete.do`;
+		            	window.location.href = "/petmillie/order/payComplete.do";
 		            }
 		        } catch (e) {
 		            console.error("❌ 최종 결과 처리 중 JSON 파싱 실패!", e);
