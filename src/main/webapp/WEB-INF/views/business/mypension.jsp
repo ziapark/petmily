@@ -129,7 +129,7 @@ function submitdelete(room_id) {
     }
 }
 </script>
-<title>내 업체 정보</title>
+<title>펫밀리</title>
 </head>
 <body>
 <c:if test="${not empty sessionScope.message}">
@@ -144,7 +144,18 @@ function submitdelete(room_id) {
 			<p class="h2p"></p>
 		</div>
 	</div>
-
+	<div class="seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션예약정보</a></li>
+			<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
+			<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
+			<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
+			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
 	 <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
 
 <div class="col">

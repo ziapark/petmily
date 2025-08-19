@@ -12,80 +12,71 @@
 
 </head>
 <body>
-	<h3>업체 등록</h3>
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">업체등록</h2>
+        </div>
 <form name="frm_mod_business" action="${contextPath}/business/addpension.do" method="post">
 	<input type="hidden" name="business_id" id="business_id" value="${sessionScope.businessInfo.business_id}"/>
-	<div id="detail_table">
-		<table>
-			<tbody>
-			
-				<tr class="dot_line">
-					<td class="fixed_join">업체명</td>
-					<td>
-					  <input name=p_name type="text" size="20"/>
-					 </td>
-					 <td>
-					</td>
-				</tr>
-				
-				<tr class="dot_line">
-					<td class="fixed_join">업체 전화번호</td>
-					<td>
-					   <input type="text" name="tel1" id="tel1" size=4/>
-					 - <input type="text" name="tel2" id="tel2" size=4/> 
-					 - <input type="text" name="tel3" id="tel3" size=4/><br> <br>
-
-				    </td>
-					<td>
-					</td>	
-				</tr>
-						
-					
-				<tr class="dot_line">
-					<td class="fixed_join">체크인 시간</td>
-					<td>
-					   <input type="time" name="checkin_time" id="checkin_time" />
-				    </td>
-					<td>
-					</td>	
-				</tr>
-				
-				<tr class="dot_line">
-					<td class="fixed_join">체크아웃 시간</td>
-					<td>
-					   <input type="time" name="checkout_time" id="checkout_time" />
-				    </td>
-					<td>
-					</td>	
-				</tr>
-			
-									
-				<tr class="dot_Line">
-				<td class="fixed_join">보유 객실 수</td>
-				<td>
-					<input type="text" id="room_count" name="room_count" size=5/>
-					<br>
-				</td>
-				</tr>
-				
-				<tr class="dot_Line">
-				<td class="fixed_join">시설 정보</td>
-				<td>
-					<input type="text" id="facilities" name="facilities" size=5/>
-				</td>
-				</tr>
-				
-				<tr class="dot_Line">
-				<td class="fixed_join">펜션 설명</td>
-				<td>
-					<input type="text" id="description" name="description" size=5/>
-				</td>
-				</tr>
-				
-				
-				
-			</tbody>
+	<div id="">
+		<table class="table table-bordered align-middle">
+		  <tbody>
+		    <tr>
+		      <td class="fw-bold" style="width:150px;">업체명</td>
+		      <td colspan="2">
+		        <input type="text" class="form-control w-50" name="p_name" />
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">업체 전화번호</td>
+		      <td colspan="2" class="d-flex gap-2 align-items-center">
+		        <input type="text" class="form-control w-25" name="tel1" id="tel1">
+		        <span>-</span>
+		        <input type="text" class="form-control w-25" name="tel2" id="tel2">
+		        <span>-</span>
+		        <input type="text" class="form-control w-25" name="tel3" id="tel3">
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">체크인 시간</td>
+		      <td colspan="2">
+		        <input type="time" class="form-control w-25" name="checkin_time" id="checkin_time">
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">체크아웃 시간</td>
+		      <td colspan="2">
+		        <input type="time" class="form-control w-25" name="checkout_time" id="checkout_time">
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">보유 객실 수</td>
+		      <td colspan="2">
+		        <input type="text" class="form-control w-25" id="room_count" name="room_count">
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">시설 정보</td>
+		      <td colspan="2">
+		        <input type="text" class="form-control" id="facilities" name="facilities">
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">펜션 설명</td>
+		      <td colspan="2">
+		        <input type="text" class="form-control" id="description" name="description">
+		      </td>
+		    </tr>
+		  </tbody>
 		</table>
+
 		</div>
 		<div class="clear">
 		<br><br>
@@ -99,5 +90,7 @@
 	</table>
 	</div>
 </form>	
+</div>
+</div>
 </body>
 </html>

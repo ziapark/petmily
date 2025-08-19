@@ -156,7 +156,7 @@
 		<div class="row row-cols-1">
 			<h3 class="mt-5 mb-4">내 정보</h3>
 			<form action="${contextPath}/mypage/updateMember.do" method="post">
-				<div class="card p-4">
+				<div class="card p-4" style="border:0;">
 					<table class="table table-bordered align-middle">
 						<tbody>
 							<tr>

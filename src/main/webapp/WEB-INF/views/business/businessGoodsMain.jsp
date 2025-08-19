@@ -9,9 +9,9 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>사업자 상품 조회</title>
+	<title>펫밀리</title>
 	<style>
-	    table {width: 100%;border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+	    table {width: 100%;border-collapse: collapse;background-color: #fff;}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
 	    table th {background-color: #f2f2f2;}
 	    .clear {clear: both;height: 10px;}
@@ -132,7 +132,11 @@
 </head>
 <body>
 <div class="container text-center mt-3 mb-3">
-   <H3>상품 조회</H3>
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">상품조회</h2>
+        </div>
+    </div>
 	<form method="post">
 		<TABLE cellpadding="10" cellspacing="10">
 			<TBODY>

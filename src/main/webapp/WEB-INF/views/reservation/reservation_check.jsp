@@ -10,10 +10,15 @@
 <title>예약 확인 페이지</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">예약 확인 및 관리</h2>
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">예약 확인 및 관리</h2>
+        </div>
+    </div>
+ 
     
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <c:choose>

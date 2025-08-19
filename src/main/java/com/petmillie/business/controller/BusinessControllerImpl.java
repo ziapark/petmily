@@ -37,6 +37,8 @@ import com.petmillie.business.vo.RoomVO;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
+import com.petmillie.member.vo.MemberVO;
+import com.petmillie.order.vo.OrderVO;
 
 @Controller("businessController")
 @RequestMapping("/business")
@@ -72,16 +74,16 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 				mav.addObject("title", "메인페이지");
 				HttpSession session = request.getSession();
 				String business_id = businessVO.getBusiness_id();
-		        PensionVO pension = businessService.pension(business_id); // 펜션 정보 조회
+		       // PensionVO pension = businessService.pension(business_id); // 펜션 정보 조회
 				session.setAttribute("isLogOn", true);
 				session.setAttribute("businessInfo", businessVO);	 // 기본 정보
 				
-				if(pension != null) {
-					session.setAttribute("pensionInfo", pension);        // 펜션 정보
-			        session.setAttribute("p_num", pension.getP_num());   // p_num 따로 꺼내기 (편의성)
-				}else {
-					System.out.println("등록된 펜션 정보 없음");
-				}
+			//	if(pension != null) {
+			//		session.setAttribute("pensionInfo", pension);        // 펜션 정보
+			 //       session.setAttribute("p_num", pension.getP_num());   // p_num 따로 꺼내기 (편의성)
+			//	}else {
+			//		System.out.println("등록된 펜션 정보 없음");
+			//	}
 				mav.setViewName("redirect:/main/main.do");
 			}
 		}else {
@@ -159,7 +161,33 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		return mav;
 	}
-	
+	@Override
+	@RequestMapping(value="/sellerMyPageMain.do", method=RequestMethod.GET)
+	public ModelAndView sellerMyPageMain(
+	        @RequestParam(value="business_id", required=false) Integer business_id,
+	        HttpServletRequest request,
+	        HttpServletResponse response) throws Exception {
+
+	    HttpSession session = request.getSession();
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+
+	    if (businessVO == null || businessVO.getBusiness_number() == null) {
+	        // 로그인 안 됐을 경우 처리
+	        return new ModelAndView("redirect:/business/loginForm.do");
+	    }
+
+	    session.setAttribute("side_menu", "my_page");
+
+	    String viewName = (String) request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("title", "마이페이지");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+
+	    // business_id도 JSP에서 사용 가능하게 담기
+	    mav.addObject("business_id", business_id);
+
+	    return mav;
+	}
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
 	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {

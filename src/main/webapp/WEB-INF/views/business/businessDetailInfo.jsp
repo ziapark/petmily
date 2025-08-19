@@ -163,137 +163,154 @@
 </head>
 
 <body>
-	<h3>내 상세 정보</h3>
+<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">사업자회원 정보관리</h2>
+        </div>
+    </div>
 <form name="frm_mod_business">	
-	<div id="detail_table">
-		<table>
-			<tbody>
-				<tr class="dot_line">
-					<td class="fixed_join">아이디</td>
-					<td>
-						<input name="seller_id" type="text" size="20" value="${businessInfo.seller_id }"  disabled/>
-					</td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">비밀번호</td>
-					<td>
-					  <input name="seller_pw" type="password" size="20" value="${businessInfo.seller_pw }" />
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_business_info('seller_pw')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이름</td>
-					<td>
-					  <input name="business_name" type="text" size="20" value="${businessInfo.business_name }"  disabled />
-					 </td>
-					 <td>
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">휴대폰번호</td>
-					<td>
-					   <select  name="phone1" id="phone1">
-							<option value="010" selected>010</option>
-							<option value="011">011</option>
-							<option value="016">016</option>
-							<option value="017">017</option>
-							<option value="018">018</option>
-							<option value="019">019</option>
-					</select> 
-					 - <input type="text" name="phone2" size=4 value="${businessInfo.phone2 }"> 
-					 - <input type="text"name="phone3"  size=4 value="${businessInfo.phone3 }"><br> <br>
-
-				    </td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_business_info('phone')" />
-					</td>	
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">이메일<br>(e-mail)</td>
-					<td>
-					   <input type="text" name="email1" size=10 value="${businessInfo.email1 }" /> @ <input type="text" size=10  name="email2" id="email2_direct" value="${businessInfo.email2 }" /> 
-					   <select name="email2_select" id="email2_select" onChange="changeEmailDomain()"  title="직접입력">
-							<option value="non">직접입력</option>
-							<option value="hanmail.net">hanmail.net</option>
-							<option value="naver.com">naver.com</option>
-							<option value="yahoo.co.kr">yahoo.co.kr</option>
-							<option value="hotmail.com">hotmail.com</option>
-							<option value="paran.com">paran.com</option>
-							<option value="nate.com">nate.com</option>
-							<option value="google.com">google.com</option>
-							<option value="gmail.com">gmail.com</option>
-							<option value="empal.com">empal.com</option>
-							<option value="korea.com">korea.com</option>
-							<option value="freechal.com">freechal.com</option>
-					</select><Br><br> 
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_business_info('email')" />
-					</td>
-				</tr>
-				<tr class="dot_line">
-					<td class="fixed_join">주소</td>
-					<td>
-					   <input type="text" id="zipcode" name="zipcode" size=5 value="${businessInfo.zipcode }" > <a href="javascript:execDaumPostcode()">우편번호검색</a>
-					  <br>
-					  <p> 
-					   지번 주소:<br><input type="text" id="roadAddress"  name="roadAddress" size="50" value="${businessInfo.roadAddress }"><br><br>
-					  도로명 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50" value="${businessInfo.jibunAddress }"><br><br>
-					  나머지 주소: <input type="text"  name="namujiAddress" size="50" value="${businessInfo.namujiAddress }" />
-					   </p>
-					</td>
-					<td>
-					  <input type="button" value="수정하기" onClick="fn_modify_business_info('address')" />
-					</td>
-				</tr>
-				<tr class="dot_Line">
-				<td class="fixed_join">은행명</td>
-				<td>
-					<input type="text" id="bank_name" name="bank_name" size=5 value="${businessInfo.bank_name}">
-					<br>
-				</td>
-				<td>
-				<input type="button" value="수정하기" onClick="fn_modify_business_info('bank_name')" />
-				</td>
-				</tr>
-				<tr class="dot_Line">
-				<td class="fixed_join">계좌번호</td>
-				<td>
-				<input type="text" id="bank_account" name="bank_account" size=5 value="${businessInfo.bank_account}">
-				<br>
-				</td>
-				<td>
-				<input type="button" value="수정하기" onClick="fn_modify_business_info('bank_account')" />
-				</td>
-				</tr>
-				<tr class="dot_Line">
-				<td class="fixed_join">예금주</td>
-				<td>
-					<input type="text" id="bank_holder" name="bank_holder" size=5 value="${businessInfo.bank_holder}">
-				</td>
-				<td>
-				<input type="button" value="수정하기" onClick="fn_modify_business_info('bank_holder')" />
-				</td>
-				</tr>
-			</tbody>
+	<div>
+		<table class="table table-bordered align-middle">
+		  <tbody>
+		    <tr>
+		      <td class="fw-bold" style="width:150px;">아이디</td>
+		      <td>
+		        <input type="text" class="form-control w-50" name="seller_id" value="${businessInfo.seller_id}" disabled>
+		      </td>
+		      <td></td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">비밀번호</td>
+		      <td>
+		        <input type="password" class="form-control w-50" name="seller_pw" value="${businessInfo.seller_pw}">
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('seller_pw')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">이름</td>
+		      <td>
+		        <input type="text" class="form-control w-50" name="business_name" value="${businessInfo.business_name}" disabled>
+		      </td>
+		      <td></td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">휴대폰번호</td>
+		      <td class="d-flex gap-2 align-items-center">
+		        <select class="form-select w-25" name="phone1" id="phone1">
+		          <option value="010" selected>010</option>
+		          <option value="011">011</option>
+		          <option value="016">016</option>
+		          <option value="017">017</option>
+		          <option value="018">018</option>
+		          <option value="019">019</option>
+		        </select>
+		        <span>-</span>
+		        <input type="text" class="form-control w-25" name="phone2" value="${businessInfo.phone2}">
+		        <span>-</span>
+		        <input type="text" class="form-control w-25" name="phone3" value="${businessInfo.phone3}">
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('phone')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">이메일 (e-mail)</td>
+		      <td class="d-flex gap-2 align-items-center flex-wrap">
+		        <input type="text" class="form-control w-25" name="email1" value="${businessInfo.email1}"> @ 
+		        <input type="text" class="form-control w-25" name="email2" id="email2_direct" value="${businessInfo.email2}">
+		        <select class="form-select w-25" name="email2_select" id="email2_select" onChange="changeEmailDomain()">
+		          <option value="non">직접입력</option>
+		          <option value="hanmail.net">hanmail.net</option>
+		          <option value="naver.com">naver.com</option>
+		          <option value="yahoo.co.kr">yahoo.co.kr</option>
+		          <option value="hotmail.com">hotmail.com</option>
+		          <option value="paran.com">paran.com</option>
+		          <option value="nate.com">nate.com</option>
+		          <option value="google.com">google.com</option>
+		          <option value="gmail.com">gmail.com</option>
+		          <option value="empal.com">empal.com</option>
+		          <option value="korea.com">korea.com</option>
+		          <option value="freechal.com">freechal.com</option>
+		        </select>
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('email')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">주소</td>
+		      <td>
+		        <div class="d-flex gap-2 mb-2">
+		          <input type="text" class="form-control w-25" id="zipcode" name="zipcode" value="${businessInfo.zipcode}">
+		          <button type="button" class="btn btn-outline-primary" onClick="execDaumPostcode()">우편번호검색</button>
+		        </div>
+		        <div class="mb-2">
+		          <label class="form-label mb-0">지번 주소</label>
+		          <input type="text" class="form-control" id="roadAddress" name="roadAddress" value="${businessInfo.roadAddress}">
+		        </div>
+		        <div class="mb-2">
+		          <label class="form-label mb-0">도로명 주소</label>
+		          <input type="text" class="form-control" id="jibunAddress" name="jibunAddress" value="${businessInfo.jibunAddress}">
+		        </div>
+		        <div class="mb-2">
+		          <label class="form-label mb-0">나머지 주소</label>
+		          <input type="text" class="form-control" name="namujiAddress" value="${businessInfo.namujiAddress}">
+		        </div>
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('address')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">은행명</td>
+		      <td>
+		        <input type="text" class="form-control w-50" id="bank_name" name="bank_name" value="${businessInfo.bank_name}">
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('bank_name')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">계좌번호</td>
+		      <td>
+		        <input type="text" class="form-control w-50" id="bank_account" name="bank_account" value="${businessInfo.bank_account}">
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('bank_account')">수정하기</button>
+		      </td>
+		    </tr>
+		
+		    <tr>
+		      <td class="fw-bold">예금주</td>
+		      <td>
+		        <input type="text" class="form-control w-50" id="bank_holder" name="bank_holder" value="${businessInfo.bank_holder}">
+		      </td>
+		      <td>
+		        <button type="button" class="btn btn-outline-primary" onClick="fn_modify_business_info('bank_holder')">수정하기</button>
+		      </td>
+		    </tr>
+		  </tbody>
 		</table>
-		</div>
-		<div class="clear">
-		<br><br>
-		<table align=center>
-		<tr>
-			<td >
-				<input type="hidden" name="command"  value="modify_my_info" /> 
-				<input name="btn_cancel_business" type="button"  value="수정 취소">
-			</td>
-		</tr>
-	</table>
+
+<div class="text-center mt-3">
+  <input type="hidden" name="command" value="modify_my_info">
+  <button type="button" class="btn btn-secondary" name="btn_cancel_business">수정 취소</button>
+</div>
+
 	</div>
 	<input  type="hidden" name="h_phone1" value="${businessInfo.phone1}" />
 </form>	
+</div>
+
 </body>
 </html>

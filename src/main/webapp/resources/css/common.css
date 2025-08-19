@@ -242,6 +242,17 @@ position:relative;
 .side_menu ul li {text-align:left;}
 .mypage_content{float:right; width: calc(100% - 200px);}
 
+/* 셀러 메뉴 */
+.seller_menu {width:100%; margin:20px 0;}
+.seller_menu ul {width:100%;}
+.seller_menu ul li {float: left;
+				    margin: 10px;
+				    border: 1px solid #46cce9;
+				    padding: 10px 20px;
+				    line-height: 25px;}
+
+.seller_menu ul li a:hober {color:blue;}
+
 /* 동물병원 & 채팅 고정바 */
 
 #sticky {   display: flex;

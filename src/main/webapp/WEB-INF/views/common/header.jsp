@@ -87,7 +87,7 @@
 						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
 					</c:when>
 					<c:when test="${isLogOn==true and not empty businessInfo}">
-					<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
+					<li><a href="${contextPath}/business/sellerMyPageMain.do?business_id=${businessInfo.business_id}"class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>
@@ -127,20 +127,16 @@
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">목욕/위생</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">산책용품</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">생활용품</a></li>
-				<li><a href="${contextPath}/reservation/pensionList.do">예약</a></li>
+				<li><a href="${contextPath}/reservation/pensionList.do">애견펜션</a></li>
 				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
 				
 				<c:choose>
 					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
 						<li><a href="#">관리자</a></li>
 					</c:when>
-					<c:when test="${isLogOn==true and not empty memberInfo}">
-						<li><a href="#">나의 주문</a></li>
-						<li><a href="#">마이페이지</a></li>
-					</c:when>
-					<c:when test="${not empty businessInfo}">
+					<%-- <c:when test="${not empty businessInfo}">
 						<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">사업자</a></li>
-					</c:when>
+					</c:when> --%>
 				</c:choose>
 			</ul>
 
@@ -151,25 +147,27 @@
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=영양제">영양제</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">봉제장난감</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=공/원반">공/원반</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=라텍스장난감">라텍스장난감</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=치실/로프">치실/로프</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">터그놀이</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=노즈워크">노즈워크</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">낚시대</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=노즈워크">먹이퍼즐</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">목욕용품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">애견샴푸</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">칫솔/치약</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">수건</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">미용기</a></li>
 				</ul>
 				<ul class="submenu">
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">칼라</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">하네스</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄">목줄</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">목줄/하네스</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">유모차</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">생활용품</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">의류</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">신발</a></li>
 				</ul>
 				
 				<ul class="submenu">
@@ -192,24 +190,9 @@
 						<li><a href="#">게시판관리</a></li>
 					</ul>
 				</c:if>
+			
 				
-				<c:if test="${isLogOn==true and not empty memberInfo.member_id !='admin' }">
-					<ul class="submenu">
-						<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
-						<li><a href="#">반품/교환 신청 및 조회</a></li>
-						<li><a href="#">취소 주문 내역</a></li>
-						<li><a href="#">세금 계산서</a></li>
-					</ul>
-					<ul class="submenu">
-						<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-						<li><a href="#">나의 주소록</a></li>
-						<li><a href="#">개인정보 동의내역</a></li>
-						<li><a href="#">회원탈퇴</a></li>
-						<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
-					</ul>
-				</c:if>
-				
-				<c:if test="${not empty businessInfo}">
+		<%-- 		<c:if test="${not empty businessInfo}">
 					<ul class="submenu">
 						<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
 						<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
@@ -218,7 +201,7 @@
 						<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
 						
 					</ul>
-				</c:if>
+				</c:if> --%>
 			</div>
 		</div>
 	</div>

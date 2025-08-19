@@ -8,7 +8,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>상품 수정</title>
+	<title>펫밀리</title>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<style>
 		form.add_new_goods_form {background: white;padding: 20px;border-radius: 10px;box-shadow: 0 0 10px #ccc;width: 600px;margin: 0 auto;}
@@ -130,13 +130,15 @@
 
 </head>
 <body>
-	<div class="container mt-3 mb-3">
+	<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">상품 정보관리</h2>
+        </div>
+    </div>
 	 	<form name="frm_mod_goods" class="add_new_goods_form" method="post" action="${contextPath}/admin/goods/modifyGoods.do" enctype="multipart/form-data">
         	<input type="hidden" name="goods_num" value="${goodsVO.goods_num}">    
        	 	<table>	
-	            <tr>
-	                <td colspan="2" class="image-section-header">상품 정보 관리</td>
-	            </tr>
 	            <tr><td><label class="form-label">상품이름</label></td><td><input name="goods_name" id="goods_name" type="text" class="form-control" value="${goodsVO.goods_name }" />
 				<button type="button" class="btn btn-secondary" id="btnCheckGoodsName" onclick="fn_checkGoodsName()">중복 확인</button></td></tr>
 	            <tr>
