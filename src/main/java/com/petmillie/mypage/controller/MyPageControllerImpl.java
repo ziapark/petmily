@@ -92,16 +92,15 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	@Override
 	@RequestMapping(value="/listMyOrderHistory.do", method = RequestMethod.GET)
-	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap,
-	                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    HttpSession session = request.getSession();
-	    session.setAttribute("side_menu", "my_page");  // 메뉴 설정 동일
+	    session.setAttribute("side_menu", "my_page");
 	    
 	    String viewName = (String) request.getAttribute("viewName");
-	    ModelAndView mav = new ModelAndView("/common/layout");  // 동일하게 layout 사용
+	    ModelAndView mav = new ModelAndView("/common/layout");
 	    
-	    mav.addObject("title", "마이페이지 - 주문 내역 조회");  // 페이지 타이틀
-	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");  // 보여줄 body 설정
+	    mav.addObject("title", "마이페이지 - 주문 내역 조회");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
 	    memberVO = (MemberVO) session.getAttribute("memberInfo");
 	    String member_id = memberVO.getMember_id();
@@ -128,9 +127,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 
 	    // 주문 내역 조회
 	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
-
-	    // 각 주문별 리뷰 여부 체크
-
 	    mav.addObject("myOrderHistList", myOrderHistList);
 	    
 	    return mav;

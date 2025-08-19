@@ -24,6 +24,7 @@ public class OrderVO {
 	private String namujiAddress;
 	private String order_time;
 	private String delivery_state;
+	private String hasReview;
 	
 	private String goods_delivery_price;
 	
@@ -154,4 +155,11 @@ public class OrderVO {
 	public void setGoods_delivery_price(String goods_delivery_price) {
 		this.goods_delivery_price = goods_delivery_price;
 	}
+	public String getHasReview() {
+		return hasReview;
+	}
+	public void setHasReview(String hasReview) {
+		this.hasReview = hasReview;
+	}
+	
 }

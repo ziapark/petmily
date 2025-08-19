@@ -151,10 +151,9 @@
 		<![CDATA[
 			SELECT *
 			FROM userorder
-			 WHERE member_id = #{member_id}
-			 AND DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
-        ORDER BY order_time DESC
-			
+			WHERE member_id = #{member_id}
+			AND DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+        	ORDER BY order_time DESC	
 		]]>
 	</select>
 

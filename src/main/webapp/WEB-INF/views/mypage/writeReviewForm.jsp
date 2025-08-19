@@ -36,7 +36,7 @@
 			<label for="name" class="col-sm-2 col-form-label">작성자 </label>
 			<div class="col-sm-10">
 			     <input type="text" name="member_id" class="form-control" value="${order_name}" readonly>
-			  </div>
+			 </div>
 		</div>
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">주문 상품 </label>

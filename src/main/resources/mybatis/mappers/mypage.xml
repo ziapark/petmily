@@ -30,21 +30,26 @@
 	    <result property="del_yn" column="del_yn"/>
 	</resultMap>
 	
-	<resultMap id="goodsResult" type="goodsVO">
-		<result property="goods_num" column="goods_num"/>
-		<result property="goods_name" column="goods_name"/>
-		<result property="goods_maker" column="goods_maker"/>
-		<result property="goods_category" column="goods_category"/>
-		<result property="goods_price" column="goods_price"/>
-		<result property="goods_sales_price" column="goods_sales_price"/>
-		<result property="goods_point" column="goods_point"/>
-		<result property="goods_stock" column="goods_stock"/>
-		<result property="goods_delivery_price" column="goods_delivery_price"/>
-		<result property="goods_fileName" column="goods_fileName"/>
-		<result property="goods_status" column="goods_status"/>
-		<result property="goods_goods_writer_intro" column="goods_goods_writer_intro"/>
-		<result property="goods_contents_order" column="goods_contents_order"/>
-		<result property="goods_credate" column="goods_credate"/>
+	<resultMap id="goodsResult" type="GoodsVO">
+    	<result property="goods_num" column="goods_num"/>
+    	<result property="goods_name" column="goods_name"/>
+    	<result property="seller_id" column="seller_id"/>
+    	<result property="goods_maker" column="goods_maker"/>
+    	<result property="goods_category" column="goods_category"/>
+    	<result property="goods_sales_price" column="goods_sales_price"/>
+    	<result property="goods_point" column="goods_point"/>
+    	<result property="goods_stock" column="goods_stock"/>
+    	<result property="goods_delivery_price" column="goods_delivery_price"/>
+    	<result property="goods_status" column="goods_status"/>
+    	<result property="goods_recommend" column="goods_recommend"/>
+    	<result property="goods_credate" column="goods_credate"/>
+     	<result property="del_yn" column="del_yn"/>
+     	
+     	<result property="image_id" column="image_id"/>
+    	<result property="fileName" column="fileName"/>
+    	<result property="fileType" column="fileType"/>
+    	<result property="reg_id" column="reg_id"/>
+    	<result property="reg_day" column="reg_day"/>
 	</resultMap>
 
 	<!-- resultMap 정의 -->
@@ -86,17 +91,21 @@
 	</resultMap>
 
 	<select id="selectLikeGoodsList" parameterType="string" resultMap="likeGoodsResult">
-		SELECT
-			l.like_goods_id,
-			l.member_id,
-			l.goods_num,
-			g.goods_name,
-			g.goods_sales_price,
-			g.goods_fileName
-		FROM likes_goods l
-		JOIN goods g
-		  ON l.goods_num = g.goods_num
-		WHERE l.member_id = #{member_id}
+		<![CDATA[
+			SELECT 
+				l.like_goods_id,
+				l.member_id,
+				l.goods_num,
+				g.goods_name,
+				g.goods_sales_price,
+				gi.fileName AS goods_fileName
+			FROM likes_goods l
+			JOIN goods g ON l.goods_num = g.goods_num
+			LEFT JOIN goods_image gi 
+				ON g.goods_num = gi.goods_num 
+				AND gi.fileType = 'main'
+			WHERE l.member_id = #{member_id}
+		]]>
 	</select>
 
 	<select id="selectLikedGoodsNums" parameterType="string" resultType="int">

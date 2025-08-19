@@ -25,6 +25,7 @@
     	<result property="reg_id" column="reg_id"/>
     	<result property="reg_day" column="reg_day"/>
 	</resultMap>
+	
 	<resultMap id="imageResult" type="imageFileVO">
     	<result property="image_id" column="image_id"/>
     	<result property="goods_num" column="goods_num"/>

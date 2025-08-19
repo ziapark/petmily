@@ -90,7 +90,6 @@ public class MyPageServiceImpl implements MyPageService{
 		return myPageDAO.likeGoodsList(member_id);
 	}
 
-
 	@Override
 	public Map<String, Object> toggleLikeGoods(String member_id, int goods_num) throws Exception {
 		Map<String, Object> params = new HashMap<>();
