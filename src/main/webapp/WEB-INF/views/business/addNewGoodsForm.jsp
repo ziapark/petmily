@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>상품 등록</title>
+	<title>펫밀리</title>
 	<style>
 		form.add_new_goods_form {background: white;padding: 20px;border-radius: 10px;box-shadow: 0 0 10px #ccc;width: 600px;margin: 0 auto;}
 		table tr td {padding:10px;}
@@ -66,7 +66,18 @@
 				<p class="h2p"></p>
 			</div>
 		</div>	
-	
+		<div class="row seller_menu">
+			<ul>	
+				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션예약정보</a></li>
+				<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
+				<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
+				<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
+				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+				<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+				<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+			</ul>
+		</div>
 		<form class="add_new_goods_form" action="${contextPath}/business/addNewGoods.do" method="post"enctype="multipart/form-data">
 			<input type="hidden" name="goods_status" value="승인대기">
 			<table>

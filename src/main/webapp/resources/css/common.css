@@ -246,12 +246,18 @@ position:relative;
 .seller_menu {width:100%; margin:20px 0;}
 .seller_menu ul {width:100%;}
 .seller_menu ul li {float: left;
-				    margin: 10px;
+				    margin: 4px;
 				    border: 1px solid #46cce9;
 				    padding: 10px 20px;
-				    line-height: 25px;}
-
-.seller_menu ul li a:hober {color:blue;}
+				    line-height: 25px;
+			        font-weight: 600;
+				    border-radius: 30px;
+				    background: #46cce9;
+				    width:150px;
+				    text-align:center !important;
+				    }
+.seller_menu ul li a {color:#fff; text-align:center !important;}
+.seller_menu ul li:hover {background:#49b4e7;}
 
 /* 동물병원 & 채팅 고정바 */
 

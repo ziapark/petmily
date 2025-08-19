@@ -19,6 +19,18 @@
 			<p class="h2p"></p>
 		</div>
 	</div>
+	<div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션예약정보</a></li>
+			<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
+			<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
+			<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
+			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
 	<h2>아이디를 입력해주세요</h2>
 <input type="text" id="member_id" name="member_id">
 <input type="submit" value="탈퇴하기">

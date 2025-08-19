@@ -144,7 +144,7 @@ function submitdelete(room_id) {
 			<p class="h2p"></p>
 		</div>
 	</div>
-	<div class="seller_menu">
+	<div class="row seller_menu">
 		<ul>	
 			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션예약정보</a></li>
 			<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
@@ -156,6 +156,7 @@ function submitdelete(room_id) {
 			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
 		</ul>
 	</div>
+	<div class="clear"></div>
 	 <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
 
 <div class="col">
