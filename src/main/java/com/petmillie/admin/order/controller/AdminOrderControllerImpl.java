@@ -98,9 +98,6 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 		
 	}
 	
-	
-	// AdminOrderControllerImpl.java
-	// ...
 	@Override
 	@RequestMapping(value="/detailOrder.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView orderDetail(@RequestParam("order_id") int order_id, 

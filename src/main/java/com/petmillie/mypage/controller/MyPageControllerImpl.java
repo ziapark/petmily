@@ -211,9 +211,13 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
-		int order_num = orderVO.getOrder_id();
-		String order_name = orderVO.getReceiver_name();
+		int order_num = orderVO.getOrder_id();		
 		String goods_name = orderVO.getGoods_name();
+		
+		HttpSession session = request.getSession();
+		MemberVO memberVO =(MemberVO) session.getAttribute("memberInfo");
+		String order_name = memberVO.getMember_id();
+		
 		mav.addObject("order_num", order_num);
 		mav.addObject("order_name", order_name);
 		mav.addObject("goods_name", goods_name);
