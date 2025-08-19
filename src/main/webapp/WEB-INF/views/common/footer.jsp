@@ -4,6 +4,7 @@
     %> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
+<div class="footer_ct">
 <ul>
 	<li><a href="#">회사소개</a></li>
 	<li><a href="#">이용약관</a></li>
@@ -19,7 +20,7 @@
 	<img alt="petmily" src="${contextPath}/resources/image/logo.png">
 </a>
 
-<div style="padding-left:200px">
+<div style="">
 	 펫밀리 <br>
 	 대표이사: 댕사랑   <br>
 	 주소 : 우편번호 03133 서울시 종로구 종로3 <br>  
@@ -28,4 +29,7 @@
 	 대표전화 : 1544-1544 (발신자 부담전화)   팩스 : 0502-977-7777 (지역번호공통) <br>
 	 COPYRIGHT(C) Petmily CENTRE ALL RIGHTS RESERVED.
 </div>
+
+</div>
+
 

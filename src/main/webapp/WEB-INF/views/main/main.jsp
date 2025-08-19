@@ -59,31 +59,33 @@
 	<!-- 날씨정보 start -->
 	<div class="weather_wrap">
 		<div class="weather_api_box container">
-			<div class="row">
-				<!--카카오맵 <div id="map" style="height:300px;">위치 정보를 불러오는 중...</div> -->
-				<div id="locationDisplay" class="mt-2 text-primary fw-bold"></div>
-			</div>
-			<div class="row">	
+			
+			<div class="row weather_box_wrap">	
+				<div class="">
+						<!--카카오맵 <div id="map" style="height:300px;">위치 정보를 불러오는 중...</div> -->
+						<span class="lacation_tt">우리동네 날씨 - </span><span id="locationDisplay" class="mt-2 text-primary fw-bold"></span>
+					</div>
 				<div class="weather_box col">
-			  		<h3>오전</h3>
+					
+			  		<h3 class="am_h3">오전</h3>
 			  		<c:if test="${not empty avgWeatherMap['오전']}">
-				    	<p>
-				      		평균온도: <fmt:formatNumber value="${avgWeatherMap['오전'].temperature}" pattern="0.0"/> ℃,
-				      		하늘: ${avgWeatherMap['오전'].sky},
-				      		강수형태: ${avgWeatherMap['오전'].precipitation},
-				      		강수확률: ${avgWeatherMap['오전'].pop}%
-				    	</p>
+				    	
+			      		<div class="wt_ct"><span class="wt_tt">평균온도&nbsp;&nbsp;</span><fmt:formatNumber value="${avgWeatherMap['오전'].temperature}" pattern="0.0"/> ℃</div>
+			      		<div class="wt_ct"><span class="wt_tt">하늘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>${avgWeatherMap['오전'].sky}</div>
+			      		<div class="wt_ct"><span class="wt_tt">강수형태&nbsp;&nbsp;</span>${avgWeatherMap['오전'].precipitation}</div>
+			      		<div class="wt_ct"><span class="wt_tt">강수확률&nbsp;&nbsp;</span>${avgWeatherMap['오전'].pop}%</div>
+				    	
 			  		</c:if>
 				</div>
 				<div class="weather_box col">
-			  		<h3>오후</h3>
+			  		<h3 class="pm_h3">오후</h3>
 			  		<c:if test="${not empty avgWeatherMap['오후']}">
-				    	<p>
-				      		평균온도: <fmt:formatNumber value="${avgWeatherMap['오후'].temperature}" pattern="0.0"/> ℃,
-				      		하늘: ${avgWeatherMap['오후'].sky},
-				      		강수형태: ${avgWeatherMap['오후'].precipitation},
-				      		강수확률: ${avgWeatherMap['오후'].pop}%
-				    	</p>
+				    	
+				    	<div class="wt_ct"><span class="wt_tt">평균온도&nbsp;&nbsp;</span><fmt:formatNumber value="${avgWeatherMap['오후'].temperature}" pattern="0.0"/> ℃</div>
+				      	<div class="wt_ct"><span class="wt_tt">하늘&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>${avgWeatherMap['오후'].sky}</div>	
+				      	<div class="wt_ct"><span class="wt_tt">강수형태&nbsp;&nbsp;</span>${avgWeatherMap['오후'].precipitation}</div>	
+				      	<div class="wt_ct"><span class="wt_tt">강수확률&nbsp;&nbsp;</span>${avgWeatherMap['오후'].pop}%</div>
+				      	
 			  		</c:if>
 				</div>	
 			</div>
@@ -98,7 +100,7 @@
 		        		<img src="${contextPath}/download.do?goods_num=${goods.goods_num}&fileName=${goods.fileName}" alt="${goods.goods_name}" width="120">		        
 		      		</a>
 		      		<p>${goods.goods_name}</p>
-		      		<p>${goods.goods_sales_price}</p>
+		      		<p style="text-align:right;">${goods.goods_sales_price} 원</p>
 		    </li>
 		  </c:forEach>
 		</ul>
@@ -109,60 +111,6 @@
 
 <div class="clear"></div>
 
-<%-- <!-- 베스트제품 start -->
-	<div class="main_book">
-	   <c:set  var="goods_count" value="0" />
-		<h3>베스트제품</h3>
-		<c:forEach var="item" items="${goodsMap.bestseller }">
-		   <c:set  var="goods_count" value="${goods_count+1 }" />
-			<div class="book">
-				<a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id }">
-				<img class="link"  src="${contextPath}/resources/image/1px.gif"> 
-				</a> 
-					<img width="121" height="154" 
-					     src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}">
-	
-				<div class="title">${item.goods_title }</div>
-				<div class="price">
-			  	   <fmt:formatNumber  value="${item.goods_price}" type="number" var="goods_price" />
-			          ${goods_price}원
-				</div>
-			</div>
-		   <c:if test="${goods_count==15   }">
-	         <div class="book">
-	           <font size=20> <a href="#">more</a></font>
-	         </div>
-	     </c:if>
-	  </c:forEach>
-	</div>
-<!-- 베스트제품 end -->
-	<div class="clear"></div>
-<!-- 신상품 start -->	
-	<div class="main_book" >
-	<c:set  var="goods_count" value="0" />
-		<h3>신상품</h3>
-		<c:forEach var="item" items="${goodsMap.newbook }" >
-		   <c:set  var="goods_count" value="${goods_count+1 }" />
-			<div class="book">
-			  <a href="${contextPath}/goods/goodsDetail.do?goods_id=${item.goods_id }">
-		       <img class="link"  src="${contextPath}/resources/image/1px.gif"> 
-		      </a>
-			 <img width="121" height="154" 
-					src="${contextPath}/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}">
-			<div class="title">${item.goods_title }</div>
-			<div class="price">
-			    <fmt:formatNumber  value="${item.goods_price}" type="number" var="goods_price" />
-			       ${goods_price}원
-			  </div>
-		</div>
-		 <c:if test="${goods_count==15   }">
-	     <div class="book">
-	       <font size=20> <a href="#">more</a></font>
-	     </div>
-	   </c:if>
-		</c:forEach>
-	</div>
-<!-- 신상품 end -->	 --%>
  
 </div>
 
