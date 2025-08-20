@@ -79,7 +79,7 @@
 					<c:when test="${isLogOn==true and not empty memberInfo}">
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
-						<li><a href="${contextPath}/mypage/myPageMain.do"
+						<li><a href="${contextPath}/mypage/listMyOrderHistory.do"
 							class="btn-sm btn btn-outline-dark">마이페이지</a></li>
 						<li><a href="${contextPath}/cart/myCartList.do"
 							class="btn-sm btn btn-outline-dark">장바구니</a></li>
