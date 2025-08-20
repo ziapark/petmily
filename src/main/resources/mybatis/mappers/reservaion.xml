@@ -213,4 +213,20 @@
         SET reservation_status = '예약취소'
         WHERE reservation_id = #{reservation_id}
     </update>
+    
+    
+    
+    
+    
+     <select id="selectRoomPrice" parameterType="int" resultType="int">
+        SELECT room_price 
+        FROM room 
+        WHERE room_id = #{roomId}
+    </select>
+    
+    
+    
+    
+    
+    
 </mapper>

@@ -17,6 +17,7 @@ import com.petmillie.reservation.vo.ReservationVO;
 @Transactional(propagation = Propagation.REQUIRED)
 public class ReservaionServiceImpl implements ReservaionService {
 
+	
 	@Autowired
     private BusinessDAO businessDAO;
 	
@@ -97,7 +98,10 @@ public class ReservaionServiceImpl implements ReservaionService {
         return reservaionDAO.updateReservationStatusToCancel(reservationId);
     }
 	
-	
+	@Override
+    public int getRoomPrice(int roomId) throws Exception {
+        return reservaionDAO.selectRoomPrice(roomId);
+    }
 	
 	
 }

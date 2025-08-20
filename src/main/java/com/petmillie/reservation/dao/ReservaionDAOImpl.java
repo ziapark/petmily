@@ -83,7 +83,10 @@ public class ReservaionDAOImpl implements ReservaionDAO {
         return result;
     }
 	
-	
+	 @Override
+	    public int selectRoomPrice(int roomId) throws DataAccessException {
+	        return sqlSession.selectOne("mapper.reservation.selectRoomPrice", roomId);
+	    }
 	
 	
 }
