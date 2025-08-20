@@ -145,33 +145,36 @@
 		    		<td><label class="form-label">상품분류</label></td>
 		    		<td>
 		        	<select name="goods_category" class="form-control">
-			            <optgroup label="식품">
-			                <option value="사료" ${goodsVO.goods_category == '사료' ? 'selected' : ''}>사료</option>
-			                <option value="간식" ${goodsVO.goods_category == '간식' ? 'selected' : ''}>간식</option>
-			                <option value="영양제" ${goodsVO.goods_category == '영양제' ? 'selected' : ''}>영양제</option>
-			            </optgroup>
-			            <optgroup label="장난감">
-			                <option value="봉제장난감" ${goodsVO.goods_category == '봉제장난감' ? 'selected' : ''}>봉제장난감</option>
-			                <option value="공/원반" ${goodsVO.goods_category == '공/원반' ? 'selected' : ''}>공/원반</option>
-			                <option value="라텍스장난감" ${goodsVO.goods_category == '라텍스장난감' ? 'selected' : ''}>라텍스장난감</option>
-			                <option value="치실/로프" ${goodsVO.goods_category == '치실/로프' ? 'selected' : ''}>치실/로프</option>
-			                <option value="터그놀이" ${goodsVO.goods_category == '터그놀이' ? 'selected' : ''}>터그놀이</option>
-			                <option value="노즈워크" ${goodsVO.goods_category == '노즈워크' ? 'selected' : ''}>노즈워크</option>
-			            </optgroup>
-			            <optgroup label="목욕/위생">
-			                <option value="목욕용품" ${goodsVO.goods_category == '목욕용품' ? 'selected' : ''}>목욕용품</option>
-			            </optgroup>
-			            <optgroup label="산책용품">
-			                <option value="칼라" ${goodsVO.goods_category == '칼라' ? 'selected' : ''}>칼라</option>
-			                <option value="배변봉투" ${goodsVO.goods_category == '배변봉투' ? 'selected' : ''}>배변봉투</option>
-			                <option value="하네스" ${goodsVO.goods_category == '하네스' ? 'selected' : ''}>하네스</option>
-			                <option value="목줄" ${goodsVO.goods_category == '목줄' ? 'selected' : ''}>목줄</option>
-			                <option value="유모차" ${goodsVO.goods_category == '유모차' ? 'selected' : ''}>유모차</option>
-			            </optgroup>
-			            <optgroup label="생활용품">
-			                <option value="생활용품" ${goodsVO.goods_category == '생활용품' ? 'selected' : ''}>생활용품</option>
-			            </optgroup>
-			        </select>
+							<optgroup label="식품">
+								<option value="사료" selected>사료</option>
+								<option value="간식">간식</option>
+								<option value="영양제">영양제</option>
+							</optgroup>
+							<optgroup label="장난감">
+								<option value="봉제장난감">봉제장난감</option>
+								<option value="공/원반">공/원반</option>
+								<option value="터그놀이">터그놀이</option>
+								<option value="낚시대">낚시대</option>
+								<option value="먹이퍼즐">먹이퍼즐</option>
+							</optgroup>
+							<optgroup label="목욕/위생">
+								<option value="애견샴푸">샴푸</option>
+								<option value="칫솔/치약">칫솔/치약</option>
+								<option value="수건">수건</option>
+								<option value="미용기">미용기</option>
+							</optgroup>
+							<optgroup label="산책용품">
+								<option value="목줄/하네스">목줄/하네스</option>
+								<option value="배변봉투">배변봉투</option>
+								<option value="유모차">유모차</option>
+							</optgroup>
+							<optgroup label="생활용품">
+								<option value="식기">식기</option>
+								<option value="스크래처">스크래처</option>
+								<option value="의류">의류</option>
+								<option value="신발">신발</option>
+							</optgroup>
+					</select>
 				    </td>
 				</tr>
 				<tr>
