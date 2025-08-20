@@ -1,12 +1,13 @@
 package com.petmillie.reservation.service;
 
 import java.util.List;
-import com.petmillie.business.dao.BusinessDAO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.petmillie.business.dao.BusinessDAO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
@@ -85,4 +86,18 @@ public class ReservaionServiceImpl implements ReservaionService {
 	public void updateReservationStatus(int reservationId, String status) throws Exception {
 		reservaionDAO.updateReservationStatus(reservationId, status);
 	}
+	
+	
+	
+	
+	
+	
+	@Override
+    public int cancelReservation(int reservationId) throws Exception {
+        return reservaionDAO.updateReservationStatusToCancel(reservationId);
+    }
+	
+	
+	
+	
 }

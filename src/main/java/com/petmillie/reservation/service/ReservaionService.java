@@ -34,4 +34,6 @@ public interface ReservaionService {
 	public void updateReservation(ReservationVO reservationVO) throws Exception;
 	public void updateReservationStatus(int reservationId, String status) throws Exception;
 	
+	
+	 public int cancelReservation(int reservationId) throws Exception;
 }

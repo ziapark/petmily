@@ -111,28 +111,25 @@
 <script>
 function cancelReservation(reservationId) {
     if (confirm("정말로 이 예약을 취소하시겠습니까?")) {
-        // 실제 취소 처리를 위한 AJAX 호출을 여기에 구현해야 합니다.
-        // 지금은 기능이 없으므로 경고창만 띄웁니다.
-        alert("예약 취소 기능은 아직 구현되지 않았습니다. (취소할 예약 번호: " + reservationId + ")");
-
-        /*
-        // 실제 구현 예시 (jQuery의 AJAX 사용)
-        $.ajax({
-            type: "POST",
-            url: "${contextPath}/reservation/cancel.do",
-            data: { reservation_id: reservationId },
-            success: function(response) {
-                alert("예약이 성공적으로 취소되었습니다.");
-                window.location.reload(); // 페이지를 새로고침하여 변경사항 확인
+        fetch("${contextPath}/reservation/cancel.do", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            error: function() {
-                alert("예약 취소 중 오류가 발생했습니다.");
-            }
+            body: "reservation_id=" + reservationId
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // 서버에서 보낸 메시지 표시
+            window.location.reload();
+        })
+        .catch(error => {
+            alert("예약 취소 중 오류가 발생했습니다.");
         });
-        */
     }
 }
 </script>
+
 
 </body>
 </html>
