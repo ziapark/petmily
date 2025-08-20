@@ -9,18 +9,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>객실 예약</title>
+<title>펫밀리</title>
 <style>
-    body {
-    margin: 0;
-    padding: 40px 20px; /* 위아래 여백을 늘려 보기 좋게 조정 (선택 사항) */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* 컨텐츠를 위에서부터 정렬하도록 변경 */
-    min-height: 100vh;
-    box-sizing: border-box; /* padding이 전체 크기에 영향을 주지 않도록 설정 */
-    font-family: 'Inter', sans-serif; /* 폰트 추가 */
-}
+
     .reservation-container {
         width: 100%;
         max-width: 650px;
@@ -28,15 +19,9 @@
         border-radius: 10px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         padding: 30px 40px;
+        margin:0 auto;
     }
-    h2 {
-        text-align: center;
-        font-size: 2rem;
-        color: #2c3e50;
-        margin-bottom: 25px;
-        border-bottom: 2px solid #3498db;
-        padding-bottom: 15px;
-    }
+
     .info-section {
         background-color: #ecf0f1;
         border-radius: 8px;
@@ -125,9 +110,13 @@
 </head>
 <body>
 
+<div class="container text-center mt-3 mb-3">
+    <div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">객실예약</h2>
+        </div>
+    </div>
 <div class="reservation-container">
-    <h2>객실 예약</h2>
-
     <div class="info-section">
         <h3>${pension.p_name}</h3>
         <p><strong>객실 이름:</strong> ${room.room_name}</p>
@@ -186,7 +175,7 @@
         <button type="submit" id="submit_btn" class="submit-btn" disabled>예약 확정하기</button>
     </form>
 </div>
-
+</div>
 <script>
     // DOM 요소 가져오기
     const checkinInput = document.getElementById('checkin_date');
