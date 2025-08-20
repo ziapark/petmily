@@ -68,13 +68,13 @@
 		</div>	
 		<div class="row seller_menu">
 			<ul>	
-				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션예약정보</a></li>
-				<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
-				<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
-				<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
-				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
 				<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
-				<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/business/businessGoodsMain.do">주문/배송관리</a></li>
+				<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
+				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+				<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
 				<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
 			</ul>
 		</div>
@@ -106,23 +106,26 @@
 							<optgroup label="장난감">
 								<option value="봉제장난감">봉제장난감</option>
 								<option value="공/원반">공/원반</option>
-								<option value="라텍스장난감">라텍스장난감</option>
-								<option value="치실/로프">치실/로프</option>
 								<option value="터그놀이">터그놀이</option>
-								<option value="노즈워크">노즈워크</option>
+								<option value="낚시대">낚시대</option>
+								<option value="먹이퍼즐">먹이퍼즐</option>
 							</optgroup>
 							<optgroup label="목욕/위생">
-								<option value="목욕용품">목욕용품</option>
+								<option value="애견샴푸">샴푸</option>
+								<option value="칫솔/치약">칫솔/치약</option>
+								<option value="수건">수건</option>
+								<option value="미용기">미용기</option>
 							</optgroup>
 							<optgroup label="산책용품">
-								<option value="칼라">칼라</option>
+								<option value="목줄/하네스">목줄/하네스</option>
 								<option value="배변봉투">배변봉투</option>
-								<option value="하네스">하네스</option>
-								<option value="목줄">목줄</option>
 								<option value="유모차">유모차</option>
 							</optgroup>
 							<optgroup label="생활용품">
-								<option value="생활용품">생활용품</option>
+								<option value="식기">식기</option>
+								<option value="스크래처">스크래처</option>
+								<option value="의류">의류</option>
+								<option value="신발">신발</option>
 							</optgroup>
 					</select></td>
 				</tr>
