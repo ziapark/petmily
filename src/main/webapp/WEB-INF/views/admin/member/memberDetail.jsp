@@ -87,66 +87,70 @@
 
 
     function fn_modify_member_info(attribute) {
+        var frm = document.frm_mod_member;
         var value;
-        var frm_mod_member = document.frm_mod_member;
-        if(attribute=='member_pw'){
-            value = frm_mod_member.member_pw.value;
-        } else if(attribute=='member_gender'){
-            var member_gender = frm_mod_member.member_gender;
-            for(var i=0; i<member_gender.length; i++){
-                if(member_gender[i].checked){
-                    value = member_gender[i].value;
+
+        if(attribute == 'member_pw'){
+            value = frm.member_pw.value;
+        } else if(attribute == 'member_gender'){
+            var gender = frm.member_gender;
+            for(var i=0;i<gender.length;i++){
+                if(gender[i].checked){
+                    value = gender[i].value;
                     break;
                 }
             }
-        } else if(attribute=='member_birth'){
-            var value_y = frm_mod_member.member_birth_y.value;
-            var value_m = frm_mod_member.member_birth_m.value;
-            var value_d = frm_mod_member.member_birth_d.value;
-            var value_gn;
-            var member_birth_gn = frm_mod_member.member_birth_gn;
-            for(var i=0; i<member_birth_gn.length; i++){
-                if(member_birth_gn[i].checked){
-                    value_gn = member_birth_gn[i].value; // 수정: nextSibling.textContent 대신 value 사용
+        } else if(attribute == 'member_birth'){
+            var y = frm.member_birth_y.value;
+            var m = frm.member_birth_m.value;
+            var d = frm.member_birth_d.value;
+            var gn;
+            var birth_gn = frm.member_birth_gn;
+            for(var i=0;i<birth_gn.length;i++){
+                if(birth_gn[i].checked){
+                    gn = birth_gn[i].value;
                     break;
                 }
             }
-            value = value_y + "," + value_m + "," + value_d + "," + value_gn;
-        } else if(attribute=='tel'){
-            var value_tel1 = frm_mod_member.tel1.value;
-            var value_tel2 = frm_mod_member.tel2.value;
-            var value_tel3 = frm_mod_member.tel3.value;
-            var smssts_yn = frm_mod_member.smssts_yn.checked ? 'Y' : 'N';
-            value = value_tel1 + "," + value_tel2 + "," + value_tel3 + "," + smssts_yn;
-        } else if(attribute=='email'){
-            var value_email1 = frm_mod_member.email1.value;
-            var value_email2 = frm_mod_member.email2.value;
-            var emailsts_yn = frm_mod_member.emailsts_yn.checked ? 'Y' : 'N';
-            value = value_email1 + "," + value_email2 + "," + emailsts_yn;
-        } else if(attribute=='address'){
-            var value_zipcode = frm_mod_member.zipcode.value;
-            var value_roadAddress = frm_mod_member.roadAddress.value;
-            var value_jibunAddress = frm_mod_member.jibunAddress.value;
-            var value_namujiAddress = frm_mod_member.namujiAddress.value;
-            value = value_zipcode + "," + value_roadAddress + "," + value_jibunAddress + "," + value_namujiAddress;
+            value = y + "," + m + "," + d + "," + gn;
+        } else if(attribute == 'tel'){
+            var t1 = frm.tel1.value;
+            var t2 = frm.tel2.value;
+            var t3 = frm.tel3.value;
+            var sms = frm.smssts_yn.checked ? 'Y' : 'N';
+            value = t1 + "," + t2 + "," + t3 + "," + sms;
+        } else if(attribute == 'email'){
+            var e1 = frm.email1.value;
+            var e2 = frm.email2.value;
+            var emailsts = frm.emailsts_yn.checked ? 'Y' : 'N';
+            value = e1 + "," + e2 + "," + emailsts;
+        } else if(attribute == 'address'){
+            var z = frm.zipcode.value;
+            var r = frm.roadAddress.value;
+            var j = frm.jibunAddress.value;
+            var n = frm.namujiAddress.value;
+            value = z + "," + r + "," + j + "," + n;
+        } else {
+            value = frm[attribute].value;
         }
+
         $.ajax({
-            type : "post",
-            async : false,
-            url : "${contextPath}/mypage/modifyMyInfo.do",
-            data : {
-                attribute: attribute,
-                value: value,
+            type: "post",
+            url: "${contextPath}/admin/member/modifyMemberInfo.do",
+            data: {
+                member_id: frm.member_id.value,
+                mod_type: attribute,
+                value: value
             },
-            success : function(data, textStatus) {
-                if(data.trim()=='mod_success'){
+            success: function(data){
+                if(data.trim() == 'mod_success'){
                     alert("회원 정보를 수정했습니다.");
-                }else if(data.trim()=='failed'){
-                    alert("다시 시도해 주세요.");    
+                } else {
+                    alert("다시 시도해주세요.");
                 }
             },
-            error : function(data, textStatus) {
-                alert("에러가 발생했습니다."+ data);
+            error: function(xhr, status, error){
+                alert("에러가 발생했습니다: " + error);
             }
         });
     }
@@ -214,23 +218,23 @@ function fn_delete_member(member_id, del_yn) {
 							<th class="align-middle bg-light">성별</th>
 							<td>
 							  <c:choose >
-							    <c:when test="${member_info.member_gender =='101' }">
+							    <c:when test="${member_info.member_gender =='남성' }">
 							      <div class="form-check form-check-inline">
-							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" />
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="여성" />
 							      	<label class="form-check-label" for="genderFemale">여성</label>
 							      </div>
 							      <div class="form-check form-check-inline">
-							   		<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" checked />
+							   		<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="남성" checked />
 							   		<label class="form-check-label" for="genderMale">남성</label>
 							      </div>
 							    </c:when>
 							    <c:otherwise>
 							      <div class="form-check form-check-inline">
-							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="102" checked />
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderFemale" value="여성" checked />
 							      	<label class="form-check-label" for="genderFemale">여성</label>
 							      </div>
 							      <div class="form-check form-check-inline">
-							      	<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="101" />
+							      	<input type="radio" class="form-check-input" name="member_gender" id="genderMale" value="남성" />
 							      	<label class="form-check-label" for="genderMale">남성</label>
 							      </div>
 							   </c:otherwise>
@@ -263,23 +267,23 @@ function fn_delete_member(member_id, del_yn) {
 								
 								   <div class="d-flex align-items-center ms-3">
 									<c:choose>
-								    	<c:when test="${member_info.member_birth_gn=='2' }">
+								    	<c:when test="${member_info.member_birth_gn=='양력' }">
 											<div class="form-check form-check-inline">
-												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" checked />
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="양력" checked />
 												<label class="form-check-label" for="solar">양력</label>
 											</div>
 											<div class="form-check form-check-inline">
-												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" />
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="음력" />
 												<label class="form-check-label" for="lunar">음력</label>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<div class="form-check form-check-inline">
-												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="2" />
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="solar" value="양력" />
 												<label class="form-check-label" for="solar">양력</label>
 											</div>
 											<div class="form-check form-check-inline">
-												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="1" checked />
+												<input type="radio" class="form-check-input" name="member_birth_gn" id="lunar" value="음력" checked />
 												<label class="form-check-label" for="lunar">음력</label>
 											</div>
 										</c:otherwise>
