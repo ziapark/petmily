@@ -168,7 +168,7 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 		String business_number = businessVO.getBusiness_number();
 		mav.addObject("businessInfo", businessVO);
 		
-		
+		request.getSession().setAttribute("businessInfo", businessVO);
 		return mav;
 	}
 	@RequestMapping(value="/memberDetail.do" ,method={RequestMethod.POST,RequestMethod.GET})
