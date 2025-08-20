@@ -133,7 +133,7 @@
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">식품</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">목욕/위생</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">산책용품</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">산책용품</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">생활용품</a></li>
 				<li><a href="${contextPath}/reservation/pensionList.do">여가생활</a></li>
 				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
@@ -160,7 +160,7 @@
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=미용기">미용기</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">목줄/하네스</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">목줄/하네스</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">유모차</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
 				</ul>
