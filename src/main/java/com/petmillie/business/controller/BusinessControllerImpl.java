@@ -191,51 +191,57 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
 	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		if(businessVO == null && businessVO.getBusiness_number() == null) {
+	    HttpSession session=request.getSession();
+	    businessVO=(BusinessVO)session.getAttribute("businessInfo");
 
-		}
-		HttpSession session=request.getSession();
-		session=request.getSession();
-		businessVO=(BusinessVO)session.getAttribute("businessInfo");
-
-		
 	    if (businessVO == null || businessVO.getBusiness_number() == null) {
-	        // 로그인 안 됐을 경우 처리
 	        return new ModelAndView("redirect:/business/loginForm.do");
 	    }
-		
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "마이페이지");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-		String business_number=businessVO.getBusiness_number();
-		String business_id = businessVO.getBusiness_id();
-		
-		BusinessVO mypension = businessService.mypension(business_number);
-		PensionVO pension = businessService.pension(business_id);
-		
-		if (p_num == null || p_num.trim().isEmpty()) {
-		    Object sessionPnum = session.getAttribute("p_num");
-		    if (sessionPnum != null) {
-		        p_num = sessionPnum.toString();
-		    } else {
-		        p_num = String.valueOf(pensionVO.getP_num()); // session에도 없으면 DB에서 가져온 값 사용
-		    }
-		}
-	    List<RoomVO> list = businessService.roomList(p_num);
-		
-		mav.addObject("message", message);
-		mav.addObject("pensionList", mypension);
-		mav.addObject("pensionInfo", pension);
-		mav.addObject("roomInfo", list);
-		session.setAttribute("pensionInfo", pension);
-		session.setAttribute("pensionList", mypension);
-		session.setAttribute("roomInfo", list);
-		session.setAttribute("p_num", p_num);
+	    
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav=new ModelAndView("/common/layout");
+	    mav.addObject("title", "마이페이지");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    
+	    String business_number=businessVO.getBusiness_number();
+	    String business_id = businessVO.getBusiness_id();
+	    
+	    BusinessVO mypension = businessService.mypension(business_number);
+	    PensionVO pension = businessService.pension(business_id); // DB에서 조회한 펜션 정보
+	    
+	    List<RoomVO> list = new ArrayList<>(); // 객실 리스트를 미리 초기화
 
-		return mav;
+	    // 1. pension 객체가 null이 아닌지 먼저 확인
+	    if (pension != null) {
+	        if (p_num == null || p_num.trim().isEmpty()) {
+	            Object sessionPnum = session.getAttribute("p_num");
+	            if (sessionPnum != null) {
+	                p_num = sessionPnum.toString();
+	            } else {
+	                // 2. DB에서 가져온 pension 객체의 p_num을 사용하도록 수정
+	                p_num = String.valueOf(pension.getP_num()); 
+	            }
+	        }
+	        // 3. 유효한 p_num으로만 객실 리스트를 조회
+	        if (p_num != null && !p_num.equals("0") && !p_num.trim().isEmpty()) {
+	            list = businessService.roomList(p_num);
+	        }
+	    }
+
+	    mav.addObject("message", message);
+	    mav.addObject("pensionList", mypension);
+	    mav.addObject("pensionInfo", pension);
+	    mav.addObject("roomInfo", list); // 수정된 room list
+	    
+	    session.setAttribute("pensionInfo", pension);
+	    session.setAttribute("pensionList", mypension);
+	    session.setAttribute("roomInfo", list);
+	    if (pension != null) { // pension이 null이 아닐 때만 p_num을 세션에 저장
+	        session.setAttribute("p_num", pension.getP_num());
+	    }
+
+	    return mav;
 	}
-
 	@Override
 	@RequestMapping(value="/businessDetailInfo.do" ,method = {RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView businessDetailInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
