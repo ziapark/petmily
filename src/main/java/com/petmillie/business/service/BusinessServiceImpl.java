@@ -119,8 +119,8 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public int removeMember(String business_number) throws Exception {
-		return businessDAO.removeMember(business_number);
+	public int removeMember(String seller_id) throws Exception {
+		return businessDAO.removeMember(seller_id);
 	}
 	
 	@Override

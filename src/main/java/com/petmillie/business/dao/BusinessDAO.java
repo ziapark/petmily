@@ -30,7 +30,7 @@ public interface BusinessDAO {
 	public int updatepension(PensionVO pensionVO) throws DataAccessException;
 	public int removepension(int id) throws DataAccessException;
     public List<ReservationVO> reservationList(String business_id) throws DataAccessException;
-	public int removeMember(String business_number) throws DataAccessException;
+	public int removeMember(String seller_id) throws DataAccessException;
 	public int selectOverlappedGoodsName(String goods_name) throws Exception;
 	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException;
 	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
