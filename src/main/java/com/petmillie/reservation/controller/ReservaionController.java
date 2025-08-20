@@ -36,5 +36,5 @@ public interface ReservaionController {
 	 * 예약 상태를 Ajax로 업데이트
 	 */
 	public ResponseEntity<Map<String, Object>> updateReservationStatus(@RequestBody Map<String, Object> payload);
-	
+	  public String cancelReservation(@RequestParam("reservation_id") int reservationId) throws Exception;
 }

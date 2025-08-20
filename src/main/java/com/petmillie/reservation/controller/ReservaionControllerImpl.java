@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody; // 👈 [추가] imp
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.business.service.BusinessService;
@@ -211,4 +212,27 @@ public class ReservaionControllerImpl implements ReservaionController {
 			return ResponseEntity.internalServerError().body(response); // 서버 에러 시 500 Internal Server Error 응답
 		}
 	}
+	
+	
+	@Override
+	@PostMapping(value = "/cancel.do", produces = "text/plain;charset=UTF-8") // JSP의 fetch 경로와 일치
+    @ResponseBody // 결과를 페이지 이동 없이 문자열 그대로 반환
+    public String cancelReservation(@RequestParam("reservation_id") int reservationId) throws Exception {
+      
+		
+		try {
+            // Service를 호출하여 예약 취소 로직 실행
+            int result = reservationService.cancelReservation(reservationId); 
+            if (result > 0) {
+                return "예약이 성공적으로 취소되었습니다.";
+            } else {
+                return "예약 취소에 실패했습니다. 다시 시도해 주세요.";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "오류가 발생하여 예약을 취소할 수 없습니다.";
+        }
+    }
+	
+	
 }

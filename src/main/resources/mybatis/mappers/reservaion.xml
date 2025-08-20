@@ -207,4 +207,10 @@
     WHERE reservation_id = #{id}
 </update>
 	
+	
+	 <update id="updateReservationStatusToCancel" parameterType="int">
+        UPDATE reservation
+        SET reservation_status = '예약취소'
+        WHERE reservation_id = #{reservation_id}
+    </update>
 </mapper>

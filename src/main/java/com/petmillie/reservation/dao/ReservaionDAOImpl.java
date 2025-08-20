@@ -73,4 +73,17 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 		params.put("reservationId", reservationId);
 		params.put("status", status);
 		sqlSession.update("mapper.reservation.updateReservationStatus", params);
-}}
+}
+	
+
+	
+	@Override
+    public int updateReservationStatusToCancel(int reservationId) throws DataAccessException {
+        int result = sqlSession.update("mapper.reservation.updateReservationStatusToCancel", reservationId);
+        return result;
+    }
+	
+	
+	
+	
+}
