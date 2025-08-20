@@ -41,19 +41,24 @@
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
-		<div class="mypage_wrap"> 
-		<div class="side_menu">
-			<ul>	
-				<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
-				<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
-				<li><a href="${contextPath}/mypage/myPetInfo.do">내 반려동물 정보</a></li>
-				<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
-				<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
-				<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-				<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
-			</ul>
-		</div>
-		<div class="mypage_content">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">마이페이지메인</h2>
+        </div>
+    </div>
+    <div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
+			<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
+			<li><a href="${contextPath}/mypage/myPetInfo.do">내 반려동물 정보</a></li>
+			<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
+			<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
+			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
+
+		<div class="">
 			<h3 style="text-align:left;">최근주문내역
 		    	<A href="${contextPath}/mypage/listMyOrderHistory.do"> <IMG  src="${contextPath}/resources/image/btn_more_see.jpg"></A> 
 			</h3>
@@ -166,7 +171,7 @@
 		   	</c:if>
 		</table>
 	</div>
-	</div>
+
 </div>
 </body>
 </html>

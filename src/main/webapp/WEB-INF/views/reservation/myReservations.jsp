@@ -7,14 +7,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>나의 예약 내역</title>
+<title>펫밀리</title>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    /* 간단한 스타일 추가 */
-    body {
-        background-color: #f8f9fa;
-    }
+   a{text}
     .card {
         transition: transform 0.2s;
     }
@@ -36,8 +33,23 @@
 </head>
 <body>
 
-<div class="container my-5">
-    <h2 class="mb-4 text-center">나의 예약 내역</h2>
+	<div class="container text-center mt-3 mb-3">
+	<div class="row row-cols-1 mb-3">
+        <div class="col bg-light p-5 text-start">
+            <h2 class="fw-bold">나의 예약확인</h2>
+        </div>
+    </div>
+    <div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
+			<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
+			<li><a href="${contextPath}/mypage/myPetInfo.do">내 반려동물 정보</a></li>
+			<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
+			<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
+			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
     
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <c:choose>

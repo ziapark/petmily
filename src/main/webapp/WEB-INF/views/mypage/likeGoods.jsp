@@ -16,6 +16,17 @@
 			<h2 class="fw-bold">나의 관심상품</h2>
 		</div>
 	</div>
+    <div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
+			<li><a href="${contextPath}/reservation/myReservations.do">나의예약확인</a></li>
+			<li><a href="${contextPath}/mypage/myPetInfo.do">내 반려동물 정보</a></li>
+			<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
+			<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
+			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
+			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
 	<form  method="post">	
 		<table class="table">
 			<tr>	
