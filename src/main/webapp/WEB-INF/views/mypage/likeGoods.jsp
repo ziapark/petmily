@@ -47,7 +47,7 @@
 				 	<c:forEach var="item" items="${likeGoodsList}">
 					    <tr>
 					        <td>
-					            <img src="${contextPath}/mypage/image.do?file_name=${item.goods_fileName}&goods_num=${item.goods_num}" style="width:100px;"/>
+					            <img src="${contextPath}/download.do?goods_num=${item.goods_num}&fileName=${item.goods_fileName}" alt="대표 이미지" style="width:100px;" />
 					        </td>
 					        <td><a href="#">${item.goods_name}</a></td>
 					        <td>${item.goods_sales_price}</td>  

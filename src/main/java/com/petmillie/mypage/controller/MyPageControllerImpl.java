@@ -396,6 +396,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    }
 	    return result;
 	}
+	
 	@Override
 	@RequestMapping(value ="/likeGoodsDelete.do", method = RequestMethod.POST)
 	@ResponseBody
