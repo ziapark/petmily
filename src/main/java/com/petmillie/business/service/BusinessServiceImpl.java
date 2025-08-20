@@ -55,7 +55,11 @@ public class BusinessServiceImpl implements BusinessService {
 	public BusinessVO businessDetailInfo(String business_number) throws Exception {
 		return businessDAO.businessDetailInfo(business_number);
 	}
-
+	@Override
+	public BusinessVO businessDetailInfo2(String seller_id) throws Exception {
+		System.out.println("서비스진입. seller_id:" + seller_id);
+		return businessDAO.businessDetailInfo2(seller_id);
+	}
 	@Override
 	public BusinessVO modifyInfo(Map businessMap) throws Exception {
 		 String business_number=(String)businessMap.get("business_number");
@@ -152,4 +156,11 @@ public class BusinessServiceImpl implements BusinessService {
     public int restoreroom(int room_id) throws Exception {
         return businessDAO.restoreroom(room_id);
     }
+
+	@Override
+	public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception {
+		businessDAO.updateApprovalStatus(sellerId, approvalStatus);
+		System.out.println("service approvalStatus: "+approvalStatus);
+		
+	}
 }

@@ -71,12 +71,12 @@
 		
 		
 		<select id="busilogin" resultMap="businessResult"  parameterType="BusinessVO"  >
-    <![CDATA[
-        select * from business 
-        where seller_id=#{seller_id}
-        and seller_pw=#{seller_pw}
-    ]]>
-</select>
+		    <![CDATA[
+		        select * from business 
+		        where seller_id=#{seller_id}
+		        and seller_pw=#{seller_pw}
+		    ]]>
+		</select>
 		
 		<!-- 사업자 회원가입 -->
 		<insert id="insertNewBusinesspartner" parameterType="BusinessVO">
@@ -122,12 +122,25 @@
 		business where business_number = #{business_number}
 	]]>
 	</select>
-			<!-- 사업자 정보 불러오기 -->
+	<!-- 사업자번호로 사업자 정보 불러오기 -->
 	<select id="businessDetailInfo" parameterType="BusinessVO" resultType="BusinessVO">
 	<![CDATA[
 		select * from business where business_number = #{business_number}
 	]]>
+	
 	</select>
+	<!-- seller id로 사업자 정보 불러오기 -->
+	<select id="businessDetailInfo2" parameterType="BusinessVO" resultType="BusinessVO">
+	<![CDATA[
+		select * from business where seller_id = #{seller_id}
+	]]>
+	</select>
+	<!-- 사업자 가입 승인 -->
+	<update id="updateApprovalStatus">
+	    UPDATE business
+	    SET approval_status = #{approval_status}
+	    WHERE seller_id = #{seller_id}
+	</update>
 		<!-- 사업자 정보 수정 -->
 	<update id="updateMyInfo" parameterType="java.util.HashMap">
 	 update business

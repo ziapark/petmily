@@ -28,6 +28,33 @@
 		<result property="del_yn" column="del_yn" />
 		<result property="role" column="role" />
 	</resultMap>
+	
+	<resultMap id="businessResult" type="BusinessVO">
+    		<result property="business_id" column="business_id"/>
+		    <result property="seller_id" column="seller_id"/>
+		    <result property="seller_pw" column="seller_pw"/>
+		    <result property="business_name" column="business_name"/>
+		    <result property="business_type" column="business_type"/>
+		    <result property="owner_name" column="owner_name"/>
+		    <result property="business_number" column="business_number"/>
+		    <result property="phone1" column="phone1"/>
+		    <result property="phone2" column="phone2"/>
+		    <result property="phone3" column="phone3"/>
+		    <result property="email1" column="email1"/>
+		    <result property="email2" column="email2"/>
+		    <result property="zipcode" column="zipcode"/>
+		    <result property="roadAddress" column="roadAddress"/>
+		    <result property="jibunAddress" column="jibunAddress"/>
+		    <result property="namujiAddress" column="namujiAddress"/>
+		    <result property="description" column="description"/>
+		    <result property="bank_name" column="bank_name"/>
+		    <result property="bank_account" column="bank_account"/>
+		    <result property="bank_holder" column="bank_holder"/>
+		    <result property="approval_status" column="approval_status"/>
+		    <result property="role" column="role"/>
+		    <result property="reg_date" column="reg_date"/>
+		    <result property="del_yn" column="del_yn"/>
+		</resultMap>
 
 	<select id="listMember" resultMap="memberResult"
 		parameterType="java.util.HashMap">
@@ -59,6 +86,42 @@
 		</if>
 	</select>
 
+	<select id="listSellerMember" resultMap="businessResult"
+	        parameterType="java.util.HashMap">
+	    SELECT *
+	    FROM business
+	    WHERE DATE_FORMAT(reg_date, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+	    
+	    <if test="search_type == 'seller_id' and search_word != null and search_word != ''">
+	        AND seller_id = #{search_word}
+	    </if>
+	    
+	    <if test="search_type == 'business_name' and search_word != null and search_word != ''">
+	        AND business_name LIKE CONCAT('%', #{search_word}, '%')
+	    </if>
+	    
+	    <if test="search_type == 'owner_name' and search_word != null and search_word != ''">
+	        AND owner_name LIKE CONCAT('%', #{search_word}, '%')
+	    </if>
+	    
+	    <if test="search_type == 'phone' and search_word != null and search_word != ''">
+	        AND CONCAT(phone1, phone2, phone3) LIKE CONCAT('%', #{search_word}, '%')
+	    </if>
+	    
+	    <if test="search_type == 'address' and search_word != null and search_word != ''">
+	        AND (roadAddress LIKE CONCAT('%', #{search_word}, '%')
+	          OR jibunAddress LIKE CONCAT('%', #{search_word}, '%')
+	          OR namujiAddress LIKE CONCAT('%', #{search_word}, '%'))
+	    </if>
+	    
+	    ORDER BY reg_date DESC
+	    
+	    <if test="begin != null">
+	        LIMIT #{begin}, 10
+	    </if>
+	</select>
+	
+	
 	<select id="memberDetail" resultMap="memberResult"
 		parameterType="String">
 		SELECT * FROM member

@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <html>
 <head>
@@ -37,7 +37,7 @@ function search_member(search_period){
     formObj.appendChild(i_endDate);
     document.body.appendChild(formObj); 
     formObj.method="get";
-    formObj.action="/petmillie23/admin/member/adminMemberMain.do";
+    formObj.action="${pageContext.request.contextPath}/admin/member/adminMemberMain.do";
     formObj.submit();
 }
 
@@ -117,7 +117,7 @@ function fn_member_detail(member_id){
     formObj.appendChild(i_member_id);
     document.body.appendChild(formObj); 
     formObj.method="post";
-    formObj.action="/petmillie/admin/member/memberDetail.do";
+    formObj.action="${pageContext.request.contextPath}/admin/member/memberDetail.do";
     formObj.submit();
 	
 }
@@ -196,7 +196,7 @@ function fn_detail_search(){
     formObj.appendChild(i_search_word);
     document.body.appendChild(formObj); 
     formObj.method="get";
-    formObj.action="/petmillie23/admin/member/adminMemberMain.do";
+    formObj.action="${pageContext.request.contextPath}/admin/member/adminMemberMain.do";
     formObj.submit();
 	
 }
@@ -211,17 +211,35 @@ function fn_detail_search(){
 			</div>
 		</div>
     <div class="row seller_menu">
-			<ul>	
-				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
-				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
-				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
-				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-				<li><a href="#">회계관리</a></li>
-				<li><a href="#">펜션등록</a></li>
-				<li><a href="#">펜션관리</a></li>
-				<li><a href="#">예약관리</a></li>	
-			</ul>
-		</div>
+		<ul>	
+			<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
+			<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
+			<li><a href="#">회계관리</a></li>
+			<li><a href="#">펜션등록</a></li>
+			<li><a href="#">펜션관리</a></li>
+			<li><a href="#">예약관리</a></li>	
+		</ul>
+	</div>
+	<div class="container mb-3">
+	  <div class="row text-center">
+	    <div class="col">
+	      <div class="card">
+	        <div class="card-body">
+	          <a href="${contextPath}/admin/member/adminMemberMain.do" class="stretched-link text-decoration-none fw-bold">일반회원 관리</a>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="col">
+	      <div class="card">
+	        <div class="card-body">
+	          <a href="${contextPath}/admin/member/adminMemberMain_seller.do" class="stretched-link text-decoration-none fw-bold">사업자회원 관리</a>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	<form name="frm_delivery_list" >	
 		<div class="row justify-content-center">
 			<div class="col-md-12">

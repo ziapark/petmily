@@ -255,9 +255,9 @@ position:relative;
 				    background: #46cce9;
 				    min-width:150px;
 				    text-align:center !important;
-			        text-decoration: none;
+			        
 				    }
-.seller_menu ul li a {color:#fff; text-align:center !important;}
+.seller_menu ul li a {color:#fff; text-align:center !important;text-decoration: none !important;}
 .seller_menu ul li:hover {background:#49b4e7;}
 
 /* 동물병원 & 채팅 고정바 */
