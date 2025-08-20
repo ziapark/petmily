@@ -222,11 +222,17 @@ public class ReservaionControllerImpl implements ReservaionController {
     @ResponseBody
     public Map<String, Object> calculatePrice(@RequestParam("roomId") int roomId,
             @RequestParam("checkinDate") String checkinDateStr,
-            @RequestParam("checkoutDate") String checkoutDateStr) throws Exception {
+            @RequestParam("checkoutDate") String checkoutDateStr) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
+            // 날짜 값이 비어있는지 확인
+            if (checkinDateStr == null || checkinDateStr.isEmpty() || 
+                checkoutDateStr == null || checkoutDateStr.isEmpty()) {               
+                throw new IllegalArgumentException("체크인 또는 체크아웃 날짜가 비어있습니다.");
+            }
+            
             LocalDate checkinDate = LocalDate.parse(checkinDateStr);
             LocalDate checkoutDate = LocalDate.parse(checkoutDateStr);
             long nights = ChronoUnit.DAYS.between(checkinDate, checkoutDate);
@@ -236,6 +242,10 @@ public class ReservaionControllerImpl implements ReservaionController {
             }
 
             int pricePerNight = reservationService.getRoomPrice(roomId);
+            System.out.println(pricePerNight);
+            if (pricePerNight <= 0) {
+                throw new IllegalArgumentException("객실 가격 정보를 가져올 수 없습니다.");
+            }
             long totalPrice = pricePerNight * nights;
 
             response.put("success", true);
@@ -243,11 +253,14 @@ public class ReservaionControllerImpl implements ReservaionController {
             response.put("nights", nights);
 
         } catch (Exception e) {
+            // 예상치 못한 에러가 발생해도 서버가 멈추지 않고,
+            // 원인 메시지를 담아 클라이언트에게 응답합니다.
             e.printStackTrace();
             response.put("success", false);
-            response.put("message", "가격을 계산하는 중 오류가 발생했습니다.");
+            response.put("message", e.getMessage()); 
         }
 
         return response;
     }
+    
 }
