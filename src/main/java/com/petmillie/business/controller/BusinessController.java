@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -37,4 +38,6 @@ public interface BusinessController {
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 	public String restoreroom(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView sellerMyPageMain(@RequestParam(value="business_id", required= false) Integer business_id, HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView deleteForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String deleteMember (@RequestParam("seller_id") String seller_id, HttpSession session, RedirectAttributes redirectAttributes) throws Exception;
 }

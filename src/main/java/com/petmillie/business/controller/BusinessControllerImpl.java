@@ -188,6 +188,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 
 	    return mav;
 	}
+	
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
 	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
@@ -308,9 +309,23 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return resEntity;
 	}
 	
+	@Override
+	@RequestMapping(value="/deleteForm.do", method=RequestMethod.GET)
+	public ModelAndView deleteForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	    HttpSession session = request.getSession();
+	    MemberVO memberVO =(MemberVO) session.getAttribute("memberInfo");
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "메인페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		mav.addObject("memberInfo", memberVO);
+		
+		return mav;
+	}
+	
 	@RequestMapping(value="/deleteMember.do", method= {RequestMethod.POST,RequestMethod.GET})
-	public String deleteMember (@RequestParam("business_number") String business_number,HttpSession session, RedirectAttributes redirectAttributes) throws Exception{
-		businessService.removeMember(business_number);
+	public String deleteMember (@RequestParam("seller_id") String seller_id, HttpSession session, RedirectAttributes redirectAttributes) throws Exception{
+		businessService.removeMember(seller_id);
 		session.invalidate();
 		redirectAttributes.addFlashAttribute("message","회원탈퇴가 완료되었습니다.");
 		return "redirect:/main/main.do";
@@ -759,6 +774,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    int result = businessService.restoreroom(id);
 	    return (result > 0) ? "true" : "false";
 	}
+	
+
 }
 
 
