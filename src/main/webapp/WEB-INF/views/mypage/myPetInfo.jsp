@@ -40,18 +40,24 @@ function fn_delete_pet(pet_id){
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
-		<div class="mypage_wrap"> 
-			<div class="side_menu">
-				<ul>	
-					<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역/배송 조회</a></li>
-					<li><a href="${contextPath}/mypage/myDetailInfo.do">내 정보</a></li>
-					<li><a href="${contextPath}/mypage/myPetInfo.do">내 반려동물 정보</a></li>
-					<li><a href="${contextPath}/mypage/myReview.do">마이리뷰</a></li>
-					<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>
-					<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
-				</ul>
+		<div class="row row-cols-1 mb-3">
+			<div class="col bg-light p-5 text-start">
+				<h2 class="fw-bold h2h2">회원정보관리</h2>
+				<p class="h2p"></p>
 			</div>
-			<div class="mypage_content">
+		</div>	
+	    <div class="row seller_menu">
+			<ul>	
+				<li><a href="${contextPath}/mypage/myDetailInfo.do">내 정보</a></li>
+				<li><a href="${contextPath}/mypage/myPetInfo.do">나의 반려동물</a></li>
+				<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문/배송 조회</a></li>
+				<li><a href="${contextPath}/reservation/myReservations.do">예약확인</a></li>				
+				<li><a href="${contextPath}/mypage/myReview.do">나의 리뷰</a></li>
+				<li><a href="${contextPath}/mypage/likeGoods.do">나의 관심상품</a></li>				
+				<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+			</ul>
+		</div>
+			<div class="">
 				<h3 style="text-align:left;">나의 반려동물 정보</h3>
 				<p style="text-align:left; color: #666; margin-bottom: 20px;">
     				※ 반려동물은 최대 <strong style="color: #007bff;">3마리</strong>까지 등록 가능합니다.

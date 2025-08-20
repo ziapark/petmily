@@ -1,70 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
+<c:set var="contextPath"  value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>사업자 탈퇴</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+	<meta charset="utf-8">
+	<title>사업자 탈퇴</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h2> 사업자 탈퇴</h2>
-    <form id="deleteForm" onsubmit="event.preventDefault(); submitdelete();">
-    	<input type="hidden" id="seller_id" name="seller_id" value="${businessInfo.seller_id}">
-        <p>정말로 회원을 탈퇴하시겠습니까?</p>
-        <p>회원 탈퇴 시 모든 정보가 삭제되며 복구가 불가능합니다.</p>
-        <input type="submit" value="탈퇴하기">
-        <button type="button" onclick="window.history.back();">취소</button>
-    </form>
-    <script>
-function submitdelete() {
-	var _id = $("#seller_id").val()
-	console.log("탈퇴요청 seller_id:", _id);
-    console.log("submitDeleteForm 호출됨"); // 디버깅용
-    if (confirm("정말로 회원탈퇴 하시겠습니까?\n(탈퇴 후 복구가 불가능합니다.)")) {
-        console.log("탈퇴 요청 전송 시도"); // 디버깅용
-        $.ajax({
-            type: "POST",
-            url: "${contextPath}/bus/removeMember.do",
-            data: {id:_id},
-            dataType: "text",
-            beforeSend: function(xhr) {
-                console.log("AJAX beforeSend 실행");
-            },
-            success: function(response) {
-                console.log("AJAX success, 응답:", response);
-                if (typeof response === "object") {
-                    // 혹시 JSON 객체로 응답될 경우 문자열 변환
-                    response = JSON.stringify(response);
-                }
-                if ($.trim(response) === "true") {
-                    alert("회원탈퇴가 완료되었습니다.");
-                    window.location.href = "${contextPath}/main/main.do";
-                } else {
-                    alert("회원탈퇴에 실패했습니다. 다시 시도해 주세요.");
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX error 발생!", xhr, status, error);
-                alert(
-                    "서버와 통신 중 오류가 발생했습니다.\n" +
-                    "status: " + status + "\n" +
-                    "HTTP 상태코드: " + xhr.status + "\n" +
-                    "오류 메시지: " + error + "\n" +
-                    "응답 내용: " + xhr.responseText
-                );
-            },
-            complete: function(xhr, status) {
-                console.log("AJAX complete - status:", status);
-            }
-        });
-    } else {
-        console.log("사용자가 탈퇴 취소");
-    }
-}
-</script>
+	<form action="${contextPath}/business/deleteMember.do" method="post"> 
+		<div class="container text-center mt-3 mb-3">
+  			<div class="row row-cols-1 mb-3">
+				<div class="col bg-light p-5 text-start">
+					<h2 class="fw-bold h2h2">사업자 회원 탈퇴</h2>
+					<p class="h2p"></p>
+				</div>
+			</div>
+			<div class="row seller_menu">
+				<ul>	
+					<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
+					<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+					<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+					<li><a href="${contextPath}/business/businessGoodsMain.do">주문/배송관리</a></li>
+					<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
+					<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+					<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+					<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
+				</ul>
+			</div>
+			<h2>아이디를 입력해주세요</h2>
+			<input type="text" id="seller_id" name="seller_id">
+			<input type="submit" value="탈퇴하기">
+		</div>
+	</form>
 </body>
 </html>

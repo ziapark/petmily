@@ -132,7 +132,24 @@
 </head>
 <body>
 <div class="container text-center mt-3 mb-3">
-   <H3>상품 조회</H3>
+		<div class="row row-cols-1 mb-3">
+			<div class="col bg-light p-5 text-start">
+				<h2 class="fw-bold h2h2">상품조회</h2>
+				<p class="h2p"></p>
+			</div>
+		</div>	
+	    <div class="row seller_menu">
+			<ul>	
+				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
+				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
+				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
+				<li><a href="#">회계관리</a></li>
+				<li><a href="#">펜션등록</a></li>
+				<li><a href="#">펜션관리</a></li>
+				<li><a href="#">예약관리</a></li>	
+			</ul>
+		</div>
 	<form method="post">
 		<TABLE cellpadding="10" cellspacing="10">
 			<TBODY>

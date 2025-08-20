@@ -55,7 +55,7 @@
 			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
 			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
 			<li><a href="${contextPath}/mypage/myDetailInfo.do">회원정보관리</a></li>
-			<li><a href="${contextPath}/mypage/deleteForm.do">회원탈퇴</a></li>
+			<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
 		</ul>
 	</div>
 	

@@ -102,7 +102,18 @@
 			<p class="h2p"></p>
 		</div>
 	</div>	
-
+	    <div class="row seller_menu">
+			<ul>	
+				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
+				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
+				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
+				<li><a href="#">회계관리</a></li>
+				<li><a href="#">펜션등록</a></li>
+				<li><a href="#">펜션관리</a></li>
+				<li><a href="#">예약관리</a></li>	
+			</ul>
+		</div>
 	<form class="add_new_goods_form" action="${contextPath}/admin/goods/addNewGoods.do" method="post"enctype="multipart/form-data">
 		<input type="hidden" name="goods_status" value="판매중">
 		<table>
@@ -124,34 +135,37 @@
 			</tr>
 			<tr>
 				<td><label class="form-label">카테고리</td>
-				<td><select name="goods_category" class="form-control">
-						<optgroup label="식품">
-							<option value="사료" selected>사료</option>
-							<option value="간식">간식</option>
-							<option value="영양제">영양제</option>
-						</optgroup>
-						<optgroup label="장난감">
-							<option value="봉제장난감">봉제장난감</option>
-							<option value="공/원반">공/원반</option>
-							<option value="라텍스장난감">라텍스장난감</option>
-							<option value="치실/로프">치실/로프</option>
-							<option value="터그놀이">터그놀이</option>
-							<option value="노즈워크">노즈워크</option>
-						</optgroup>
-						<optgroup label="목욕/위생">
-							<option value="목욕용품">목욕용품</option>
-						</optgroup>
-						<optgroup label="산책용품">
-							<option value="칼라">칼라</option>
-							<option value="배변봉투">배변봉투</option>
-							<option value="하네스">하네스</option>
-							<option value="목줄">목줄</option>
-							<option value="유모차">유모차</option>
-						</optgroup>
-						<optgroup label="생활용품">
-							<option value="생활용품">생활용품</option>
-						</optgroup>
-				</select></td>
+					<td><select name="goods_category" class="form-control">
+							<optgroup label="식품">
+								<option value="사료" selected>사료</option>
+								<option value="간식">간식</option>
+								<option value="영양제">영양제</option>
+							</optgroup>
+							<optgroup label="장난감">
+								<option value="봉제장난감">봉제장난감</option>
+								<option value="공/원반">공/원반</option>
+								<option value="터그놀이">터그놀이</option>
+								<option value="낚시대">낚시대</option>
+								<option value="먹이퍼즐">먹이퍼즐</option>
+							</optgroup>
+							<optgroup label="목욕/위생">
+								<option value="애견샴푸">샴푸</option>
+								<option value="칫솔/치약">칫솔/치약</option>
+								<option value="수건">수건</option>
+								<option value="미용기">미용기</option>
+							</optgroup>
+							<optgroup label="산책용품">
+								<option value="목줄/하네스">목줄/하네스</option>
+								<option value="배변봉투">배변봉투</option>
+								<option value="유모차">유모차</option>
+							</optgroup>
+							<optgroup label="생활용품">
+								<option value="식기">식기</option>
+								<option value="스크래처">스크래처</option>
+								<option value="의류">의류</option>
+								<option value="신발">신발</option>
+							</optgroup>
+					</select></td>
 			</tr>
 			<tr>
 			    <td><label class="form-label">추천 날씨</label></td>

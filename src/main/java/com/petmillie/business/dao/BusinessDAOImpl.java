@@ -119,8 +119,8 @@ public class BusinessDAOImpl implements BusinessDAO {
     }
 
 	@Override
-	public int removeMember(String business_number) throws DataAccessException {
-		int re = sqlSession.update("mapper.business.removebusiness", business_number);
+	public int removeMember(String seller_id) throws DataAccessException {
+		int re = sqlSession.update("mapper.business.removebusiness", seller_id);
 		return re ;
 	}
 	

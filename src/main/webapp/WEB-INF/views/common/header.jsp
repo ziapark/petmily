@@ -76,18 +76,26 @@
 		<div id="head_link">
 			<ul>
 				<c:choose>
-					<c:when test="${isLogOn==true and not empty memberInfo}">
+					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">					
+						<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do"
+							class="btn-sm btn btn-outline-dark">관리자</a></li>
+						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
-						<li><a href="${contextPath}/mypage/myPageMain.do"
+					</c:when>
+					<c:when test="${isLogOn==true and not empty memberInfo}">					
+						<li><a href="${contextPath}/mypage/myDetailInfo.do"
 							class="btn-sm btn btn-outline-dark">마이페이지</a></li>
 						<li><a href="${contextPath}/cart/myCartList.do"
 							class="btn-sm btn btn-outline-dark">장바구니</a></li>
 						<li><a href="#" class="btn-sm btn btn-outline-dark">주문배송</a></li>
 						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
+						<li><a href="${contextPath}/member/logout.do"
+							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>
+					
 					<c:when test="${isLogOn==true and not empty businessInfo}">
-					<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
+					<li><a href="${contextPath}/business/businessDetailInfo.do" class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>
@@ -124,20 +132,12 @@
 			<ul class="gnb">
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">식품</a></li>
 				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">목욕/위생</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">산책용품</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">생활용품</a></li>
-				<li><a href="${contextPath}/reservation/pensionList.do">애견펜션</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">목욕/위생</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">산책용품</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">생활용품</a></li>
+				<li><a href="${contextPath}/reservation/pensionList.do">여가생활</a></li>
 				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
 				
-				<c:choose>
-					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
-						<li><a href="#">관리자</a></li>
-					</c:when>
-					<%-- <c:when test="${not empty businessInfo}">
-						<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">사업자</a></li>
-					</c:when> --%>
-				</c:choose>
 			</ul>
 
 			<div class="submenu-wrap">
@@ -147,31 +147,33 @@
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=영양제">영양제</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">봉제장난감</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=공/원반">공/원반</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">터그놀이</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">낚시대</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=노즈워크">먹이퍼즐</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=낚시대">낚시대</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=먹이퍼즐">먹이퍼즐</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">애견샴푸</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">칫솔/치약</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">수건</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">미용기</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">샴푸</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칫솔치약">칫솔/치약</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=수건">수건</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=미용기">미용기</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칼라">칼라</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=하네스">목줄/하네스</a></li>
 					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">유모차</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=생활용품">의류</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목욕용품">신발</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">식기</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=스크래처">스크래처</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=의류">의류</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=신발">신발</a></li>
 				</ul>
 				
 				<ul class="submenu">
-					<li><a href="${contextPath}/reservation/pensionList.do">펜션예약</a></li>
+					<li><a href="${contextPath}/reservation/pensionList.do">애견펜션</a></li>
+					<li><a href="${contextPath}/reservation/pensionList.do">문화시설</a></li>
 				</ul>
 				
 				<ul class="submenu">
@@ -181,27 +183,6 @@
 					<li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
 				</ul>
 				
-				<c:if test="${isLogOn==true and memberInfo.member_id =='admin' }">
-					<ul class="submenu">
-						<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
-						<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문관리</a></li>
-						<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-						<li><a href="#">배송관리</a></li>
-						<li><a href="#">게시판관리</a></li>
-					</ul>
-				</c:if>
-			
-				
-		<%-- 		<c:if test="${not empty businessInfo}">
-					<ul class="submenu">
-						<li><a href="${contextPath}/business/addpensionForm.do">업체 등록</a></li>
-						<li><a href="${contextPath}/reservation/reservation_check.do">예약 확인</a></li>
-						<li><a href="${contextPath}/business/businessDetailInfo.do">사업자 정보관리</a></li>
-						<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
-						<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
-						
-					</ul>
-				</c:if> --%>
 			</div>
 		</div>
 	</div>

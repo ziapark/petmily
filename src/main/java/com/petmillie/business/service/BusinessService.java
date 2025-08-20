@@ -27,7 +27,7 @@ public interface BusinessService {
 	public int updatepension(PensionVO pensionVO) throws Exception;
 	public int removepension(int id) throws Exception;
 	public List reservationList(String business_id) throws Exception;
-	public int removeMember(String business_number)throws Exception;
+	public int removeMember(String seller_id)throws Exception;
 	public int addNewGoods(Map newGoodsMap) throws Exception;
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception;
 	public int checkOverlappedGoodsName(String goods_name) throws Exception;
