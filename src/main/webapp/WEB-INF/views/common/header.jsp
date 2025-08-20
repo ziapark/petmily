@@ -95,7 +95,7 @@
 					</c:when>
 					
 					<c:when test="${isLogOn==true and not empty businessInfo}">
-					<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
+					<li><a href="${contextPath}/business/businessDetailInfo.do" class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
 						<li><a href="${contextPath}/member/logout.do"
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>

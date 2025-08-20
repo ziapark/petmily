@@ -175,7 +175,12 @@
 		where business_number=#{business_number}
 	</update>
 	<update id="removebusiness" parameterType="String">
-		update business set del_yn = 'Y' where business_number = #{business_number}
+		<![CDATA[
+			UPDATE business 
+			SET del_yn = 'Y', 
+			    approval_status = 'approve' 
+			WHERE seller_id = #{seller_id}
+		]]>
 	</update>
 		
 	<resultMap id="pensionResult" type="pensionVO">
