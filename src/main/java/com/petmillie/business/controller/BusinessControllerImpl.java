@@ -38,7 +38,6 @@ import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.member.vo.MemberVO;
-import com.petmillie.order.vo.OrderVO;
 
 @Controller("businessController")
 @RequestMapping("/business")
@@ -248,7 +247,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	public ModelAndView businessDetailInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
 		String business_number = businessVO.getBusiness_number();
-		System.out.println(business_number);
+		
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("title", "사업자정보관리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
@@ -259,54 +258,65 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return mav;
 	}
 
+
 	@Override
 	@RequestMapping(value="/modifyMyInfo.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public ResponseEntity modifyMyInfo(String attribute, String value, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		Map<String,String> businessMap=new HashMap<String,String>();
-		String val[]=null;
-		HttpSession session=request.getSession();
-		businessVO = (BusinessVO)session.getAttribute("businessInfo");
-		String business_number=businessVO.getBusiness_number();
-			if(attribute.equals("phone")){
-			val=value.split(",");
-			businessMap.put("phone1",val[0]);
-			businessMap.put("phone2",val[1]);
-			businessMap.put("phone3",val[2]);
-		}else if(attribute.equals("email")){
-			val=value.split(",");
-			businessMap.put("email1",val[0]);
-			businessMap.put("email2",val[1]);
-		}else if(attribute.equals("address")){
-			val=value.split(",");
-			businessMap.put("zipcode",val[0]);
-			businessMap.put("roadAddress",val[1]);
-			businessMap.put("jibunAddress", val[2]);
-			businessMap.put("namujiAddress", val[3]);
-		}else if(attribute.equals("seller_pw")){
-			businessMap.put("seller_pw", value);
-		}else if(attribute.equals("bank_name")){
-			businessMap.put("bank_name", value);
-		}else if(attribute.equals("bank_account")) {
-			businessMap.put("bank_account", value);
-		}else if(attribute.equals("bank_holder")) {
-			businessMap.put("bank_holder", value);
-		}else {
-			businessMap.put(attribute,value);	
-		}
-		
-		businessMap.put("business_number", business_number);
-		
-		businessVO = (BusinessVO)businessService.modifyInfo(businessMap);
-		session.removeAttribute("businessInfo");
-		session.setAttribute("businessInfo", businessVO);
-		
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		message  = "mod_success";
-		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
+	        HttpServletResponse response) throws Exception {
+
+	    HttpSession session = request.getSession();
+	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
+
+	    // 세션에 businessInfo가 없으면 바로 실패 응답
+	    if (businessVO == null) {
+	        String message = "failed";
+	        HttpHeaders responseHeaders = new HttpHeaders();
+	        return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+	    }
+
+	    Map<String,String> businessMap = new HashMap<>();
+	    String[] val = null;
+	    String business_number = businessVO.getBusiness_number();
+
+	    if(attribute.equals("phone")){
+	        val = value.split(",");
+	        businessMap.put("phone1", val[0]);
+	        businessMap.put("phone2", val[1]);
+	        businessMap.put("phone3", val[2]);
+	    } else if(attribute.equals("email")){
+	        val = value.split(",");
+	        businessMap.put("email1", val[0]);
+	        businessMap.put("email2", val[1]);
+	    } else if(attribute.equals("address")){
+	        val = value.split(",");
+	        businessMap.put("zipcode", val[0]);
+	        businessMap.put("roadAddress", val[1]);
+	        businessMap.put("jibunAddress", val[2]);
+	        businessMap.put("namujiAddress", val[3]);
+	    } else if(attribute.equals("seller_pw")){
+	        businessMap.put("seller_pw", value);
+	    } else if(attribute.equals("bank_name")){
+	        businessMap.put("bank_name", value);
+	    } else if(attribute.equals("bank_account")) {
+	        businessMap.put("bank_account", value);
+	    } else if(attribute.equals("bank_holder")) {
+	        businessMap.put("bank_holder", value);
+	    } else {
+	        businessMap.put(attribute, value);    
+	    }
+
+	    businessMap.put("business_number", business_number);
+
+	    // Service 호출
+	    businessVO = (BusinessVO) businessService.modifyInfo(businessMap);
+
+	    // 세션 업데이트
+	    session.removeAttribute("businessInfo");
+	    session.setAttribute("businessInfo", businessVO);
+
+	    String message = "mod_success";
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 	}
 	
 	@Override

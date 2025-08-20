@@ -7,19 +7,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.admin.member.service.AdminMemberService;
+import com.petmillie.business.service.BusinessService;
+import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.member.vo.MemberVO;
 
@@ -28,7 +27,12 @@ import com.petmillie.member.vo.MemberVO;
 public class AdminMemberControllerImpl extends BaseController  implements AdminMemberController{
 	@Autowired
 	private AdminMemberService adminMemberService;
-
+	@Autowired
+	private BusinessVO businessVO;
+	
+	@Autowired
+	private BusinessService businessService;
+	
 	@RequestMapping(value="/adminMemberMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
 	                                   HttpServletRequest request, HttpServletResponse response)  throws Exception{
@@ -82,6 +86,91 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	    return mav;
 	}
 
+	@RequestMapping(value="/adminMemberMain_seller.do" ,method={RequestMethod.POST,RequestMethod.GET})
+	public ModelAndView adminGoodsMain_seller(@RequestParam Map<String, String> dateMap,
+	                                   HttpServletRequest request, HttpServletResponse response)  throws Exception{
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("body", "/WEB-INF/views"+ viewName +".jsp");
+
+	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+	    String section = dateMap.get("section");
+	    String pageNum = dateMap.get("pageNum");
+	    String beginDate=null,endDate=null;
+
+	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+	    beginDate=tempDate[0];
+	    endDate=tempDate[1];
+	    dateMap.put("beginDate", beginDate);
+	    dateMap.put("endDate", endDate);
+
+
+	    HashMap<String,Object> condMap=new HashMap<String,Object>();
+	    if(section== null) {
+	        section = "1";
+	    }
+	    if(pageNum== null) {
+	        pageNum = "1";
+	    }
+	    condMap.put("section",section);
+	    condMap.put("pageNum",pageNum);
+	    condMap.put("beginDate",beginDate);
+	    condMap.put("endDate", endDate);
+
+	    int sectionInt = Integer.parseInt(section);
+	    int pageNumInt = Integer.parseInt(pageNum);
+	    int offset = Math.max(0, (sectionInt - 1) * 100 + (pageNumInt - 1) * 10);
+	    condMap.put("offset", offset);
+	    
+	    ArrayList<BusinessVO> business_list=adminMemberService.listSellerMember(condMap);
+	    
+	    mav.addObject("business_list", business_list);
+
+	    String beginDate1[]=beginDate.split("-");
+	    String endDate2[]=endDate.split("-");
+	    mav.addObject("beginYear",beginDate1[0]);
+	    mav.addObject("beginMonth",beginDate1[1]);
+	    mav.addObject("beginDay",beginDate1[2]);
+	    mav.addObject("endYear",endDate2[0]);
+	    mav.addObject("endMonth",endDate2[1]);
+	    mav.addObject("endDay",endDate2[2]);
+
+	    mav.addObject("section", section);
+	    mav.addObject("pageNum", pageNum);
+	    return mav;
+	}
+	
+	
+		@RequestMapping(value="/updateApprovalStatus.do" ,method={RequestMethod.POST,RequestMethod.GET})
+		@ResponseBody
+		public String updateApprovalStatus(@RequestParam String seller_id, @RequestParam String approval_status) throws Exception{
+
+			 try {
+				 	businessService.updateApprovalStatus(seller_id, approval_status);
+			        return "success";
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			        return "fail";
+			    }
+		
+		}
+		
+	@Override
+	@RequestMapping(value="/adminSellerMemberDetailInfo.do" ,method = {RequestMethod.POST,RequestMethod.GET})
+	public ModelAndView adminSellerMemberDetailInfo(@RequestParam("seller_id") String seller_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("title", "펫밀리");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		BusinessVO businessVO = businessService.businessDetailInfo2(seller_id);
+		System.out.println("seller_id: " + businessVO.getSeller_id());
+		String business_number = businessVO.getBusiness_number();
+		mav.addObject("businessInfo", businessVO);
+		
+		
+		return mav;
+	}
 	@RequestMapping(value="/memberDetail.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView memberDetail(HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		String viewName=(String)request.getAttribute("viewName");

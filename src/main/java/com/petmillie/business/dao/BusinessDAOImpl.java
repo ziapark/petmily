@@ -59,6 +59,12 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
 	@Override
+	public BusinessVO businessDetailInfo2(String seller_id) throws DataAccessException {
+		System.out.println("DAO진입. seller_id:" + seller_id);
+		BusinessVO DetailInfo = (BusinessVO)sqlSession.selectOne("mapper.business.businessDetailInfo2", seller_id);
+		return DetailInfo;
+	}
+	@Override
 	public void modifyInfo(Map businessMap) throws DataAccessException {
 		sqlSession.update("mapper.business.updateMyInfo", businessMap);
 		
@@ -148,4 +154,13 @@ public class BusinessDAOImpl implements BusinessDAO {
     public int restoreroom(int room_id) throws Exception {
         return sqlSession.update("mapper.business.restoreroom", room_id);
     }
+
+	@Override
+	public void updateApprovalStatus(String sellerId, String approvalStatus) throws DataAccessException {
+		sqlSession.update("mapper.business.updateApprovalStatus", Map.of(
+		        "seller_id", sellerId,
+		        "approval_status", approvalStatus
+		    ));
+		System.out.println("dao approvalStatus: "+approvalStatus);
+	}
 }

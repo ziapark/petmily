@@ -16,6 +16,7 @@ public interface BusinessService {
 	public BusinessVO login(String seller_id, String seller_pw) throws Exception;
 	public BusinessVO mypension(String business_number) throws Exception;
 	public BusinessVO businessDetailInfo(String business_number) throws Exception;
+	public BusinessVO businessDetailInfo2(String seller_id) throws Exception;
 	public BusinessVO modifyInfo(Map businessMap) throws Exception;
 	public void addpension(PensionVO pensionVO) throws Exception;
 	public void addpension2(RoomVO roomVO) throws Exception;
@@ -33,4 +34,5 @@ public interface BusinessService {
 	public int checkOverlappedGoodsName(String goods_name) throws Exception;
 	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
 	 public int restoreroom(int room_id) throws Exception;
+	 public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception;
 }
