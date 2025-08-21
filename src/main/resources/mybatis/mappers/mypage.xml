@@ -199,7 +199,14 @@
 		]]>
 	</update>
 
-
+	<update id="updateDeliveryState" parameterType="com.petmillie.order.vo.OrderVO">
+		<![CDATA[
+		   	update userorder
+			set delivery_state=#{delivery_state}
+	   		where order_id=#{order_id}
+		]]>
+	</update>
+	
 	<insert id="insertGoodsReview" parameterType="GoodsReviewVO">
 		INSERT INTO goods_review (member_id, order_num, rating,content,file_name)
 		VALUES (#{member_id}, #{order_num}, #{rating}, #{content},#{file_name})

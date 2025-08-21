@@ -144,6 +144,36 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 	
+	//구매확정
+	@RequestMapping(value="/confirmPurchase.do" ,method = RequestMethod.POST)
+	public ModelAndView confirmPurchase(@RequestParam String order_id) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			myPageService.updateDeliveryState(order_id, "finished");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		mav.addObject("message", "주문이 확정 되었습니다.");
+		mav.setViewName("redirect:/mypage/listMyOrderHistory.do");
+		return mav;
+	}
+	
+	//반품
+	@RequestMapping(value="/returnOrder.do" ,method = RequestMethod.POST)
+	public ModelAndView returnOrder(@RequestParam String order_id) {
+		ModelAndView mav = new ModelAndView();
+		try {
+			myPageService.updateDeliveryState(order_id, "returning_goods");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		mav.addObject("message", "반품신청되었습니다.");
+		mav.setViewName("redirect:/mypage/listMyOrderHistory.do");
+		return mav;
+	}
+	
 	@Override
 	@RequestMapping(value="/myDetailInfo.do" ,method = RequestMethod.GET)
 	public ModelAndView myDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception {

@@ -38,6 +38,48 @@
 	    		formObj.submit();	
 			}
 		}
+		
+	    function exchange_finish_order(selectElement) {
+		    const selectedValue = selectElement.value;
+		    const order_id = selectElement.dataset.orderId;
+
+		    let message = "";
+		    let actionUrl = "";
+
+		    if (selectedValue === "finished") {
+		    	message = "구매를 확정하시겠습니까?";
+		      	actionUrl = "${contextPath}/mypage/confirmPurchase.do";
+		    }else if (selectedValue === "returning_goods") {
+		      	message = "반품을 진행하시겠습니까?";
+		      	actionUrl = "${contextPath}/mypage/returnOrder.do";
+		    }else {
+		      	return; // "배송완료" 선택 시는 아무 동작 안 함
+		    }
+		    
+		    const answer = confirm(message);
+		    if (answer === true) {
+		      	const formObj = document.createElement("form");
+		      	const i_order_id = document.createElement("input");
+		      	const i_state = document.createElement("input");
+
+		      	i_order_id.name = "order_id";
+		      	i_order_id.value = order_id;
+
+		      	i_state.name = "delivery_state";
+		      	i_state.value = selectedValue;
+
+		      	formObj.appendChild(i_order_id);
+		      	formObj.appendChild(i_state);
+
+		      	document.body.appendChild(formObj);
+		      	formObj.method = "post";
+		      	formObj.action = actionUrl;
+		      	formObj.submit();
+		    } else {
+		      	// 사용자가 취소하면 다시 원래 옵션으로 되돌리기
+		      	selectElement.value = "finished_delivering";
+		    }
+		}
 	</script>
 </head>
 <body>
@@ -249,13 +291,17 @@
 									<td>
 								    	<c:choose>
 								   			<c:when test="${item.delivery_state=='delivery_prepared'}">
-								       			<input  type="button" onClick="fn_cancel_order('${item.order_id}')" value="주문취소"  />
+								       			<input  type="button" onClick="fn_cancel_order('${item.order_id}')" value="주문취소" />
 								  		 	</c:when>
-								   			<c:when test="${item.delivery_state=='finished_delivering' }">
-										 		<input  type="button" onClick="fn_exchange_order('${item.order_id}')" value="반품" />
+								   			<c:when test="${item.delivery_state=='finished_delivering'}">
+								   				<select onchange="exchange_finish_order(this)" data-order-id="${item.order_id}">
+									   				<option value="finished_delivering" selected>배송완료</option>
+									   				<option value="finished">구매확정</option>
+											 		<option value="returning_goods">반품</option>
+										 		</select>
 											</c:when>
-											<c:when test="${item.delivery_state=='finished' }">
-										 		<input  type="button" onClick="fn_finish_order('${item.order_id}')" value="구매확정" />
+											<c:when test="${item.delivery_state=='finished'}">
+										 		구매확정
 											</c:when>
 											<c:when test="${item.delivery_state=='delivering' }">
 										  		배송중

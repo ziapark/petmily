@@ -57,6 +57,16 @@ public class MyPageDAOImpl implements MyPageDAO{
 	}
 
 	@Override
+	public void updateDeliveryState(String _order_id, String delivery_state) throws DataAccessException{
+		OrderVO orderVO = new OrderVO();
+		int order_id = Integer.parseInt(_order_id);
+		orderVO.setOrder_id(order_id);
+		orderVO.setDelivery_state(delivery_state);
+		
+		sqlSession.update("mapper.mypage.updateDeliveryState",orderVO);
+	}
+	
+	@Override
 	public void insertGoodsReview(GoodsReviewVO goodsReviewVO) throws DataAccessException {
 		sqlSession.insert("mapper.mypage.insertGoodsReview", goodsReviewVO); 
 	}

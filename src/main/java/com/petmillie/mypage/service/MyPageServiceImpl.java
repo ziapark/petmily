@@ -51,6 +51,11 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 	
 	@Override
+	public void updateDeliveryState(String order_id, String delivery_state) throws Exception{
+		myPageDAO.updateDeliveryState(order_id, delivery_state);
+	}
+	
+	@Override
 	public MemberVO myDetailInfo(String member_id) throws Exception{
 		return myPageDAO.selectMyDetailInfo(member_id);
 	}
