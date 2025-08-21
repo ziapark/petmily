@@ -138,8 +138,9 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 			                         HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		ModelAndView mav = new ModelAndView();
 		myPageService.cancelOrder(order_id);
-		mav.addObject("message", "cancel_order");
-		mav.setViewName("redirect:/mypage/myPageMain.do");
+		
+		mav.addObject("message", "주문을 취소하였습니다.");
+		mav.setViewName("redirect:/mypage/listMyOrderHistory.do");
 		return mav;
 	}
 	

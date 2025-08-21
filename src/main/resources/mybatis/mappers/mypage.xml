@@ -192,9 +192,11 @@
 	</select>
 
 	<update id="updateMyOrderCancel" parameterType="String">
-	   update order
-		  set delivery_state='cancel_order'
-	   where order_id=#{order_id}
+		<![CDATA[
+		   	update userorder
+			set delivery_state='cancel_order'
+	   		where order_id=#{order_id}
+		]]>
 	</update>
 
 
