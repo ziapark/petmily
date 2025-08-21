@@ -18,6 +18,7 @@ public class FileDownloadController {
 	private static String CURR_BOARD_REPO_PATH = "C:\\petrepo\\board"; // 게시판 전용 경로
 	private static String CURR_IMAGE_REPO_PATH = "C:\\petrepo\\goods"; // 상품 전용 경로
 	private static String CURR_ROOM_REPO_PATH = "C:\\petrepo\\room";
+	private static String CURR_REVIEW_REPO_PATH = "C:\\petrepo\\goodsreivew";
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
@@ -59,19 +60,14 @@ public class FileDownloadController {
 	protected void thumbnails(@RequestParam("fileName") String fileName,
 	                          @RequestParam("goods_num") int goods_num,
 	                          HttpServletResponse response) throws Exception {
-	    System.out.println("[🔍 디버그] 썸네일 요청 들어옴");
-	    System.out.println("[🔍 디버그] fileName: " + fileName);
-	    System.out.println("[🔍 디버그] goods_num: " + goods_num);
 
 	    OutputStream out = response.getOutputStream();
 
 	    String filePath = CURR_IMAGE_REPO_PATH + "\\" + goods_num + "\\" + fileName;
-	    System.out.println("[🔍 디버그] 실제 이미지 경로: " + filePath);
 
 	    File image = new File(filePath);
 
 	    if (image.exists()) {
-	        System.out.println("[✅ 디버그] 이미지 존재 확인됨");
 	        response.setContentType("image/png");
 
 	        try {
@@ -79,14 +75,11 @@ public class FileDownloadController {
 	                      .size(121, 154)
 	                      .outputFormat("png")
 	                      .toOutputStream(out);
-	            System.out.println("[✅ 디버그] 썸네일 변환 및 출력 성공");
 	        } catch (Exception e) {
-	            System.out.println("[❌ 오류] 썸네일 처리 중 예외 발생: " + e.getMessage());
 	            e.printStackTrace();
 	            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 	        }
 	    } else {
-	        System.out.println("[❌ 디버그] 이미지 파일이 존재하지 않습니다.");
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	    }
 
@@ -104,6 +97,37 @@ public class FileDownloadController {
 		String filePath = CURR_BOARD_REPO_PATH + "\\" + fileName;
 		File image = new File(filePath);
 		System.out.println("이미지 경로: " + filePath);
+		if (!image.exists()) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		String contentType = "application/octet-stream";
+		if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+			contentType = "image/jpeg";
+		} else if (fileName.endsWith(".png")) {
+			contentType = "image/png";
+		}
+		response.setContentType(contentType);
+		
+		try (FileInputStream in = new FileInputStream(image);
+		     OutputStream out = response.getOutputStream()) {
+			byte[] buffer = new byte[1024 * 8];
+			int count;
+			while ((count = in.read(buffer)) != -1) {
+				out.write(buffer, 0, count);
+			}
+		}
+	}
+	
+	// 리뷰 이미지 출력
+	@RequestMapping("/review/image.do")
+	public void reviewImage(@RequestParam("file_name") String fileName,
+	                              @RequestParam("review_id") String review_id,
+	                              HttpServletResponse response) throws Exception {
+
+		String filePath = CURR_REVIEW_REPO_PATH + "\\" + fileName;
+		File image = new File(filePath);
 		if (!image.exists()) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -153,7 +177,6 @@ public class FileDownloadController {
 	    		out.write(buffer, 0, count);
 	    	}
 	    }
-	    System.out.println("이미지 스트리밍 완료!");
 	}
 
 }

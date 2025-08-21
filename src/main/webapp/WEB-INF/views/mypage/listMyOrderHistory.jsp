@@ -235,7 +235,7 @@
 						            						</a>
 						        						</c:when>
 						        					<c:otherwise>
-						            					<a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_num}&goods_name=${item.goods_name}">
+						            					<a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_id}&goods_name=${item.goods_name}">
 						                					<strong>리뷰쓰기</strong>
 						            					</a>
 						        					</c:otherwise>

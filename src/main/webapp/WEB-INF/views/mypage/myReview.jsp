@@ -38,7 +38,7 @@
 
 			<c:forEach var="item" items="${goodsReviewVO}">
 			<tr>
-				<td><img src="${contextPath}/mypage/image.do?file_name=${item.file_name}&review_id=${item.review_id}" style="width:100px;"/></td>
+				<td><img src="${contextPath}/review/image.do?file_name=${item.file_name}&review_id=${item.review_id}" style="width:100px;"/></td>
 				<td><a href="${contextPath}/mypage/myReviewDetail.do?review_id=${item.review_id}&goods_name=${item.goods_name}">${item.goods_name}</a></td>
 				<td>${item.rating}</td>
 				<td>${item.created_at}</td>			

@@ -160,41 +160,50 @@
                 </c:forEach>
             </div>           
             <div class="tab_content" id="tab2">
-                <h4>리뷰</h4>
-                <c:forEach var="review" items="${reviewList}">
-			        <div class="review-item" style="border-bottom: 1px solid #ddd; margin-bottom: 10px; padding-bottom: 10px;">
-			            <div class="review-header" style="display:flex; align-items:center; margin-bottom:5px;">
-			                <!-- 별점 출력 -->
-			                <div class="star-rating" style="color: #f44336; margin-right: 10px;">
-			                    <c:forEach begin="1" end="5" var="i">
-			                        <c:choose>
-			                            <c:when test="${i <= review.rating}">
-			                                ★
-			                            </c:when>
-			                            <c:otherwise>
-			                                ☆
-			                            </c:otherwise>
-			                        </c:choose>
-			                    </c:forEach>
-			                    <span style="margin-left: 5px; color: black;">${review.rating}</span>
-			                </div>
-			                <div>
-			                	<span style="margin-left: 5px; color: black;">${review.member_id}	</span>
-			                	<div class="review-date" style="color: #888;">${review.updated_at}</div>
-			            	</div>
-			            </div>
-			            <div class="review-text" style="margin-bottom: 5px;">${review.content}</div>
-			            <c:if test="${not empty review.file_name}">
-			                <img src="${contextPath}/mypage/image.do?file_name=${review.file_name}&review_id=${review.review_id}" alt="리뷰 이미지" style="max-width: 100px; max-height: 100px;">
-			            </c:if>
-			        </div>
-			    </c:forEach>
-            </div>
-        </div>
-    </div>
+    		<h4>리뷰</h4>
+    		<c:choose>
+        		<c:when test="${not empty reviewList}">
+            		<c:forEach var="review" items="${reviewList}">
+                		<div class="review-item" style="border-bottom: 1px solid #ddd; margin-bottom: 10px; padding-bottom: 10px;">
+                    		<div class="review-header" style="display:flex; align-items:center; margin-bottom:5px;">
+                        		<div class="star-rating" style="color: #f44336; margin-right: 10px;">
+                            		<c:forEach begin="1" end="5" var="i">
+                                		<c:choose>
+                                    		<c:when test="${i <= review.rating}">
+                                        		★
+                                    		</c:when>
+                                    		<c:otherwise>
+                                        		☆
+                                   	 		</c:otherwise>
+                                		</c:choose>
+                            		</c:forEach>
+                            		<span style="margin-left: 5px; color: black;">${review.rating}</span>
+                        		</div>
+                        		<div>
+                            		<span style="margin-left: 5px; color: black;">${review.member_id}</span>
+                            		<div class="review-date" style="color: #888;">${review.updated_at}</div>
+                        		</div>
+                    		</div>
+                    		<div class="review-text" style="margin-bottom: 5px;">${review.content}</div>
+                    			<c:if test="${not empty review.file_name}">
+                        			<img src="${contextPath}/review/image.do?file_name=${review.file_name}&review_id=${review.review_id}" alt="리뷰 이미지" style="max-width: 100px; max-height: 100px;">
+                    			</c:if>
+                			</div>
+            			</c:forEach>
+        			</c:when>
+		        <c:otherwise>
+		            <div style="padding: 20px; text-align: center; color: #888;">
+		                등록된 리뷰가 없습니다.
+		            </div>
+		        </c:otherwise>
+		    </c:choose>
+      </div>
+  </div>
+  </div>
 
     <div class="clear"></div>
     <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>
-</div>
+    </div>
+
 </body>
 </html>

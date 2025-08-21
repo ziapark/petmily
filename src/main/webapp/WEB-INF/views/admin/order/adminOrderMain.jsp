@@ -538,7 +538,7 @@
 								     				<option value="delivery_prepared" selected>배송준비중</option>
 								     				<option value="delivering">배송중</option>
 								     				<option value="finished_delivering">배송완료</option>
-											        <option value="finished_delivering">구매확정</option>
+											        <option value="finished">구매확정</option>
 											        <option value="cancel_order">주문취소</option>
 											       <option value="returning_goods">반품</option>
 								   				</c:when>
@@ -546,7 +546,7 @@
 											    	<option value="delivery_prepared" >배송준비중</option>
 											     	<option value="delivering" selected >배송중</option>
 												    <option value="finished_delivering">배송완료</option>
-												    <option value="finished_delivering">구매확정</option>
+												    <option value="finished">구매확정</option>
 												    <option value="cancel_order">주문취소</option>
 												    <option value="returning_goods">반품</option>
 											    </c:when>
@@ -554,7 +554,7 @@
 											    	<option value="delivery_prepared" >배송준비중</option>
 											     	<option value="delivering"  >배송중</option>
 											     	<option value="finished_delivering" selected>배송완료</option>
-											     	<option value="finished_delivering">구매확정</option>
+											     	<option value="finished">구매확정</option>
 											     	<option value="cancel_order">주문취소</option>
 											     	<option value="returning_goods">반품</option>
 											    </c:when>
@@ -562,7 +562,7 @@
 											    	<option value="delivery_prepared" >배송준비중</option>
 											    	<option value="delivering"  >배송중</option>
 											     	<option value="finished_delivering">배송완료</option>
-											     	<option value="finished_delivering" selected>구매확정</option>
+											     	<option value="finished" selected>구매확정</option>
 											     	<option value="cancel_order">주문취소</option>
 											     	<option value="returning_goods">반품</option>
 											    </c:when>
@@ -570,7 +570,7 @@
 											    	<option value="delivery_prepared" >배송준비중</option>
 											     	<option value="delivering"  >배송중</option>
 											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished_delivering">구매확정</option>
+											     	<option value="finished">구매확정</option>
 											     	<option value="cancel_order" selected>주문취소</option>
 											     	<option value="returning_goods">반품</option>
 											   	</c:when>
@@ -578,7 +578,7 @@
 											    	<option value="delivery_prepared" >배송준비중</option>
 											     	<option value="delivering"  >배송중</option>
 											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished_delivering">구매확정</option>
+											     	<option value="finished">구매확정</option>
 											    	<option value="cancel_order" >주문취소</option>
 											     	<option value="returning_goods" selected>반품</option>
 											    </c:when>

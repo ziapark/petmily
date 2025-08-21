@@ -18,6 +18,9 @@ public class GoodsReviewVO {
 	private String del_yn;
 	private String review_type;
 	
+	
+	private String goods_name;
+	
 	public String getReview_id() {
 		return review_id;
 	}
@@ -83,5 +86,11 @@ public class GoodsReviewVO {
 	}
 	public void setReview_type(String review_type) {
 		this.review_type = review_type;
+	}
+	public String getGoods_name() {
+		return goods_name;
+	}
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
 	}
 }

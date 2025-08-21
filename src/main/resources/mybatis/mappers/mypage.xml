@@ -218,7 +218,7 @@
 			o.goods_name
 		FROM goods_review r
 		JOIN userorder o
-			ON r.order_num = o.order_num
+			ON r.order_num = o.order_id
 		WHERE r.member_id = #{member_id}
 	]]>
 	</select>
