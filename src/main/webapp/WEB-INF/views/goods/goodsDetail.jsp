@@ -14,98 +14,6 @@
 		#layer {position: fixed; top: 0; left: 0; width: 100%; height: 100%; visibility: hidden; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: flex; justify-content: center; align-items: center;}
 		#popup {background: white; padding: 40px; border-radius: 10px; text-align: center;}
 		#close {position: absolute; top: 10px; right: 10px; cursor: pointer;}
-		
-		/* ===== 신규 리뷰 디자인 CSS ===== */
-		.review-section {
-		    font-family: 'Malgun Gothic', sans-serif;
-		    padding: 10px 0;
-		}
-		
-		.review-item {
-		    display: flex; /* 가로 정렬을 위한 flexbox */
-		    align-items: flex-start; /* 상단 정렬 */
-		    padding: 24px 10px;
-		    border-bottom: 1px solid #f0f0f0;
-		    gap: 20px; /* 이미지와 내용 사이의 간격 */
-		}
-		
-		.review-item:last-child {
-		    border-bottom: none;
-		}
-		
-		.review-image-box {
-		    flex-shrink: 0; /* 이미지가 찌그러지지 않도록 설정 */
-		    width: 80px;
-		    height: 80px;
-		    border-radius: 10px;
-		    overflow: hidden; /* 둥근 모서리를 위해 */
-		    background-color: #f4f4f4;
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		}
-		
-		.review-image-box img {
-		    width: 100%;
-		    height: 100%;
-		    object-fit: cover; /* 이미지가 비율에 맞게 꽉 차도록 */
-		}
-		
-		/* 이미지가 없을 때를 위한 아이콘 스타일 */
-		.review-image-box .no-image-placeholder {
-		    width: 40%;
-		    height: 40%;
-		    color: #cccccc;
-		}
-		
-		.review-details {
-		    flex-grow: 1; /* 남은 공간을 모두 차지하도록 */
-		    display: flex;
-		    flex-direction: column; /* 내용을 세로로 정렬 */
-		}
-		
-		.review-header {
-		    display: flex;
-		    justify-content: space-between; /* 작성자 정보와 별점을 양 끝으로 */
-		    align-items: center;
-		    margin-bottom: 8px;
-		}
-		
-		.review-author-info .author {
-		    font-weight: bold;
-		    color: #333;
-		}
-		
-		.review-author-info .date {
-		    font-size: 0.85em;
-		    color: #999;
-		    margin-left: 8px;
-		}
-		
-		.star-rating {
-		    font-size: 1.1em;
-		    color: #FFC107; /* 별점 색상 */
-		}
-		
-		.star-rating .empty-star {
-		    color: #e0e0e0; /* 빈 별 색상 */
-		}
-		
-		.review-body {
-		    font-size: 0.95em;
-		    color: #555;
-		    line-height: 1.6;
-		    text-align: left;
-		}
-		
-		.no-reviews-message {
-		    padding: 60px 20px;
-		    text-align: center;
-		    color: #888;
-		    background-color: #fafafa;
-		    border-radius: 8px;
-		    margin-top: 20px;
-		}
 	</style>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
@@ -237,6 +145,7 @@
 
     <div class="clear"></div>
 
+    <!-- 탭 영역 -->
     <div id="container">
         <ul class="tabs">
             <li><a href="#tab1">상품소개</a></li>       
@@ -251,53 +160,45 @@
                 </c:forEach>
             </div>           
             <div class="tab_content" id="tab2">
-				<h4>리뷰</h4>
-				<div class="review-section">
-				    <c:choose>
-				        <c:when test="${not empty reviewList}">
-				            <c:forEach var="review" items="${reviewList}">
-				                <div class="review-item">
-				                    <div class="review-image-box">
-				                        <c:choose>
-				                            <c:when test="${not empty review.file_name}">
-				                                <img src="${contextPath}/review/image.do?file_name=${review.file_name}&review_id=${review.review_id}" alt="리뷰 이미지">
-				                            </c:when>
-				                            <c:otherwise>
-				                                <svg class="no-image-placeholder" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
-				                                  <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-				                                  <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
-				                                </svg>
-				                            </c:otherwise>
-				                        </c:choose>
-				                    </div>
-				
-				                    <div class="review-details">
-				                        <div class="review-header">
-				                            <div class="review-author-info">
-				                                <span class="author">${review.member_id}</span>
-				                                <span class="date"><fmt:formatDate value="${review.updated_at}" pattern="yyyy-MM-dd"/></span>
-				                            </div>
-				                            <div class="star-rating">
-				                                <c:forEach begin="1" end="${review.rating}">★</c:forEach>
-				                                <c:forEach begin="${review.rating + 1}" end="5"><span class="empty-star">★</span></c:forEach>
-				                            </div>
-				                        </div>
-				                        <div class="review-body">
-				                            ${review.content}
-				                        </div>
-				                    </div>
-				                </div>
-				            </c:forEach>
-				        </c:when>
-				        <c:otherwise>
-				            <div class="no-reviews-message">
-				                등록된 리뷰가 없습니다.
-				            </div>
-				        </c:otherwise>
-				    </c:choose>
-				</div>
-      		</div>
-  		</div>
+    		<h4>리뷰</h4>
+    		<c:choose>
+        		<c:when test="${not empty reviewList}">
+            		<c:forEach var="review" items="${reviewList}">
+                		<div class="review-item" style="border-bottom: 1px solid #ddd; margin-bottom: 10px; padding-bottom: 10px;">
+                    		<div class="review-header" style="display:flex; align-items:center; margin-bottom:5px;">
+                        		<div class="star-rating" style="color: #f44336; margin-right: 10px;">
+                            		<c:forEach begin="1" end="5" var="i">
+                                		<c:choose>
+                                    		<c:when test="${i <= review.rating}">
+                                        		★
+                                    		</c:when>
+                                    		<c:otherwise>
+                                        		☆
+                                   	 		</c:otherwise>
+                                		</c:choose>
+                            		</c:forEach>
+                            		<span style="margin-left: 5px; color: black;">${review.rating}</span>
+                        		</div>
+                        		<div>
+                            		<span style="margin-left: 5px; color: black;">${review.member_id}</span>
+                            		<div class="review-date" style="color: #888;">${review.updated_at}</div>
+                        		</div>
+                    		</div>
+                    		<div class="review-text" style="margin-bottom: 5px;">${review.content}</div>
+                    			<c:if test="${not empty review.file_name}">
+                        			<img src="${contextPath}/review/image.do?file_name=${review.file_name}&review_id=${review.review_id}" alt="리뷰 이미지" style="max-width: 100px; max-height: 100px;">
+                    			</c:if>
+                			</div>
+            			</c:forEach>
+        			</c:when>
+		        <c:otherwise>
+		            <div style="padding: 20px; text-align: center; color: #888;">
+		                등록된 리뷰가 없습니다.
+		            </div>
+		        </c:otherwise>
+		    </c:choose>
+      </div>
+  </div>
   </div>
 
     <div class="clear"></div>
