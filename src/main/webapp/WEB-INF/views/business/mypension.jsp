@@ -144,18 +144,18 @@ function submitdelete(room_id) {
 			<p class="h2p"></p>
 		</div>
 	</div>
-	<div class="row seller_menu">
-		<ul>	
-			<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
-			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
-			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
-			<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>
-			<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
-			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
-			<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
-			<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
-		</ul>
-	</div>
+		<div class="row seller_menu">
+			<ul>	
+				<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
+				<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+				<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
+				<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
+				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+				<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+				<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
+			</ul>
+		</div>
 	<div class="clear"></div>
 	 <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
 

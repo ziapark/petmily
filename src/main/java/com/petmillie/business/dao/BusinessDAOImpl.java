@@ -1,5 +1,6 @@
 package com.petmillie.business.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.order.vo.OrderVO;
 import com.petmillie.reservation.vo.ReservationVO;
 
 @Repository("businessDAO")
@@ -162,5 +164,10 @@ public class BusinessDAOImpl implements BusinessDAO {
 		        "approval_status", approvalStatus
 		    ));
 		System.out.println("dao approvalStatus: "+approvalStatus);
+	}
+	
+	public ArrayList<OrderVO>selectNewOrderList(Map condMap) throws DataAccessException{
+		ArrayList<OrderVO> orderList=(ArrayList)sqlSession.selectList("mapper.business.selectNewOrderList",condMap);
+		return orderList;
 	}
 }

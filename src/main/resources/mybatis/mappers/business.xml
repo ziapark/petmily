@@ -60,14 +60,45 @@
 			<result property="reg_id" column="reg_id" />
 			<result property="reg_day" column="reg_day" />
 		</resultMap>
-		<!-- 사업자 로그인 -->
-<!-- 		<select id="busilogin" resultType="BusinessVO"  parameterType="BusinessVO"  > -->
-<!-- 	    	<![CDATA[ -->
-<!-- 				select * from business  -->
-<!-- 			 	where seller_id=#{seller_id} -->
-<!-- 			 	and seller_pw=#{seller_pw} -->
-<!-- 			]]> -->
-<!-- 		</select>	 -->
+
+	<!-- OrderVO용 ResultMap -->
+	<resultMap id="adminorderResult" type="com.petmillie.order.vo.OrderVO">
+		<result property="order_num" column="order_num" />
+		<result property="member_id" column="member_id" />
+		<result property="order_id" column="order_id" />
+		<result property="goods_num" column="goods_num" />
+		<result property="goods_name" column="goods_name" />
+		<result property="goods_sales_price" column="goods_sales_price" />
+		<result property="total_price" column="total_price" />
+		<result property="goods_qty" column="goods_qty" />
+		<result property="order_name" column="order_name" />
+		<result property="receiver_name" column="receiver_name" />
+		<result property="tel1" column="tel1" />
+		<result property="tel2" column="tel2" />
+		<result property="tel3" column="tel3" />
+		<result property="zipcode" column="zipcode" />
+		<result property="roadAddress" column="roadAddress" />
+		<result property="jibunAddress" column="jibunAddress" />
+		<result property="namujiAddress" column="namujiAddress" />
+		<result property="delivery_method" column="delivery_method" />
+		<result property="pay_order_tel" column="pay_order_tel" />
+		<result property="delivery_message" column="delivery_message" />
+		<result property="delivery_state" column="delivery_state" />
+		<result property="goods_fileName" column="goods_fileName" />
+		<result property="order_time" column="order_time" />
+	</resultMap>
+	
+		<select id="selectNewOrderList" resultMap="adminorderResult" parameterType="java.util.Map">
+		    <![CDATA[
+		        SELECT o.*
+		        FROM userorder o INNER JOIN goods g
+		        ON o.goods_num = g.goods_num
+		        WHERE g.seller_id = #{seller_id}
+		          AND DATE_FORMAT(o.order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
+		        ORDER BY o.order_time DESC
+		        LIMIT #{offset}, #{limit}
+		    ]]>
+		</select>
 		
 		
 		<select id="busilogin" resultMap="businessResult"  parameterType="BusinessVO"  >

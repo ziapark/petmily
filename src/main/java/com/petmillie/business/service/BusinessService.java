@@ -7,6 +7,7 @@ import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.order.vo.OrderVO;
 
 public interface BusinessService {
 
@@ -32,7 +33,8 @@ public interface BusinessService {
 	public int addNewGoods(Map newGoodsMap) throws Exception;
 	public List<GoodsVO> listNewGoods(Map condMap) throws Exception;
 	public int checkOverlappedGoodsName(String goods_name) throws Exception;
-	 public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
-	 public int restoreroom(int room_id) throws Exception;
-	 public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception;
+	public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
+	public int restoreroom(int room_id) throws Exception;
+	public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception;
+	public List<OrderVO> listNewOrder(Map condMap) throws Exception;
 }

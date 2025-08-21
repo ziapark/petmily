@@ -1,6 +1,7 @@
 package com.petmillie.business.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,8 @@ import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
+import com.petmillie.member.vo.MemberVO;
+import com.petmillie.order.vo.OrderVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
 import com.petmillie.reservation.vo.ReservationVO;
 
@@ -162,5 +165,9 @@ public class BusinessServiceImpl implements BusinessService {
 		businessDAO.updateApprovalStatus(sellerId, approvalStatus);
 		System.out.println("service approvalStatus: "+approvalStatus);
 		
+	}
+	
+	public List<OrderVO> listNewOrder(Map condMap) throws Exception{
+		return businessDAO.selectNewOrderList(condMap);
 	}
 }

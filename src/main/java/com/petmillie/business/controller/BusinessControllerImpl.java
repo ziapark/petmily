@@ -38,6 +38,7 @@ import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.member.vo.MemberVO;
+import com.petmillie.order.vo.OrderVO;
 
 @Controller("businessController")
 @RequestMapping("/business")
@@ -159,33 +160,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		mav.addObject("title", "메인페이지");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		return mav;
-	}
-	@Override
-	@RequestMapping(value="/sellerMyPageMain.do", method=RequestMethod.GET)
-	public ModelAndView sellerMyPageMain(
-	        @RequestParam(value="business_id", required=false) Integer business_id,
-	        HttpServletRequest request,
-	        HttpServletResponse response) throws Exception {
-
-	    HttpSession session = request.getSession();
-	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
-
-	    if (businessVO == null || businessVO.getBusiness_number() == null) {
-	        // 로그인 안 됐을 경우 처리
-	        return new ModelAndView("redirect:/business/loginForm.do");
-	    }
-
-	    session.setAttribute("side_menu", "my_page");
-
-	    String viewName = (String) request.getAttribute("viewName");
-	    ModelAndView mav = new ModelAndView("/common/layout");
-	    mav.addObject("title", "마이페이지");
-	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-
-	    // business_id도 JSP에서 사용 가능하게 담기
-	    mav.addObject("business_id", business_id);
-
-	    return mav;
 	}
 	
 	@Override
@@ -786,7 +760,69 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    return (result > 0) ? "true" : "false";
 	}
 	
+	@Override
+	@RequestMapping(value="/businessOrderMain.do" ,method={RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView businessOrderMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    
+	    mav.addObject("body", "/WEB-INF/views"+viewName +".jsp");
 
+	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+	    String section = dateMap.get("section");
+	    String pageNum = dateMap.get("pageNum");
+	    String beginDate=null,endDate=null;
+
+	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+	    beginDate=tempDate[0];
+	    endDate=tempDate[1];
+	    dateMap.put("beginDate", beginDate);
+	    dateMap.put("endDate", endDate);
+
+	    HashMap<String,Object> condMap=new HashMap<String,Object>();
+	    if(section== null) {
+	        section = "1";
+	    }
+	    if(pageNum== null) {
+	        pageNum = "1";
+	    }
+	    int sectionInt = Integer.parseInt(section);
+	    int pageNumInt = Integer.parseInt(pageNum);
+	    int offset = (sectionInt - 1) * 100 + (pageNumInt - 1) * 10;
+	    int limit = 10;
+	    condMap.put("offset", offset);
+	    condMap.put("limit", limit);
+
+	    condMap.put("beginDate",beginDate);
+	    condMap.put("endDate", endDate);
+
+	    String seller_id = "";
+	    HttpSession session = request.getSession();
+	    Object obj = session.getAttribute("businessInfo");
+	    if (obj != null) {
+	        BusinessVO businessVO = (BusinessVO) obj;
+	        seller_id = businessVO.getSeller_id();
+	    }
+	    condMap.put("seller_id", seller_id);
+	    
+	    List<OrderVO> newOrderList=businessService.listNewOrder(condMap);
+	    mav.addObject("newOrderList",newOrderList);
+	    
+		
+		String beginDate1[]=beginDate.split("-");
+		String endDate2[]=endDate.split("-");
+		mav.addObject("beginYear",beginDate1[0]);
+		mav.addObject("beginMonth",beginDate1[1]);
+		mav.addObject("beginDay",beginDate1[2]);
+		mav.addObject("endYear",endDate2[0]);
+		mav.addObject("endMonth",endDate2[1]);
+		mav.addObject("endDay",endDate2[2]);
+		
+		mav.addObject("section", section);
+		mav.addObject("pageNum", pageNum);
+		return mav;
+		
+	}
 }
 
 
