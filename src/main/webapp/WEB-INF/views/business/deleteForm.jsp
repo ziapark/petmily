@@ -19,7 +19,7 @@
 					<p class="h2p"></p>
 				</div>
 			</div>
-			<div class="row seller_menu">
+		   	<div class="row seller_menu">
 				<ul>	
 					<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
 					<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
