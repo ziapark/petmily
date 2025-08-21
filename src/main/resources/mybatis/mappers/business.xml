@@ -106,6 +106,7 @@
 		        select * from business 
 		        where seller_id=#{seller_id}
 		        and seller_pw=#{seller_pw}
+		        and del_yn = 'n'
 		    ]]>
 		</select>
 		
