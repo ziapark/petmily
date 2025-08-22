@@ -131,18 +131,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    
 	    return mav;
 	}
-
-	@Override
-	@RequestMapping(value="/cancelMyOrder.do" ,method = RequestMethod.POST)
-	public ModelAndView cancelMyOrder(@RequestParam("order_id")  String order_id,
-			                         HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		ModelAndView mav = new ModelAndView();
-		myPageService.cancelOrder(order_id);
-		
-		mav.addObject("message", "주문을 취소하였습니다.");
-		mav.setViewName("redirect:/mypage/listMyOrderHistory.do");
-		return mav;
-	}
 	
 	//구매확정
 	@RequestMapping(value="/confirmPurchase.do" ,method = RequestMethod.POST)

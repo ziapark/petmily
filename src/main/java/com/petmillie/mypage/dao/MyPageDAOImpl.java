@@ -50,11 +50,6 @@ public class MyPageDAOImpl implements MyPageDAO{
 		return memberVO;
 		
 	}
-	
-	@Override
-	public void updateMyOrderCancel(String order_id) throws DataAccessException{
-		sqlSession.update("mapper.mypage.updateMyOrderCancel",order_id);
-	}
 
 	@Override
 	public void updateDeliveryState(String _order_id, String delivery_state) throws DataAccessException{

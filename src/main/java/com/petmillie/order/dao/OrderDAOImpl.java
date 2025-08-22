@@ -28,6 +28,17 @@ public class OrderDAOImpl implements OrderDAO {
         sqlSession.delete("mapper.order.deleteCart", params);
     }
     
+	@Override
+	public void updateOrderStatusToCancel(String imp_uid) throws Exception {
+		sqlSession.update("mapper.order.updatePayStatusToCancel", imp_uid);
+		sqlSession.update("mapper.order.updateOrderStatusToCancel", imp_uid);
+	}
+
+	@Override
+	public void restorePoints(Map<String, Object> params) throws Exception {
+		sqlSession.update("mapper.order.restorePoints", params);
+	}
+	
     @Override
     public GoodsVO goodsDetailForOrder(int goods_num) throws DataAccessException {
         return sqlSession.selectOne("mapper.order.goodsDetailForOrder", goods_num);

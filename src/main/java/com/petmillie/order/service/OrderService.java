@@ -1,6 +1,7 @@
 package com.petmillie.order.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.vo.OrderItemDto;
@@ -10,6 +11,8 @@ import com.petmillie.order.vo.PayVO;
 public interface OrderService {
 	public void addNewOrder(OrderVO orderVO) throws Exception;
 	public void removeOrderedItemsFromCart(List<OrderItemDto> orderItems, String member_id) throws Exception;
+	public void updateOrderStatusToCancel(String imp_uid) throws Exception;
+	public void restorePoints(Map<String, Object> params) throws Exception;
 	public void deductionPoint(String member_id, int final_point) throws Exception;
 	public GoodsVO goodsDetailForOrder(int goods_num) throws Exception;
     public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception;

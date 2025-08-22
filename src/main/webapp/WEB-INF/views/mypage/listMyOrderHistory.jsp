@@ -9,6 +9,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
 	<script>
 		function search_order_history(fixedSearchPeriod){
 			var formObj=document.createElement("form");
@@ -22,22 +23,37 @@
     		formObj.submit();
 		}
 
-		function fn_cancel_order(order_id){
-			var answer=confirm("주문을 취소하시겠습니까?");
-			if(answer==true){
-				var formObj=document.createElement("form");
-				var i_order_id = document.createElement("input"); 
-	    
-	    		i_order_id.name="order_id";
-	    		i_order_id.value=order_id;
-		
-	    		formObj.appendChild(i_order_id);
-	    		document.body.appendChild(formObj); 
-	    		formObj.method="post";
-	    		formObj.action="${contextPath}/mypage/cancelMyOrder.do";
-	    		formObj.submit();	
-			}
-		}
+	    async function cancelOrder(button) {
+	        if (!confirm('정말로 이 주문을 취소하시겠습니까?')) { return; }
+
+	        const impUid = button.dataset.impUid;
+	        const orderId = button.dataset.orderId;
+	        const amount = button.dataset.amount;
+	        const usedPoints = button.dataset.usedPoints;
+
+	        try {
+	            const res = await fetch("${contextPath}/order/cancelPayment.do", {
+	                method: "POST",
+	                headers: { "Content-Type": "application/json" },
+	                body: JSON.stringify({
+	                    imp_uid: impUid,
+	                    order_id: orderId,
+	                    amount: amount,
+	                    used_points: parseInt(usedPoints, 10)
+	                })
+	            });
+	            const result = await res.json();
+	            if (result.success) {
+	                alert('주문이 성공적으로 취소되었습니다.');
+	                location.reload();
+	            } else {
+	                alert(`주문 취소에 실패했습니다: ${result.message}`);
+	            }
+	        } catch (error) {
+	            console.error("주문 취소 중 오류 발생:", error);
+	            alert("주문 취소 과정에서 오류가 발생했습니다.");
+	        }
+	    }
 		
 	    function exchange_finish_order(selectElement) {
 		    const selectedValue = selectElement.value;
@@ -291,7 +307,14 @@
 									<td>
 								    	<c:choose>
 								   			<c:when test="${item.delivery_state=='delivery_prepared'}">
-								       			<input  type="button" onClick="fn_cancel_order('${item.order_id}')" value="주문취소" />
+												<button type="button" class="btn btn-sm btn-danger" 
+												        onclick="cancelOrder(this)"
+												        data-order-id="${item.order_id}"
+												        data-imp-uid="${item.imp_uid}"
+												        data-amount="${item.payment_amount}"
+												        data-used-points="${item.used_point}">
+												    주문취소
+												</button>
 								  		 	</c:when>
 								   			<c:when test="${item.delivery_state=='finished_delivering'}">
 								   				<select onchange="exchange_finish_order(this)" data-order-id="${item.order_id}">

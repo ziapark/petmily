@@ -12,6 +12,8 @@ import com.petmillie.order.vo.OrderVO;
 public interface OrderDAO {
 	public void insertNewOrder(OrderVO orderVO) throws Exception;
 	public void deleteCartItems(Map<String, Object> params) throws Exception;
+	public void updateOrderStatusToCancel(String imp_uid) throws Exception;
+	public void restorePoints(Map<String, Object> params) throws Exception;
 	public GoodsVO goodsDetailForOrder(int goods_num) throws DataAccessException;
 	public List<OrderVO> listMyOrderGoods(OrderVO orderBean) throws DataAccessException;
 	public OrderVO findMyOrder(String order_id) throws DataAccessException;
