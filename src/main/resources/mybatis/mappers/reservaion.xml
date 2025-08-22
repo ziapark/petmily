@@ -65,7 +65,8 @@
 
 	<select id="selectAllPensionList" resultType="com.petmillie.business.vo.PensionVO">
     <![CDATA[
-        SELECT * FROM pension ORDER BY p_num DESC
+        SELECT * FROM pension  WHERE pension_status = 'approve'
+        ORDER BY p_num DESC 
     ]]>
 </select>
 	
