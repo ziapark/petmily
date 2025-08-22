@@ -19,10 +19,9 @@
             <div class="card shadow-sm">
                 <div class="card-body p-4">
                     <h2 class="card-title text-center mb-4">예약 정보 수정</h2>
-                    <form name="frmModify" action="${contextPath}/reservation/updateReservation.do" method="post">
+                    <form name="frmModify" action="${contextPath}/reservation/updateReservation.do" method="post" onsubmit="return validateForm()">
                         <input type="hidden" name="reservation_id" value="${reservation.reservation_id}" />
-                        <input type="hidden" id="room_id22" value="${reservation.room_id}" />
-
+           
                         <div class="mb-3">
                             <label class="form-label"><strong>펜션명</strong></label>
                             <p class="form-control-plaintext">${reservation.p_name}</p>
@@ -63,7 +62,7 @@
                             <h4>예상 결제 금액: <span id="total_price_display" class="text-primary fw-bold">
                                 <fmt:formatNumber value="${reservation.total_price}" pattern="#,###" />
                             </span>원</h4>
-                            <input type="hidden" id="total_price" name="total_price" value="${reservation.total_price}" />
+                            <input type="hidden" id="total_price_input" name="total_price" value="${reservation.total_price}" />
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
@@ -76,65 +75,91 @@
         </div>
     </div>
 </div>
+
 <script>
-function calculateAndUpdatePrice() {
-    // 1. 필요한 모든 값을 가져옵니다.
-    const checkinDate = document.getElementById('checkin_date22').value;
-    const checkoutDate = document.getElementById('checkout_date22').value;
-    const roomId = document.getElementById('room_id22').value;
-    const priceDisplayEl = document.getElementById('total_price_display');
-    const totalPriceInputEl = document.getElementById('total_price');
+    // DOM 요소 가져오기
+    const checkinInput = document.getElementById('checkin_date22');
+    const checkoutInput = document.getElementById('checkout_date22');
+    const totalPriceSpan = document.getElementById('total_price_display');
+    const totalPriceInput = document.getElementById('total_price_input');
 
-    // 2. 서버 요청 전에 필수 값들을 확인합니다.
-    if (!roomId) {
-        alert('객실 정보(roomId)가 없습니다. 페이지를 새로고침 해주세요.');
-        return;
-    }
-    if (!checkinDate || !checkoutDate) {
-        priceDisplayEl.innerText = '날짜를 모두 선택해주세요.';
-        return;
-    }
-
-    const checkin = new Date(checkinDate);
-    const checkout = new Date(checkoutDate);
-
-    if (checkout <= checkin) {
-        priceDisplayEl.innerText = '날짜 확인 필요';
-        alert('체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.');
-        return;
+    /**
+     * 시간대 오류를 원천적으로 방지하기 위해 UTC 기준으로 숙박일수를 계산하는 함수
+     */
+    function getNights(checkinStr, checkoutStr) {
+        if (!checkinStr || !checkoutStr) return 0;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const [inYear, inMonth, inDay] = checkinStr.split('-').map(Number);
+        const [outYear, outMonth, outDay] = checkoutStr.split('-').map(Number);
+        const checkinUTC = Date.UTC(inYear, inMonth - 1, inDay);
+        const checkoutUTC = Date.UTC(outYear, outMonth - 1, outDay);
+        const timeDiff = checkoutUTC - checkinUTC;
+        if (timeDiff <= 0) return 0;
+        return Math.round(timeDiff / oneDay);
     }
 
-    // 3. jQuery.ajax를 이용해 서버에 가격 계산을 요청합니다.
-    $.ajax({
-        type: "GET",
-        url: `${contextPath}/reservation/calculatePrice.do`,
-        data: {
-            roomId: roomId,
-            checkinDate: checkinDate,
-            checkoutDate: checkoutDate
-        },
-        dataType: "json",
-        success: function(data) {
-            // 서버로부터 성공적인 응답(HTTP 200)을 받았을 때 실행됩니다.
-            if (data.success) {
-                // Controller가 {"success": true, ...} 를 응답한 경우
-                const newPrice = data.totalPrice;
-                priceDisplayEl.innerText = newPrice.toLocaleString();
-                totalPriceInputEl.value = newPrice;
-            } else {
-                // Controller가 {"success": false, "message": "..."} 를 응답한 경우
-                alert(data.message); // 예: "숙박일수는 1일 이상이어야 합니다."
-                priceDisplayEl.innerText = '계산 오류';
+    // --- 1. '1박당 가격'을 역산하기 ---
+    const initialTotalPrice = parseFloat('${reservation.total_price}');
+    const initialNights = getNights('${formattedCheckinDate}', '${formattedCheckoutDate}');
+    
+    // 1박 요금 계산 시 소수점이 발생할 수 있음
+    const rawPricePerNight = initialNights > 0 ? initialTotalPrice / initialNights : 0;
+    
+    // ▼▼▼▼▼ [수정] 계산된 1박 요금을 1000원 단위로 반올림하여 오차를 보정합니다. ▼▼▼▼▼
+    const pricePerNight = Math.round(rawPricePerNight / 1000) * 1000;
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+    
+    // --- 2. 이벤트 리스너 및 UI 업데이트 로직 ---
+    const today = new Date().toISOString().split('T')[0];
+    checkinInput.setAttribute('min', today);
+
+    checkinInput.addEventListener('change', handleDateChange);
+    checkoutInput.addEventListener('change', calculateTotalPrice);
+    
+    handleDateChange();
+
+    function handleDateChange() {
+        if (checkinInput.value) {
+            let nextDay = new Date(checkinInput.value);
+            nextDay.setDate(nextDay.getDate() + 1);
+            let minCheckoutDate = nextDay.toISOString().substring(0, 10);
+            
+            checkoutInput.setAttribute('min', minCheckoutDate);
+
+            if (checkoutInput.value < minCheckoutDate) {
+                 checkoutInput.value = '';
             }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            // 서버가 400, 404, 500 등 에러로 응답했거나 네트워크가 끊겼을 때 실행됩니다.
-            console.error("AJAX Error:", textStatus, errorThrown);
-            alert('서버와 통신 중 오류가 발생했습니다.');
-            priceDisplayEl.innerText = '통신 오류';
         }
-    });
-}
+        calculateTotalPrice();
+    }
+
+    function calculateTotalPrice() {
+        const nights = getNights(checkinInput.value, checkoutInput.value);
+        let totalPrice = 0;
+
+        if (nights > 0) {
+            // 보정된 1박 요금으로 총액을 계산
+            totalPrice = nights * pricePerNight;
+        }
+        
+        totalPriceSpan.textContent = totalPrice.toLocaleString();
+        totalPriceInput.value = totalPrice;
+    }
+    
+    function validateForm() {
+        const nights = getNights(checkinInput.value, checkoutInput.value);
+        if (nights <= 0) {
+            alert('체크아웃 날짜는 체크인 날짜보다 늦어야 합니다.');
+            checkinInput.focus();
+            return false;
+        }
+        
+        if (confirm("수정된 내용으로 저장하시겠습니까?")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 </script>
 
 </body>

@@ -37,4 +37,5 @@ public interface BusinessService {
 	public int restoreroom(int room_id) throws Exception;
 	public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception;
 	public List<OrderVO> listNewOrder(Map condMap) throws Exception;
+	public List<BusinessVO> getAllBusinesses() throws Exception;
 }

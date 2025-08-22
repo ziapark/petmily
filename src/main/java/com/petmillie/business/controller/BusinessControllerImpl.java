@@ -145,6 +145,11 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		}		
 	}
 	
+	
+	
+	
+	
+	
 	@Override
 	@RequestMapping(value = "/overlapped.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -166,68 +171,73 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
-	public ModelAndView myPageMain(@RequestParam(required = false,value="message")  String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
-	    HttpSession session=request.getSession();
-	    businessVO=(BusinessVO)session.getAttribute("businessInfo");
+	public ModelAndView myPageMain(@RequestParam(required = false,value="message") String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
+		HttpSession session=request.getSession();
+		// 클래스 변수가 아닌, 메서드 내의 지역 변수로 세션 정보를 받습니다.
+		BusinessVO sessionBusinessVO =(BusinessVO)session.getAttribute("businessInfo");
 
-	    if (businessVO == null || businessVO.getBusiness_number() == null) {
-	        return new ModelAndView("redirect:/business/loginForm.do");
-	    }
-	    
-	    String viewName=(String)request.getAttribute("viewName");
-	    ModelAndView mav=new ModelAndView("/common/layout");
-	    mav.addObject("title", "마이페이지");
-	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-	    
-	    String business_number=businessVO.getBusiness_number();
-	    String business_id = businessVO.getBusiness_id();
-	    
-	    BusinessVO mypension = businessService.mypension(business_number);
-	    PensionVO pension = businessService.pension(business_id); // DB에서 조회한 펜션 정보
-	    
-	    List<RoomVO> list = new ArrayList<>(); // 객실 리스트를 미리 초기화
+		if (sessionBusinessVO == null || sessionBusinessVO.getBusiness_number() == null) {
+			return new ModelAndView("redirect:/business/loginForm.do");
+		}
+		
+		String viewName=(String)request.getAttribute("viewName");
+		ModelAndView mav=new ModelAndView("/common/layout");
+		mav.addObject("title", "마이페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		String business_number=sessionBusinessVO.getBusiness_number();
+		String business_id = sessionBusinessVO.getBusiness_id();
+		
+		BusinessVO mypension = businessService.mypension(business_number);
+		PensionVO pension = businessService.pension(business_id);
+		
+		List<RoomVO> list = new ArrayList<>();
 
-	    // 1. pension 객체가 null이 아닌지 먼저 확인
-	    if (pension != null) {
-	        if (p_num == null || p_num.trim().isEmpty()) {
-	            Object sessionPnum = session.getAttribute("p_num");
-	            if (sessionPnum != null) {
-	                p_num = sessionPnum.toString();
-	            } else {
-	                // 2. DB에서 가져온 pension 객체의 p_num을 사용하도록 수정
-	                p_num = String.valueOf(pension.getP_num()); 
-	            }
-	        }
-	        // 3. 유효한 p_num으로만 객실 리스트를 조회
-	        if (p_num != null && !p_num.equals("0") && !p_num.trim().isEmpty()) {
-	            list = businessService.roomList(p_num);
-	        }
-	    }
+		if (pension != null) {
+			if (p_num == null || p_num.trim().isEmpty()) {
+				p_num = String.valueOf(pension.getP_num()); 
+			}
+			if (p_num != null && !p_num.equals("0") && !p_num.trim().isEmpty()) {
+				list = businessService.roomList(p_num);
+			}
+		}
 
-	    mav.addObject("message", message);
-	    mav.addObject("pensionList", mypension);
-	    mav.addObject("pensionInfo", pension);
-	    mav.addObject("roomInfo", list); // 수정된 room list
-	    
-	    session.setAttribute("pensionInfo", pension);
-	    session.setAttribute("pensionList", mypension);
-	    session.setAttribute("roomInfo", list);
-	    if (pension != null) { // pension이 null이 아닐 때만 p_num을 세션에 저장
-	        session.setAttribute("p_num", pension.getP_num());
-	    }
+		mav.addObject("message", message);
+		mav.addObject("pensionList", mypension);
+		mav.addObject("pensionInfo", pension);
+		mav.addObject("roomInfo", list);
+		
+		session.setAttribute("pensionInfo", pension);
+		if (pension != null) {
+			session.setAttribute("p_num", pension.getP_num());
+		}
 
-	    return mav;
+		return mav;
 	}
+
+	
 	@Override
 	@RequestMapping(value="/businessDetailInfo.do" ,method = {RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView businessDetailInfo(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 1. 세션에서 로그인한 사업자 정보를 가져옵니다.
+		HttpSession session = request.getSession();
+		BusinessVO sessionBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
+
+		// 2. 만약 로그인 정보가 없으면 로그인 페이지로 보냅니다.
+		if (sessionBusinessVO == null) {
+			return new ModelAndView("redirect:/business/loginForm.do");
+		}
+
 		String viewName=(String)request.getAttribute("viewName");
-		String business_number = businessVO.getBusiness_number();
+		
+		// 3. 세션에서 가져온 business_number를 사용합니다.
+		String business_number = sessionBusinessVO.getBusiness_number();
 		
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("title", "사업자정보관리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
+		// 4. DB에서 최신 정보를 조회하여 화면에 전달합니다.
 		BusinessVO businessVO = businessService.businessDetailInfo(business_number);
 		mav.addObject("businessInfo", businessVO);
 		
@@ -321,52 +331,52 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	@Override
 	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public ResponseEntity addpension(@ModelAttribute("PensionVO") PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    response.setContentType("text/html; charset=UTF-8");
-	    request.setCharacterEncoding("utf-8");
-	    System.out.println("업체명 : " + pensionVO.getP_name());
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 
-	    String message = null;
-	    ResponseEntity resEntity = null;
-	    HttpHeaders responseHeaders = new HttpHeaders();
-	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		String message = null;
+		ResponseEntity resEntity = null;
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-	    try {
-	        HttpSession session = request.getSession();
-	        BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
-	        
-	        if (loginBusinessVO == null) {
-	            message = "<script>";
-	            message += " alert('로그인 정보가 만료되었습니다. 다시 로그인해주세요.');";
-	            message += " location.href='" + request.getContextPath() + "/business/loginForm.do';";
-	            message += " </script>";
-	            resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-	            return resEntity;
-	        }
+		try {
+			HttpSession session = request.getSession();
+			String business_id_to_check = pensionVO.getBusiness_id();
 
-	        String business_id = loginBusinessVO.getBusiness_id();
+			// 사업자가 직접 등록하는 경우, 세션에서 ID를 가져옵니다.
+			if (business_id_to_check == null || business_id_to_check.isEmpty()) {
+				BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
+				if (loginBusinessVO == null) {
+					message = "<script>alert('로그인 정보가 만료되었습니다.'); location.href='"+request.getContextPath()+"/business/loginForm.do';</script>";
+					return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+				}
+				business_id_to_check = loginBusinessVO.getBusiness_id();
+				pensionVO.setBusiness_id(business_id_to_check);
+			}
 
-	        pensionVO.setBusiness_id(business_id);
+			// ▼▼▼▼▼ 핵심 수정: 펜션 등록 전 중복 확인 ▼▼▼▼▼
+			PensionVO existingPension = businessService.pension(business_id_to_check);
+			if (existingPension != null) {
+				message = "<script>alert('이미 등록된 펜션이 있습니다. 펜션은 하나만 등록할 수 있습니다.');history.back();</script>";
+				return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+			}
+			// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-	        businessService.addpension(pensionVO);
+			businessService.addpension(pensionVO);
 
-	        session.setAttribute("pensionInfo", pensionVO);
-	        message = "<script>";
-	        message += " alert('등록 성공');";
-	        message += " location.href='" + request.getContextPath() + "/business/mypension.do';";
-	        message += " </script>";
+			String redirectUrl = (session.getAttribute("adminInfo") != null)
+								? request.getContextPath() + "/admin/pension/adminPensionList.do" // 관리자용 경로 (예시)
+								: request.getContextPath() + "/business/mypension.do"; // 사업자용 경로
 
-	    } catch (Exception e) {
-	        message = "<script>";
-	        message += " alert('등록 실패');";
-	        message += " location.href='" + request.getContextPath() + "/business/addpensionForm.do';";
-	        message += " </script>";
+			message = "<script>alert('등록 성공'); location.href='" + redirectUrl + "';</script>";
 
-	        e.printStackTrace();
-	    }
-	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-	    return resEntity;
+		} catch (Exception e) {
+			message = "<script>alert('등록 실패'); location.href='" + request.getContextPath() + "/business/addpensionForm.do';</script>";
+			e.printStackTrace();
+		}
+		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+		return resEntity;
 	}
-
 	@RequestMapping(value="addroom.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String addpension2(RoomVO roomVO, 
 	                          @RequestParam(value="file", required = false) MultipartFile fileimage, 
@@ -825,6 +835,22 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return mav;
 		
 	}
+	
+	// [추가] 관리자용 펜션 등록 페이지를 보여주는 메서드
+	@RequestMapping(value="/admin/addPensionForm.do", method=RequestMethod.GET)
+	public ModelAndView adminAddPensionForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    // 1. 드롭다운 메뉴에 표시할 모든 사업자 목록을 가져옵니다.
+	    List<BusinessVO> businessList = businessService.getAllBusinesses();
+	    
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    // 2. 사용자가 저장한 JSP 경로를 지정합니다.
+	    mav.addObject("body", "/WEB-INF/views/admin/pension/adminAddPension.jsp");
+	    mav.addObject("title", "관리자 펜션 등록");
+	    // 3. JSP에서 사용할 수 있도록 사업자 목록을 전달합니다.
+	    mav.addObject("businessList", businessList);
+	    return mav;
+	}
+
 }
 
 

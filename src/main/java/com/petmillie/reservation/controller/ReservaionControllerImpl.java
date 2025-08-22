@@ -116,7 +116,7 @@ public class ReservaionControllerImpl implements ReservaionController {
             return new ModelAndView("redirect:/member/loginForm.do");
         }
         reservationVO.setMember_id(memberVO.getMember_id());
-        reservationVO.setReservation_status("예약완료");
+        reservationVO.setReservation_status("예약대기");
         int reservationId = reservationService.addReservation(reservationVO);
         ModelAndView mav = new ModelAndView("redirect:/reservation/reservationComplete.do");
         mav.addObject("reservationId", reservationId);
@@ -181,23 +181,31 @@ public class ReservaionControllerImpl implements ReservaionController {
 
             System.out.println("상태 업데이트 요청: ID=" + reservationId + ", 상태=" + newStatus);
 
-            boolean isSuccess = true; 
+            // ▼▼▼▼▼ [수정] 서비스를 호출하여 DB를 실제로 업데이트하는 로직 추가 ▼▼▼▼▼
+            reservationService.updateReservationStatus(reservationId, newStatus);
+            // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-            if (isSuccess) {
-                response.put("success", true);
-                response.put("message", "예약 상태가 성공적으로 변경되었습니다.");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "DB 업데이트에 실패했습니다.");
-                return ResponseEntity.badRequest().body(response);
-            }
+            response.put("success", true);
+            response.put("message", "예약 상태가 성공적으로 변경되었습니다.");
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
             response.put("success", false);
             response.put("message", "서버 오류가 발생했습니다.");
             return ResponseEntity.internalServerError().body(response);
         }
+    }
+    @RequestMapping(value="/adminPensionCheck.do", method=RequestMethod.GET)
+    public ModelAndView adminAllReservations(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<ReservationVO> allReservations = reservationService.getAllReservations(); 
+        
+        ModelAndView mav = new ModelAndView("/common/layout");
+        // 사용자가 알려준 JSP 경로로 설정합니다.
+        mav.addObject("body", "/WEB-INF/views/admin/pension/adminPensionCheck.jsp");
+        mav.addObject("title", "관리자 예약 관리");
+        mav.addObject("allReservations", allReservations); // JSP에서 사용할 이름으로 데이터 전달
+        return mav;
     }
 
     @Override

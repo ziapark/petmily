@@ -109,9 +109,9 @@
 				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="#">회계관리</a></li>
-				<li><a href="#">펜션등록</a></li>
+				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
 				<li><a href="#">펜션관리</a></li>
-				<li><a href="#">예약관리</a></li>	
+				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>
 	<form class="add_new_goods_form" action="${contextPath}/admin/goods/addNewGoods.do" method="post"enctype="multipart/form-data">

@@ -58,7 +58,7 @@
                                     <strong>예약 상태:</strong>
                                     <select class="form-select form-select-sm reservation-status-select" 
                                             data-id="${reservationItem.reservation_id}">
-                                        <option value="예약가능" ${reservationItem.reservation_status == '예약가능' ? 'selected' : ''}>예약가능</option>
+
                                         <option value="예약대기" ${reservationItem.reservation_status == '예약대기' ? 'selected' : ''}>예약대기</option>
                                         <option value="예약완료" ${reservationItem.reservation_status == '예약완료' ? 'selected' : ''}>예약완료</option>
                                         <option value="예약취소" ${reservationItem.reservation_status == '예약취소' ? 'selected' : ''}>예약취소</option>
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const reservationId = this.dataset.id;
             
             // 사용자에게 변경 여부를 다시 한번 확인받습니다.
-            if (confirm(`예약 번호 ${reservationId}의 상태를 '${newStatus}'(으)로 변경하시겠습니까?`)) {
+            if (confirm(`예약 상태를 변경하시겠습니까?`)) {
                 
                 // 서버로 보낼 데이터를 준비합니다.
                 const data = {

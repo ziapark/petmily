@@ -1,7 +1,6 @@
 package com.petmillie.business.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
-import com.petmillie.member.vo.MemberVO;
 import com.petmillie.order.vo.OrderVO;
 import com.petmillie.reservation.dao.ReservaionDAO;
 import com.petmillie.reservation.vo.ReservationVO;
@@ -169,5 +167,13 @@ public class BusinessServiceImpl implements BusinessService {
 	
 	public List<OrderVO> listNewOrder(Map condMap) throws Exception{
 		return businessDAO.selectNewOrderList(condMap);
+		
 	}
+	
+	// [추가] 관리자가 모든 사업자 목록을 조회
+	@Override
+	public List<BusinessVO> getAllBusinesses() throws Exception {
+	    return businessDAO.selectAllBusinesses();
+	}
+
 }

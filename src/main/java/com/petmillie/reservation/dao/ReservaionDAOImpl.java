@@ -88,5 +88,10 @@ public class ReservaionDAOImpl implements ReservaionDAO {
 	        return sqlSession.selectOne("mapper.reservation.selectRoomPrice", roomId);
 	    }
 	
-	
+	// [추가] 관리자가 모든 예약을 조회
+	 @Override
+	 public List<ReservationVO> selectAllReservations() throws Exception {
+	     return sqlSession.selectList(NAMESPACE + ".selectAllReservations");
+	 }
+
 }

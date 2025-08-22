@@ -184,9 +184,9 @@
     const totalPriceSpan = document.getElementById('total_price');
     const submitBtn = document.getElementById('submit_btn');
     
-    // ▼▼▼▼▼ [수정 2] 숨겨진 input 요소를 변수에 할당 ▼▼▼▼▼
+   
     const totalPriceInput = document.getElementById('total_price_input');
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+   
 
     // 1박 요금 (JSP EL을 사용하여 JavaScript 변수에 할당)
     const pricePerNight = parseInt('${room.price}');

@@ -39,8 +39,9 @@ public interface BusinessDAO {
 	public int selectOverlappedGoodsName(String goods_name) throws Exception;
 	public List<GoodsVO>selectNewGoodsList(Map condMap) throws DataAccessException;
 	public int updateGoodsStatus(Map<String, Object> paramMap) throws Exception;
-	public void updateRoomStatus(int roomId) throws Exception;
+	public void updateRoomStatus(Map<String, Object> roomMap) throws Exception;
 	public int restoreroom(int room_id) throws Exception;
 	public void updateApprovalStatus(String sellerId, String approvalStatus) throws DataAccessException;
 	public ArrayList<OrderVO>selectNewOrderList(Map condMap) throws DataAccessException; 
+	public List<BusinessVO> selectAllBusinesses() throws Exception;
 }
