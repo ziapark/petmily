@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.member.vo.MemberVO;
 import com.petmillie.order.dao.OrderDAO;
 import com.petmillie.order.dao.PayDAO;
 import com.petmillie.order.vo.OrderItemDto;
@@ -47,6 +48,15 @@ public class OrderServiceImpl implements OrderService {
         params.put("goodsNumList", goodsNumList);
 
         orderDAO.deleteCartItems(params);
+    }
+    
+    @Override
+    public void deductionPoint(String member_id, int final_point) throws Exception{
+    	MemberVO memberVO = new MemberVO();
+    	
+    	memberVO.setMember_id(member_id);
+    	memberVO.setPoint(final_point);
+        payDAO.deductionPoint(memberVO);      
     }
     
     @Override

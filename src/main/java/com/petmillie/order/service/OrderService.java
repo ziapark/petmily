@@ -10,6 +10,7 @@ import com.petmillie.order.vo.PayVO;
 public interface OrderService {
 	public void addNewOrder(OrderVO orderVO) throws Exception;
 	public void removeOrderedItemsFromCart(List<OrderItemDto> orderItems, String member_id) throws Exception;
+	public void deductionPoint(String member_id, int final_point) throws Exception;
 	public GoodsVO goodsDetailForOrder(int goods_num) throws Exception;
     public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception;
     public OrderVO findMyOrder(String order_id) throws Exception;

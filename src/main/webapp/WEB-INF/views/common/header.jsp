@@ -84,6 +84,11 @@
 							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
 					</c:when>
 					<c:when test="${isLogOn==true and not empty memberInfo}">					
+					    <li>
+					        <a href="#" class="btn-sm btn btn-outline-warning">
+					            <i class="bi bi-coin" style="color: #E8C164; vertical-align: -0.1em;"></i> ${memberInfo.point} P
+					        </a>
+					    </li>
 						<li><a href="${contextPath}/mypage/myDetailInfo.do"
 							class="btn-sm btn btn-outline-dark">마이페이지</a></li>
 						<li><a href="${contextPath}/cart/myCartList.do"

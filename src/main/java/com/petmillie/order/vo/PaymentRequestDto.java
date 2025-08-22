@@ -18,6 +18,7 @@ public class PaymentRequestDto {
 	private String namujiAddress;
 	private String delivery_message;
 	private String pay_method;
+	private int used_point;
 	
 	// [주문 상품 목록]
 	private List<OrderItemDto> orderItems;
@@ -132,6 +133,14 @@ public class PaymentRequestDto {
 
 	public void setPay_method(String pay_method) {
 		this.pay_method = pay_method;
+	}
+
+	public int getUsed_point() {
+		return used_point;
+	}
+
+	public void setUsed_point(int used_point) {
+		this.used_point = used_point;
 	} 
 	
 }

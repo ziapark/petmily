@@ -56,6 +56,15 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 				mav.addObject("message", "비밀번호가 일치하지 않습니다.");
 				mav.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
 			}else {
+				//탈퇴한 회원
+				if("Y".equals(memberVO.getDel_yn())) {
+					mav.addObject("title", "로그인");
+					mav.addObject("message", "탈퇴한 회원 입니다. 회원가입해주세요.");
+					mav.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
+					
+					return mav;
+				}
+				
 				//로그인 성공
 				HttpSession session = request.getSession();
 				session.setAttribute("isLogOn", true);

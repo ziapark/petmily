@@ -119,32 +119,28 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    return mav;
 	}
 	
-	@Transactional // ServiceImpl 메소드에 붙여주세요!
+	@Transactional
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
 	public ApiResponse payToOrderGoods(@RequestBody PaymentRequestDto payDto, HttpServletRequest request) throws Exception {
 	    
 	    HttpSession session = request.getSession();
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-
-	    int serverCalculatedPrice = 0;
-	    // DB에서 조회한 상품 정보를 임시로 담아둘 리스트
-	    List<GoodsVO> orderedGoodsList = new ArrayList<>(); 
 	    
-	    // 1. 주문된 상품 목록을 기반으로 DB에서 실제 상품 정보를 조회하고, 서버가 직접 가격을 계산합니다.
+	    int usedPoints = payDto.getUsed_point();
+	    int goodsTotalPrice = 0;
+	    List<GoodsVO> orderedGoodsList = new ArrayList<>();
+	    
 	    for (OrderItemDto item : payDto.getOrderItems()) {
 	        GoodsVO goodsVO = orderService.goodsDetailForOrder(item.getGoods_num());
-	        orderedGoodsList.add(goodsVO); // 조회한 상품 정보를 리스트에 추가
-	        // DB에 저장된 실제 가격과 사용자가 주문한 수량을 곱하여 합산
-	        serverCalculatedPrice += Integer.parseInt(goodsVO.getGoods_sales_price()) * item.getGoods_qty();
+	        orderedGoodsList.add(goodsVO);
+	        goodsTotalPrice += Integer.parseInt(goodsVO.getGoods_sales_price()) * item.getGoods_qty();
 	    }
 
-	    // 2. 서버가 계산한 금액과 사용자가 보낸 금액이 일치하는지 확인합니다.
-	    if (serverCalculatedPrice != payDto.getPrice()) {
+	    if ((goodsTotalPrice - usedPoints) != payDto.getPrice()) {
 	        return new ApiResponse(false, "결제 금액이 유효하지 않습니다. 주문이 취소되었습니다.");
 	    }
 	    
-	    // --- [수정] 주문 정보 저장 로직 ---
 	    int orderId = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 
 	    for (int i = 0; i < payDto.getOrderItems().size(); i++) {
@@ -183,11 +179,15 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    payVO.setBuyer_name(memberInfo.getMember_name());
 	    payVO.setBuyer_email(memberInfo.getEmail1() + "@" + memberInfo.getEmail2());
 	    payVO.setPay_method(payDto.getPay_method());
-
+	    payVO.setUsed_point(payDto.getUsed_point());
+	    
 	    orderService.addNewpay(payVO);
 
 	    orderService.removeOrderedItemsFromCart(payDto.getOrderItems(), memberInfo.getMember_id());
-
+	    
+	    int final_point = memberInfo.getPoint() - payDto.getUsed_point();  
+	    orderService.deductionPoint(memberInfo.getMember_id(), final_point);
+	    
 	    session.setAttribute("myOrderList", orderedGoodsList); // DB에서 조회한 상품 정보 리스트
 	    session.setAttribute("myPayInfo", payVO);             // 방금 저장한 결제 정보
 	    

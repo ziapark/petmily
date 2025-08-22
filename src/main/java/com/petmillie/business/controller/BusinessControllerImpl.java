@@ -70,20 +70,22 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 				mav.addObject("message", "비밀번호가 일치하지 않습니다.");
 				mav.addObject("body", "/WEB-INF/views/business/loginForm.jsp");
 			}else {
+				//탈퇴한 회원
+				if("Y".equals(businessVO.getDel_yn())) {
+					mav.addObject("title", "로그인");
+					mav.addObject("message", "탈퇴한 회원 입니다. 회원가입해주세요.");
+					mav.addObject("body", "/WEB-INF/views/member/loginForm.jsp");
+					
+					return mav;
+				}
+				
 				//로그인 성공
 				mav.addObject("title", "메인페이지");
 				HttpSession session = request.getSession();
 				String business_id = businessVO.getBusiness_id();
-		       // PensionVO pension = businessService.pension(business_id); // 펜션 정보 조회
 				session.setAttribute("isLogOn", true);
 				session.setAttribute("businessInfo", businessVO);	 // 기본 정보
 				
-			//	if(pension != null) {
-			//		session.setAttribute("pensionInfo", pension);        // 펜션 정보
-			 //       session.setAttribute("p_num", pension.getP_num());   // p_num 따로 꺼내기 (편의성)
-			//	}else {
-			//		System.out.println("등록된 펜션 정보 없음");
-			//	}
 				mav.setViewName("redirect:/main/main.do");
 			}
 		}else {

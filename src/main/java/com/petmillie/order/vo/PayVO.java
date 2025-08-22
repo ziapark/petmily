@@ -14,6 +14,7 @@ public class PayVO {
 	private String payment_time;
 	private String buyer_name;
 	private String buyer_email;
+	private int used_point;
 	
 	public int getPayment_num() {
 		return payment_num;
@@ -69,4 +70,11 @@ public class PayVO {
 	public void setBuyer_email(String buyer_email) {
 		this.buyer_email = buyer_email;
 	}
+	public int getUsed_point() {
+		return used_point;
+	}
+	public void setUsed_point(int used_point) {
+		this.used_point = used_point;
+	}
+	
 }

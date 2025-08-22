@@ -14,8 +14,35 @@
 	    <result property="payment_time" column="payment_time"/>
 	    <result property="buyer_name" column="buyer_name"/>
 	    <result property="buyer_email" column="buyer_email"/>
+	    <result property="used_point" column="used_point"/>
 	</resultMap>
-
+	
+	<resultMap id="memberResult" type="MemberVO">
+	    <result property="member_num" column="member_num"/>
+	    <result property="member_id" column="member_id"/>
+	    <result property="member_pw" column="member_pw"/>
+	    <result property="member_name" column="member_name"/>
+	    <result property="member_gender" column="member_gender"/>
+	    <result property="member_birth_y" column="member_birth_y"/>
+	    <result property="member_birth_m" column="member_birth_m"/>
+	    <result property="member_birth_d" column="member_birth_d"/>
+	    <result property="member_birth_gn" column="member_birth_gn"/>
+	    <result property="tel1" column="tel1"/>
+	    <result property="tel2" column="tel2"/>
+	    <result property="tel3" column="tel3"/>
+	    <result property="smssts_yn" column="smssts_yn"/>
+	    <result property="email1" column="email1"/>
+	    <result property="email2" column="email2"/>
+	    <result property="emailsts_yn" column="emailsts_yn"/>
+	    <result property="zipcode" column="zipcode"/>
+	    <result property="roadAddress" column="roadAddress"/>
+	    <result property="jibunAddress" column="jibunAddress"/>
+	    <result property="namujiAddress" column="namujiAddress"/>
+	    <result property="member_join" column="member_join"/>
+	    <result property="del_yn" column="del_yn"/>
+	    <result property="point" column="point"/>
+	</resultMap>
+	
 	<insert id="insertNewPayment" parameterType="PayVO">
 	    <![CDATA[
 		    INSERT INTO payment (
@@ -25,7 +52,8 @@
 		        payment_status,
 		        pay_method,
 		        buyer_name,
-		        buyer_email
+		        buyer_email,
+		        used_point
 		    ) VALUES (
 		        #{order_id},
 		        #{imp_uid},
@@ -33,8 +61,14 @@
 		        #{payment_status},
 		        #{pay_method},
 		        #{buyer_name},
-		        #{buyer_email}
+		        #{buyer_email},
+		        #{used_point}
 		    )
 	    ]]>
 	</insert>
+	<update id="deductionPoint" parameterType="MemberVO">
+  		<![CDATA[
+  			update member set point=#{point} where member_id = #{member_id}
+ 	 	]]>
+  	</update>
 </mapper>
