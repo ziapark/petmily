@@ -391,11 +391,12 @@
 	</update>
 	
 	
-	<update id="updateRoomStatus" parameterType="int">
+	<update id="updateRoomStatus" parameterType="map">
     UPDATE room
-    SET room_status = '예약대기'
-    WHERE room_id = #{room_id}
+    SET room_status = #{status}
+    WHERE room_id = #{roomId}
 </update>
+
 <!-- 객실 상태를 '예약가능'으로 복구하는 쿼리 -->
 <update id="restoreroom" parameterType="int">
     <![CDATA[
@@ -404,4 +405,6 @@
         WHERE room_id = #{room_id}
     ]]>
 </update>
+
+
 </mapper>

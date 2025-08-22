@@ -149,8 +149,8 @@ public class BusinessDAOImpl implements BusinessDAO {
     }
     
     @Override
-    public void updateRoomStatus(int roomId) throws Exception {
-        sqlSession.update("mapper.business.updateRoomStatus", roomId);
+    public void updateRoomStatus(Map<String, Object> roomMap) throws Exception {
+        sqlSession.update("mapper.business.updateRoomStatus", roomMap);
     }
     @Override
     public int restoreroom(int room_id) throws Exception {

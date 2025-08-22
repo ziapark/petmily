@@ -38,4 +38,5 @@ public interface ReservaionService {
 	public int cancelReservation(int reservationId) throws Exception;
 	
 	public int getRoomPrice(int roomId) throws Exception;
+	public List<ReservationVO> getAllReservations() throws Exception;
 }

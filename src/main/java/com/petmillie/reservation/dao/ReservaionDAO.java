@@ -40,5 +40,6 @@ public interface ReservaionDAO {
 	
 	public int updateReservationStatusToCancel(int reservationId) throws DataAccessException;
 	public int selectRoomPrice(int roomId) throws DataAccessException;
+	public List<ReservationVO> selectAllReservations() throws Exception;
 }
 

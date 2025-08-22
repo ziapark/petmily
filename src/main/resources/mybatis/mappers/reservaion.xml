@@ -179,8 +179,9 @@
     ]]>
 </select>
 
-<!-- 예약 정보 수정 -->
-<update id="updateReservation" parameterType="com.petmillie.reservation.vo.ReservationVO">
+
+	
+	<update id="updateReservation" parameterType="com.petmillie.reservation.vo.ReservationVO">
     <![CDATA[
         UPDATE reservation
         SET 
@@ -188,17 +189,19 @@
             reserver_tel = #{reserver_tel},
             checkin_date = #{checkin_date},
             checkout_date = #{checkout_date},
-            guests = #{guests}
+            guests = #{guests},
+            total_price = #{total_price}
         WHERE 
             reservation_id = #{reservation_id}
     ]]>
 </update>
 	
 	
-	<update id="updateReservationStatus" parameterType="map">
-    UPDATE reservation_table
+	<!-- reservation_table -> reservation, id -> reservationId 로 수정 -->
+<update id="updateReservationStatus" parameterType="map">
+    UPDATE reservation
     SET reservation_status = #{status}
-    WHERE reservation_id = #{id}
+    WHERE reservation_id = #{reservationId}
 </update>
 	
 	
@@ -214,6 +217,19 @@
         WHERE room_id = #{roomId}
     </select>
     
+    <!-- [추가] 관리자가 모든 예약 목록을 조회 -->
+<select id="selectAllReservations" resultMap="reservationResult">
+    <![CDATA[
+        SELECT 
+            r.*, 
+            p.p_name,
+            rm.room_name
+        FROM reservation r
+        LEFT JOIN pension p ON r.p_num = p.p_num
+        LEFT JOIN room rm ON r.room_id = rm.room_id
+        ORDER BY r.reservation_id DESC
+    ]]>
+</select>
     
     
     

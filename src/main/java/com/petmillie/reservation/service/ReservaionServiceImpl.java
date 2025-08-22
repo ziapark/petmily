@@ -1,6 +1,8 @@
 package com.petmillie.reservation.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,6 @@ import com.petmillie.reservation.vo.ReservationVO;
 @Transactional(propagation = Propagation.REQUIRED)
 public class ReservaionServiceImpl implements ReservaionService {
 
-	
 	@Autowired
     private BusinessDAO businessDAO;
 	
@@ -48,22 +49,20 @@ public class ReservaionServiceImpl implements ReservaionService {
 		return reservaionDAO.selectRoomDetail(roomId);
 	}
 
-	// 예약 추가
-	
 	@Override
 	public int addReservation(ReservationVO reservationVO) throws Exception {
-	    // 첫 번째 일: 예약 기록하기
-	    reservaionDAO.insertReservation(reservationVO);
-	    
-	    // 두 번째 일: 객실 상태 변경하기 (새로 추가된 부분)
-	    businessDAO.updateRoomStatus(reservationVO.getRoom_id());
-	    
-	    return 1;
+		// 1. 예약 정보를 reservation 테이블에 추가
+		reservaionDAO.insertReservation(reservationVO);
+		
+		// 2. 해당 객실의 상태를 '예약대기'로 변경
+		Map<String, Object> roomMap = new HashMap<>();
+		roomMap.put("roomId", reservationVO.getRoom_id());
+		roomMap.put("status", "예약대기");
+		businessDAO.updateRoomStatus(roomMap);
+		
+		return reservationVO.getReservation_id();
 	}
-	/**
-	 * [추가] 사업자 ID로 예약 목록을 조회하는 메서드 구현
-	 * 이 메서드는 DAO를 호출하여 DB에서 데이터를 가져옵니다.
-	 */
+
 	@Override
 	public List<ReservationVO> getReservationsByBusinessId(String business_id) throws Exception {
 		return reservaionDAO.selectReservationsByBusinessId(business_id);
@@ -83,15 +82,37 @@ public class ReservaionServiceImpl implements ReservaionService {
 	public void updateReservation(ReservationVO reservationVO) throws Exception {
 	    reservaionDAO.updateReservation(reservationVO);
 	}
+
+	/**
+	 * [수정] '예약대기' 상태일 때도 룸 상태를 함께 변경하는 로직 추가
+	 */
 	@Override
 	public void updateReservationStatus(int reservationId, String status) throws Exception {
+		// 1. 먼저 변경할 예약 정보를 가져와서 room_id를 확보합니다.
+		ReservationVO reservation = reservaionDAO.selectReservationById(reservationId);
+		if (reservation == null) {
+			throw new Exception("존재하지 않는 예약입니다.");
+		}
+		int roomId = reservation.getRoom_id();
+
+		// 2. reservation 테이블의 상태를 업데이트합니다.
 		reservaionDAO.updateReservationStatus(reservationId, status);
+
+		// 3. 새로운 예약 상태(status)에 따라 room 테이블의 상태를 업데이트합니다.
+		Map<String, Object> roomMap = new HashMap<>();
+		roomMap.put("roomId", roomId);
+
+		if ("예약완료".equals(status)) {
+			roomMap.put("status", "예약중");
+			businessDAO.updateRoomStatus(roomMap);
+		} else if ("예약취소".equals(status)) {
+			roomMap.put("status", "예약가능");
+			businessDAO.updateRoomStatus(roomMap);
+		} else if ("예약대기".equals(status)) {
+			roomMap.put("status", "예약대기");
+			businessDAO.updateRoomStatus(roomMap);
+		}
 	}
-	
-	
-	
-	
-	
 	
 	@Override
     public int cancelReservation(int reservationId) throws Exception {
@@ -102,6 +123,8 @@ public class ReservaionServiceImpl implements ReservaionService {
     public int getRoomPrice(int roomId) throws Exception {
         return reservaionDAO.selectRoomPrice(roomId);
     }
-	
+	@Override
+	public List<ReservationVO> getAllReservations() throws Exception {
+	    return reservaionDAO.selectAllReservations(); }
 	
 }

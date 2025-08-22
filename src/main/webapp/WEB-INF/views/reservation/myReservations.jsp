@@ -89,7 +89,7 @@
 
                                 <!-- ▼▼▼ 수정 및 취소 버튼 추가 ▼▼▼ -->
                                 <!-- '예약완료' 상태일 때만 버튼이 보이도록 설정 -->
-                                <c:if test="${reservation.reservation_status == '예약완료'}">
+                                <c:if test="${reservation.reservation_status == '예약대기'}">
                                     <div class="mt-3 d-flex justify-content-end gap-2 border-top pt-3">
                                         <a href="${contextPath}/reservation/modifyForm.do?reservationId=${reservation.reservation_id}" class="btn btn-sm btn-outline-primary">예약 수정</a>
                                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="cancelReservation(${reservation.reservation_id})">예약 취소</button>

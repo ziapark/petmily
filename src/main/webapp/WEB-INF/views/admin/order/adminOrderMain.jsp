@@ -273,7 +273,7 @@
 				<p class="h2p"></p>
 			</div>
 		</div>
-		<div class="row seller_menu">
+		 <div class="row seller_menu">
 			<ul>	
 				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
 				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
@@ -282,7 +282,7 @@
 				<li><a href="#">회계관리</a></li>
 				<li><a href="#">펜션등록</a></li>
 				<li><a href="#">펜션관리</a></li>
-				<li><a href="#">예약관리</a></li>	
+				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>
 				
