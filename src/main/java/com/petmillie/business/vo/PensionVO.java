@@ -18,9 +18,43 @@ public class PensionVO {
 	private String fileName;
 	private String reg_date;
 	private String pension_status;
-	
+	private String business_name;
+	private String seller_id;
+	private String owner_name;
+	private String business_number;
+	private String roadAddress;
 
 	
+	public String getBusiness_name() {
+		return business_name;
+	}
+	public void setBusiness_name(String business_name) {
+		this.business_name = business_name;
+	}
+	public String getSeller_id() {
+		return seller_id;
+	}
+	public void setSeller_id(String seller_id) {
+		this.seller_id = seller_id;
+	}
+	public String getOwner_name() {
+		return owner_name;
+	}
+	public void setOwner_name(String owner_name) {
+		this.owner_name = owner_name;
+	}
+	public String getBusiness_number() {
+		return business_number;
+	}
+	public void setBusiness_number(String business_number) {
+		this.business_number = business_number;
+	}
+	public String getRoadAddress() {
+		return roadAddress;
+	}
+	public void setRoadAddress(String roadAddress) {
+		this.roadAddress = roadAddress;
+	}
 	private BusinessVO business;
 	
 

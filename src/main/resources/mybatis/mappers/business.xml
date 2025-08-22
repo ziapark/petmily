@@ -415,6 +415,45 @@
         ORDER BY business_name ASC
     ]]>
 </select>
+<!-- [추가] 관리자용 펜션 목록 조회를 위한 ResultMap -->
+<resultMap id="adminPensionResult" type="com.petmillie.business.vo.PensionVO">
+    <!-- PensionVO의 필드 -->
+    <result property="p_num" column="p_num"/>
+    <result property="business_id" column="business_id"/>
+    <result property="p_name" column="p_name"/>
+    <result property="tel1" column="tel1"/>
+    <result property="tel2" column="tel2"/>
+    <result property="tel3" column="tel3"/>
+    <result property="reg_date" column="reg_date"/>
+    <result property="pension_status" column="pension_status"/>
+    <!-- BusinessVO에서 가져올 필드 -->
+    <result property="business_name" column="business_name"/>
+    <result property="seller_id" column="seller_id"/>
+    <result property="owner_name" column="owner_name"/>
+    <result property="business_number" column="business_number"/>
+    <result property="roadAddress" column="roadAddress"/>
+</resultMap>
+
+<!-- [추가] 관리자가 모든 펜션 목록을 사업자 정보와 함께 조회 -->
+<select id="selectAllPensionsWithBusinessInfo" resultMap="adminPensionResult">
+    <![CDATA[
+        SELECT
+            p.p_num, p.business_id, p.p_name, p.tel1, p.tel2, p.tel3, p.reg_date, p.pension_status,
+            b.business_name, b.seller_id, b.owner_name, b.business_number, b.roadAddress
+        FROM
+            pension p
+        JOIN
+            business b ON p.business_id = b.business_id
+        ORDER BY
+            p.p_num DESC
+    ]]>
+</select>
+
+<update id="updatePensionStatus" parameterType="map">
+    UPDATE pension
+    SET pension_status = #{pension_status}
+    WHERE p_num = #{p_num}
+</update>
 
 
 </mapper>

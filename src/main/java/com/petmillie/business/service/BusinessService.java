@@ -38,4 +38,10 @@ public interface BusinessService {
 	public void updateApprovalStatus(String sellerId, String approvalStatus) throws Exception;
 	public List<OrderVO> listNewOrder(Map condMap) throws Exception;
 	public List<BusinessVO> getAllBusinesses() throws Exception;
+	// [추가] 관리자가 모든 펜션 정보를 조회
+	public List<PensionVO> getAllPensionsWithBusinessInfo() throws Exception;
+
+	// [추가] 관리자가 펜션의 승인 상태를 변경
+	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception;
+
 }

@@ -175,5 +175,15 @@ public class BusinessServiceImpl implements BusinessService {
 	public List<BusinessVO> getAllBusinesses() throws Exception {
 	    return businessDAO.selectAllBusinesses();
 	}
+	@Override
+	public List<PensionVO> getAllPensionsWithBusinessInfo() throws Exception {
+	    return businessDAO.selectAllPensionsWithBusinessInfo();
+	}
+
+	// [추가] 관리자가 펜션의 승인 상태를 변경
+	@Override
+	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception {
+	    businessDAO.updatePensionStatus(pensionMap);
+	}
 
 }

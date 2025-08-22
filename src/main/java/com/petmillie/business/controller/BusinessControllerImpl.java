@@ -851,6 +851,52 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    return mav;
 	}
 
+	
+	// [추가] 1. 관리자용 전체 펜션 목록 페이지를 보여주는 메서드
+	@RequestMapping(value="/admin/pensionList.do", method=RequestMethod.GET)
+	public ModelAndView adminPensionList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    // 서비스로부터 모든 펜션 정보를 가져옵니다.
+	    List<PensionVO> allPensions = businessService.getAllPensionsWithBusinessInfo();
+	    
+	    ModelAndView mav = new ModelAndView("/common/layout");
+	    mav.addObject("body", "/WEB-INF/views/admin/pension/adminPensionList.jsp");
+	    mav.addObject("title", "관리자 펜션 관리");
+	    mav.addObject("allPensions", allPensions); // JSP로 데이터 전달
+	    return mav;
+	}
+
+	// [추가] 2. 펜션의 승인 상태를 변경하는 메서드 (AJAX)
+	@RequestMapping(value="/admin/pension/updatePensionStatus.do", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> updatePensionStatus(@RequestParam("p_num") int p_num, @RequestParam("status") String status) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        Map<String, Object> pensionMap = new HashMap<>();
+	        pensionMap.put("p_num", p_num);
+	        pensionMap.put("pension_status", status);
+	        businessService.updatePensionStatus(pensionMap);
+	        
+	        response.put("success", true);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", e.getMessage());
+	        e.printStackTrace();
+	    }
+	    return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	// [추가] 3. 특정 펜션의 객실 목록을 가져오는 메서드 (AJAX)
+	@RequestMapping(value="/admin/pension/getRoomList.do", method=RequestMethod.GET)
+	public ModelAndView getRoomListForAdmin(@RequestParam("p_num") String p_num) throws Exception {
+	    // AJAX 요청이므로 전체 레이아웃이 아닌, 객실 목록 조각(_roomListPartial.jsp)만 반환합니다.
+	    ModelAndView mav = new ModelAndView("/admin/pension/_roomListPartial");
+	    
+	    List<RoomVO> roomList = businessService.roomList(p_num);
+	    mav.addObject("roomList", roomList);
+	    
+	    return mav;
+	}
+	
 }
 
 
