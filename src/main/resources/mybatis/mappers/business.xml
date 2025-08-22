@@ -406,5 +406,15 @@
     ]]>
 </update>
 
+<!-- [추가] 관리자가 펜션을 등록할 때 선택할 모든 사업자 목록 조회 -->
+<select id="selectAllBusinesses" resultMap="businessResult">
+    <![CDATA[
+        SELECT business_id, business_name, seller_id
+        FROM business
+        WHERE approval_status = 'approve' AND del_yn = 'n'
+        ORDER BY business_name ASC
+    ]]>
+</select>
+
 
 </mapper>

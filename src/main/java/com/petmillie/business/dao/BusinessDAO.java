@@ -43,4 +43,5 @@ public interface BusinessDAO {
 	public int restoreroom(int room_id) throws Exception;
 	public void updateApprovalStatus(String sellerId, String approvalStatus) throws DataAccessException;
 	public ArrayList<OrderVO>selectNewOrderList(Map condMap) throws DataAccessException; 
+	public List<BusinessVO> selectAllBusinesses() throws Exception;
 }

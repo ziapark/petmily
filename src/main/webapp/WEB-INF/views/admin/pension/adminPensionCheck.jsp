@@ -25,12 +25,12 @@
 				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="#">회계관리</a></li>
-				<li><a href="#">펜션등록</a></li>
+				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
 				<li><a href="#">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>
-    <!-- 관리자 페이지에서는 사업자 메뉴를 삭제하거나 관리자용 메뉴로 교체합니다. -->
+  
     
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <c:choose>

@@ -170,4 +170,10 @@ public class BusinessDAOImpl implements BusinessDAO {
 		ArrayList<OrderVO> orderList=(ArrayList)sqlSession.selectList("mapper.business.selectNewOrderList",condMap);
 		return orderList;
 	}
+	// [추가] 관리자가 모든 사업자 목록을 조회
+	@Override
+	public List<BusinessVO> selectAllBusinesses() throws Exception {
+	    return sqlSession.selectList("mapper.business.selectAllBusinesses");
+	}
+
 }
