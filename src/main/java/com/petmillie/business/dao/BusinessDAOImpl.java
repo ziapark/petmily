@@ -175,5 +175,16 @@ public class BusinessDAOImpl implements BusinessDAO {
 	public List<BusinessVO> selectAllBusinesses() throws Exception {
 	    return sqlSession.selectList("mapper.business.selectAllBusinesses");
 	}
+	// [추가] 관리자가 모든 펜션 정보를 조회
+	@Override
+	public List<PensionVO> selectAllPensionsWithBusinessInfo() throws Exception {
+	    return sqlSession.selectList("mapper.business.selectAllPensionsWithBusinessInfo");
+	}
+
+	// [추가] 관리자가 펜션의 승인 상태를 변경
+	@Override
+	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception {
+	    sqlSession.update("mapper.business.updatePensionStatus", pensionMap);
+	}
 
 }

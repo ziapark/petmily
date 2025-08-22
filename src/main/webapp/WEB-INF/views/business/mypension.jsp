@@ -193,6 +193,7 @@ function submitdelete(room_id) {
         <p class="card-text mb-1"><strong>객실 수:</strong> ${pensionInfo.room_count}</p>
         <p class="card-text mb-1"><strong>시설 정보:</strong> ${pensionInfo.facilities}</p>
         <p class="card-text"><strong>설명:</strong> ${pensionInfo.description}</p>
+        <p class="card-text"><strong>펜션승인상태:</strong> ${pensionInfo.pension_status}</p>
 
         <div class="d-flex justify-content-end gap-2 mt-3">
           <a href="${contextPath}/business/pensiondetail.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-primary btn-sm">

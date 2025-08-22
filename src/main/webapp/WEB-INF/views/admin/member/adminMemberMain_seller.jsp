@@ -149,7 +149,7 @@ function fn_detail_search(){
 			<h2 class="fw-bold h2h2">사업자회원 관리</h2>
 		</div>
 	</div>
-	  <div class="row seller_menu">
+	 <div class="row seller_menu">
 			<ul>	
 				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
 				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
@@ -157,7 +157,7 @@ function fn_detail_search(){
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="#">회계관리</a></li>
 				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
-				<li><a href="#">펜션관리</a></li>
+				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>

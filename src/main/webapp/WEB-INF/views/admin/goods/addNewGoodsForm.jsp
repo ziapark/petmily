@@ -110,7 +110,7 @@
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="#">회계관리</a></li>
 				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
-				<li><a href="#">펜션관리</a></li>
+				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>
