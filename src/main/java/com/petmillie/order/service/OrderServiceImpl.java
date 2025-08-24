@@ -60,6 +60,16 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
+    public void updateOrderStatusToCancel(String imp_uid) throws Exception {
+        orderDAO.updateOrderStatusToCancel(imp_uid);
+    }
+
+    @Override
+    public void restorePoints(Map<String, Object> params) throws Exception {
+        orderDAO.restorePoints(params);
+    }
+    
+    @Override
     public GoodsVO goodsDetailForOrder(int goods_num) throws Exception {
         return orderDAO.goodsDetailForOrder(goods_num);
     }
@@ -69,9 +79,7 @@ public class OrderServiceImpl implements OrderService {
 		orderGoodsList=orderDAO.listMyOrderGoods(orderVO);
 		return orderGoodsList;
 	}
-
-
-    
+  
     public OrderVO findMyOrder(String order_id) throws Exception{
         return orderDAO.findMyOrder(order_id);
     }    

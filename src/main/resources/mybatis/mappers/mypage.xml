@@ -28,6 +28,7 @@
 	    <result property="namujiAddress" column="namujiAddress"/>
 	    <result property="member_join" column="member_join"/>
 	    <result property="del_yn" column="del_yn"/>
+	    <result property="point" column="point"/>
 	</resultMap>
 	
 	<resultMap id="goodsResult" type="GoodsVO">
@@ -90,6 +91,38 @@
 		<result property="reg_date" column="reg_date"/>
 	</resultMap>
 
+	<resultMap id="orderResult" type="com.petmillie.order.vo.OrderVO">
+		<result property="order_num" column="order_num"/>
+		<result property="member_id" column="member_id"/>
+		<result property="order_id" column="order_id"/>
+		<result property="goods_num" column="goods_num"/>
+		<result property="fileName" column="fileName"/>
+		<result property="goods_name" column="goods_name"/>
+		<result property="goods_sales_price" column="goods_sales_price"/>
+		<result property="goods_qty" column="goods_qty"/>
+		<result property="point" column="point"/>
+		<result property="receiver_name" column="receiver_name"/>
+		<result property="tel1" column="tel1" />
+		<result property="tel2" column="tel2" />
+		<result property="tel3" column="tel3" />
+		<result property="delivery_message" column="delivery_message" />
+		<result property="zipcode" column="zipcode" />
+		<result property="roadAddress" column="roadAddress" />
+		<result property="jibunAddress" column="jibunAddress" />
+		<result property="namujiAddress" column="namujiAddress" />
+		<result property="order_time" column="order_time" />
+		<result property="delivery_state" column="delivery_state" />	
+		
+		<result property="payment_num" column="payment_num" />
+		<result property="imp_uid" column="imp_uid" />
+		<result property="payment_amount" column="payment_amount" />
+		<result property="payment_status" column="payment_status" />
+		<result property="pay_method" column="pay_method" />
+		<result property="payment_time" column="payment_time" />
+		<result property="buyer_name" column="buyer_name" />
+		<result property="buyer_email" column="buyer_email" />
+		<result property="used_point" column="used_point" />
+	</resultMap>
 	<select id="selectLikeGoodsList" parameterType="string" resultMap="likeGoodsResult">
 		<![CDATA[
 			SELECT 
@@ -150,12 +183,19 @@
 		]]>
 	</select>
 
-	<select id="selectMyOrderHistoryList" resultMap="goodsResult" parameterType="java.util.Map">
+	<select id="selectMyOrderHistoryList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[
-		  select * from userorder
-		  where member_id=#{member_id}
-		  and DATE_FORMAT(order_time,'%Y-%m-%d') between #{beginDate} and #{endDate}
-		  order by order_time desc
+		    SELECT 
+		        o.*,
+		        p.*	
+		    FROM 
+		        userorder o
+		    LEFT JOIN goods g ON o.goods_num = g.goods_num
+		    LEFT JOIN payment p ON o.order_id = p.order_id
+		    WHERE 
+		        o.member_id = #{member_id}
+		        AND o.order_time BETWEEN #{beginDate} AND #{endDate}
+		    ORDER BY o.order_time DESC
 		]]>
 	</select>
 
@@ -190,14 +230,6 @@
 			where member_id=#{member_id}
 		]]>
 	</select>
-
-	<update id="updateMyOrderCancel" parameterType="String">
-		<![CDATA[
-		   	update userorder
-			set delivery_state='cancel_order'
-	   		where order_id=#{order_id}
-		]]>
-	</update>
 
 	<update id="updateDeliveryState" parameterType="com.petmillie.order.vo.OrderVO">
 		<![CDATA[

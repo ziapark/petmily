@@ -232,4 +232,32 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    return mav;
 	}
 
+	@RequestMapping(value="/cancelPayment.do", method=RequestMethod.POST)
+	@ResponseBody
+	public ApiResponse cancelPayment(@RequestBody Map<String, Object> cancelData, HttpServletRequest request) {
+	    try {
+	        String imp_uid = (String) cancelData.get("imp_uid");
+	        int used_points = Integer.parseInt(String.valueOf(cancelData.get("used_points")));
+	        
+	        HttpSession session = request.getSession();
+	        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	        
+	        portoneService.cancelPayment(imp_uid);
+
+	        orderService.updateOrderStatusToCancel(imp_uid);
+	        
+	        if (used_points > 0) {
+	            Map<String, Object> params = new HashMap<>();
+	            params.put("member_id", memberInfo.getMember_id());
+	            params.put("points_to_restore", used_points);
+	            orderService.restorePoints(params);
+	        }
+	        
+	        return new ApiResponse(true, "결제가 성공적으로 취소되었습니다.");
+
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        return new ApiResponse(false, "결제 취소에 실패했습니다: " + e.getMessage());
+	    }
+	}
 }

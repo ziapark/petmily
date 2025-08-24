@@ -398,8 +398,8 @@
 		    // --- 3단계: 포트원 결제 요청 ---
 		    const paymentId = `PAYMENT_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
 		    const portoneRequestPayload = {
-		        storeId: "store-292f1f91-b8c2-4608-9394-615315d5f811",
-		        channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc",
+		        storeId: "store-e922786e-5a3c-4063-8202-ae25a0966363",
+		        channelKey: "channel-key-5886f536-8798-4066-aff3-416419fa1d39",
 		        paymentId: paymentId,
 		        orderName: orderName,
 		        totalAmount: price,

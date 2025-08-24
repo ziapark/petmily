@@ -26,7 +26,17 @@
 		<result property="jibunAddress" column="jibunAddress" />
 		<result property="namujiAddress" column="namujiAddress" />
 		<result property="order_time" column="order_time" />
-		<result property="delivery_state" column="delivery_state" />	
+		<result property="delivery_state" column="delivery_state" />
+		
+		<result property="payment_num" column="payment_num" />
+		<result property="imp_uid" column="imp_uid" />
+		<result property="payment_amount" column="payment_amount" />
+		<result property="payment_status" column="payment_status" />
+		<result property="pay_method" column="pay_method" />
+		<result property="payment_time" column="payment_time" />
+		<result property="buyer_name" column="buyer_name" />
+		<result property="buyer_email" column="buyer_email" />
+		<result property="used_point" column="used_point" />
 	</resultMap>
 
 	<!-- memberVO용 ResultMap -->
@@ -127,6 +137,22 @@
 	    </foreach>
 	</delete>
     
+    <update id="updatePayStatusToCancel" parameterType="String">
+	    UPDATE payment SET payment_status = 'cancel_order' WHERE imp_uid = #{imp_uid}
+	</update>
+	
+	<update id="updateOrderStatusToCancel" parameterType="String">
+	    <![CDATA[
+		    UPDATE userorder SET delivery_state = 'cancel_order'
+		    WHERE order_id = (SELECT order_id FROM payment WHERE imp_uid = #{imp_uid})
+	    ]]>
+	</update>
+	
+	<update id="restorePoints" parameterType="java.util.Map">
+	    UPDATE t_shopping_member SET point = point + #{points_to_restore}
+	    WHERE member_id = #{member_id}
+	</update>
+
 	<select id="goodsDetailForOrder" resultType="com.petmillie.goods.vo.GoodsVO" parameterType="int">
     	<![CDATA[
 		    SELECT 
@@ -149,11 +175,16 @@
 	<!-- 주문 목록 조회 -->
 	<select id="selectMyOrderList" resultMap="orderResult" parameterType="java.util.Map">
 		<![CDATA[
-			SELECT *
-			FROM userorder
-			WHERE member_id = #{member_id}
-			AND DATE_FORMAT(order_time, '%Y-%m-%d') BETWEEN #{beginDate} AND #{endDate}
-        	ORDER BY order_time DESC	
+			SELECT 
+			    o.*, 
+			    p.*
+			FROM 
+			    userorder o
+			LEFT JOIN 
+			    payment p ON o.order_id = p.order_id
+			WHERE 
+			    o.member_id = #{member_id}
+		    ORDER BY o.order_num DESC
 		]]>
 	</select>
 

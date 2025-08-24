@@ -46,11 +46,6 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 	
 	@Override
-	public void cancelOrder(String order_id) throws Exception{
-		myPageDAO.updateMyOrderCancel(order_id);
-	}
-	
-	@Override
 	public void updateDeliveryState(String order_id, String delivery_state) throws Exception{
 		myPageDAO.updateDeliveryState(order_id, delivery_state);
 	}
