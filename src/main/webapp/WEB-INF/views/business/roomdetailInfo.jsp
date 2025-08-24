@@ -1,156 +1,150 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"	isELIgnored="false"%> 
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>객실 수정</title>
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<style>
+    /* 추가적인 스타일링 */
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-header {
+        background-color: #0d6efd;
+        color: white;
+        font-weight: bold;
+    }
+</style>
 <script>
-function fn_modify_business_info(attribute){
-	var value;
-	var room = document.frm_mod_room;
-	if(attribute == 'room_name'){
-		value = room.room_name.value;
-	}else if(attribute =='price'){
-		value = room.price.value;
-	}else if(attribute == 'room_type'){
-		value = room.room_type.value;
-	}else if(attribute == 'bed_type'){
-		value = room.bed_type.value;
-	}else if(attribute == 'max_capacity'){
-		value = room.max_capacity.value;
-	}else if(attribute == 'room_size'){
-		value = room.room_size.value;
-	}else if(attribute == 'room_description'){
-		value = room.room_description.value;
-	}else if(attribute == 'amenities'){
-		value = room.amenities.value;
-	}
-	$.ajax({
-		type : "post",
-		async : false,
-		url : "${contextPath}/business/modifyroom.do",
-		data : {
-			attribute : attribute,
-			value : value,
-		},
-		success : function(data, textStatus){
-			if(data.trim() == 'mod_success'){
-				alert("객실 정보를 수정했습니다.");
-			}else if(data.trim()=='failed'){
+// 기존 JavaScript 코드는 그대로 사용합니다.
+function fn_modify_business_info(attribute, element){
+    var value = $(element).closest('.input-group').find('input, select').val();
+    
+    // AJAX 요청
+    $.ajax({
+        type : "post",
+        async : false,
+        url : "${contextPath}/business/modifyroom.do",
+        data : {
+            attribute : attribute,
+            value : value
+        },
+        success : function(data, textStatus){
+            if(data.trim() == 'mod_success'){
+                alert("'" + value + "'(으)로 정보를 수정했습니다.");
+            }else if(data.trim()=='failed'){
                 alert("다시 시도해 주세요.");    
             }
-		},
-		error: function(xhr, status, error){
-		    console.log("XHR:", xhr);              // 전체 응답 객체
-		    console.log("Status:", status);        // 예: "error"
-		    console.log("Error:", error);          // 예: "Internal Server Error"
-		    console.log("Response Text:", xhr.responseText);  // 예: 서버의 에러 메시지
-
-		    alert("에러가 발생했습니다.\n" +
-		          "상태: " + status + "\n" +
-		          "에러: " + error + "\n" +
-		          "응답내용: " + xhr.responseText);
-		}
-	});
+        },
+        error: function(xhr, status, error){
+            console.error("AJAX Error:", {xhr, status, error});
+            alert("에러가 발생했습니다. 개발자 콘솔을 확인해주세요.");
+        }
+    });
 }
 </script>
 </head>
 <body>
-<form name="frm_mod_room">	
-	<div id="detail_table">
-		<table>
-			<tbody>
-				<tr class="dot_line">
-					<td class="fixed_join">객실 이름</td>
-					<td>
-						<input name="room_name" type="text" size="20" value="${roomInfo.room_name}"/>
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('room_name')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">가격</td>
-					<td>
-						<input name="price" type="number" min="10000" max="500000" step="1000" size="20" value="${roomInfo.price}" />
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('price')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">객실 타입</td>
-					<td>
-							<select name="room_type">
-								<option value="스탠다드">스탠다드</option>
-								<option value="디럭스">디럭스</option>
-								<option value="스위트">스위트</option>
-							</select>
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('room_type')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">침대 타입</td>
-					<td>
-							<select name="bed_type">
-								<option value="더블">더블</option>
-								<option value="트윈">트윈</option>
-								<option value="온돌">온돌</option>
-							</select>
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('bed_type')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">최대 인원</td>
-					<td>
-						<input name="max_capacity" type="text" size="20" value="${roomInfo.max_capacity}"  />
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('max_capacity')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">면적</td>
-					<td>
-						<input name="room_size" type="text" size="20" value="${roomInfo.room_size}"  />
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('room_size')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">설명</td>
-					<td>
-						<input name="room_description" type="text" size="20" value="${roomInfo.room_description}"  />
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('room_description')" />
-					</td>
-				</tr>
-					<tr class="dot_line">
-					<td class="fixed_join">편의 시설</td>
-					<td>
-						<input name="amenities" type="text" size="20" value="${roomInfo.amenities}"  />
-					</td>
-					 <td>
-					 	<input type="button" value="수정하기" onClick="fn_modify_business_info('amenities')" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}"><input type="button" value="사업자 페이지 돌아가기"></a>
-			</tbody>
-		</table>
-	</div>
-</form>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header text-center h4">
+                    객실 정보 수정
+                </div>
+                <div class="card-body p-4">
+                    <form name="frm_mod_room" onsubmit="return false;">
+                        
+                        <div class="mb-3">
+                            <label for="room_name" class="form-label">객실 이름</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="room_name" name="room_name" value="${roomInfo.room_name}">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('room_name', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="price" class="form-label">가격 (원)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="price" name="price" value="${roomInfo.price}" min="10000" max="500000" step="1000">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('price', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="room_type" class="form-label">객실 타입</label>
+                            <div class="input-group">
+                                <select class="form-select" id="room_type" name="room_type">
+                                    <option value="스탠다드" ${roomInfo.room_type == '스탠다드' ? 'selected' : ''}>스탠다드</option>
+                                    <option value="디럭스" ${roomInfo.room_type == '디럭스' ? 'selected' : ''}>디럭스</option>
+                                    <option value="스위트" ${roomInfo.room_type == '스위트' ? 'selected' : ''}>스위트</option>
+                                </select>
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('room_type', this)">수정</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="bed_type" class="form-label">침대 타입</label>
+                            <div class="input-group">
+                                <select class="form-select" id="bed_type" name="bed_type">
+                                    <option value="더블" ${roomInfo.bed_type == '더블' ? 'selected' : ''}>더블</option>
+                                    <option value="트윈" ${roomInfo.bed_type == '트윈' ? 'selected' : ''}>트윈</option>
+                                    <option value="온돌" ${roomInfo.bed_type == '온돌' ? 'selected' : ''}>온돌</option>
+                                </select>
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('bed_type', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="max_capacity" class="form-label">최대 인원 (명)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="max_capacity" name="max_capacity" value="${roomInfo.max_capacity}" min="1">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('max_capacity', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="room_size" class="form-label">면적 (m²)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="room_size" name="room_size" value="${roomInfo.room_size}">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('room_size', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="room_description" class="form-label">설명</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="room_description" name="room_description" value="${roomInfo.room_description}">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('room_description', this)">수정</button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="amenities" class="form-label">편의 시설</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="amenities" name="amenities" value="${roomInfo.amenities}">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_business_info('amenities', this)">수정</button>
+                            </div>
+                        </div>
+
+                       <div class="d-grid mt-4">
+    <button type="button" class="btn btn-secondary" onclick="history.back()">
+        펜션 관리페이지로 가기
+    </button>
+</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
