@@ -199,6 +199,7 @@ public class MainController extends BaseController {
         WeatherProductRecommendation rec = weatherService.getRecommendationFromDB(currentWeather);
         mav.addObject("weatherRecommendation", rec);
 
+      
         return mav;
     }
 
