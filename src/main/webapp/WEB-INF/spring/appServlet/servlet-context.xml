@@ -14,6 +14,10 @@
     <!-- Static resource handling -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
+
+
+<mvc:resources mapping="/*.js" location="/" />
+
     <!-- View Resolver 설정 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -40,4 +44,27 @@
         <property name="defaultEncoding" value="utf-8"/>
     </bean>
 
+	<!-- 다국어처리 -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	    <property name="basename" value="messages" />
+	    <property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<!-- 세션에 Locale 저장 -->
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+	    <property name="defaultLocale" value="ko" />
+	</bean>
+	
+	<!-- 언어 변경을 위한 인터셉터 -->
+	<mvc:interceptors>
+	    <mvc:interceptor>
+	        <mvc:mapping path="/**" />
+	        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	            <!-- URL 파라미터 이름 (ex: ?lang=en) -->
+	            <property name="paramName" value="lang" />
+	        </bean>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+	
+	
 </beans>

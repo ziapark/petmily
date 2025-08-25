@@ -8,7 +8,17 @@
 <%
   request.setCharacterEncoding("UTF-8");
 %>
-
+<head>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "14ed38d9-71e5-4fc8-aec3-457b8a7ca88d",
+    });
+  });
+</script>
+</head>
 <c:if test="${not empty sessionScope.message}">
   	<script>alert("${sessionScope.message}");</script>
   	<c:remove var="message" scope="session" />

@@ -104,4 +104,10 @@
 		]]>
 	</select>
 
+<select id="selectMemberIdByOrderId" resultType="String" parameterType="String">
+    <![CDATA[
+        SELECT member_id FROM userorder WHERE order_id = #{order_id} LIMIT 1
+    ]]>
+</select>
+
 </mapper>

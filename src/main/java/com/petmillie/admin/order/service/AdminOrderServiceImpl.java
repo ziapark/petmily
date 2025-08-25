@@ -52,4 +52,8 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
 		return orderMap;
 	}
+	@Override
+	public String getMemberIdByOrderId(String order_id) throws Exception {
+	    return adminOrderDAO.selectMemberIdByOrderId(order_id);
+	}
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.leisure">
+
+    <!-- 통합 검색 결과 MediVO 매핑 -->
+    <resultMap id="leisureResult" type="LeisureVO">
+        <result property="leisure_id" column="leisure_id"/>
+        <result property="fac_nm" column="fac_nm"/>
+        <result property="rn_addr" column="rn_addr"/>
+        <result property="opr_time_info" column="opr_time_info"/>
+        <result property="off_day" column="off_day"/>
+        <result property="rprs_telno" column="rprs_telno"/>
+        <result property="hmpg_url" column="hmpg_url"/>
+        <result property="ctg02" column="ctg02"/>
+        <result property="ctg03" column="ctg03"/>
+        <result property="info" column="info"/>
+        <result property="la_vlue" column="la_vlue"/>
+        <result property="lo_vlue" column="lo_vlue"/>
+    </resultMap>
+
+
+	<!-- 시/도 + 군/구 + 시설명 + ctg02 필터 검색 (반려동물식당카페/반려동물여행) -->
+	<select id="searchLeisure" parameterType="map" resultMap="leisureResult">
+	    SELECT *
+	    FROM leisure
+	    <where>
+	        <if test="sido != null and sido != ''">
+	            rn_addr LIKE CONCAT('%', #{sido}, '%')
+	        </if>
+	        <if test="gungu != null and gungu != ''">
+	            <if test="sido != null and sido != ''">
+	                AND
+	            </if>
+	            rn_addr LIKE CONCAT('%', #{gungu}, '%')
+	        </if>
+	        <if test="keyword != null and keyword != ''">
+	            <if test="sido != null and sido != '' or gungu != null and gungu != ''">
+	                AND
+	            </if>
+	            (fac_nm LIKE CONCAT('%', #{keyword}, '%') OR info LIKE CONCAT('%', #{keyword}, '%'))
+	        </if>
+	        <if test="sido != null or gungu != null or keyword != null">
+	            AND
+	        </if>
+	        ctg02 IN ('반려동물식당카페', '반려동물여행')
+	    </where>
+	    ORDER BY fac_nm ASC
+	</select>
+
+
+
+</mapper>
+
