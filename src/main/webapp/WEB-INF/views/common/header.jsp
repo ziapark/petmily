@@ -2,7 +2,6 @@
 	pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -17,7 +16,7 @@
 		var value = document.frmSearch.searchWord.value;
 		$.ajax({
 			type : "get",
-			async : true, //false인 경우 동기식으로 처리한다.
+			async : true,
 			url : "${contextPath}/goods/keywordSearch.do",
 			data : {
 				keyword : value
@@ -28,11 +27,8 @@
 			},
 			error : function(data, textStatus) {
 				alert("에러가 발생했습니다." + data);
-			},
-			complete : function(data, textStatus) {
-				//alert("작업을완료 했습니다");
 			}
-		}); //end ajax	
+		});
 	}
 
 	function displayResult(jsonInfo) {
@@ -71,11 +67,8 @@
 		}
 	}
 	
-	
 	$(function() {
 	    $('.btn-group .btn').on('click', function(e) {
-	        
-  			//e.preventDefault(); // 링크 이동 방지
 	        $('.btn-group .btn').removeClass('active').attr('aria-current', 'false');
 	        $(this).addClass('active').attr('aria-current', 'page');
 	    });
@@ -84,7 +77,6 @@
 
 <%-- ======================================================== --%>
 <%--       2. 최종 원시그널(OneSignal) 스크립트                --%>
-<%-- (초기화와 사용자 ID 등록 로직이 모두 포함되어 있습니다)      --%>
 <%-- ======================================================== --%>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -94,6 +86,9 @@
     // 원시그널 초기화
     await OneSignal.init({
       appId: "14ed38d9-71e5-4fc8-aec3-457b8a7ca88d", // 당신의 App ID
+      
+      // 콘솔 404 에러 해결을 위한 서비스 워커 경로 설정
+      serviceWorkerPath: "petmillie/OneSignalSDKWorker.js"
     });
 
     // JSTL을 사용해 로그인 상태에 따라 사용자 ID 등록
@@ -129,11 +124,9 @@
 		<div class="btn-group lang_btn" role="group" aria-label="Language toggle button">
 		    <c:set var="baseQuery" value="${queryString}" />
 		    
-		    <!-- 기존 lang 파라미터 제거 -->
 		    <c:if test="${not empty baseQuery}">
 		        <c:set var="baseQuery" value="${fn:replace(baseQuery, 'lang=ko', '')}" />
 		        <c:set var="baseQuery" value="${fn:replace(baseQuery, 'lang=en', '')}" />
-		        <!-- 앞/뒤 & 처리 -->
 		        <c:set var="baseQuery" value="${fn:replace(baseQuery, '&&', '&')}" />
 		        <c:set var="baseQuery" value="${fn:trim(baseQuery)}" />
 		        <c:if test="${baseQuery ne ''}">
@@ -149,12 +142,6 @@
 		       class="btn btn-primary ${lang == 'en' ? 'active' : ''}"
 		       aria-current="${lang == 'en' ? 'page' : 'false'}">English</a>
 		</div>
-
-<!-- 		<div class="lang_btn btn-group" style="position:absolute;" role="group" aria-label="Language toggle button">
-			<a href="?lang=ko" class="btn btn-primary" aria-current="page">한국어</a>
-			<a href="?lang=en" class="btn btn-primary">English</a>
-		</div> -->
-
 		
 		<div id="head_link">
 			<ul>
@@ -246,7 +233,6 @@
 			<div id="suggestList"></div>
 		</div>
 	</div>
-	<!-- 상단 메뉴 -->
 	<div class="nav-area" style="position: relative; clear: both;">
 		<div class="nav_inner">
 			<ul class="gnb">
