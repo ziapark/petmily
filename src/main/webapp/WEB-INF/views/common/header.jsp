@@ -331,7 +331,7 @@
 					<li><a href="${contextPath}/reservation/pensionList.do">
 						<spring:message code="submenu.pension"/>
 					</a></li>
-					<li><a href="${contextPath}/reservation/pensionList.do">
+					<li><a href="${contextPath}/leisure/leisure.do">
 						<spring:message code="submenu.culture"/>
 					</a></li>
 				</ul>
