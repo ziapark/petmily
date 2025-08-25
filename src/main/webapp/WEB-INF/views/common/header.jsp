@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <%-- ======================================================== --%>
@@ -67,6 +70,16 @@
 			element.style.display = 'none';
 		}
 	}
+	
+	
+	$(function() {
+	    $('.btn-group .btn').on('click', function(e) {
+	        
+  			//e.preventDefault(); // 링크 이동 방지
+	        $('.btn-group .btn').removeClass('active').attr('aria-current', 'false');
+	        $(this).addClass('active').attr('aria-current', 'page');
+	    });
+	});
 </script>
 
 <%-- ======================================================== --%>
@@ -110,16 +123,56 @@
 				src="${contextPath}/resources/image/logo.png">
 			</a>
 		</div>
+		
+		<c:set var="queryString" value="${pageContext.request.queryString}" />
+
+		<div class="btn-group lang_btn" role="group" aria-label="Language toggle button">
+		    <c:set var="baseQuery" value="${queryString}" />
+		    
+		    <!-- 기존 lang 파라미터 제거 -->
+		    <c:if test="${not empty baseQuery}">
+		        <c:set var="baseQuery" value="${fn:replace(baseQuery, 'lang=ko', '')}" />
+		        <c:set var="baseQuery" value="${fn:replace(baseQuery, 'lang=en', '')}" />
+		        <!-- 앞/뒤 & 처리 -->
+		        <c:set var="baseQuery" value="${fn:replace(baseQuery, '&&', '&')}" />
+		        <c:set var="baseQuery" value="${fn:trim(baseQuery)}" />
+		        <c:if test="${baseQuery ne ''}">
+		            <c:set var="baseQuery" value="${baseQuery}&" />
+		        </c:if>
+		    </c:if>
+		
+		    <a href="?${baseQuery}lang=ko"
+		       class="btn btn-primary ${lang == 'ko' ? 'active' : ''}"
+		       aria-current="${lang == 'ko' ? 'page' : 'false'}">한국어</a>
+		
+		    <a href="?${baseQuery}lang=en"
+		       class="btn btn-primary ${lang == 'en' ? 'active' : ''}"
+		       aria-current="${lang == 'en' ? 'page' : 'false'}">English</a>
+		</div>
+
+<!-- 		<div class="lang_btn btn-group" style="position:absolute;" role="group" aria-label="Language toggle button">
+			<a href="?lang=ko" class="btn btn-primary" aria-current="page">한국어</a>
+			<a href="?lang=en" class="btn btn-primary">English</a>
+		</div> -->
+
+		
 		<div id="head_link">
 			<ul>
 				<c:choose>
 					<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">					
 						<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do"
-							class="btn-sm btn btn-outline-dark">관리자</a></li>
-						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.admin"/>
+						</a></li>
+						<li><a href="#" class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.cs"/>
+						</a></li>
 						<li><a href="${contextPath}/member/logout.do"
-							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.logout"/>
+						</a></li>
 					</c:when>
+					
 					<c:when test="${isLogOn==true and not empty memberInfo}">					
 					    <li>
 					        <a href="#" class="btn-sm btn btn-outline-warning">
@@ -127,29 +180,54 @@
 					        </a>
 					    </li>
 						<li><a href="${contextPath}/mypage/myDetailInfo.do"
-							class="btn-sm btn btn-outline-dark">마이페이지</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.mypage"/>
+						</a></li>
 						<li><a href="${contextPath}/cart/myCartList.do"
-							class="btn-sm btn btn-outline-dark">장바구니</a></li>
-						<li><a href="${contextPath}/mypage/listMyOrderHistory.do" class="btn-sm btn btn-outline-dark">주문배송</a></li>
-						<li><a href="#" class="btn-sm btn btn-outline-dark">고객센터</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.cart"/>
+						</a></li>
+						<li><a href="${contextPath}/mypage/listMyOrderHistory.do"
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.order"/>
+						</a></li>
+						<li><a href="#" class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.cs"/>
+						</a></li>
 						<li><a href="${contextPath}/member/logout.do"
-							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.logout"/>
+						</a></li>
 					</c:when>
 					
 					<c:when test="${isLogOn==true and not empty businessInfo}">
-					<li><a href="${contextPath}/business/businessDetailInfo.do" class="btn-sm btn btn-outline-dark">사업자 마이페이지</a></li>
+						<li><a href="${contextPath}/business/businessDetailInfo.do"
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.mypage"/>
+						</a></li>
 						<li><a href="${contextPath}/member/logout.do"
-							class="btn-sm btn btn-outline-dark">로그아웃</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.logout"/>
+						</a></li>
 					</c:when>
+					
 					<c:otherwise>
 						<li><a href="${contextPath}/member/loginForm.do"
-							class="btn-sm btn btn-outline-dark">로그인</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.login"/>
+						</a></li>
 						<li><a href="${contextPath}/member/memberForm.do"
-							class="btn-sm btn btn-outline-dark">회원가입</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.signup"/>
+						</a></li>
 						<li><a href="${contextPath}/business/loginForm.do"
-							class="btn-sm btn btn-outline-dark">사업자 로그인</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.businessLogin"/>
+						</a></li>
 						<li><a href="${contextPath}/business/businessForm.do"
-							class="btn-sm btn btn-outline-dark">사업자 회원가입</a></li>
+							class="btn-sm btn btn-outline-dark">
+							<spring:message code="menu.businessSignup"/>
+						</a></li>
 					</c:otherwise>
 				</c:choose>
 			</ul>
@@ -159,72 +237,132 @@
 		    <form name="frmSearch" action="${contextPath}/goods/searchGoods.do" method="get">
 		    	<div class="search_box">
 		    		<input name="searchWord" class="form-control search_input"
-		               type="text" placeholder="검색어를 입력하세요">
+		               type="text" placeholder="<spring:message code='search.placeholder'/>">
 		        	<input type="submit" name="search" class="btn-primary btn-sm search_btn" value=" "/>
 		    	</div>
-		        
 		    </form>
 		</div>
 		<div id="suggest">
 			<div id="suggestList"></div>
 		</div>
 	</div>
+	<!-- 상단 메뉴 -->
 	<div class="nav-area" style="position: relative; clear: both;">
 		<div class="nav_inner">
 			<ul class="gnb">
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">식품</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">장난감</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">목욕/위생</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">산책용품</a></li>
-				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">생활용품</a></li>
-				<li><a href="${contextPath}/reservation/pensionList.do">여가생활</a></li>
-				<li><a href="${contextPath}/board/boardList.do?board_type=notice">커뮤니티</a></li>
-				
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">
+					<spring:message code="menu.food"/>
+				</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">
+					<spring:message code="menu.toy"/>
+				</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">
+					<spring:message code="menu.clean"/>
+				</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">
+					<spring:message code="menu.walk"/>
+				</a></li>
+				<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">
+					<spring:message code="menu.living"/>
+				</a></li>
+				<li><a href="${contextPath}/reservation/pensionList.do">
+					<spring:message code="menu.leisure"/>
+				</a></li>
+				<li><a href="${contextPath}/board/boardList.do?board_type=notice">
+					<spring:message code="menu.community"/>
+				</a></li>
 			</ul>
 
 			<div class="submenu-wrap">
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">사료</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=간식">간식</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=영양제">영양제</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=사료">
+						<spring:message code="submenu.feed"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=간식">
+						<spring:message code="submenu.snack"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=영양제">
+						<spring:message code="submenu.supplement"/>
+					</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">봉제장난감</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=공/원반">공/원반</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">터그놀이</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=낚시대">낚시대</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=먹이퍼즐">먹이퍼즐</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=봉제장난감">
+						<spring:message code="submenu.dolltoy"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=공/원반">
+						<spring:message code="submenu.discball"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=터그놀이">
+						<spring:message code="submenu.tugToystugToys"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=낚시대">
+						<spring:message code="submenu.fishingRod"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=먹이퍼즐">
+						<spring:message code="submenu.puzzleFeeder"/>
+					</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">샴푸</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칫솔치약">칫솔/치약</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=수건">수건</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=미용기">미용기</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=애견샴푸">
+						<spring:message code="submenu.shampoo"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=칫솔치약">
+						<spring:message code="submenu.tooth"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=수건">
+						<spring:message code="submenu.towel"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=미용기">
+						<spring:message code="submenu.beauty"/>
+					</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">목줄/하네스</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">유모차</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">배변봉투</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=목줄/하네스">
+						<spring:message code="submenu.leash"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=유모차">
+						<spring:message code="submenu.stroller"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=배변봉투">
+						<spring:message code="submenu.bag"/>
+					</a></li>
 				</ul>
 				<ul class="submenu">
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">식기</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=스크래처">스크래처</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=의류">의류</a></li>
-					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=신발">신발</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=식기">
+						<spring:message code="submenu.bowl"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=스크래처">
+						<spring:message code="submenu.scratcher"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=의류">
+						<spring:message code="submenu.cloth"/>
+					</a></li>
+					<li><a href="${contextPath}/goods/goodsListByCategory.do?goods_category=신발">
+						<spring:message code="submenu.shoes"/>
+					</a></li>
 				</ul>
-				
 				<ul class="submenu">
-					<li><a href="${contextPath}/reservation/pensionList.do">애견펜션</a></li>
-					<li><a href="${contextPath}/reservation/pensionList.do">문화시설</a></li>
+					<li><a href="${contextPath}/reservation/pensionList.do">
+						<spring:message code="submenu.pension"/>
+					</a></li>
+					<li><a href="${contextPath}/reservation/pensionList.do">
+						<spring:message code="submenu.culture"/>
+					</a></li>
 				</ul>
-				
 				<ul class="submenu">
-					<li><a href="${contextPath}/board/boardList.do?board_type=notice">공지사항</a></li>
-					<li><a href="${contextPath}/board/boardList.do?board_type=qna">질문게시판</a></li>
-					<li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">커뮤니티:강아지</a></li>
-					<li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">커뮤니티:고양이</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=notice">
+						<spring:message code="submenu.notice"/>
+					</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=qna">
+						<spring:message code="submenu.qna"/>
+					</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">
+						<spring:message code="submenu.comuDog"/>
+					</a></li>
+					<li><a href="${contextPath}/board/boardList.do?board_type=comu_cat">
+						<spring:message code="submenu.comuCat"/>
+					</a></li>
 				</ul>
-				
 			</div>
 		</div>
 	</div>

@@ -28,6 +28,9 @@ header #head_link li a {font-size:13px;}
 
 article { width:100%; margin:0 auto; }
 
+.lang_btn a {font-family: "Noto Sans KR", sans-serif; font-size:0.8em;}
+
+
 /*****nav*************************************/
 
 .nav_inner {width:100%; max-width:1200px; margin:0 auto; position:relative; }
@@ -86,12 +89,15 @@ article { width:100%; margin:0 auto; }
 .submenu {margin: 0px;padding-left:0;}
 .submenu li {width:120px;}
 .submenu li a {
-  display: inline-block;
+  display: block;
   width:100%;
   padding: 10px;
   color:#000;;
   text-decoration: none;
   padding:10px 0px 10px 20px;
+  white-space: normal;     /* 줄바꿈 */
+  word-wrap: break-word;   /* 단어 단위 줄바꿈 */
+  overflow: visible;
 }
 
 .submenu li a:hover {color:#0080ff;}
@@ -326,3 +332,5 @@ footer ul {list-style: none;  margin: 0px 0px 0px 7px;}
 footer ul li {float:left; margin-right:5px;}
 footer ul li a {color:#fff; font-weight:400; font-size:0.8rem;}
 footer ul li a:hover {color:#c9ffe3;}
+
+
