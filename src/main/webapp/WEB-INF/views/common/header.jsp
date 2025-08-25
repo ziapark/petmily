@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
+<%-- ======================================================== --%>
+<%--                1. 기존 JavaScript 코드                    --%>
+<%-- ======================================================== --%>
 <script type="text/javascript">
 	var loopSearch = true;
 	function keywordSearch() {
@@ -25,7 +28,6 @@
 			},
 			complete : function(data, textStatus) {
 				//alert("작업을완료 했습니다");
-
 			}
 		}); //end ajax	
 	}
@@ -66,6 +68,41 @@
 		}
 	}
 </script>
+
+<%-- ======================================================== --%>
+<%--       2. 최종 원시그널(OneSignal) 스크립트                --%>
+<%-- (초기화와 사용자 ID 등록 로직이 모두 포함되어 있습니다)      --%>
+<%-- ======================================================== --%>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    
+    // 원시그널 초기화
+    await OneSignal.init({
+      appId: "14ed38d9-71e5-4fc8-aec3-457b8a7ca88d", // 당신의 App ID
+    });
+
+    // JSTL을 사용해 로그인 상태에 따라 사용자 ID 등록
+    <c:choose>
+        <%-- 일반 회원으로 로그인한 경우 --%>
+        <c:when test="${isLogOn == true && not empty memberInfo.member_id}">
+            var userId = "${memberInfo.member_id}";
+            await OneSignal.login(userId);
+            console.log("OneSignal External ID (Member) has been set to: " + userId);
+        </c:when>
+        
+        <%-- 사업자 회원으로 로그인한 경우 --%>
+        <c:when test="${isLogOn == true && not empty businessInfo.business_id}">
+            var userId = "${businessInfo.business_id}"; // business_id는 실제 변수명으로 변경
+            await OneSignal.login(userId);
+            console.log("OneSignal External ID (Business) has been set to: " + userId);
+        </c:when>
+    </c:choose>
+    
+  });
+</script>
+
 <body>
 	<div class="header_wrap">
 		<div id="logo">

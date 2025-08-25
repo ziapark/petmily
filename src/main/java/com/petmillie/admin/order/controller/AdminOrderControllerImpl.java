@@ -1,5 +1,9 @@
 package com.petmillie.admin.order.controller;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,16 +90,60 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	@Override
 	@RequestMapping(value="/modifyDeliveryState.do" ,method={RequestMethod.POST})
 	public ResponseEntity modifyDeliveryState(@RequestParam Map<String, String> deliveryMap, 
-			                        HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		adminOrderService.modifyDeliveryState(deliveryMap);
-		
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		message  = "mod_success";
-		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
-		
+	                                          HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    
+	    // 1. 기존 배송 상태 DB 업데이트 (원래 있던 코드)
+	    adminOrderService.modifyDeliveryState(deliveryMap);
+	    
+	    // ▼▼▼▼▼ 여기에 원시그널 알림 코드를 추가합니다 ▼▼▼▼▼
+	    try {
+	        String order_id = deliveryMap.get("order_id");
+	        String delivery_state = deliveryMap.get("delivery_state");
+	        String notificationMessage = "";
+
+	        // 2. (1단계에서 만든) 주문 ID로 회원 ID 조회
+	        String member_id = adminOrderService.getMemberIdByOrderId(order_id);
+
+	        // 3. 배송 상태에 따라 보낼 메시지 결정
+	        if ("delivering".equals(delivery_state)) {
+	            notificationMessage = "주문하신 상품의 배송이 시작되었습니다. 🚚";
+	        } else if ("finished_delivering".equals(delivery_state)) {
+	            notificationMessage = "주문하신 상품이 배송 완료되었습니다. 🎉";
+	        }
+	        // 필요하다면 다른 상태(주문취소, 반품완료 등)에 대한 알림도 추가 가능
+
+	        // 4. 알림을 보낼 조건(회원ID 존재, 보낼 메시지 존재)이 맞으면 OneSignal API 호출
+	        if (member_id != null && !member_id.isEmpty() && !notificationMessage.isEmpty()) {
+	            String jsonBody = "{"
+	                          + "\"app_id\": \"14ed38d9-71e5-4fc8-aec3-457b8a7ca88d\","  // 본인 APP ID로 변경
+	                          + "\"headings\": {\"en\": \"📦 주문 상태 변경 알림\"},"
+	                          + "\"contents\": {\"en\": \"" + notificationMessage + "\"},"
+	                          + "\"include_external_user_ids\": [\"" + member_id + "\"]" // 핵심: 특정 회원에게만 발송
+	                          + "}";
+
+	            URL url = new URL("https://onesignal.com/api/v1/notifications");
+	            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+	            http.setRequestMethod("POST");
+	            http.setDoOutput(true);
+	            http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+	            http.setRequestProperty("Authorization", "os_v2_app_ctwtrwlr4vh4rlwdiv5yu7firvsokncxdqtuw7e73rpidqxyiae5ozcrjzwdtb4nrf64htnknd32hc254xvgmtdbkadocsabc5naoxa"); // 본인 REST API KEY로 변경
+
+	            byte[] out = jsonBody.getBytes(StandardCharsets.UTF_8);
+	            OutputStream stream = http.getOutputStream();
+	            stream.write(out);
+
+	            System.out.println("OneSignal Response: " + http.getResponseCode() + " " + http.getResponseMessage());
+	            http.disconnect();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // 알림 발송에 실패하더라도 원래 기능은 계속되어야 하므로 에러만 기록
+	    }
+	    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+	    // 5. 기존 응답 반환 (원래 있던 코드)
+	    String message = "mod_success";
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 	}
 	
 	@Override

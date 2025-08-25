@@ -13,4 +13,6 @@ public interface AdminOrderDAO {
 	public void  updateDeliveryState(Map deliveryMap) throws DataAccessException;
 	public ArrayList<OrderVO> selectOrderDetail(int order_id) throws DataAccessException;
 	public MemberVO selectOrderer(String member_id) throws DataAccessException;
+	public String selectMemberIdByOrderId(String order_id) throws Exception;
+
 }
