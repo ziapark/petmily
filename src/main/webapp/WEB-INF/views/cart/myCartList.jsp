@@ -73,7 +73,7 @@
 
 		// [핵심 수정] 개별 상품 주문 함수
 		// 어떤 버튼을 눌렀는지 알 수 있도록 'index'를 파라미터로 추가합니다.
-		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName, index){
+		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName, goods_point, index){
 			var _order_goods_qty;
 			var cart_goods_qty_inputs = document.getElementsByName("cart_goods_qty");
 
@@ -99,25 +99,29 @@
     		var i_goods_sales_price=document.createElement("input");
     		var i_fileName=document.createElement("input");
     		var i_goods_qty=document.createElement("input"); // 변수명 통일 (order_goods_qty -> goods_qty)
-    
+    		var i_goods_point = document.createElement("input");
+    		
     		i_goods_num.name="goods_num";
     		i_goods_name.name="goods_name";
     		i_goods_sales_price.name="goods_sales_price";
     		i_fileName.name="fileName";
     		i_goods_qty.name="goods_qty"; // 컨트롤러에서 받을 이름과 통일
-    
+			i_goods_point.name="point";
+
     		i_goods_num.value=goods_num;
     		i_goods_qty.value=_order_goods_qty;
     		i_goods_name.value=goods_name;
     		i_goods_sales_price.value=goods_sales_price;
     		i_fileName.value=fileName;
-    
+    		i_goods_point.value=goods_point;
+    		
     		formObj.appendChild(i_goods_num);
     		formObj.appendChild(i_goods_name);
     		formObj.appendChild(i_goods_sales_price);
     		formObj.appendChild(i_fileName);
     		formObj.appendChild(i_goods_qty);
-
+    		formObj.appendChild(i_goods_point);
+    		
     		document.body.appendChild(formObj); 
     		formObj.method="post";
     		formObj.action="${contextPath}/order/orderEachGoods.do";
@@ -218,7 +222,7 @@
 								</td>
 								<td>
 									<%-- [핵심 수정] 개별 주문 함수에 현재 아이템의 순서(loop.index)를 함께 넘겨줍니다. --%>
-								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}', ${loop.index});" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">주문하기</a>
+								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}', '${item.goods_point}', ${loop.index});" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">주문하기</a>
 									<a href="javascript:delete_cart_goods('${item.cart_id}');" class="btn btn-danger"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">삭제하기</a>
 								</td>
 							</tr>

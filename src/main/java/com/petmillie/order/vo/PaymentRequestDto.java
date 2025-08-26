@@ -19,6 +19,7 @@ public class PaymentRequestDto {
 	private String delivery_message;
 	private String paymentId;
 	private int used_point;
+	private int reward_point;
 	
 	// [주문 상품 목록]
 	private List<OrderItemDto> orderItems;
@@ -142,6 +143,14 @@ public class PaymentRequestDto {
 
 	public void setUsed_point(int used_point) {
 		this.used_point = used_point;
+	}
+
+	public int getReward_point() {
+		return reward_point;
+	}
+
+	public void setReward_point(int reward_point) {
+		this.reward_point = reward_point;
 	} 
 	
 }

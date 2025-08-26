@@ -104,7 +104,7 @@
 		}
 	
 		//바로 구매 함수
-		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName){
+		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName, goods_point){
 	    	var isLogOn = document.getElementById("isLogOn").value;
 	    	if(isLogOn == "false" || isLogOn == '') {
 	        	alert("로그인 후 주문이 가능합니다!");
@@ -124,24 +124,29 @@
 	    	var i_goods_sales_price = document.createElement("input");
 	    	var i_fileName = document.createElement("input");
 	    	var i_goods_qty = document.createElement("input");
-
+	    	var i_goods_point = document.createElement("input");
+	    	
 	    	i_goods_num.name = "goods_num";
 	    	i_goods_name.name = "goods_name";
 	    	i_goods_sales_price.name = "goods_sales_price";
 	    	i_fileName.name = "fileName";
 	    	i_goods_qty.name = "goods_qty"; // 컨트롤러에서 받을 이름과 통일
-			
+	    	i_goods_point.name = "point";
+	    	
 	    	i_goods_num.value = goods_num;
 	    	i_goods_name.value = goods_name;
 	    	i_goods_sales_price.value = goods_sales_price;
 	    	i_fileName.value = fileName;
 	    	i_goods_qty.value = goods_qty; // 가져온 수량 값을 설정
-
+	    	i_goods_point.value = goods_point;
+	    	
 	    	formObj.appendChild(i_goods_num);
 	    	formObj.appendChild(i_goods_name);
 	    	formObj.appendChild(i_goods_sales_price);
 	    	formObj.appendChild(i_fileName);
 	    	formObj.appendChild(i_goods_qty);
+	    	formObj.appendChild(i_goods_point);
+	    	
 	    	document.body.appendChild(formObj);
 	    	formObj.method = "post";
 	    	formObj.action = contextPath + "/order/orderEachGoods.do";
@@ -264,7 +269,7 @@
 
         <ul class="detail_buttons">
 			<%-- [수정] 구매하기 버튼의 파라미터에서 수량 부분을 제거합니다. (스크립트에서 직접 가져오므로) --%>
-            <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${goodsImageList[0].fileName}');">구매하기</a></li>
+            <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${goodsImageList[0].fileName}', '${goodsVO.goods_point}');">구매하기</a></li>
             <li><a class="cart btn btn-primary" href="javascript:add_cart('${goodsVO.goods_num}');">장바구니</a></li>
             <li>
 	            <c:set var="liked" value="${likedGoodsSet.contains(goodsVO.goods_num)}" />

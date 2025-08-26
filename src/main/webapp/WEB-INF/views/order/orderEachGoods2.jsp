@@ -39,7 +39,9 @@
 	          		<td>예상적립금</td>
         		</tr>
         		<c:forEach var="item" items="${myOrderList}" varStatus="loop">
-          			<tr class="order-item" data-goods-num="${item.goods_num}" data-goods-qty="${item.goods_qty}" data-file-name="${item.fileName}">
+        			<c:set var="rewardPointPerItem" value="${item.goods_qty * item.goods_sales_price * item.point * 0.01}" />
+          			
+          			<tr class="order-item" data-goods-num="${item.goods_num}" data-goods-qty="${item.goods_qty}" data-file-name="${item.fileName}" data-reward-point="<fmt:formatNumber value='${rewardPointPerItem}' maxFractionDigits='0' groupingUsed='false' />">
             			<td>${loop.count}</td>
             			<td class="goods_image">
 	              			<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">
@@ -356,7 +358,8 @@
 		        orderItems.push({
 		            goods_num: itemElement.dataset.goodsNum,
 		            goods_qty: itemElement.dataset.goodsQty,
-		            fileName: itemElement.dataset.fileName
+		            fileName: itemElement.dataset.fileName,
+		            reward_point: parseInt(itemElement.dataset.rewardPoint, 10)
 		        });
 		    });
 
@@ -449,14 +452,13 @@
 		            imp_uid: paymentKey,
 		            paymentStatus: response.status
 		        };
-		        
+		        console.log("서버로 보내는 최종 데이터:", JSON.stringify(serverPayload, null, 2));
+
 		        const res = await fetch("/petmillie/order/payToOrderGoods.do", {
 		            method: "POST",
 		            headers: { "Content-Type": "application/json" },
 		            body: JSON.stringify(serverPayload)
 		        });
-
-		        console.log("✅ 6단계: 서버 응답 받음. 상태:", res.status);
 
 		        if (!res.ok) {
 		            alert(`서버 통신 오류가 발생했습니다. (상태: ${res.status})`);

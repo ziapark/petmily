@@ -14,6 +14,8 @@ public class CartVO {
     private int goods_sales_price;
     private String fileName;
     
+    private int goods_point;
+    
 	public int getCart_id() {
 		return cart_id;
 	}
@@ -62,4 +64,12 @@ public class CartVO {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+	public int getGoods_point() {
+		return goods_point;
+	}
+	public void setGoods_point(int goods_point) {
+		this.goods_point = goods_point;
+	}
+
+	
 }

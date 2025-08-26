@@ -4,6 +4,7 @@ public class OrderItemDto {
 	private int goods_num;
 	private int goods_qty;
 	private String fileName;
+	private int reward_point;
 	
 	public int getGoods_num() {
 		return goods_num;
@@ -22,6 +23,12 @@ public class OrderItemDto {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	public int getReward_point() {
+		return reward_point;
+	}
+	public void setReward_point(int reward_point) {
+		this.reward_point = reward_point;
 	}
 	
 }
