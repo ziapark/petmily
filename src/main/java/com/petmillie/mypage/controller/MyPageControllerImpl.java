@@ -318,6 +318,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    mav.addObject("title", "펫밀리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 	    GoodsReviewVO review = myPageService.getReviewDetailByReviewId(review_id);
+	    System.out.println("리뷰리뷰리뷰리뷰" + review);
 	    mav.addObject("review", review);
 	    return mav;
 	}

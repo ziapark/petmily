@@ -277,7 +277,7 @@
 			   r.created_at, r.updated_at, r.del_yn,
 			   o.goods_name
 		FROM goods_review r
-		JOIN userorder o ON r.order_num = o.order_num
+		JOIN userorder o ON r.order_num = o.order_id
 		WHERE r.review_id = #{review_id}
 		]]>
 	</select>
