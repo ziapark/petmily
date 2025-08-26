@@ -1,6 +1,4 @@
 package com.petmillie.order.controller;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.order.portone.PortoneService;
 import com.petmillie.order.service.OrderService;
@@ -44,6 +43,8 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	private OrderVO orderVO;
 	@Autowired
 	private PortoneService portoneService;
+	@Autowired
+	private MemberService memberService;
 	
 	@RequestMapping(value="/orderEachGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView orderEachGoods(@ModelAttribute("orderVO") OrderVO _orderVO,
@@ -178,8 +179,8 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    payVO.setPayment_status(payDto.getPaymentStatus());
 	    payVO.setBuyer_name(memberInfo.getMember_name());
 	    payVO.setBuyer_email(memberInfo.getEmail1() + "@" + memberInfo.getEmail2());
-	    payVO.setPay_method(payDto.getPay_method());
 	    payVO.setUsed_point(payDto.getUsed_point());
+	    payVO.setPaymentId(payDto.getPaymentId());
 	    
 	    orderService.addNewpay(payVO);
 
@@ -190,6 +191,9 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    
 	    session.setAttribute("myOrderList", orderedGoodsList); // DB에서 조회한 상품 정보 리스트
 	    session.setAttribute("myPayInfo", payVO);             // 방금 저장한 결제 정보
+	    
+	    MemberVO memberVO = memberService.login(memberInfo.getMember_id(), memberInfo.getMember_pw());
+	    session.setAttribute("memberInfo", memberVO);
 	    
 	    return new ApiResponse(true, "주문 및 결제 완료되었습니다!");
 	}
@@ -236,15 +240,21 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	@ResponseBody
 	public ApiResponse cancelPayment(@RequestBody Map<String, Object> cancelData, HttpServletRequest request) {
 	    try {
-	        String imp_uid = (String) cancelData.get("imp_uid");
-	        int used_points = Integer.parseInt(String.valueOf(cancelData.get("used_points")));
+	        String payment_id = (String) cancelData.get("payment_id");
+
+	        String amountStr = String.valueOf(cancelData.get("amount"));
+	        int amount = (amountStr == null || amountStr.isEmpty() || "null".equals(amountStr)) ? 0 : Integer.parseInt(amountStr);
+
+	        // JSP에서 used_points 값이 비어있거나 null일 경우를 대비해 기본값 0을 설정합니다.
+	        String usedPointsStr = String.valueOf(cancelData.get("used_points"));
+	        int used_points = (usedPointsStr == null || usedPointsStr.isEmpty() || "null".equals(usedPointsStr)) ? 0 : Integer.parseInt(usedPointsStr);
 	        
 	        HttpSession session = request.getSession();
 	        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 	        
-	        portoneService.cancelPayment(imp_uid);
+	        portoneService.cancelPayment(payment_id, amount); 
 
-	        orderService.updateOrderStatusToCancel(imp_uid);
+	        orderService.updateOrderStatusToCancel(payment_id);
 	        
 	        if (used_points > 0) {
 	            Map<String, Object> params = new HashMap<>();

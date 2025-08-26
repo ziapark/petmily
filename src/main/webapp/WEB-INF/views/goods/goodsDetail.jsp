@@ -173,6 +173,40 @@
 	    	formObj.action = contextPath + "/order/orderEachGoods.do";
 	    	formObj.submit();
 		}
+		
+		//관심상품 추가 
+		function toggleLikeGoods(btn) {
+	    	var member_id = "${sessionScope.memberInfo.member_id}"; 
+	    	if (!member_id) {
+	        	alert("로그인 후 이용 가능합니다.");
+	        	return;
+	    	}
+	   	 	var goods_num = $(btn).data("goods-num");  // data-goods-num에서 값 가져오기
+	    	var isLiked = $(btn).hasClass("like_on");  // 클릭한 버튼 기준으로 상태 확인
+	
+	    	$.ajax({
+	        	url: "${pageContext.request.contextPath}/mypage/toggleLikeGoods.do",
+	        	type: "POST",
+	        	dataType: "json",
+	        	data: { member_id: member_id, goods_num: goods_num },
+	        	success: function(response) {
+	            	if(response.success) {
+	                	if(response.status === "added") {
+	                		alert("나의 관심상품에 추가되었습니다.");
+	                    	$(btn).removeClass("like_off").addClass("like_on");
+	                	} else if(response.status === "deleted") {
+	                		alert("나의 관심상품에서 해제되었습니다.");
+	                    	$(btn).removeClass("like_on").addClass("like_off");
+	                	}
+	            	} else {
+	                	alert("처리에 실패했습니다.");
+	            	}
+	        	},
+	        	error: function() {
+	            	alert("좋아요 처리 중 오류가 발생했습니다.");
+	        	}
+	    	});
+		}
 	</script>
 </head>
 <body>
@@ -228,10 +262,14 @@
                 </tr>
             </tbody>
         </table>
-        <ul>
+
+        <ul class="detail_buttons">
             <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${image.fileName}');">구매하기</a></li>
             <li><a class="cart btn btn-primary" href="javascript:add_cart('${goodsVO.goods_num}');">장바구니</a></li>
-            <li><a class="wish btn  btn-pink" href="#">관심상품</a></li>
+            <li>
+	            <c:set var="liked" value="${likedGoodsSet.contains(goodsVO.goods_num)}" />
+				<input type="button" class="btn btn-danger ${liked ? 'like_on' : 'like_off'}" data-goods-num="${goodsVO.goods_num}" onclick="toggleLikeGoods(this)" value="관심상품" />
+            </li>
         </ul>
     </div>
 

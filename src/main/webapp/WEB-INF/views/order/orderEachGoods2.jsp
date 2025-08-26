@@ -433,6 +433,7 @@
 
 		        // --- 5단계: 서버에 결제 결과 전송 ---
 		        const serverPayload = {
+		        	paymentId: paymentId, 
 		            price: price,
 		            used_point:appliedPoints,
 		            receiver_name: receiver_name,
@@ -446,8 +447,7 @@
 		            delivery_message: f['delivery_message']?.value,
 		            orderItems: orderItems,
 		            imp_uid: paymentKey,
-		            paymentStatus: response.status,
-		            pay_method: response.pg_provider
+		            paymentStatus: response.status
 		        };
 		        
 		        const res = await fetch("/petmillie/order/payToOrderGoods.do", {

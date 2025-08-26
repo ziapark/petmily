@@ -26,7 +26,7 @@
 	    async function cancelOrder(button) {
 	        if (!confirm('정말로 이 주문을 취소하시겠습니까?')) { return; }
 
-	        const impUid = button.dataset.impUid;
+	        const paymentId = button.dataset.paymentId;
 	        const orderId = button.dataset.orderId;
 	        const amount = button.dataset.amount;
 	        const usedPoints = button.dataset.usedPoints;
@@ -36,7 +36,7 @@
 	                method: "POST",
 	                headers: { "Content-Type": "application/json" },
 	                body: JSON.stringify({
-	                    imp_uid: impUid,
+	                	payment_id: paymentId,
 	                    order_id: orderId,
 	                    amount: amount,
 	                    used_points: parseInt(usedPoints, 10)
@@ -311,6 +311,7 @@
 												        onclick="cancelOrder(this)"
 												        data-order-id="${item.order_id}"
 												        data-imp-uid="${item.imp_uid}"
+												        data-payment-id="${item.paymentId}"
 												        data-amount="${item.payment_amount}"
 												        data-used-points="${item.used_point}">
 												    주문취소
