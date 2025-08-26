@@ -126,7 +126,7 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	            http.setRequestMethod("POST");
 	            http.setDoOutput(true);
 	            http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-	            http.setRequestProperty("Authorization", "os_v2_app_ctwtrwlr4vh4rlwdiv5yu7firvsokncxdqtuw7e73rpidqxyiae5ozcrjzwdtb4nrf64htnknd32hc254xvgmtdbkadocsabc5naoxa"); // 본인 REST API KEY로 변경
+	            http.setRequestProperty("Authorization", "Basic os_v2_app_ctwtrwlr4vh4rlwdiv5yu7firvg7r3gnj7du5ueju7vbgaxiuk4jbewdwvcpsgookttodpoj6enjurjzijhl6mdrn76hsflz5dia32y"); // 본인 REST API KEY로 변경
 
 	            byte[] out = jsonBody.getBytes(StandardCharsets.UTF_8);
 	            OutputStream stream = http.getOutputStream();

@@ -16,7 +16,7 @@
 
 
 
-<mvc:resources mapping="/*.js" location="/" />
+
 
     <!-- View Resolver 설정 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
