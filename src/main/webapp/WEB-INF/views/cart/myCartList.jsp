@@ -7,72 +7,58 @@
 <c:set var="cartList" value="${cartList}" />
 
 <head>
+    <%-- jQuery를 먼저 로드하는 것이 좋습니다. --%>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript">
-		function calcGoodsPrice(bookPrice,obj){
-			var totalPrice,final_total_price,totalNum;
-			var goods_qty=document.getElementById("select_goods_qty");
-			//alert("총 상품금액"+goods_qty.value);
-			var p_totalNum=document.getElementById("p_totalNum");
-			var p_totalPrice=document.getElementById("p_totalPrice");
-			var p_final_totalPrice=document.getElementById("p_final_totalPrice");
-			var h_totalNum=document.getElementById("h_totalNum");
-			var h_totalPrice=document.getElementById("h_totalPrice");
-			var h_totalDelivery=document.getElementById("h_totalDelivery");
-			var h_final_total_price=document.getElementById("h_final_totalPrice");
-			if(obj.checked==true){	
-				totalNum=Number(h_totalNum.value)+Number(goods_qty.value);
-				totalPrice=Number(h_totalPrice.value)+Number(goods_qty.value*bookPrice);
-				final_total_price=totalPrice+Number(h_totalDelivery.value);
-			}else{
-				totalNum=Number(h_totalNum.value)-Number(goods_qty.value);
-				totalPrice=Number(h_totalPrice.value)-Number(goods_qty.value)*bookPrice;
-				final_total_price=totalPrice-Number(h_totalDelivery.value);
-			}
-	
-			h_totalNum.value=totalNum;
-			h_totalPrice.value=totalPrice;
-			h_final_total_price.value=final_total_price;
-	
-			p_totalNum.innerHTML=totalNum;
-			p_totalPrice.innerHTML=totalPrice;
-			p_final_totalPrice.innerHTML=final_total_price;
-		}
-
-		function modify_cart_qty(goods_num,bookPrice,index){
+		
+		// [수정] 수량 변경 함수: 불필요한 동기식 ajax 호출을 제거하고,
+		// 사용자 경험을 위해 페이지 새로고침 대신 화면 값만 바꾸도록 개선할 수 있습니다.
+		// (지금은 기존 로직을 유지하되, index를 정확히 넘겨주도록 수정했습니다.)
+		function modify_cart_qty(goods_num, index){
 			var length=document.frm_order_all_cart.cart_goods_qty.length;
    			var _cart_goods_qty=0;
-			if(length>1){
+   			
+			// 장바구니에 상품이 하나일 때와 여러 개일 때를 구분해서 수량 값을 가져옵니다.
+			if(length > 1){
 				_cart_goods_qty=document.frm_order_all_cart.cart_goods_qty[index].value;		
 			}else{
 				_cart_goods_qty=document.frm_order_all_cart.cart_goods_qty.value;
 			}
 		
-			var cart_goods_qty=Number(_cart_goods_qty);
+			var cart_goods_qty = Number(_cart_goods_qty);
+            if (cart_goods_qty <= 0) {
+                alert("수량은 1 이상이어야 합니다.");
+                return;
+            }
 
 			$.ajax({
 				type : "post",
-				async : false, //false인 경우 동기식으로 처리한다.
 				url : "${contextPath}/cart/modifyCartQty.do",
 				data : {
-					goods_num:goods_num,
-					cart_goods_qty:cart_goods_qty
+					goods_num: goods_num,
+					cart_goods_qty: cart_goods_qty
 				},
 				success : function(data, textStatus) {
 					if(data.trim()=='modify_success'){
-						alert("수량을 변경했습니다!!");
-						window.location.href = "${contextPath}/cart/myCartList.do";
+						alert("수량을 변경했습니다!");
+						// 변경 성공 시, 현재 페이지를 새로고침하여 합계 등을 다시 계산합니다.
+						location.reload(); 
 					}else{
-						alert("다시 시도해 주세요!!");	
+						alert("다시 시도해 주세요!");	
 					}			
 				},
 				error : function(data, textStatus) {
 					alert("에러가 발생했습니다."+data);
 				}
-			}); //end ajax	
+			});
 		}
 
+		// [수정] 상품 삭제 함수: 불필요한 form 생성을 제거하고 jQuery ajax로 개선할 수 있습니다.
+		// (지금은 기존 로직을 유지합니다.)
 		function delete_cart_goods(cart_id){
-			var cart_id=Number(cart_id);
+			if (!confirm("정말로 이 상품을 삭제하시겠습니까?")) {
+				return;
+			}
 			var formObj=document.createElement("form");
 			var i_cart = document.createElement("input");
 			i_cart.name="cart_id";
@@ -85,26 +71,43 @@
     		formObj.submit();
 		}
 
-		function fn_order_each_goods(goods_num,goods_name,goods_sales_price,fileName){
-			var total_price,final_total_price,_goods_qty;
-			var cart_goods_qty=document.getElementById("cart_goods_qty");
-	
-			_order_goods_qty=cart_goods_qty.value; //장바구니에 담긴 개수 만큼 주문한다.
+		// [핵심 수정] 개별 상품 주문 함수
+		// 어떤 버튼을 눌렀는지 알 수 있도록 'index'를 파라미터로 추가합니다.
+		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName, index){
+			var _order_goods_qty;
+			var cart_goods_qty_inputs = document.getElementsByName("cart_goods_qty");
+
+			// 여러 상품 중, 클릭된 버튼과 같은 줄에 있는(index가 같은) 수량 입력칸의 값을 가져옵니다.
+			// 상품이 하나만 있을 경우를 대비하여 length 체크를 합니다.
+			if (cart_goods_qty_inputs.length > 1) {
+				_order_goods_qty = cart_goods_qty_inputs[index].value;
+			} else {
+				_order_goods_qty = cart_goods_qty_inputs[0].value;
+			}
+			
+			if (Number(_order_goods_qty) <= 0) {
+				alert("주문 수량은 1 이상이어야 합니다.");
+				return;
+			}
+
+			// form을 동적으로 생성하여 서버에 데이터를 전송합니다.
 			var formObj=document.createElement("form");
+			
+			// input 태그들을 생성하고 form에 추가합니다.
 			var i_goods_num = document.createElement("input"); 
     		var i_goods_name = document.createElement("input");
     		var i_goods_sales_price=document.createElement("input");
     		var i_fileName=document.createElement("input");
-    		var i_order_goods_qty=document.createElement("input");
+    		var i_goods_qty=document.createElement("input"); // 변수명 통일 (order_goods_qty -> goods_qty)
     
     		i_goods_num.name="goods_num";
     		i_goods_name.name="goods_name";
     		i_goods_sales_price.name="goods_sales_price";
     		i_fileName.name="fileName";
-    		i_order_goods_qty.name="order_goods_qty";
+    		i_goods_qty.name="goods_qty"; // 컨트롤러에서 받을 이름과 통일
     
     		i_goods_num.value=goods_num;
-    		i_order_goods_qty.value=_order_goods_qty;
+    		i_goods_qty.value=_order_goods_qty;
     		i_goods_name.value=goods_name;
     		i_goods_sales_price.value=goods_sales_price;
     		i_fileName.value=fileName;
@@ -113,7 +116,7 @@
     		formObj.appendChild(i_goods_name);
     		formObj.appendChild(i_goods_sales_price);
     		formObj.appendChild(i_fileName);
-    		formObj.appendChild(i_order_goods_qty);
+    		formObj.appendChild(i_goods_qty);
 
     		document.body.appendChild(formObj); 
     		formObj.method="post";
@@ -121,6 +124,7 @@
     		formObj.submit();
 		}
 
+		// [수정] 선택 상품 주문 함수: 기존 로직은 훌륭해서 그대로 유지합니다.
 		function fn_order_all_cart_goods(){
 		    var checkedItems = $("input[name='checked_goods']:checked");
 
@@ -203,6 +207,7 @@
 								    <strong><fmt:formatNumber value="${item.goods_sales_price}" type="number" pattern="#,###원" /></strong>
 								</td>
 								<td>
+									<%-- [수정] 수량 변경 함수에 현재 아이템의 순서(loop.index)를 넘겨줍니다. --%>
 								    <input type="text" name="cart_goods_qty" size="3" value="${item.cart_goods_qty}">
 									<a href="javascript:modify_cart_qty(${item.goods_num}, ${loop.index});">
 										<img width="25" alt="수량변경" src="${contextPath}/resources/image/btn_modify_qty.jpg">
@@ -212,7 +217,8 @@
 								    <strong><fmt:formatNumber value="${item.goods_sales_price * item.cart_goods_qty}" type="number" pattern="#,###원" /></strong>
 								</td>
 								<td>
-								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}');" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">주문하기</a>
+									<%-- [핵심 수정] 개별 주문 함수에 현재 아이템의 순서(loop.index)를 함께 넘겨줍니다. --%>
+								    <a href="javascript:fn_order_each_goods('${item.goods_num}','${item.goods_name}','${item.goods_sales_price}','${item.fileName}', ${loop.index});" class="btn btn-primary"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">주문하기</a>
 									<a href="javascript:delete_cart_goods('${item.cart_id}');" class="btn btn-danger"style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">삭제하기</a>
 								</td>
 							</tr>
@@ -268,3 +274,4 @@
 	<center>
 	</form>			
 </div>
+</body>

@@ -29,7 +29,7 @@
   	 <update id="increaseCartQty" parameterType="CartVO">
     	<![CDATA[
     		UPDATE cart
-    		SET cart_goods_qty = cart_goods_qty + 1
+    		SET cart_goods_qty = #{cart_goods_qty}
     		WHERE member_id = #{member_id} AND goods_num = #{goods_num}
 		]]>
 	</update>

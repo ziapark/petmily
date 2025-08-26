@@ -75,7 +75,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav=new ModelAndView("/common/layout");
 		mav.addObject("title", "제품구매");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		mav.addObject("body", "/WEB-INF/views/order/orderEachGoods2.jsp");
 		
 		List myOrderList=new ArrayList<OrderVO>();
 		myOrderList.add(orderVO);
