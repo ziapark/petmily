@@ -336,6 +336,9 @@
 											<c:when test="${item.delivery_state=='returning_goods' }">
 										  		반품
 											</c:when>
+											<c:when test="${item.delivery_state=='returning_goods_success' }">
+										  		반품완료
+											</c:when>
 								  		</c:choose>
 								    </td>
 								</tr>
