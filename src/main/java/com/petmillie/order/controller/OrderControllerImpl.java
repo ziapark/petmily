@@ -237,12 +237,13 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	public ApiResponse cancelPayment(@RequestBody Map<String, Object> cancelData, HttpServletRequest request) {
 	    try {
 	        String imp_uid = (String) cancelData.get("imp_uid");
+	        int amount = Integer.parseInt(String.valueOf(cancelData.get("amount")));
 	        int used_points = Integer.parseInt(String.valueOf(cancelData.get("used_points")));
 	        
 	        HttpSession session = request.getSession();
 	        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 	        
-	        portoneService.cancelPayment(imp_uid);
+	        portoneService.cancelPayment(imp_uid, amount); 
 
 	        orderService.updateOrderStatusToCancel(imp_uid);
 	        
