@@ -76,39 +76,55 @@
 </script>
 
 <%-- ======================================================== --%>
-<%--       2. 최종 원시그널(OneSignal) 스크립트                --%>
+<%--       2. Scope 설정까지 포함된 최종 원시그널 스크립트       --%>
 <%-- ======================================================== --%>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     
-    // 원시그널 초기화
     await OneSignal.init({
       appId: "14ed38d9-71e5-4fc8-aec3-457b8a7ca88d", // 당신의 App ID
       
-      // 콘솔 404 에러 해결을 위한 서비스 워커 경로 설정
-      serviceWorkerPath: "petmillie/OneSignalSDKWorker.js"
+      // 1. 파일의 실제 위치를 정확히 알려줍니다.
+      serviceWorkerPath: "${contextPath}/resources/js/OneSignalSDKWorker.js",
+
+      // 2. 서비스 워커의 활동 범위를 우리 프로젝트 경로로 강제합니다. (이것이 핵심!)
+      serviceWorkerParam: { scope: '${contextPath}/' },
+      
+      allowLocalhostAsSecureOrigin: true
     });
 
-    // JSTL을 사용해 로그인 상태에 따라 사용자 ID 등록
+    const isSubscribed = await OneSignal.isPushNotificationsEnabled();
+    
+    if (isSubscribed) {
+        console.log("User is already subscribed.");
+        setExternalId(OneSignal);
+    } else {
+        OneSignal.on('subscriptionChange', function(isSubscribedNow) {
+            if (isSubscribedNow) {
+                console.log("User has just subscribed.");
+                setExternalId(OneSignal);
+            }
+        });
+    }
+  });
+
+  // 사용자 ID를 등록하는 함수
+  async function setExternalId(OneSignal) {
     <c:choose>
-        <%-- 일반 회원으로 로그인한 경우 --%>
         <c:when test="${isLogOn == true && not empty memberInfo.member_id}">
             var userId = "${memberInfo.member_id}";
             await OneSignal.login(userId);
             console.log("OneSignal External ID (Member) has been set to: " + userId);
         </c:when>
-        
-        <%-- 사업자 회원으로 로그인한 경우 --%>
         <c:when test="${isLogOn == true && not empty businessInfo.business_id}">
-            var userId = "${businessInfo.business_id}"; // business_id는 실제 변수명으로 변경
+            var userId = "${businessInfo.business_id}";
             await OneSignal.login(userId);
             console.log("OneSignal External ID (Business) has been set to: " + userId);
         </c:when>
     </c:choose>
-    
-  });
+  }
 </script>
 
 <body>

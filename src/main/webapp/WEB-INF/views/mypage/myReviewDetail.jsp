@@ -31,7 +31,7 @@
 				<div class="contents_box" style="text-align:left;">
 	    			<c:if test="${not empty review.file_name}">
 					  <div class="imgbox">
-					    <img src="${contextPath}/mypage/image.do?file_name=${review.file_name}&review_id=${review.review_id}" />
+					    <img src="${contextPath}/review/image.do?file_name=${review.file_name}&review_id=${review.review_id}" />
 					  </div>
 					</c:if>
 		  		</div>

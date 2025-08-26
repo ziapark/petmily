@@ -89,9 +89,10 @@
 	</select>
 
     <!-- 상품명으로만 검색 -->
-    <select id="selectGoodsBySearchWord" parameterType="String" resultType="com.petmillie.goods.vo.GoodsVO">
-        SELECT *
-        FROM goods
+    <select id="selectGoodsBySearchWord" parameterType="String" resultMap="goodsResult">
+        SELECT g.*,i.*
+        FROM goods g 
+        JOIN goods_image i ON g.goods_num = i.goods_num AND i.fileType = 'main'
         WHERE goods_name LIKE CONCAT('%', #{searchWord}, '%')
     </select>
 	

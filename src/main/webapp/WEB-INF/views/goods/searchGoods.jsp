@@ -38,7 +38,7 @@
                 <c:forEach var="goods" items="${goodsList}">
                     <tr>
                         <td>
-                            <img src="${contextPath}/resources/upload/${goods.fileName}" 
+                            <img src="${contextPath}/download.do?goods_num=${goods.goods_num}&fileName=${goods.fileName}" 
                                  alt="${goods.goods_name}" width="100" height="100"/>
                         </td>
                         <td>${goods.goods_name}</td>
