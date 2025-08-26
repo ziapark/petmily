@@ -33,7 +33,7 @@ public class OrderVO {
 	private String imp_uid;
 	private String payment_amount;
 	private String payment_status;
-	private String pay_method;
+	private String paymentId;
 	private String payment_time;
 	private String buyer_name;
 	private String buyer_email;
@@ -196,11 +196,11 @@ public class OrderVO {
 	public void setPayment_status(String payment_status) {
 		this.payment_status = payment_status;
 	}
-	public String getPay_method() {
-		return pay_method;
+	public String getPaymentId() {
+		return paymentId;
 	}
-	public void setPay_method(String pay_method) {
-		this.pay_method = pay_method;
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
 	}
 	public String getPayment_time() {
 		return payment_time;

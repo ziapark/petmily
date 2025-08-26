@@ -29,16 +29,16 @@ public class PortoneServiceImpl implements PortoneService {
     }
 
     @Override
-    public boolean verifyPayment(String imp_uid, int expectAmount) throws Exception {
+    public boolean verifyPayment(String payment_id, int expectAmount) throws Exception {
         return true;
     }
     
     @Override
-    public void cancelPayment(String imp_uid, int amount) throws Exception {
+    public void cancelPayment(String payment_id, int amount) throws Exception {
         System.out.println("\n=======================[ V2 API 결제 취소 시도 ]=======================");
         
         try {
-            String url = "https://api.portone.io/payments/" + imp_uid + "/cancel";
+            String url = "https://api.portone.io/payments/" + payment_id + "/cancel";
             
             System.out.println("4. [v2 API 최종] 결제 취소 API 호출...");
             System.out.println("   - 요청 URL: " + url);
