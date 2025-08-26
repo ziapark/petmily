@@ -234,6 +234,12 @@ position:relative;
 #detail_table table tr td {font-size:1.0rem;}
 #detail_table table tr td.price_td {font-size: 1.6rem; color: #38c5f5; padding:10px 0px 20px 0; border-bottom:1px solid #eee;}
 
+.detail_buttons .like_icon_btn {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;border:none;}
+.detail_buttons .like_icon_btn:hover {display:inline-block; width:20px; height:20px; background:url(/petmillie/resources/image/like_on.png) no-repeat;background-size:cover;border:none; }
+
+.detail_buttons .like_icon_btn.like_on {background:url(/petmillie/resources/image/like_on.png) no-repeat; background-size:cover;}
+.detail_buttons .like_icon_btn.like_off {background:url(/petmillie/resources/image/like.png) no-repeat; background-size:cover;}
+
 
 /* 사업자 페이지 */
 .pd { padding-top:20;}
