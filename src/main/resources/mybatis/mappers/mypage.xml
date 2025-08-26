@@ -117,7 +117,7 @@
 		<result property="imp_uid" column="imp_uid" />
 		<result property="payment_amount" column="payment_amount" />
 		<result property="payment_status" column="payment_status" />
-		<result property="pay_method" column="pay_method" />
+		<result property="paymentId" column="paymentId" />
 		<result property="payment_time" column="payment_time" />
 		<result property="buyer_name" column="buyer_name" />
 		<result property="buyer_email" column="buyer_email" />
