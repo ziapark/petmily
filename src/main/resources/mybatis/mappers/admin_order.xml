@@ -115,10 +115,25 @@
 		]]>
 	</select>
 
-<select id="selectMemberIdByOrderId" resultType="String" parameterType="String">
-    <![CDATA[
-        SELECT member_id FROM userorder WHERE order_id = #{order_id} LIMIT 1
-    ]]>
-</select>
+	<select id="selectMemberIdByOrderId" resultType="String" parameterType="String">
+	    <![CDATA[
+	        SELECT member_id FROM userorder WHERE order_id = #{order_id} LIMIT 1
+	    ]]>
+	</select>
 
+	<select id="selectTotalRewardPoint" resultType="int" parameterType="java.lang.String">
+		<![CDATA[
+			SELECT SUM(reward_point) 
+			FROM userorder
+			WHERE order_id = #{order_id}
+		]]>
+	</select>
+
+	<update id="updateMemberPoint" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE member
+			SET point = point + #{totalRewardPoint}
+			WHERE member_id = #{member_id}
+		]]>
+	</update>
 </mapper>

@@ -11,4 +11,5 @@ public interface AdminOrderService {
 	public Map<String, Object> orderDetail(int order_id) throws Exception;
 	public String getMemberIdByOrderId(String order_id) throws Exception;
 	public int getNewOrderCount(Map<String,Object> condMap) throws Exception;
+	public void rewardPointsForOrder(Map<String, String> pointMap) throws Exception;
 }

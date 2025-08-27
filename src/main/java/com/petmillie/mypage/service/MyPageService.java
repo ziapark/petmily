@@ -33,4 +33,5 @@ public interface MyPageService{
 	public PetVO findPetInfo(int pet_id) throws Exception;
 	public void modifyPet(PetVO petVO) throws Exception;
 	public void removePet(int pet_id) throws Exception;
+	public void confirmPurchase(Map<String, String> orderMap) throws Exception;
 }

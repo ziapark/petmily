@@ -55,44 +55,49 @@
 	        }
 	    }
 		
-	    function exchange_finish_order(selectElement) {
-		    const selectedValue = selectElement.value;
-		    const order_id = selectElement.dataset.orderId;
+	    function exchange_finish_order(selectElement, order_id, member_id) {
+	    	const selectedValue = selectElement.value;
 
 		    let message = "";
 		    let actionUrl = "";
 
 		    if (selectedValue === "finished") {
-		    	message = "구매를 확정하시겠습니까?";
+		    	message = "구매를 확정하시겠습니까?\n확정 후에는 포인트가 적립되며, 반품이 어려울 수 있습니다.";
 		      	actionUrl = "${contextPath}/mypage/confirmPurchase.do";
-		    }else if (selectedValue === "returning_goods") {
+		    } else if (selectedValue === "returning_goods") {
 		      	message = "반품을 진행하시겠습니까?";
 		      	actionUrl = "${contextPath}/mypage/returnOrder.do";
-		    }else {
-		      	return; // "배송완료" 선택 시는 아무 동작 안 함
+		    } else {
+		      	return; // "배송완료"를 다시 선택하면 아무 동작 안 함
 		    }
 		    
 		    const answer = confirm(message);
-		    if (answer === true) {
+		    if (confirm(message)) {
 		      	const formObj = document.createElement("form");
 		      	const i_order_id = document.createElement("input");
+
+		      	const i_member_id = document.createElement("input");
+		      	
 		      	const i_state = document.createElement("input");
 
 		      	i_order_id.name = "order_id";
 		      	i_order_id.value = order_id;
+				
+				i_member_id.name = "member_id";
+				i_member_id.value = member_id;
 
 		      	i_state.name = "delivery_state";
 		      	i_state.value = selectedValue;
 
 		      	formObj.appendChild(i_order_id);
+				formObj.appendChild(i_member_id);
 		      	formObj.appendChild(i_state);
 
-		      	document.body.appendChild(formObj);
+		      	document.body.appendChild(formObj); 
 		      	formObj.method = "post";
 		      	formObj.action = actionUrl;
 		      	formObj.submit();
 		    } else {
-		      	// 사용자가 취소하면 다시 원래 옵션으로 되돌리기
 		      	selectElement.value = "finished_delivering";
 		    }
 		}
@@ -318,11 +323,11 @@
 												</button>
 								  		 	</c:when>
 								   			<c:when test="${item.delivery_state=='finished_delivering'}">
-								   				<select onchange="exchange_finish_order(this)" data-order-id="${item.order_id}">
-									   				<option value="finished_delivering" selected>배송완료</option>
-									   				<option value="finished">구매확정</option>
-											 		<option value="returning_goods">반품</option>
-										 		</select>
+												<select onchange="exchange_finish_order(this, '${item.order_id}', '${item.member_id}')">
+													<option value="finished_delivering" selected>배송완료</option>
+													<option value="finished">구매확정</option>
+													<option value="returning_goods">반품</option>
+												</select>
 											</c:when>
 											<c:when test="${item.delivery_state=='finished'}">
 										 		구매확정

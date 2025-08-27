@@ -43,4 +43,6 @@ public interface MyPageController {
 	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	}
+	public String confirmPurchase(@RequestParam("order_id") String order_id,
+            HttpServletRequest request, HttpServletResponse response) throws Exception;	
+}
