@@ -592,19 +592,59 @@
 					</c:forEach>
 				</c:otherwise>
   			</c:choose>	
-         	<tr>
-             	<td colspan=8 class="fixed">
-                 	<c:forEach   var="page" begin="1" end="10" step="1" >
-		         		<c:if test="${section >1 && page==1 }">
-		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp;&nbsp;</a>
-		         		</c:if>
-		          		<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 +page } </a>
-		         		<c:if test="${page ==10 }">
-		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
-		         		</c:if> 
-	      			</c:forEach> 
-           		</td>
-        	</tr>  		   
+<!--          	<tr> -->
+<!--              	<td colspan=8 class="fixed"> -->
+<%--                  	<c:forEach   var="page" begin="1" end="10" step="1" > --%>
+<%-- 		         		<c:if test="${section >1 && page==1 }"> --%>
+<%-- 		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp;&nbsp;</a> --%>
+<%-- 		         		</c:if> --%>
+<%-- 		          		<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 +page } </a> --%>
+<%-- 		         		<c:if test="${page ==10 }"> --%>
+<%-- 		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a> --%>
+<%-- 		         		</c:if>  --%>
+<%-- 	      			</c:forEach>  --%>
+<!--            		</td> -->
+<!--         	</tr>  		    -->
+<tr>
+<td colspan="8" class="fixed" style="text-align: center; font-size: 1.1em;">
+
+        <%-- 
+            [서버 컨트롤러에서 받아와야 할 값]
+            pageInfo.totalPageCount : 전체 페이지의 총 개수
+            pageInfo.section : 현재 페이지가 속한 섹션 번호
+            pageInfo.totalPagesInSection : 현재 섹션에 표시될 페이지 수
+            pageInfo.currentPageNum : 현재 사용자가 보고 있는 실제 페이지 번호
+        --%>
+
+        <%-- '이전' 섹션으로 이동 버튼 --%>
+        <c:if test="${pageInfo.section > 1}">
+            <a href="${contextPath}/business/businessOrderMain.do?chapter=${pageInfo.section - 1}&pageNum=1" style="text-decoration: none;">&laquo; 이전</a>
+        </c:if>
+
+        <%-- 페이지 번호 목록 --%>
+        <c:forEach var="page" begin="1" end="${pageInfo.totalPagesInSection}">
+            <c:set var="absolutePageNum" value="${(pageInfo.section - 1) * 10 + page}" />
+            
+            <%-- 현재 페이지는 링크 없이 굵게 표시 --%>
+            <c:choose>
+                <c:when test="${absolutePageNum == pageInfo.currentPageNum}">
+                    <strong style="color: #c00; margin: 0 5px;">${absolutePageNum}</strong>
+                </c:when>
+                <c:otherwise>
+                    <a href="${contextPath}/business/businessOrderMain.do?chapter=${pageInfo.section}&pageNum=${page}" style="margin: 0 5px; text-decoration: none;">${absolutePageNum}</a>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+        <%-- '다음' 섹션으로 이동 버튼 --%>
+        <c:if test="${pageInfo.section * 10 < pageInfo.totalPageCount}">
+            <a href="${contextPath}/business/businessOrderMain.do?chapter=${pageInfo.section + 1}&pageNum=1" style="text-decoration: none;">다음 &raquo;</a>
+        </c:if>
+
+    </td>
+</tr>
+<%-- ==================== 페이지네이션 끝 ==================== --%>
+
 		</tbody>
 	</table>
   	</form> 

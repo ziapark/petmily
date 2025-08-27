@@ -662,70 +662,96 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	//사업자 등록 상품 리스트 보기
 	@RequestMapping(value="/businessGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView businessGoodsMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session=request.getSession();
-		session=request.getSession();
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "마이페이지");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    HttpSession session=request.getSession();
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav=new ModelAndView("/common/layout");
+	    mav.addObject("title", "상품관리");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
-		session.setAttribute("side_menu", "business_mode");
+	    // ▼▼▼▼▼ 1. 페이지 파라미터 받기 ▼▼▼▼▼
+	    String section_str = dateMap.get("section");
+	    String pageNum_str = dateMap.get("pageNum");
+	    if(section_str== null) {
+	        section_str = "1";
+	    }
+	    if(pageNum_str== null) {
+	        pageNum_str = "1";
+	    }
+	    int section = Integer.parseInt(section_str);
+	    int pageNum = Integer.parseInt(pageNum_str);
 
-		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
-		String section = dateMap.get("section");
-		String pageNum = dateMap.get("pageNum");
-		String beginDate=null,endDate=null;
+	    // ▼▼▼▼▼ 2. 날짜 및 검색 조건 설정 ▼▼▼▼▼
+	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+	    String beginDate=null,endDate=null;
 
-		String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
-		beginDate=tempDate[0];
-		endDate=tempDate[1];
-		dateMap.put("beginDate", beginDate);
-		dateMap.put("endDate", endDate);
-
-		Map<String,Object> condMap=new HashMap<String,Object>();
-		if(section== null) {
-			section = "1";
-		}
-		condMap.put("section",section);
-		if(pageNum== null) {
-			pageNum = "1";
-		}
-		condMap.put("pageNum",pageNum);
-		condMap.put("beginDate",beginDate);
-		condMap.put("endDate", endDate);
-		
+	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+	    beginDate=tempDate[0];
+	    endDate=tempDate[1];
+	    
+	    // DB 조회를 위한 조건 맵(condMap) 생성
+	    Map<String,Object> condMap=new HashMap<String,Object>();
+	    condMap.put("beginDate",beginDate);
+	    condMap.put("endDate", endDate);
+	    
 	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
 	    String seller_id = businessVO.getSeller_id();
 	    condMap.put("seller_id", seller_id);
 	    
-        int pageSize = 10;
-        int currentPage = Integer.parseInt(pageNum);
-        int offset = (currentPage - 1) * pageSize;
-
-        condMap.put("offset", offset);
-        condMap.put("limit", pageSize);
+	    // ▼▼▼▼▼ 3. ⭐⭐⭐ 페이지 정보 계산 (핵심 수정 부분) ⭐⭐⭐ ▼▼▼▼▼
 	    
-		List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
-		mav.addObject("newGoodsList", newGoodsList);
-		
-		int totalCount = businessService.getGoodsCount(condMap);
-		mav.addObject("totalCount", totalCount);
+	    // 3-1. 필터링된 전체 상품 개수 가져오기 (이미 사용 중인 메소드)
+	    int totalGoodsCount = businessService.getGoodsCount(condMap); 
 
-		String beginDate1[]=beginDate.split("-");
-		String endDate2[]=endDate.split("-");
-		mav.addObject("beginYear",beginDate1[0]);
-		mav.addObject("beginMonth",beginDate1[1]);
-		mav.addObject("beginDay",beginDate1[2]);
-		mav.addObject("endYear",endDate2[0]);
-		mav.addObject("endMonth",endDate2[1]);
-		mav.addObject("endDay",endDate2[2]);
+	    // 3-2. 페이지 계산에 필요한 변수 설정
+	    int pageSize = 10; // 한 페이지에 보여줄 상품 수
+	    int sectionSize = 10; // 한 섹션(블록)에 보여줄 페이지 수
 
-		mav.addObject("section", section);
-		mav.addObject("pageNum", pageNum);
-		return mav;
+	    // 3-3. 전체 페이지 수 계산
+	    int totalPageCount = (int)Math.ceil((double)totalGoodsCount / pageSize);
 
+	    // 3-4. 현재 페이지 번호 (절대값) 계산
+	    int currentPageNum = (section - 1) * sectionSize + pageNum;
+
+	    // 3-5. 현재 섹션에 표시할 페이지 수 계산 (마지막 섹션 처리)
+	    int totalPagesInSection = 0;
+	    int lastSection = (int)Math.ceil((double)totalPageCount / sectionSize);
+	    if (section < lastSection) {
+	        totalPagesInSection = sectionSize;
+	    } else {
+	        totalPagesInSection = totalPageCount > 0 ? (totalPageCount % sectionSize == 0 ? sectionSize : totalPageCount % sectionSize) : 0;
+	    }
+	    
+	    // 3-6. JSP로 보낼 pageInfo 맵 생성
+	    Map<String, Object> pageInfo = new HashMap<>();
+	    pageInfo.put("totalPageCount", totalPageCount);
+	    pageInfo.put("section", section);
+	    pageInfo.put("currentPageNum", currentPageNum);
+	    pageInfo.put("totalPagesInSection", totalPagesInSection);
+	    
+	    mav.addObject("pageInfo", pageInfo); // JSP로 pageInfo 객체 전달
+
+	    // ▼▼▼▼▼ 4. DB 조회를 위한 offset, limit 설정 ▼▼▼▼▼
+	    int offset = (currentPageNum - 1) * pageSize;
+	    int limit = pageSize;
+	    
+	    condMap.put("offset", offset);
+	    condMap.put("limit", limit);
+	    
+	    // ▼▼▼▼▼ 5. DB에서 상품 목록 조회 및 mav에 추가 ▼▼▼▼▼
+	    List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
+	    mav.addObject("newGoodsList", newGoodsList);
+	    
+	    String beginDate1[]=beginDate.split("-");
+	    String endDate2[]=endDate.split("-");
+	    mav.addObject("beginYear",beginDate1[0]);
+	    mav.addObject("beginMonth",beginDate1[1]);
+	    mav.addObject("beginDay",beginDate1[2]);
+	    mav.addObject("endYear",endDate2[0]);
+	    mav.addObject("endMonth",endDate2[1]);
+	    mav.addObject("endDay",endDate2[2]);
+
+	    return mav;
 	}
-	
 	//사업자 상품 상태 변경
 	@RequestMapping(value = "/updateGoodsStatus.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -780,34 +806,30 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	public ModelAndView businessOrderMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    String viewName=(String)request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
-	    
 	    mav.addObject("body", "/WEB-INF/views"+viewName +".jsp");
 
+	    // ▼▼▼▼▼ 1. 페이지 파라미터 받기 (기존 코드) ▼▼▼▼▼
+	    String section_str = dateMap.get("section"); // JSP에서는 chapter로 보내지만, 여기선 section으로 받음
+	    String pageNum_str = dateMap.get("pageNum");
+	    if(section_str == null) {
+	        section_str = "1";
+	    }
+	    if(pageNum_str == null) {
+	        pageNum_str = "1";
+	    }
+	    int section = Integer.parseInt(section_str);
+	    int pageNum = Integer.parseInt(pageNum_str);
+
+	    // ▼▼▼▼▼ 2. 날짜 및 검색 조건 설정 (기존 코드) ▼▼▼▼▼
 	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
-	    String section = dateMap.get("section");
-	    String pageNum = dateMap.get("pageNum");
 	    String beginDate=null,endDate=null;
 
 	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
 	    beginDate=tempDate[0];
 	    endDate=tempDate[1];
-	    dateMap.put("beginDate", beginDate);
-	    dateMap.put("endDate", endDate);
-
+	    
+	    // DB 조회를 위한 조건 맵(condMap) 생성
 	    HashMap<String,Object> condMap=new HashMap<String,Object>();
-	    if(section== null) {
-	        section = "1";
-	    }
-	    if(pageNum== null) {
-	        pageNum = "1";
-	    }
-	    int sectionInt = Integer.parseInt(section);
-	    int pageNumInt = Integer.parseInt(pageNum);
-	    int offset = (sectionInt - 1) * 100 + (pageNumInt - 1) * 10;
-	    int limit = 10;
-	    condMap.put("offset", offset);
-	    condMap.put("limit", limit);
-
 	    condMap.put("beginDate",beginDate);
 	    condMap.put("endDate", endDate);
 
@@ -820,23 +842,67 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    }
 	    condMap.put("seller_id", seller_id);
 	    
+	    // ▼▼▼▼▼ 3. ⭐⭐⭐ 페이지 정보 계산 (핵심 추가 부분) ⭐⭐⭐ ▼▼▼▼▼
+	    
+	    // 3-1. 필터링된 전체 주문 개수 가져오기 (Service에 추가해야 할 메소드)
+	    int totalOrderCount = businessService.getNewOrderCount(condMap); 
+
+	    // 3-2. 페이지 계산에 필요한 변수 설정
+	    int pageSize = 10; // 한 페이지에 보여줄 주문 수
+	    int sectionSize = 10; // 한 섹션(블록)에 보여줄 페이지 수
+
+	    // 3-3. 전체 페이지 수 계산
+	    int totalPageCount = (int)Math.ceil((double)totalOrderCount / pageSize);
+
+	    // 3-4. 현재 페이지 번호 (절대값) 계산
+	    int currentPageNum = (section - 1) * sectionSize + pageNum;
+
+	    // 3-5. 현재 섹션에 표시할 페이지 수 계산 (마지막 섹션 처리)
+	    int totalPagesInSection = 0;
+	    int lastSection = (int)Math.ceil((double)totalPageCount / sectionSize);
+	    if (section < lastSection) {
+	        totalPagesInSection = sectionSize;
+	    } else {
+	        totalPagesInSection = totalPageCount % sectionSize;
+	        if (totalPagesInSection == 0) {
+	            totalPagesInSection = sectionSize;
+	        }
+	    }
+	    
+	    // 3-6. JSP로 보낼 pageInfo 맵 생성
+	    Map<String, Object> pageInfo = new HashMap<>();
+	    pageInfo.put("totalPageCount", totalPageCount);       // 전체 페이지 수
+	    pageInfo.put("section", section);                      // 현재 섹션 번호
+	    pageInfo.put("currentPageNum", currentPageNum);        // 현재 페이지 번호
+	    pageInfo.put("totalPagesInSection", totalPagesInSection); // 현재 섹션의 페이지 수
+	    
+	    mav.addObject("pageInfo", pageInfo); // JSP로 pageInfo 객체 전달
+
+	    // ▼▼▼▼▼ 4. DB 조회를 위한 offset, limit 설정 (수정된 부분) ▼▼▼▼▼
+	    int offset = (currentPageNum - 1) * pageSize; // (현재 페이지-1) * 페이지당 개수
+	    int limit = pageSize;
+	    
+	    condMap.put("offset", offset);
+	    condMap.put("limit", limit);
+
+	    // ▼▼▼▼▼ 5. DB에서 주문 목록 조회 및 mav에 추가 (기존 코드) ▼▼▼▼▼
 	    List<OrderVO> newOrderList=businessService.listNewOrder(condMap);
 	    mav.addObject("newOrderList",newOrderList);
 	    
-		
-		String beginDate1[]=beginDate.split("-");
-		String endDate2[]=endDate.split("-");
-		mav.addObject("beginYear",beginDate1[0]);
-		mav.addObject("beginMonth",beginDate1[1]);
-		mav.addObject("beginDay",beginDate1[2]);
-		mav.addObject("endYear",endDate2[0]);
-		mav.addObject("endMonth",endDate2[1]);
-		mav.addObject("endDay",endDate2[2]);
-		
-		mav.addObject("section", section);
-		mav.addObject("pageNum", pageNum);
-		return mav;
-		
+	    String beginDate1[]=beginDate.split("-");
+	    String endDate2[]=endDate.split("-");
+	    mav.addObject("beginYear",beginDate1[0]);
+	    mav.addObject("beginMonth",beginDate1[1]);
+	    mav.addObject("beginDay",beginDate1[2]);
+	    mav.addObject("endYear",endDate2[0]);
+	    mav.addObject("endMonth",endDate2[1]);
+	    mav.addObject("endDay",endDate2[2]);
+	    
+	    // section, pageNum은 이제 pageInfo 객체로 전달되므로 굳이 따로 보낼 필요는 없습니다.
+	    // mav.addObject("section", section);
+	    // mav.addObject("pageNum", pageNum);
+	    
+	    return mav;
 	}
 	
 	// [추가] 관리자용 펜션 등록 페이지를 보여주는 메서드

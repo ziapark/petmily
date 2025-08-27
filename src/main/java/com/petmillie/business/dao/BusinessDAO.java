@@ -49,5 +49,6 @@ public interface BusinessDAO {
 
 	// [추가] 관리자가 펜션의 승인 상태를 변경
 	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception;
+	public int selectNewOrderCount(Map<String, Object> condMap) throws Exception;
 
 }

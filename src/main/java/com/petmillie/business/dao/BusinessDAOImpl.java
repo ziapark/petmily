@@ -186,5 +186,11 @@ public class BusinessDAOImpl implements BusinessDAO {
 	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception {
 	    sqlSession.update("mapper.business.updatePensionStatus", pensionMap);
 	}
-
+	@Override
+    public int selectNewOrderCount(Map<String, Object> condMap) throws Exception {
+        // sqlSession.selectOne()을 사용해 개수(int)를 반환하는 쿼리를 실행합니다.
+        // 첫 번째 파라미터는 Mapper XML의 namespace와 쿼리 id를 조합한 문자열입니다.
+        // 두 번째 파라미터는 쿼리에 전달할 조건 맵입니다.
+        return sqlSession.selectOne("mapper.business.selectNewOrderCount", condMap);
+    }
 }
