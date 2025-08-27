@@ -188,9 +188,9 @@ public class BusinessServiceImpl implements BusinessService {
 
 	@Override
 	public int getGoodsCount(Map<String, Object> condMap) throws Exception {
-		
-		return 1;
+	    return businessDAO.selectGoodsCount(condMap);
 	}
+
 	@Override
 	public int getNewOrderCount(Map<String, Object> condMap) throws Exception {
 	    return businessDAO.selectNewOrderCount(condMap);

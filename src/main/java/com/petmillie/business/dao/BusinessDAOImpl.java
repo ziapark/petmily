@@ -193,4 +193,9 @@ public class BusinessDAOImpl implements BusinessDAO {
         // 두 번째 파라미터는 쿼리에 전달할 조건 맵입니다.
         return sqlSession.selectOne("mapper.business.selectNewOrderCount", condMap);
     }
+	@Override
+	public int selectGoodsCount(Map<String, Object> condMap) throws Exception {
+	    return sqlSession.selectOne("mapper.business.selectGoodsCount", condMap);
+	}
+
 }

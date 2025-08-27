@@ -11,6 +11,10 @@
 	<meta charset="utf-8">
 	<title>펫밀리</title>
 	<style>
+	
+
+
+
 	    table {width: 100%;border-collapse: collapse;background-color: #fff;}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
 	    table th {background-color: #f2f2f2;}
@@ -27,7 +31,10 @@
 	    /* 판매 상태 표시를 위한 스타일 */
 	    .status-deleted {color: #dc3545;font-weight: bold;}
 	    .status-active {color: #28a745;}
+
 	</style>
+	
+
 	<script>
 		function search_goods_list(fixedSearchPeriod) {
 			var formObj = document.createElement("form");
@@ -309,42 +316,32 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
-           <tr>
-    <td colspan="6" class="fixed" style="text-align: center; font-size: 1.1em;">
-        <%-- 
-            [서버 컨트롤러에서 받아와야 할 값]
-            pageInfo.totalPageCount : 전체 페이지의 총 개수
-            pageInfo.section : 현재 페이지가 속한 섹션 번호
-            pageInfo.totalPagesInSection : 현재 섹션에 표시될 페이지 수
-            pageInfo.currentPageNum : 현재 사용자가 보고 있는 실제 페이지 번호
-        --%>
-
-        <%-- '이전' 섹션으로 이동 버튼 --%>
-        <c:if test="${pageInfo.section > 1}">
-            <a href="${contextPath}/business/businessGoodsMain.do?section=${pageInfo.section - 1}&pageNum=1" style="text-decoration: none;">&laquo; 이전</a>
+   <tr>
+    <td colspan="6" class="fixed" style="text-align: center;">
+        <c:if test="${pageInfo.currentPageNum > 1}">
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=1">&laquo;</a>
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.currentPageNum - 1}">&lt;</a>
         </c:if>
 
-        <%-- 페이지 번호 목록 --%>
-        <c:forEach var="page" begin="1" end="${pageInfo.totalPagesInSection}">
-            <c:set var="absolutePageNum" value="${(pageInfo.section - 1) * 10 + page}" />
-            
-            <%-- 현재 페이지는 링크 없이 굵게 표시 --%>
+        <c:forEach begin="1" end="${pageInfo.totalPageCount}" var="i">
             <c:choose>
-                <c:when test="${absolutePageNum == pageInfo.currentPageNum}">
-                    <strong style="color: #c00; margin: 0 5px;">${absolutePageNum}</strong>
+                <c:when test="${i == pageInfo.currentPageNum}">
+                    <strong>${i}</strong>
                 </c:when>
                 <c:otherwise>
-                    <a href="${contextPath}/business/businessGoodsMain.do?section=${pageInfo.section}&pageNum=${page}" style="margin: 0 5px; text-decoration: none;">${absolutePageNum}</a>
+                    <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${i}">${i}</a>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
 
-        <%-- '다음' 섹션으로 이동 버튼 --%>
-        <c:if test="${pageInfo.section * 10 < pageInfo.totalPageCount}">
-            <a href="${contextPath}/business/businessGoodsMain.do?section=${pageInfo.section + 1}&pageNum=1" style="text-decoration: none;">다음 &raquo;</a>
+        <c:if test="${pageInfo.currentPageNum < pageInfo.totalPageCount}">
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.currentPageNum + 1}">&gt;</a>
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.totalPageCount}">&raquo;</a>
         </c:if>
     </td>
 </tr>
+
+
         </TBODY>
     </TABLE>
     <form action="${contextPath}/business/addNewGoodsForm.do" style="width:100%; text-align:right;">

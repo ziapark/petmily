@@ -162,16 +162,16 @@
 		    ]]>
 		</select>
 	    
-	    <select id="selectGoodsCount" resultType="int" parameterType="java.util.Map">
-	        <![CDATA[
-	            SELECT COUNT(*)
-	            FROM goods
-	            WHERE seller_id = #{seller_id}
-	        ]]>
-	        <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
-	            AND DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate}
-	        </if>
-	    </select>
+<!-- 	    <select id="selectGoodsCount" resultType="int" parameterType="java.util.Map"> -->
+<!-- 	        <![CDATA[ -->
+<!-- 	            SELECT COUNT(*) -->
+<!-- 	            FROM goods -->
+<!-- 	            WHERE seller_id = #{seller_id} -->
+<!-- 	        ]]> -->
+<!-- 	        <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> -->
+<!-- 	            AND DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate} -->
+<!-- 	        </if> -->
+<!-- 	    </select> -->
 	
 	    <select id="selectNewGoodsList" resultMap="goodsResult" parameterType="java.util.Map">
 			<![CDATA[
@@ -474,5 +474,19 @@
 		    SET pension_status = #{pension_status}
 		    WHERE p_num = #{p_num}
 		</update>
+		
+		
+	
+		
+		<select id="selectGoodsCount" resultType="int" parameterType="java.util.Map">
+	        <![CDATA[
+	            SELECT COUNT(*)
+	            FROM goods
+	            WHERE seller_id = #{seller_id}
+	        ]]>
+	        <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+	            AND DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate}
+	        </if>
+	    </select>
 		
 	</mapper>

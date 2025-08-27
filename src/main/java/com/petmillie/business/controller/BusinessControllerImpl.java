@@ -660,6 +660,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 
 	//사업자 등록 상품 리스트 보기
+	
 	@RequestMapping(value="/businessGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView businessGoodsMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    HttpSession session=request.getSession();
@@ -680,39 +681,41 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    int section = Integer.parseInt(section_str);
 	    int pageNum = Integer.parseInt(pageNum_str);
 
-	    // ▼▼▼▼▼ 2. 날짜 및 검색 조건 설정 ▼▼▼▼▼
-	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
-	    String beginDate=null,endDate=null;
-
-	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
-	    beginDate=tempDate[0];
-	    endDate=tempDate[1];
+	    // ▼▼▼▼▼ 2. 날짜 및 검색 조건 설정 (핵심 수정 부분) ▼▼▼▼▼
 	    
 	    // DB 조회를 위한 조건 맵(condMap) 생성
 	    Map<String,Object> condMap=new HashMap<String,Object>();
-	    condMap.put("beginDate",beginDate);
-	    condMap.put("endDate", endDate);
+	    
+	    // ⭐⭐⭐ 사용자가 날짜를 클릭했을 때만(fixedSearchPeriod가 있을 때만) 날짜 조건을 Map에 추가 ⭐⭐⭐
+	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+	    if(fixedSearchPeriod != null && !fixedSearchPeriod.isEmpty()) {
+	        String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+	        String beginDate=tempDate[0];
+	        String endDate=tempDate[1];
+	        condMap.put("beginDate",beginDate);
+	        condMap.put("endDate", endDate);
+	        
+	        // JSP에 조회 기간을 표시하기 위해 날짜 정보를 mav에 추가
+	        String beginDate1[]=beginDate.split("-");
+	        String endDate2[]=endDate.split("-");
+	        mav.addObject("beginYear",beginDate1[0]);
+	        mav.addObject("beginMonth",beginDate1[1]);
+	        mav.addObject("beginDay",beginDate1[2]);
+	        mav.addObject("endYear",endDate2[0]);
+	        mav.addObject("endMonth",endDate2[1]);
+	        mav.addObject("endDay",endDate2[2]);
+	    }
 	    
 	    BusinessVO businessVO = (BusinessVO) session.getAttribute("businessInfo");
 	    String seller_id = businessVO.getSeller_id();
 	    condMap.put("seller_id", seller_id);
 	    
-	    // ▼▼▼▼▼ 3. ⭐⭐⭐ 페이지 정보 계산 (핵심 수정 부분) ⭐⭐⭐ ▼▼▼▼▼
-	    
-	    // 3-1. 필터링된 전체 상품 개수 가져오기 (이미 사용 중인 메소드)
+	    // ▼▼▼▼▼ 3. 페이지 정보 계산 (이전과 동일) ▼▼▼▼▼
 	    int totalGoodsCount = businessService.getGoodsCount(condMap); 
-
-	    // 3-2. 페이지 계산에 필요한 변수 설정
-	    int pageSize = 10; // 한 페이지에 보여줄 상품 수
-	    int sectionSize = 10; // 한 섹션(블록)에 보여줄 페이지 수
-
-	    // 3-3. 전체 페이지 수 계산
+	    int pageSize = 10;
+	    int sectionSize = 10;
 	    int totalPageCount = (int)Math.ceil((double)totalGoodsCount / pageSize);
-
-	    // 3-4. 현재 페이지 번호 (절대값) 계산
 	    int currentPageNum = (section - 1) * sectionSize + pageNum;
-
-	    // 3-5. 현재 섹션에 표시할 페이지 수 계산 (마지막 섹션 처리)
 	    int totalPagesInSection = 0;
 	    int lastSection = (int)Math.ceil((double)totalPageCount / sectionSize);
 	    if (section < lastSection) {
@@ -721,34 +724,24 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        totalPagesInSection = totalPageCount > 0 ? (totalPageCount % sectionSize == 0 ? sectionSize : totalPageCount % sectionSize) : 0;
 	    }
 	    
-	    // 3-6. JSP로 보낼 pageInfo 맵 생성
 	    Map<String, Object> pageInfo = new HashMap<>();
 	    pageInfo.put("totalPageCount", totalPageCount);
 	    pageInfo.put("section", section);
 	    pageInfo.put("currentPageNum", currentPageNum);
 	    pageInfo.put("totalPagesInSection", totalPagesInSection);
 	    
-	    mav.addObject("pageInfo", pageInfo); // JSP로 pageInfo 객체 전달
+	    mav.addObject("pageInfo", pageInfo);
 
-	    // ▼▼▼▼▼ 4. DB 조회를 위한 offset, limit 설정 ▼▼▼▼▼
+	    // ▼▼▼▼▼ 4. DB 조회를 위한 offset, limit 설정 (이전과 동일) ▼▼▼▼▼
 	    int offset = (currentPageNum - 1) * pageSize;
 	    int limit = pageSize;
 	    
 	    condMap.put("offset", offset);
 	    condMap.put("limit", limit);
 	    
-	    // ▼▼▼▼▼ 5. DB에서 상품 목록 조회 및 mav에 추가 ▼▼▼▼▼
+	    // ▼▼▼▼▼ 5. DB에서 상품 목록 조회 및 mav에 추가 (이전과 동일) ▼▼▼▼▼
 	    List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
 	    mav.addObject("newGoodsList", newGoodsList);
-	    
-	    String beginDate1[]=beginDate.split("-");
-	    String endDate2[]=endDate.split("-");
-	    mav.addObject("beginYear",beginDate1[0]);
-	    mav.addObject("beginMonth",beginDate1[1]);
-	    mav.addObject("beginDay",beginDate1[2]);
-	    mav.addObject("endYear",endDate2[0]);
-	    mav.addObject("endMonth",endDate2[1]);
-	    mav.addObject("endDay",endDate2[2]);
 
 	    return mav;
 	}
