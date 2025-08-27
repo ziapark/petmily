@@ -45,5 +45,6 @@ public interface BusinessService {
 	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception;
 	
 	public int getGoodsCount(Map<String, Object> condMap) throws Exception;
+	public int getNewOrderCount(Map<String, Object> condMap) throws Exception;
 
 }
