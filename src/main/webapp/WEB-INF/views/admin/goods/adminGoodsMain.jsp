@@ -14,7 +14,7 @@
 	<title>관리자 상품 조회</title>
 	<style>
 	    table {width: 100%;border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
+	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: center;} /* 텍스트 중앙 정렬 */
 	    table th {background-color: #f2f2f2;}
 	    .clear {clear: both;height: 10px;}
 	    input[type="text"], select {padding: 5px;border: 1px solid #ccc;border-radius: 3px;}
@@ -22,10 +22,13 @@
 	    input[type="button"]:hover, input[type="submit"]:hover {background-color: #0056b3;}
 	    input[type="button"][disabled], input[type="text"][disabled], select[disabled] {background-color: #e9ecef;cursor: not-allowed;}
 	    #search a img {vertical-align: middle;border: 0;}
-	    /* 페이징 스타일 */
+	    
+	    /* 요청하신 페이지네이션 스타일로 변경 */
+	    .fixed { text-align: center; padding: 15px 0; } /* 중앙 정렬 및 패딩 추가 */
 	    .fixed a {display: inline-block;padding: 5px 10px;margin: 0 2px;border: 1px solid #ddd;border-radius: 3px;text-decoration: none;color: #007bff;}
 	    .fixed a:hover {background-color: #e9ecef;}
-	    .fixed a b {color: #dc3545;font-weight: bold;}
+	    .fixed b {color: #dc3545;font-weight: bold; padding: 5px 10px;} /* 현재 페이지 스타일 일관성 유지 */
+	    
 	    /* 판매 상태 표시를 위한 스타일 */
 	    .status-deleted {color: #dc3545;font-weight: bold;}
 	    .status-active {color: #28a745;}
@@ -59,52 +62,45 @@
 				beginMonth = endMonth;
 				beginDay = endDay;
 			} else if (search_period == 'one_week') {
+				dt.setDate(endDay - 7);
 				beginYear = dt.getFullYear();
 				beginMonth = dt.getMonth() + 1;
-				dt.setDate(endDay - 7);
 				beginDay = dt.getDate();
 			} else if (search_period == 'two_week') {
+				dt.setDate(endDay - 14);
 				beginYear = dt.getFullYear();
 				beginMonth = dt.getMonth() + 1;
-				dt.setDate(endDay - 14);
 				beginDay = dt.getDate();
 			} else if (search_period == 'one_month') {
+				dt.setMonth(dt.getMonth() - 1);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth - 1);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			} else if (search_period == 'two_month') {
+				dt.setMonth(dt.getMonth() - 2);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth - 2);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			} else if (search_period == 'three_month') {
+				dt.setMonth(dt.getMonth() - 3);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth - 3);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			} else if (search_period == 'four_month') {
+				dt.setMonth(dt.getMonth() - 4);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth - 4);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}
 		
-			if (beginMonth < 10) {
-				beginMonth = '0' + beginMonth;
-				if (beginDay < 10) {
-					beginDay = '0' + beginDay;
-				}
-			}
-			if (endMonth < 10) {
-				endMonth = '0' + endMonth;
-				if (endDay < 10) {
-					endDay = '0' + endDay;
-				}
-			}
+			beginMonth = beginMonth < 10 ? '0' + beginMonth : beginMonth;
+			beginDay = beginDay < 10 ? '0' + beginDay : beginDay;
+			endMonth = endMonth < 10 ? '0' + endMonth : endMonth;
+			endDay = endDay < 10 ? '0' + endDay : endDay;
+
 			endDate = endYear + '-' + endMonth + '-' + endDay;
 			beginDate = beginYear + '-' + beginMonth + '-' + beginDay;
-			//alert(beginDate+","+endDate);
+			
 			return beginDate + "," + endDate;
 		}
 		
@@ -253,14 +249,14 @@
 	<DIV class="clear"></DIV>
 	
 		<TABLE class="table">
-        <TBODY align="center">
+        <TBODY>
             <tr style="background:#33cc00; color:white;">
-                <td>상품번호</td>
-                <td>상품이름</td>
-                <td>제조사</td>
-                <td>판매가격(할인 후)</td>
-                <td>등록일</td>
-                <td>판매상태</td>
+                <th>상품번호</th>
+                <th>상품이름</th>
+                <th>제조사</th>
+                <th>판매가격(할인 후)</th>
+                <th>등록일</th>
+                <th>판매상태</th>
             </tr>
             <c:choose>
                 <c:when test="${empty newGoodsList}">
@@ -303,6 +299,7 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
+            <!-- 페이지네이션 HTML 및 로직 -->
             <tr>
                 <td colspan="6" class="fixed">
                     <%-- 페이징: chapter와 pageNum을 사용하여 페이지 이동. 필요에 따라 현재 페이지를 나타내는 로직 추가 --%>
@@ -323,7 +320,7 @@
                     <c:forEach var="page" begin="1" end="10" step="1">
                         <c:set var="currentPageNum" value="${(section-1)*10 + page}" />
                         <%-- 전체 상품 개수가 0보다 크고, 해당 페이지가 전체 상품 개수 범위 내에 있을 때만 페이지 번호 표시 --%>
-                        <c:if test="${totalGoodsCount > 0 && currentPageNum le totalGoodsCount}">
+                        <c:if test="${totalGoodsCount > 0 && currentPageNum <= totalPages}">
                             <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section}&pageNum=${currentPageNum}
                                 <c:if test="${not empty param.fixedSearchPeriod}">
                                     &fixedSearchPeriod=${param.fixedSearchPeriod}
@@ -351,7 +348,7 @@
                     </c:forEach>
 
                     <%-- 다음 섹션으로 이동 링크 (전체 상품 개수가 다음 섹션의 시작 페이지보다 많을 경우) --%>
-                    <c:if test="${totalGoodsCount > (section * 10)}">
+                    <c:if test="${totalPages > (section * 10)}">
                         <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section+1}&pageNum=${section*10+1}
                             <c:if test="${not empty param.fixedSearchPeriod}">
                                 &fixedSearchPeriod=${param.fixedSearchPeriod}

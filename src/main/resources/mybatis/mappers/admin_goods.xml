@@ -214,4 +214,16 @@
 		UPDATE goods SET goods_status=#{goods_status}
 		WHERE goods_num = #{goods_num}
 	</update>
+	
+	<select id="selectNewGoodsTotalCount" resultType="int" parameterType="java.util.Map">
+        <![CDATA[
+            SELECT 
+                COUNT(goods_num)
+            FROM 
+                goods
+            WHERE 
+                DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate}
+        ]]>
+    </select>
+	
 </mapper>

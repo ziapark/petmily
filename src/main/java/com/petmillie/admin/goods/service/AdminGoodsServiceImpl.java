@@ -106,5 +106,8 @@ public class AdminGoodsServiceImpl implements AdminGoodsService {
         goodsMap.put("goods_status", "판매중");
         adminGoodsDAO.updateGoodsDelYn(goodsMap); // 기존 updateGoodsDelYn DAO 메서드 재활용
     }
-	 
+	@Override
+    public int countNewGoods(Map<String, Object> condMap) throws Exception {
+        return adminGoodsDAO.selectNewGoodsTotalCount(condMap);
+    }
 }

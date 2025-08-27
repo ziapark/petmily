@@ -24,5 +24,6 @@ public interface AdminGoodsDAO {
 	public void modifyMemberInfo(Map MemberMap) throws DataAccessException;
 	public int updateGoodsDelYn(Map<String, Object> goodsMap) throws Exception;
 	public int updateGoodsStatus(GoodsVO goodsVO) throws Exception;
+	public int selectNewGoodsTotalCount(Map<String, Object> condMap) throws Exception;
 	
 }

@@ -10,6 +10,11 @@
 	    table { width: 100%; border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;}
 	    table th {background-color: #f2f2f2;}
+		/* 요청하신 페이지네이션 스타일 */
+		.fixed { text-align: center; }
+		.fixed a {display: inline-block;padding: 5px 10px;margin: 0 2px;border: 1px solid #ddd;border-radius: 3px;text-decoration: none;color: #007bff;}
+	    .fixed a:hover {background-color: #e9ecef;}
+	    .fixed b {color: #dc3545;font-weight: bold; padding: 5px 10px;}
 	</style>
 	<meta charset="utf-8">
 	<c:choose>
@@ -37,6 +42,7 @@
 			</script>
 		</c:when>
 	</c:choose>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 		function search_order_history(search_period){	
 			temp=calcPeriod(search_period);
@@ -77,35 +83,35 @@
 				beginMonth=endMonth;
 				beginDay=endDay;
 			}else if(search_period=='one_week'){
+				dt.setDate(endDay-7);
 				beginYear=dt.getFullYear();
 				beginMonth=dt.getMonth()+1;
-				dt.setDate(endDay-7);
 				beginDay=dt.getDate();
 				
 			}else if(search_period=='two_week'){
+				dt.setDate(endDay-14);
 				beginYear = dt.getFullYear();
 				beginMonth = dt.getMonth()+1;
-				dt.setDate(endDay-14);
 				beginDay=dt.getDate();
 			}else if(search_period=='one_month'){
+				dt.setMonth(dt.getMonth() - 1);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-1);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='two_month'){
+				dt.setMonth(dt.getMonth() - 2);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-2);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='three_month'){
+				dt.setMonth(dt.getMonth() - 3);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-3);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='four_month'){
+				dt.setMonth(dt.getMonth() - 4);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-4);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}
 	
@@ -589,19 +595,21 @@
 					</c:forEach>
 				</c:otherwise>
   			</c:choose>	
-         	<tr>
-			    <td colspan=8 class="fixed">
-			        <c:forEach var="page" begin="1" end="${totalPage}" step="1">
-			            <c:if test="${section >1 && page==1 }">
-			                <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp;&nbsp;</a>
-			            </c:if>
-			            <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 + page } </a>
-			            <c:if test="${page == totalPage}">
-			                <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
-			            </c:if> 
-			        </c:forEach> 
+         	<!-- 수정된 페이지네이션 블록 -->
+			<tr>
+			    <td colspan="8" class="fixed">
+			        <c:forEach var="page" begin="1" end="${totalPage}">
+			            <c:choose>
+			                <c:when test="${page == pageNum}">
+			                    <b>[${page}]</b>
+			                </c:when>
+			                <c:otherwise>
+			                    <a href="${contextPath}/admin/order/adminOrderMain.do?pageNum=${page}&section=${section}">${page}</a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:forEach>
 			    </td>
-			</tr>		   
+			</tr>	   
 		</tbody>
 	</table>
   	</form> 

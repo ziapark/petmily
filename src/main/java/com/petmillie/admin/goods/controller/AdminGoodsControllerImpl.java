@@ -45,63 +45,75 @@ public class AdminGoodsControllerImpl extends BaseController implements AdminGoo
 	
 	@RequestMapping(value="/adminGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
-			 HttpServletRequest request, HttpServletResponse response) throws Exception {
+	         HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		HttpSession session=request.getSession();
-		session=request.getSession();
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "마이페이지");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+	    HttpSession session=request.getSession();
+	    String viewName=(String)request.getAttribute("viewName");
+	    ModelAndView mav=new ModelAndView("/common/layout");
+	    mav.addObject("title", "마이페이지");
+	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
-		session.setAttribute("side_menu", "admin_mode");
+	    session.setAttribute("side_menu", "admin_mode");
 
-		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
-		String section = dateMap.get("section");
-		String pageNum = dateMap.get("pageNum");
-		String beginDate=null,endDate=null;
+	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
+	    String sectionStr = dateMap.get("section");
+	    String pageNumStr = dateMap.get("pageNum");
+	    String beginDate=null,endDate=null;
 
-		String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
-		beginDate=tempDate[0];
-		endDate=tempDate[1];
-		dateMap.put("beginDate", beginDate);
-		dateMap.put("endDate", endDate);
+	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
+	    beginDate=tempDate[0];
+	    endDate=tempDate[1];
+	    dateMap.put("beginDate", beginDate);
+	    dateMap.put("endDate", endDate);
 
-		Map<String,Object> condMap=new HashMap<String,Object>();
-		if(section== null) {
-			section = "1";
-		}
-		condMap.put("section",section);
-		if(pageNum== null) {
-			pageNum = "1";
-		}
-		condMap.put("pageNum",pageNum);
-		condMap.put("beginDate",beginDate);
-		condMap.put("endDate", endDate);
+	    Map<String,Object> condMap=new HashMap<String,Object>();
+	    
+	    int section = 1;
+	    if(sectionStr != null && !sectionStr.isEmpty()) {
+	        section = Integer.parseInt(sectionStr);
+	    }
+	    condMap.put("section", section);
 
-        int pageSize = 10;
-        int currentPage = Integer.parseInt(pageNum);
-        int offset = (currentPage - 1) * pageSize;
+	    int pageNum = 1;
+	    if(pageNumStr != null && !pageNumStr.isEmpty()) {
+	        pageNum = Integer.parseInt(pageNumStr);
+	    }
+	    condMap.put("pageNum", pageNum);
+	    
+	    condMap.put("beginDate",beginDate);
+	    condMap.put("endDate", endDate);
 
-        condMap.put("offset", offset);
-        condMap.put("limit", pageSize);
+	    // 1. 전체 상품 개수 가져오기 (Service와 Mapper/DAO에 countNewGoods 같은 메소드가 필요합니다)
+	    // 이 메소드는 검색 조건(날짜 등)을 포함해야 정확한 개수를 셀 수 있습니다.
+	    int totalGoodsCount = adminGoodsService.countNewGoods(condMap); 
+	    
+	    // 2. 전체 페이지 수 계산하기
+	    int pageSize = 10; // 한 페이지에 보여줄 상품 수
+	    int totalPages = (int) Math.ceil((double) totalGoodsCount / pageSize);
 
-		List<GoodsVO> newGoodsList=adminGoodsService.listNewGoods(condMap);
-		mav.addObject("newGoodsList", newGoodsList);
+	    int offset = (pageNum - 1) * pageSize;
+	    condMap.put("offset", offset);
+	    condMap.put("limit", pageSize);
 
-		String beginDate1[]=beginDate.split("-");
-		String endDate2[]=endDate.split("-");
-		mav.addObject("beginYear",beginDate1[0]);
-		mav.addObject("beginMonth",beginDate1[1]);
-		mav.addObject("beginDay",beginDate1[2]);
-		mav.addObject("endYear",endDate2[0]);
-		mav.addObject("endMonth",endDate2[1]);
-		mav.addObject("endDay",endDate2[2]);
+	    List<GoodsVO> newGoodsList=adminGoodsService.listNewGoods(condMap);
+	    mav.addObject("newGoodsList", newGoodsList);
 
-		mav.addObject("section", section);
-		mav.addObject("pageNum", pageNum);
-		return mav;
+	    String beginDate1[]=beginDate.split("-");
+	    String endDate2[]=endDate.split("-");
+	    mav.addObject("beginYear",beginDate1[0]);
+	    mav.addObject("beginMonth",beginDate1[1]);
+	    mav.addObject("beginDay",beginDate1[2]);
+	    mav.addObject("endYear",endDate2[0]);
+	    mav.addObject("endMonth",endDate2[1]);
+	    mav.addObject("endDay",endDate2[2]);
 
+	    // 3. 계산된 페이지 정보들을 ModelAndView에 추가
+	    mav.addObject("totalGoodsCount", totalGoodsCount); // JSP에서 사용하기 위해 추가
+	    mav.addObject("totalPages", totalPages);           // JSP에서 사용하기 위해 추가
+	    mav.addObject("section", section);
+	    mav.addObject("pageNum", pageNum);
+	    
+	    return mav;
 	}
 
 	@RequestMapping(value="/addNewGoods.do", method={RequestMethod.POST})
