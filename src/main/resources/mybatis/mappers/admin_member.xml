@@ -54,7 +54,7 @@
 		    <result property="role" column="role"/>
 		    <result property="reg_date" column="reg_date"/>
 		    <result property="del_yn" column="del_yn"/>
-		</resultMap>
+	</resultMap>
 
 	<select id="listMember" resultMap="memberResult"
 		parameterType="java.util.HashMap">
@@ -85,7 +85,33 @@
 			LIMIT #{begin}, 10
 		</if>
 	</select>
-
+	
+	<select id="listAllMembers" resultMap="memberResult"
+		parameterType="java.util.HashMap">
+		SELECT *
+		FROM member
+		WHERE DATE_FORMAT(member_join, '%Y-%m-%d') BETWEEN #{beginDate} AND
+		#{endDate}
+		<if
+			test="search_type == 'member_id' and search_word != null and search_word != ''">
+			AND member_id = #{search_word}
+		</if>
+		<if
+			test="search_type == 'member_name' and search_word != null and search_word != ''">
+			AND member_name LIKE CONCAT('%', #{search_word}, '%')
+		</if>
+		<if
+			test="search_type == 'member_tel' and search_word != null and search_word != ''">
+			AND CONCAT(tel1, tel2, tel3) LIKE CONCAT('%', #{search_word}, '%')
+		</if>
+		<if
+			test="search_type == 'member_addr' and search_word != null and search_word != ''">
+			AND (roadAddress LIKE CONCAT('%', #{search_word}, '%') OR jibunAddress
+			LIKE CONCAT('%', #{search_word}, '%') OR namujiAddress LIKE
+			CONCAT('%', #{search_word}, '%'))
+		</if>
+		ORDER BY member_join DESC
+		</select>
 	<select id="listSellerMember" resultMap="businessResult"
 	        parameterType="java.util.HashMap">
 	    SELECT *

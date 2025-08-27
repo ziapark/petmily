@@ -34,15 +34,16 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	private BusinessService businessService;
 	
 	@RequestMapping(value="/adminMemberMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
-	                                   HttpServletRequest request, HttpServletResponse response)  throws Exception{
+	// 메서드 이름을 adminMemberMain으로 바꾸는 것을 권장합니다.
+	public ModelAndView adminMemberMain(@RequestParam Map<String, String> dateMap, 
+	                                    HttpServletRequest request, HttpServletResponse response)  throws Exception{
 	    String viewName=(String)request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
 	    mav.addObject("body", "/WEB-INF/views"+ viewName +".jsp");
 
 	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
-	    String section = dateMap.get("section");
-	    String pageNum = dateMap.get("pageNum");
+	    // String section = dateMap.get("section"); // <<-- 삭제
+	    // String pageNum = dateMap.get("pageNum"); // <<-- 삭제
 	    String beginDate=null,endDate=null;
 
 	    String [] tempDate=calcSearchPeriod(fixedSearchPeriod).split(",");
@@ -51,25 +52,17 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	    dateMap.put("beginDate", beginDate);
 	    dateMap.put("endDate", endDate);
 
-
+	    // 검색 기간만 condMap에 담습니다.
 	    HashMap<String,Object> condMap=new HashMap<String,Object>();
-	    if(section== null) {
-	        section = "1";
-	    }
-	    if(pageNum== null) {
-	        pageNum = "1";
-	    }
-	    condMap.put("section",section);
-	    condMap.put("pageNum",pageNum);
 	    condMap.put("beginDate",beginDate);
 	    condMap.put("endDate", endDate);
+	    // condMap.put("section",section); // <<-- 삭제
+	    // condMap.put("pageNum",pageNum); // <<-- 삭제
+	    // 페이지네이션 offset 계산 로직 전체 삭제
 
-	    int sectionInt = Integer.parseInt(section);
-	    int pageNumInt = Integer.parseInt(pageNum);
-	    int offset = Math.max(0, (sectionInt - 1) * 100 + (pageNumInt - 1) * 10);
-	    condMap.put("offset", offset);
-
-	    ArrayList<MemberVO> member_list=adminMemberService.listMember(condMap);
+	    // 모든 회원을 조회하는 서비스 메서드를 호출합니다 (메서드명은 예시).
+	    // 이 메서드는 SQL에서 LIMIT, OFFSET 없이 모든 결과를 가져와야 합니다.
+	    ArrayList<MemberVO> member_list = adminMemberService.listAllMembers(condMap); 
 	    mav.addObject("member_list", member_list);
 
 	    String beginDate1[]=beginDate.split("-");
@@ -81,8 +74,7 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	    mav.addObject("endMonth",endDate2[1]);
 	    mav.addObject("endDay",endDate2[2]);
 
-	    mav.addObject("section", section);
-	    mav.addObject("pageNum", pageNum);
+	    
 	    return mav;
 	}
 

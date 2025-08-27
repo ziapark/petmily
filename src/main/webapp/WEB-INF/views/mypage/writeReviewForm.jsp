@@ -31,17 +31,13 @@
 	<form name="writeForm" action="${contextPath}/mypage/addReview.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="nonce" value="0">
 	    <input type="hidden" name="order_num" value="${order_num}" />
-	    <input type="hidden" name="order_num" value="${review_id}" />
-		<div class="mb-3 row">
-			<label for="name" class="col-sm-2 col-form-label">작성자 </label>
-			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${order_name}" readonly>
-			 </div>
-		</div>
+	    <input type="hidden" name="review_id" value="${review_id}" />
+	    <input type="hidden" name="goods_num" value="${goods_num}" />
+
 		<div class="mb-3 row">
 			<label for="name" class="col-sm-2 col-form-label">주문 상품 </label>
 			<div class="col-sm-10">
-			     <input type="text" name="member_id" class="form-control" value="${goods_name}" readonly>
+			     <input type="text" name="goods_name" class="form-control" value="${goods_name}" readonly>
 			  </div>
 		</div>		
 		<div class="mb-3 row">

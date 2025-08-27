@@ -18,4 +18,5 @@ public interface OrderService {
     public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception;
     public OrderVO findMyOrder(String order_id) throws Exception;
     public void addNewpay(PayVO payVO)throws Exception; 
+    
 }
