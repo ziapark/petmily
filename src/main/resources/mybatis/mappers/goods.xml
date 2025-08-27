@@ -129,4 +129,6 @@
 			WHERE uo.goods_num = #{goods_num}
     	]]>
     </select>
+    
+    
 </mapper>

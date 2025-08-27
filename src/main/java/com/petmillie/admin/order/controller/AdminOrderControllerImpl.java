@@ -71,7 +71,10 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	    List<OrderVO> newOrderList=adminOrderService.listNewOrder(condMap);
 	    mav.addObject("newOrderList",newOrderList);
 	    
-		
+	    int totalCount = adminOrderService.getNewOrderCount(condMap);
+	    int totalPage = (int)Math.ceil((double)totalCount / limit);
+	    mav.addObject("totalPage", totalPage);
+	    
 		String beginDate1[]=beginDate.split("-");
 		String endDate2[]=endDate.split("-");
 		mav.addObject("beginYear",beginDate1[0]);

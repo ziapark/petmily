@@ -37,7 +37,12 @@ public class AdminOrderDAOImpl  implements AdminOrderDAO{
 	}
 	@Override
 	public String selectMemberIdByOrderId(String order_id) throws Exception {
-	    // ...
+	    
 	    return sqlSession.selectOne("mapper.admin.order.selectMemberIdByOrderId", order_id);
+	}
+	@Override
+	public int selectNewOrderCount(Map<String, Object> condMap) throws Exception {
+		
+		return sqlSession.selectOne("mapper.admin.order.selectNewOrderCount", condMap);
 	}
 }

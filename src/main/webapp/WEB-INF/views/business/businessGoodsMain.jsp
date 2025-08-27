@@ -310,68 +310,19 @@
                 </c:otherwise>
             </c:choose>
             <tr>
-                <td colspan="6" class="fixed">
-                    <%-- 페이징: chapter와 pageNum을 사용하여 페이지 이동. 필요에 따라 현재 페이지를 나타내는 로직 추가 --%>
-                    <c:if test="${section > 1}">
-                        <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section-1}&pageNum=1
-                            <c:if test="${not empty param.fixedSearchPeriod}">
-                                &fixedSearchPeriod=${param.fixedSearchPeriod}
-                            </c:if>
-                            <c:if test="${not empty param.search_type}">
-                                &search_type=${param.search_type}
-                            </c:if>
-                            <c:if test="${not empty param.search_condition}">
-                                &search_condition=${param.search_condition}&search_word=${param.search_word}
-                            </c:if>
-                            ">&lt;&lt; 이전</a>
-                    </c:if>
-
-                    <c:forEach var="page" begin="1" end="10" step="1">
-                        <c:set var="currentPageNum" value="${(section-1)*10 + page}" />
-                        <%-- 전체 상품 개수가 0보다 크고, 해당 페이지가 전체 상품 개수 범위 내에 있을 때만 페이지 번호 표시 --%>
-                        <c:if test="${totalGoodsCount > 0 && currentPageNum le totalGoodsCount}">
-                            <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section}&pageNum=${currentPageNum}
-                                <c:if test="${not empty param.fixedSearchPeriod}">
-                                    &fixedSearchPeriod=${param.fixedSearchPeriod}
-                                </c:if>
-                                <c:if test="${not empty param.search_type}">
-                                    &search_type=${param.search_type}
-                                </c:if>
-                                <c:if test="${not empty param.search_condition}">
-                                    &search_condition=${param.search_condition}&search_word=${param.search_word}
-                                </c:if>
-                                ">
-                                <c:choose>
-                                    <c:when test="${(param.pageNum eq currentPageNum) or (empty param.pageNum and currentPageNum eq 1 and (empty param.search_type or param.search_type eq 'period'))}">
-                                        <b>${currentPageNum}</b>
-                                    </c:when>
-                                    <c:when test="${(param.pageNum eq currentPageNum) and (not empty param.search_type and param.search_type eq 'detail')}">
-                                        <b>${currentPageNum}</b>
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${currentPageNum}
-                                    </c:otherwise>
-                                </c:choose>
-                            </a>
-                        </c:if>
-                    </c:forEach>
-
-                    <%-- 다음 섹션으로 이동 링크 (전체 상품 개수가 다음 섹션의 시작 페이지보다 많을 경우) --%>
-                    <c:if test="${totalGoodsCount > (section * 10)}">
-                        <a href="${contextPath}/admin/goods/adminGoodsMain.do?chapter=${section+1}&pageNum=${section*10+1}
-                            <c:if test="${not empty param.fixedSearchPeriod}">
-                                &fixedSearchPeriod=${param.fixedSearchPeriod}
-                            </c:if>
-                            <c:if test="${not empty param.search_type}">
-                                &search_type=${param.search_type}
-                            </c:if>
-                            <c:if test="${not empty param.search_condition}">
-                                &search_condition=${param.search_condition}&search_word=${param.search_word}
-                            </c:if>
-                            ">다음 &gt;&gt;</a>
-                    </c:if>
-                </td>
-            </tr>
+			    <td colspan="6" class="fixed">
+			        <c:forEach var="page" begin="1" end="${totalPages}">
+			            <c:choose>
+			                <c:when test="${page == pageNum}">
+			                    <b>[${page}]</b>
+			                </c:when>
+			                <c:otherwise>
+			                    <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${page}&section=${section}">${page}</a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:forEach>
+			    </td>
+			</tr>
         </TBODY>
     </TABLE>
     <form action="${contextPath}/business/addNewGoodsForm.do" style="width:100%; text-align:right;">

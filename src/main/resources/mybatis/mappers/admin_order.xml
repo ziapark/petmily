@@ -72,6 +72,17 @@
 		<result property="joinDate" column="joinDate" />
 	</resultMap>
 
+
+	
+	<!-- 전제주문개수 조회 -->
+	
+	<select id="selectNewOrderCount" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM userorder
+	    WHERE order_time BETWEEN #{beginDate} AND #{endDate}
+	</select>
+	
+	
 	<select id="selectNewOrderList" resultMap="adminorderResult" parameterType="java.util.Map">
 		<![CDATA[
 			SELECT *

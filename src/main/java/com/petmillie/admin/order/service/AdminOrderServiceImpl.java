@@ -56,4 +56,10 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 	public String getMemberIdByOrderId(String order_id) throws Exception {
 	    return adminOrderDAO.selectMemberIdByOrderId(order_id);
 	}
+
+	@Override
+	public int getNewOrderCount(Map<String, Object> condMap) throws Exception {
+		
+		return adminOrderDAO.selectNewOrderCount(condMap);
+	}
 }

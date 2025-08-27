@@ -186,4 +186,10 @@ public class BusinessServiceImpl implements BusinessService {
 	    businessDAO.updatePensionStatus(pensionMap);
 	}
 
+	@Override
+	public int getGoodsCount(Map<String, Object> condMap) throws Exception {
+		
+		return 1;
+	}
+
 }

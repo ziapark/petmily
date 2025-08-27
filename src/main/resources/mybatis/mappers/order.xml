@@ -85,6 +85,8 @@
     	<result property="reg_day" column="reg_day"/>
 	</resultMap>
 	
+
+
 	<insert id="insertNewOrder" parameterType="com.petmillie.order.vo.OrderVO">
         <![CDATA[
             INSERT INTO userorder(

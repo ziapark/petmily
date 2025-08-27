@@ -707,6 +707,9 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    
 		List<GoodsVO> newGoodsList=businessService.listNewGoods(condMap);
 		mav.addObject("newGoodsList", newGoodsList);
+		
+		int totalCount = businessService.getGoodsCount(condMap);
+		mav.addObject("totalCount", totalCount);
 
 		String beginDate1[]=beginDate.split("-");
 		String endDate2[]=endDate.split("-");
