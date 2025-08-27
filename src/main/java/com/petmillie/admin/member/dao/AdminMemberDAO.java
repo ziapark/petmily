@@ -10,9 +10,11 @@ import com.petmillie.member.vo.MemberVO;
 
 public interface AdminMemberDAO {
 	public ArrayList<MemberVO> listMember(HashMap condMap) throws DataAccessException;
+	
+	// 모든 회원을 조회하기 위한 메서드 선언을 추가합니다.
+	public ArrayList<MemberVO> listAllMembers(HashMap condMap) throws DataAccessException;
+	
 	public ArrayList<BusinessVO> listSellerMember(HashMap condMap) throws DataAccessException;
 	public MemberVO memberDetail(String member_id) throws DataAccessException;
 	public void modifyMemberInfo(HashMap memberMap) throws DataAccessException;
-	
-	
 }
