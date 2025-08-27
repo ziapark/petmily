@@ -158,4 +158,10 @@ public class MyPageDAOImpl implements MyPageDAO{
 	public int deletePet(int pet_id) throws Exception {
 		return sqlSession.delete("mapper.mypage.deletePet", pet_id);
 	}
+
+	@Override
+	public void updateHasReview(GoodsReviewVO goodsReviewVO) throws Exception {
+		
+		sqlSession.update("mapper.mypage.updateHasReview", goodsReviewVO);
+	}
 }

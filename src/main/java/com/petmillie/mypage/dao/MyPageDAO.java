@@ -36,5 +36,5 @@ public interface MyPageDAO {
 	public PetVO selectPet(int pet_id) throws Exception;
 	public int updatePet(PetVO petVO) throws Exception;
 	public int deletePet(int pet_id) throws Exception;
-	
+	public void updateHasReview(GoodsReviewVO goodsReviewVO) throws Exception;
 }

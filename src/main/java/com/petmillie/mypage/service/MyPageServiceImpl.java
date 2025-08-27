@@ -56,8 +56,9 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 	
     @Override
-    public void writeGoodsReview(GoodsReviewVO goodsReviewVO) {
+    public void writeGoodsReview(GoodsReviewVO goodsReviewVO) throws Exception {
     	myPageDAO.insertGoodsReview(goodsReviewVO);
+    	myPageDAO.updateHasReview(goodsReviewVO);
     }
 
 	@Override

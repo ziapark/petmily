@@ -68,5 +68,11 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<GoodsReviewVO> goodsReview(int goods_num) throws Exception{
 		return goodsDAO.goodsReview(goods_num);
 	}
+
+	@Override
+	public List<GoodsVO> getGoodsListByOrder(int order_num) {
+		System.out.println("주문한 상품리스트 서비스진입: " + order_num);
+		return goodsDAO.getGoodsListByOrder(order_num);
+	}
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class GoodsReviewVO {
 	private String review_id;
 	private String member_id;
+	private int goods_num;
 	private int order_num;
 	private int reservation_id;
 	private int rating;
@@ -19,6 +20,12 @@ public class GoodsReviewVO {
 	private String review_type;
 	
 	
+	public int getGoods_num() {
+		return goods_num;
+	}
+	public void setGoods_num(int goods_num) {
+		this.goods_num = goods_num;
+	}
 	private String goods_name;
 	
 	public String getReview_id() {

@@ -130,5 +130,11 @@
     	]]>
     </select>
     
-    
+    <!-- 주문 번호로 주문한 상품 리스트 조회 -->
+    <select id="getGoodsListByOrder" parameterType="int" resultType="com.petmillie.goods.vo.GoodsVO">
+        SELECT g.goods_num, g.goods_name
+        FROM goods g
+        JOIN userorder uo ON g.goods_num = uo.goods_num
+        WHERE uo.order_id = #{order_num}
+    </select>
 </mapper>

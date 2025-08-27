@@ -58,6 +58,7 @@
 		<result property="review_id" column="review_id"/>
 		<result property="member_id" column="member_id"/>
 		<result property="order_num" column="order_num"/>
+		<result property="goods_num" column="goods_num"/>
 		<result property="rating" column="rating"/>
 		<result property="subject" column="subject"/>
 		<result property="content" column="content"/>
@@ -240,8 +241,8 @@
 	</update>
 	
 	<insert id="insertGoodsReview" parameterType="GoodsReviewVO">
-		INSERT INTO goods_review (member_id, order_num, rating,content,file_name)
-		VALUES (#{member_id}, #{order_num}, #{rating}, #{content},#{file_name})
+		INSERT INTO goods_review (member_id, order_num, rating,content,file_name,goods_num)
+		VALUES (#{member_id}, #{order_num}, #{rating}, #{content},#{file_name},#{goods_num})
 	</insert>
 
 	<select id="selectGoodsReview" resultMap="goodsReviewResult" parameterType="string">
@@ -261,6 +262,7 @@
 		JOIN userorder o
 			ON r.order_num = o.order_id
 		WHERE r.member_id = #{member_id}
+		ORDER BY r.review_id DESC
 	]]>
 	</select>
 
@@ -286,6 +288,12 @@
 		UPDATE goods_review
 		SET rating= #{rating}, content= #{content}, file_name= #{file_name}
 		WHERE review_id = #{review_id}
+	</update>
+	
+	<update id="updateHasReview" parameterType="GoodsReviewVO">
+		UPDATE userorder
+		SET hasReview= 'Y'
+		WHERE order_id = #{order_num} AND goods_num = #{goods_num}
 	</update>
 
 	<delete id="deleteReview" parameterType="int">
