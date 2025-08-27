@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.account">
+	<resultMap id="accountResult" type="AccountVO">
+	    <result property="seller_id" column="seller_id"/>
+	    <result property="business_name" column="business_name"/>
+	    <result property="netSales" column="netSales"/>
+	    <result property="orderCount" column="orderCount"/>
+	    <result property="commission_rate" column="commission_rate"/>
+	</resultMap>
+	
+	<select id="selectStoreRanking" resultType="accountVO" parameterType="java.util.Map">
+		<![CDATA[
+			SELECT
+			    g.seller_id as seller_id,
+			    b.business_name as business_name,
+			    SUM(p.payment_amount) as netSales,
+			    COUNT(DISTINCT p.order_id) as orderCount,
+			    b.commission_rate as commission_rate
+			FROM
+			    payment p
+			INNER JOIN
+			    userorder u ON p.order_id = u.order_id
+			INNER JOIN
+			    goods g ON u.goods_num = g.goods_num
+			INNER JOIN
+			    business b ON g.seller_id = b.seller_id
+			WHERE
+			    u.delivery_state = 'finished'
+		]]>
+			    <if test="beginDate != null and beginDate != ''">
+			    	<![CDATA[
+			        AND p.payment_time >= #{beginDate}
+			    	]]>
+			    </if>
+			    <if test="endDate != null and endDate != ''">
+					<![CDATA[
+			        AND p.payment_time <= #{endDate}
+			    	]]>
+			    </if>
+		<![CDATA[
+			GROUP BY
+			    g.seller_id, b.business_name, b.commission_rate
+			ORDER BY
+			    netSales DESC
+		]]>
+	</select>
+
+	<update id="updateCommissionRate" parameterType="java.util.Map">
+		<![CDATA[	
+			UPDATE business
+			SET commission_rate = #{commission_rate}
+			WHERE seller_id = #{seller_id}
+		]]>
+	</update>
+	
+	<!-- 상점 이름 조회 -->
+	<select id="selectStoreName" resultType="String" parameterType="String">
+		SELECT business_name FROM business WHERE seller_id = #{seller_id}
+	</select>
+
+	<!-- 핵심 요약 정보 조회 -->
+	<select id="selectStoreSummary" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			b.business_name as business_name,
+			IFNULL(SUM(CASE WHEN u.delivery_state = 'finished' THEN p.payment_amount ELSE 0 END), 0) as totalSales,
+			IFNULL(SUM(CASE WHEN u.delivery_state = 'finished' THEN p.used_point ELSE 0 END), 0) as usedPoints,
+			IFNULL(SUM(CASE WHEN u.delivery_state = 'cancel_order' THEN p.payment_amount ELSE 0 END), 0) as totalRefunds,
+	        IFNULL(SUM(CASE 
+                   WHEN u.delivery_state = 'finished' THEN p.payment_amount 
+                   WHEN u.delivery_state = 'cancel_order' THEN -p.payment_amount 
+                   ELSE 0 
+                 END), 0) as netSales,
+			COUNT(DISTINCT p.order_id) as orderCount,
+			b.commission_rate as commission_rate
+		FROM
+			business b
+		LEFT JOIN
+		    goods g ON b.seller_id = g.seller_id
+		LEFT JOIN
+		    userorder u ON g.goods_num = u.goods_num
+		LEFT JOIN
+		    payment p ON u.order_id = p.order_id
+		WHERE
+			b.seller_id = #{seller_id}
+			<if test="selectedMonth != null and selectedMonth != ''">
+		        AND DATE_FORMAT(p.payment_time, '%Y-%m') = #{selectedMonth}
+		    </if>
+	</select>
+
+	<!-- 일별 매출 데이터 조회 (차트용) -->
+	<select id="selectDailySales" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			DATE_FORMAT(p.payment_time, '%m-%d') as date,
+	        IFNULL(SUM(CASE 
+                WHEN u.delivery_state = 'finished' THEN p.payment_amount 
+                WHEN u.delivery_state = 'cancel_order' THEN -p.payment_amount 
+                ELSE 0 
+              END), 0) as netSales
+		FROM
+			payment p
+		INNER JOIN
+			userorder u ON p.order_id = u.order_id
+		INNER JOIN
+			goods g ON u.goods_num = g.goods_num
+		WHERE
+			g.seller_id = #{seller_id}
+			<if test="selectedMonth != null and selectedMonth != ''">
+		        AND DATE_FORMAT(p.payment_time, '%Y-%m') = #{selectedMonth}
+		    </if>
+		GROUP BY
+			DATE_FORMAT(p.payment_time, '%Y-%m-%d')
+		ORDER BY
+			date ASC
+	</select>
+
+	<!-- 최신 거래 내역 조회 -->
+	<select id="selectTransactionList" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			DATE_FORMAT(p.payment_time, '%Y-%m-%d %H:%i') as date,
+			p.order_id as order_id,
+			p.payment_amount as amount,
+			u.delivery_state as delivery_state
+		FROM
+			payment p
+		INNER JOIN
+			userorder u ON p.order_id = u.order_id
+		INNER JOIN
+			goods g ON u.goods_num = g.goods_num
+		WHERE
+			g.seller_id = #{seller_id}
+			<if test="selectedMonth != null and selectedMonth != ''">
+		        AND DATE_FORMAT(p.payment_time, '%Y-%m') = #{selectedMonth}
+		    </if>
+		ORDER BY
+			p.payment_time DESC
+		LIMIT 10
+	</select>
+</mapper>

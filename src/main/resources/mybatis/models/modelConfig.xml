@@ -25,6 +25,7 @@
     <typeAlias type="com.petmillie.reservation.vo.ReservationVO" alias="ReservationVO" />
     <typeAlias type="com.petmillie.order.vo.PayVO" alias="PayVO" />
     <typeAlias type="com.petmillie.medi.vo.MediVO" alias="MediVO" />
+    <typeAlias type="com.petmillie.account.vo.AccountVO" alias="AccountVO" />
   </typeAliases>
 </configuration>
 
