@@ -158,6 +158,13 @@ public class MyPageDAOImpl implements MyPageDAO{
 	public int deletePet(int pet_id) throws Exception {
 		return sqlSession.delete("mapper.mypage.deletePet", pet_id);
 	}
+<<<<<<< HEAD
+
+	@Override
+	public void updateHasReview(GoodsReviewVO goodsReviewVO) throws Exception {
+		
+		sqlSession.update("mapper.mypage.updateHasReview", goodsReviewVO);
+=======
 	
 	@Override
 	public void updateOrderStateToFinished(Map<String, String> orderMap) throws Exception {
@@ -172,5 +179,6 @@ public class MyPageDAOImpl implements MyPageDAO{
 	@Override
 	public void updateMemberPoint(Map<String, String> pointMap) throws Exception {
 		sqlSession.update("mapper.mypage.updateMemberPoint", pointMap);
+>>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
 	}
 }

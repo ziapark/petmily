@@ -147,7 +147,7 @@
 							class="btn-sm btn btn-outline-dark">
 							<spring:message code="menu.order"/>
 						</a></li>
-						<li><a href="#" class="btn-sm btn btn-outline-dark">
+						<li><a href="${contextPath}/board/boardList.do?board_type=qna" class="btn-sm btn btn-outline-dark">
 							<spring:message code="menu.cs"/>
 						</a></li>
 						<li><a href="${contextPath}/member/logout.do"
@@ -307,9 +307,6 @@
 				<ul class="submenu">
 					<li><a href="${contextPath}/board/boardList.do?board_type=notice">
 						<spring:message code="submenu.notice"/>
-					</a></li>
-					<li><a href="${contextPath}/board/boardList.do?board_type=qna">
-						<spring:message code="submenu.qna"/>
 					</a></li>
 					<li><a href="${contextPath}/board/boardList.do?board_type=comu_dog">
 						<spring:message code="submenu.comuDog"/>
