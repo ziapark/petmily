@@ -11,106 +11,62 @@
 <html>
 <head>
 	<style>
+		/* ===== 기존 스타일 유지 ===== */
 		#layer {position: fixed; top: 0; left: 0; width: 100%; height: 100%; visibility: hidden; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; display: flex; justify-content: center; align-items: center;}
 		#popup {background: white; padding: 40px; border-radius: 10px; text-align: center;}
 		#close {position: absolute; top: 10px; right: 10px; cursor: pointer;}
-		
-		/* ===== 신규 리뷰 디자인 CSS ===== */
-		.review-section {
-		    font-family: 'Malgun Gothic', sans-serif;
-		    padding: 10px 0;
+		.review-section { font-family: 'Malgun Gothic', sans-serif; padding: 10px 0; }
+		.review-item { display: flex; align-items: flex-start; padding: 24px 10px; border-bottom: 1px solid #f0f0f0; gap: 20px; }
+		.review-item:last-child { border-bottom: none; }
+		.review-image-box { flex-shrink: 0; width: 80px; height: 80px; border-radius: 10px; overflow: hidden; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; }
+		.review-image-box img { width: 100%; height: 100%; object-fit: cover; }
+		.review-image-box .no-image-placeholder { width: 40%; height: 40%; color: #cccccc; }
+		.review-details { flex-grow: 1; display: flex; flex-direction: column; }
+		.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+		.review-author-info .author { font-weight: bold; color: #333; }
+		.review-author-info .date { font-size: 0.85em; color: #999; margin-left: 8px; }
+		.star-rating { font-size: 1.1em; color: #FFC107; }
+		.star-rating .empty-star { color: #e0e0e0; }
+		.review-body { font-size: 0.95em; color: #555; line-height: 1.6; text-align: left; }
+		.no-reviews-message { padding: 60px 20px; text-align: center; color: #888; background-color: #fafafa; border-radius: 8px; margin-top: 20px; }
+		.quantity-selector {
+			display: flex;
+			align-items: center;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 5px;
+			width: fit-content; /* 테이블 셀 안에서 너비가 꽉 차지 않도록 설정 */
 		}
-		
-		.review-item {
-		    display: flex; /* 가로 정렬을 위한 flexbox */
-		    align-items: flex-start; /* 상단 정렬 */
-		    padding: 24px 10px;
-		    border-bottom: 1px solid #f0f0f0;
-		    gap: 20px; /* 이미지와 내용 사이의 간격 */
+		.quantity-selector button {
+			border: none;
+			background-color: #f0f0f0;
+			font-size: 1.2rem;
+			font-weight: bold;
+			cursor: pointer;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
 		}
-		
-		.review-item:last-child {
-		    border-bottom: none;
+		.quantity-selector input {
+			width: 50px;
+			text-align: center;
+			border: none;
+			font-size: 1rem;
+			font-weight: bold;
 		}
-		
-		.review-image-box {
-		    flex-shrink: 0; /* 이미지가 찌그러지지 않도록 설정 */
-		    width: 80px;
-		    height: 80px;
-		    border-radius: 10px;
-		    overflow: hidden; /* 둥근 모서리를 위해 */
-		    background-color: #f4f4f4;
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		}
-		
-		.review-image-box img {
-		    width: 100%;
-		    height: 100%;
-		    object-fit: cover; /* 이미지가 비율에 맞게 꽉 차도록 */
-		}
-		
-		/* 이미지가 없을 때를 위한 아이콘 스타일 */
-		.review-image-box .no-image-placeholder {
-		    width: 40%;
-		    height: 40%;
-		    color: #cccccc;
-		}
-		
-		.review-details {
-		    flex-grow: 1; /* 남은 공간을 모두 차지하도록 */
-		    display: flex;
-		    flex-direction: column; /* 내용을 세로로 정렬 */
-		}
-		
-		.review-header {
-		    display: flex;
-		    justify-content: space-between; /* 작성자 정보와 별점을 양 끝으로 */
-		    align-items: center;
-		    margin-bottom: 8px;
-		}
-		
-		.review-author-info .author {
-		    font-weight: bold;
-		    color: #333;
-		}
-		
-		.review-author-info .date {
-		    font-size: 0.85em;
-		    color: #999;
-		    margin-left: 8px;
-		}
-		
-		.star-rating {
-		    font-size: 1.1em;
-		    color: #FFC107; /* 별점 색상 */
-		}
-		
-		.star-rating .empty-star {
-		    color: #e0e0e0; /* 빈 별 색상 */
-		}
-		
-		.review-body {
-		    font-size: 0.95em;
-		    color: #555;
-		    line-height: 1.6;
-		    text-align: left;
-		}
-		
-		.no-reviews-message {
-		    padding: 60px 20px;
-		    text-align: center;
-		    color: #888;
-		    background-color: #fafafa;
-		    border-radius: 8px;
-		    margin-top: 20px;
+		/* input 태그의 화살표 제거 */
+		.quantity-selector input[type="number"]::-webkit-inner-spin-button,
+		.quantity-selector input[type="number"]::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
 		}
 	</style>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
 		var contextPath = "${pageContext.request.contextPath}";
 
+		// 장바구니 추가 함수
 		function add_cart(goods_num) {	
 		    var isLogOn = document.getElementById("isLogOn").value;
 		    if (isLogOn == "false" || isLogOn == '') {
@@ -119,70 +75,92 @@
 		        return;
 		    }
 		    
+			var cart_goods_qty = document.getElementById("cart_goods_qty").value;
+			if (Number(cart_goods_qty) <= 0) {
+				alert("수량은 1 이상이어야 합니다.");
+				return;
+			}
+
     		$.ajax({
         		type: "post",
         		url: contextPath + "/cart/addGoodsInCart.do",
-        		data: { goods_num: goods_num },
+        		data: { 
+					goods_num: goods_num,
+					cart_goods_qty: cart_goods_qty 
+				},
         		success: function(data) {
-	            	console.log("서버 응답:", data);
-
-	            	if(data === 'increase_success'){
-	            		alert("이미 카트에 등록된 상품입니다. 상품 수량 1개 증가했습니다.");
-	            	}else{
+	            	if(data === 'add_success'){
 	            		alert("장바구니에 상품을 추가했습니다.");
-	            	}
+	            	} else if (data === 'increase_success') {
+						alert("이미 장바구니에 있는 상품입니다. 수량을 변경했습니다.");
+					} else {
+						alert("장바구니 추가에 실패했습니다.");
+					}
         		},
         		error: function(xhr, status, error) {
-            		console.error("Ajax 에러:", error);
             		alert("에러가 발생했습니다.");
         		}
     		});
 		}
 	
-		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName){
+		//바로 구매 함수
+		function fn_order_each_goods(goods_num, goods_name, goods_sales_price, fileName, goods_point){
 	    	var isLogOn = document.getElementById("isLogOn").value;
 	    	if(isLogOn == "false" || isLogOn == '') {
-	        	alert("로그인 후 주문이 가능합니다!!!");
+	        	alert("로그인 후 주문이 가능합니다!");
 	        	return;
 	   	 	}
 	
-		    var order_goods_qty = document.getElementById("order_goods_qty").value;
+			//수량 입력칸에서 값을 가져옵니다.
+		    var goods_qty = document.getElementById("cart_goods_qty").value;
+			if (Number(goods_qty) <= 0) {
+				alert("주문 수량은 1 이상이어야 합니다.");
+				return;
+			}
+
 	    	var formObj = document.createElement("form");
 	    	var i_goods_num = document.createElement("input"); 
 	    	var i_goods_name = document.createElement("input");
 	    	var i_goods_sales_price = document.createElement("input");
 	    	var i_fileName = document.createElement("input");
-	    	var i_order_goods_qty = document.createElement("input");
+	    	var i_goods_qty = document.createElement("input");
+	    	var i_goods_point = document.createElement("input");
+	    	
 	    	i_goods_num.name = "goods_num";
 	    	i_goods_name.name = "goods_name";
 	    	i_goods_sales_price.name = "goods_sales_price";
 	    	i_fileName.name = "fileName";
-	    	i_order_goods_qty.name = "order_goods_qty";
+	    	i_goods_qty.name = "goods_qty"; // 컨트롤러에서 받을 이름과 통일
+	    	i_goods_point.name = "point";
+	    	
 	    	i_goods_num.value = goods_num;
 	    	i_goods_name.value = goods_name;
 	    	i_goods_sales_price.value = goods_sales_price;
 	    	i_fileName.value = fileName;
-	    	i_order_goods_qty.value = order_goods_qty;
+	    	i_goods_qty.value = goods_qty; // 가져온 수량 값을 설정
+	    	i_goods_point.value = goods_point;
+	    	
 	    	formObj.appendChild(i_goods_num);
 	    	formObj.appendChild(i_goods_name);
 	    	formObj.appendChild(i_goods_sales_price);
 	    	formObj.appendChild(i_fileName);
-	    	formObj.appendChild(i_order_goods_qty);
+	    	formObj.appendChild(i_goods_qty);
+	    	formObj.appendChild(i_goods_point);
+	    	
 	    	document.body.appendChild(formObj);
 	    	formObj.method = "post";
 	    	formObj.action = contextPath + "/order/orderEachGoods.do";
 	    	formObj.submit();
 		}
 		
-		//관심상품 추가 
 		function toggleLikeGoods(btn) {
 	    	var member_id = "${sessionScope.memberInfo.member_id}"; 
 	    	if (!member_id) {
 	        	alert("로그인 후 이용 가능합니다.");
 	        	return;
 	    	}
-	   	 	var goods_num = $(btn).data("goods-num");  // data-goods-num에서 값 가져오기
-	    	var isLiked = $(btn).hasClass("like_on");  // 클릭한 버튼 기준으로 상태 확인
+	   	 	var goods_num = $(btn).data("goods-num");
+	    	var isLiked = $(btn).hasClass("like_on");
 	
 	    	$.ajax({
 	        	url: "${pageContext.request.contextPath}/mypage/toggleLikeGoods.do",
@@ -206,6 +184,23 @@
 	            	alert("좋아요 처리 중 오류가 발생했습니다.");
 	        	}
 	    	});
+		}
+
+		//수량 조절 스크립트
+		function changeQty(amount) {
+			const qtyInput = document.getElementById('cart_goods_qty');
+			let currentQty = parseInt(qtyInput.value);
+			let newQty = currentQty + amount;
+
+			if (newQty < 1) {
+				newQty = 1;
+			}
+
+			if (newQty > ${goodsVO.goods_stock}) {
+				newQty = ${goodsVO.goods_stock};
+			alert("재고 이상으로 구매할 수 없습니다.");
+			}
+			qtyInput.value = newQty;
 		}
 	</script>
 </head>
@@ -235,8 +230,6 @@
             		<td colspan="2" style="font-size:1.5rem;">${goodsVO.goods_name}</td>
             	</tr>       
                 <tr class="dot_line">
-                	
-                    
                     <td colspan="2" class="active price_td">                
 		            	<c:choose>
 							<c:when test="${goodsVO.goods_sales_price != 0}">
@@ -260,11 +253,23 @@
                     <td class="fixed">재고</td>
                     <td class="fixed"><strong>${goodsVO.goods_stock}</strong></td>
                 </tr>
+				<%-- [수정] 수량 조절 UI를 테이블 안으로 이동시켰습니다. --%>
+				<tr>
+					<td class="fixed">수량</td>
+					<td class="active">
+						<div class="quantity-selector">
+							<button onclick="changeQty(-1)">-</button>
+							<input type="number" id="cart_goods_qty" value="1" min="1">
+							<button onclick="changeQty(1)">+</button>
+						</div>
+					</td>
+				</tr>
             </tbody>
         </table>
 
         <ul class="detail_buttons">
-            <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${image.fileName}');">구매하기</a></li>
+			<%-- [수정] 구매하기 버튼의 파라미터에서 수량 부분을 제거합니다. (스크립트에서 직접 가져오므로) --%>
+            <li><a class="buy btn btn-primary" href="javascript:fn_order_each_goods('${goodsVO.goods_num}', '${goodsVO.goods_name}', '${goodsVO.goods_sales_price}', '${goodsImageList[0].fileName}', '${goodsVO.goods_point}');">구매하기</a></li>
             <li><a class="cart btn btn-primary" href="javascript:add_cart('${goodsVO.goods_num}');">장바구니</a></li>
             <li>
 	            <c:set var="liked" value="${likedGoodsSet.contains(goodsVO.goods_num)}" />
@@ -275,6 +280,7 @@
 
     <div class="clear"></div>
 
+    <%-- 이하 상품소개, 리뷰 탭 등은 기존 코드와 동일 --%>
     <div id="container">
         <ul class="tabs">
             <li><a href="#tab1">상품소개</a></li>       

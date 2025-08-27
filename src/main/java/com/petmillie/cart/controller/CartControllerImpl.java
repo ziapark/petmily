@@ -30,7 +30,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	
 	@Override
 	@RequestMapping(value="/addGoodsInCart.do" ,method = RequestMethod.POST,produces = "application/text; charset=utf8")
-	public @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num, HttpServletRequest request, HttpServletResponse response)  throws Exception{
+	public @ResponseBody String addGoodsInCart(@RequestParam("goods_num") int goods_num, @RequestParam("cart_goods_qty") int cart_goods_qty, HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		HttpSession session=request.getSession();
 		
 		MemberVO memberVO = (MemberVO)session.getAttribute("memberInfo");			
@@ -38,7 +38,7 @@ public class CartControllerImpl extends BaseController implements CartController
 
 	    cartVO.setMember_id(member_id);
 	    cartVO.setGoods_num(goods_num);
-	    cartVO.setCart_goods_qty(1);
+	    cartVO.setCart_goods_qty(cart_goods_qty);
 		
 	    String result = cartService.addOrIncreaseGoodsInCart(cartVO);
 	    return result;

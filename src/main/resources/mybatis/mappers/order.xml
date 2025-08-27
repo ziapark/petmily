@@ -27,6 +27,7 @@
 		<result property="namujiAddress" column="namujiAddress" />
 		<result property="order_time" column="order_time" />
 		<result property="delivery_state" column="delivery_state" />
+		<result property="reward_point" column="reward_point" />
 		
 		<result property="payment_num" column="payment_num" />
 		<result property="imp_uid" column="imp_uid" />
@@ -105,7 +106,8 @@
                 jibunAddress,
                 namujiAddress,
                 delivery_message,
-                fileName
+                fileName,
+                reward_point
             )
             VALUES(
                 #{order_id},
@@ -123,7 +125,8 @@
                 #{jibunAddress},
                 #{namujiAddress},
                 #{delivery_message},
-                #{fileName}
+                #{fileName},
+                #{reward_point}
             )
         ]]>
     </insert>

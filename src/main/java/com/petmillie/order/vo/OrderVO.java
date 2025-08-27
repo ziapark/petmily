@@ -25,6 +25,7 @@ public class OrderVO {
 	private String order_time;
 	private String delivery_state;
 	private String hasReview;
+	private int reward_point;
 	
 	private String goods_delivery_price;
 	
@@ -226,4 +227,11 @@ public class OrderVO {
 	public void setUsed_point(int used_point) {
 		this.used_point = used_point;
 	}
+	public int getReward_point() {
+		return reward_point;
+	}
+	public void setReward_point(int reward_point) {
+		this.reward_point = reward_point;
+	}
+	
 }

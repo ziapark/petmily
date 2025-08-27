@@ -57,8 +57,6 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		Boolean isLogOn=(Boolean)session.getAttribute("isLogOn");
 		String action=(String)session.getAttribute("action");
 		//로그인 여부 체크
-		//이전에 로그인 상태인 경우는 주문과정 진행
-		//로그아웃 상태인 경우 로그인 화면으로 이동
 		if(isLogOn==null || isLogOn==false){
 			session.setAttribute("orderInfo", _orderVO);
 			session.setAttribute("action", "/order/orderEachGoods.do");
@@ -75,12 +73,10 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav=new ModelAndView("/common/layout");
 		mav.addObject("title", "제품구매");
-		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		mav.addObject("body", "/WEB-INF/views/order/orderEachGoods2.jsp");
 		
 		List myOrderList=new ArrayList<OrderVO>();
 		myOrderList.add(orderVO);
-
-		MemberVO memberInfo=(MemberVO)session.getAttribute("memberInfo");
 
 		session.setAttribute("myOrderList", myOrderList);
 		
@@ -123,10 +119,15 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	@Transactional
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST ) 
 	@ResponseBody
-	public ApiResponse payToOrderGoods(@RequestBody PaymentRequestDto payDto, HttpServletRequest request) throws Exception {
-	    
+	public ApiResponse payToOrderGoods(@RequestBody PaymentRequestDto payDto, HttpServletRequest request) throws Exception {	    
 	    HttpSession session = request.getSession();
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	    
+	    if (memberInfo == null) {
+	        System.err.println("치명적 오류: 결제는 성공했으나 세션이 만료되어 주문 정보를 저장할 수 없습니다.");
+	        System.err.println("paymentId: " + payDto.getPaymentId() + ", imp_uid: " + payDto.getImp_uid());
+	        return new ApiResponse(false, "세션이 만료되었습니다. 다시 로그인 후 고객센터로 문의해주세요.");
+	    }
 	    
 	    int usedPoints = payDto.getUsed_point();
 	    int goodsTotalPrice = 0;
@@ -139,6 +140,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    }
 
 	    if ((goodsTotalPrice - usedPoints) != payDto.getPrice()) {
+	    	portoneService.cancelPayment(payDto.getPaymentId(), payDto.getPrice());
 	        return new ApiResponse(false, "결제 금액이 유효하지 않습니다. 주문이 취소되었습니다.");
 	    }
 	    
@@ -161,7 +163,8 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	        orderVO.setJibunAddress(payDto.getJibunAddress());
 	        orderVO.setNamujiAddress(payDto.getNamujiAddress());
 	        orderVO.setDelivery_message(payDto.getDelivery_message());
-	        
+
+	        orderVO.setReward_point(item.getReward_point());
 	        orderVO.setGoods_num(item.getGoods_num());
 	        orderVO.setGoods_qty(String.valueOf(item.getGoods_qty()));
 	        orderVO.setGoods_name(goodsVO.getGoods_name());

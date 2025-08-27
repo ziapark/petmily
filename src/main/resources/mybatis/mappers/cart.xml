@@ -16,6 +16,7 @@
     	<result property="goods_name" column="goods_name"/>
     	<result property="goods_sales_price" column="goods_sales_price"/>
     	<result property="fileName" column="fileName"/>
+    	<result property="goods_point" column="goods_point"/>
   	</resultMap>
 
   	<!-- 장바구니에 해당 상품이 있는지 확인 -->
@@ -29,7 +30,7 @@
   	 <update id="increaseCartQty" parameterType="CartVO">
     	<![CDATA[
     		UPDATE cart
-    		SET cart_goods_qty = cart_goods_qty + 1
+    		SET cart_goods_qty = #{cart_goods_qty}
     		WHERE member_id = #{member_id} AND goods_num = #{goods_num}
 		]]>
 	</update>
@@ -52,6 +53,7 @@
         		c.cart_goods_qty,
         		g.goods_name,
         		g.goods_sales_price,
+        		g.goods_point,
         		i.fileName
     		FROM 
         		cart c

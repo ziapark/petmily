@@ -75,56 +75,12 @@
 	});
 </script>
 
-<%-- ======================================================== --%>
-<%--       2. Scope 설정까지 포함된 최종 원시그널 스크립트       --%>
-<%-- ======================================================== --%>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    
-    await OneSignal.init({
-      appId: "14ed38d9-71e5-4fc8-aec3-457b8a7ca88d", // 당신의 App ID
-      
-      // 1. 파일의 실제 위치를 정확히 알려줍니다.
-      serviceWorkerPath: "${contextPath}/resources/js/OneSignalSDKWorker.js",
+  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
 
-      // 2. 서비스 워커의 활동 범위를 우리 프로젝트 경로로 강제합니다. (이것이 핵심!)
-      serviceWorkerParam: { scope: '${contextPath}/' },
-      
-      allowLocalhostAsSecureOrigin: true
-    });
-
-    const isSubscribed = await OneSignal.isPushNotificationsEnabled();
-    
-    if (isSubscribed) {
-        console.log("User is already subscribed.");
-        setExternalId(OneSignal);
-    } else {
-        OneSignal.on('subscriptionChange', function(isSubscribedNow) {
-            if (isSubscribedNow) {
-                console.log("User has just subscribed.");
-                setExternalId(OneSignal);
-            }
-        });
-    }
+  ChannelIO('boot', {
+    "pluginKey": "7e377132-dddb-467c-812d-213f0cb2f1ff"
   });
-
-  // 사용자 ID를 등록하는 함수
-  async function setExternalId(OneSignal) {
-    <c:choose>
-        <c:when test="${isLogOn == true && not empty memberInfo.member_id}">
-            var userId = "${memberInfo.member_id}";
-            await OneSignal.login(userId);
-            console.log("OneSignal External ID (Member) has been set to: " + userId);
-        </c:when>
-        <c:when test="${isLogOn == true && not empty businessInfo.business_id}">
-            var userId = "${businessInfo.business_id}";
-            await OneSignal.login(userId);
-            console.log("OneSignal External ID (Business) has been set to: " + userId);
-        </c:when>
-    </c:choose>
-  }
 </script>
 
 <body>
