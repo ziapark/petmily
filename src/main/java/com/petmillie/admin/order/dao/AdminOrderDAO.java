@@ -15,5 +15,6 @@ public interface AdminOrderDAO {
 	public MemberVO selectOrderer(String member_id) throws DataAccessException;
 	public String selectMemberIdByOrderId(String order_id) throws Exception;
 	public int selectNewOrderCount(Map<String, Object> condMap) throws Exception;
-
+	public int selectTotalRewardPoint(String order_id) throws Exception;
+	public void updateMemberPoint(Map<String, String> pointMap) throws Exception;
 }

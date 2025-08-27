@@ -158,4 +158,19 @@ public class MyPageDAOImpl implements MyPageDAO{
 	public int deletePet(int pet_id) throws Exception {
 		return sqlSession.delete("mapper.mypage.deletePet", pet_id);
 	}
+	
+	@Override
+	public void updateOrderStateToFinished(Map<String, String> orderMap) throws Exception {
+		sqlSession.update("mapper.mypage.updateOrderStateToFinished", orderMap);
+	}
+	
+	@Override
+	public int selectTotalRewardPoint(String order_id) throws Exception {
+		return sqlSession.selectOne("mapper.mypage.selectTotalRewardPoint", order_id);
+	}
+
+	@Override
+	public void updateMemberPoint(Map<String, String> pointMap) throws Exception {
+		sqlSession.update("mapper.mypage.updateMemberPoint", pointMap);
+	}
 }

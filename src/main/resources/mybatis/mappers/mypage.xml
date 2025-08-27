@@ -343,4 +343,30 @@
 			WHERE pet_id = #{pet_id}
 		]]>
 	</delete>
+	<update id="updateOrderStateToFinished" parameterType="java.util.Map">
+	    <![CDATA[
+	        UPDATE userorder
+	        SET delivery_state = 'finished'
+	        WHERE order_id = #{order_id} AND member_id = #{member_id}
+	    ]]>
+	</update>
+
+	<!-- 2. 주문 번호로 적립될 총 포인트를 합산하는 쿼리 -->
+	<select id="selectTotalRewardPoint" resultType="int" parameterType="String">
+	    <![CDATA[
+	        SELECT SUM(reward_point) 
+	        FROM userorder
+	        WHERE order_id = #{order_id}
+	    ]]>
+	</select>
+	
+	<!-- 3. 계산된 포인트를 회원 테이블에 더해주는 쿼리 -->
+	<update id="updateMemberPoint" parameterType="java.util.Map">
+	    <![CDATA[
+	        UPDATE member
+	        SET point = point + #{totalRewardPoint}
+	        WHERE member_id = #{member_id}
+	    ]]>
+	</update>
+
 </mapper>

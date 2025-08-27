@@ -45,4 +45,14 @@ public class AdminOrderDAOImpl  implements AdminOrderDAO{
 		
 		return sqlSession.selectOne("mapper.admin.order.selectNewOrderCount", condMap);
 	}
+	
+	@Override
+	public int selectTotalRewardPoint(String order_id) throws Exception {
+		return sqlSession.selectOne("mapper.admin.order.selectTotalRewardPoint", order_id);
+	}
+
+	@Override
+	public void updateMemberPoint(Map<String, String> pointMap) throws Exception {
+		sqlSession.update("mapper.admin.order.updateMemberPoint", pointMap);
+	}
 }

@@ -62,4 +62,15 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 		
 		return adminOrderDAO.selectNewOrderCount(condMap);
 	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void rewardPointsForOrder(Map<String, String> pointMap) throws Exception {
+		int totalRewardPoint = adminOrderDAO.selectTotalRewardPoint(pointMap.get("order_id"));
+		
+		if (totalRewardPoint > 0) {
+			pointMap.put("totalRewardPoint", String.valueOf(totalRewardPoint));
+			adminOrderDAO.updateMemberPoint(pointMap);
+		}
+	}
 }
