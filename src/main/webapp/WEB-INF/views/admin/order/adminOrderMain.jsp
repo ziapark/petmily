@@ -10,6 +10,11 @@
 	    table { width: 100%; border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;}
 	    table th {background-color: #f2f2f2;}
+		/* 요청하신 페이지네이션 스타일 */
+		.fixed { text-align: center; }
+		.fixed a {display: inline-block;padding: 5px 10px;margin: 0 2px;border: 1px solid #ddd;border-radius: 3px;text-decoration: none;color: #007bff;}
+	    .fixed a:hover {background-color: #e9ecef;}
+	    .fixed b {color: #dc3545;font-weight: bold; padding: 5px 10px;}
 	</style>
 	<meta charset="utf-8">
 	<c:choose>
@@ -37,6 +42,7 @@
 			</script>
 		</c:when>
 	</c:choose>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 		function search_order_history(search_period){	
 			temp=calcPeriod(search_period);
@@ -77,35 +83,35 @@
 				beginMonth=endMonth;
 				beginDay=endDay;
 			}else if(search_period=='one_week'){
+				dt.setDate(endDay-7);
 				beginYear=dt.getFullYear();
 				beginMonth=dt.getMonth()+1;
-				dt.setDate(endDay-7);
 				beginDay=dt.getDate();
 				
 			}else if(search_period=='two_week'){
+				dt.setDate(endDay-14);
 				beginYear = dt.getFullYear();
 				beginMonth = dt.getMonth()+1;
-				dt.setDate(endDay-14);
 				beginDay=dt.getDate();
 			}else if(search_period=='one_month'){
+				dt.setMonth(dt.getMonth() - 1);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-1);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='two_month'){
+				dt.setMonth(dt.getMonth() - 2);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-2);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='three_month'){
+				dt.setMonth(dt.getMonth() - 3);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-3);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}else if(search_period=='four_month'){
+				dt.setMonth(dt.getMonth() - 4);
 				beginYear = dt.getFullYear();
-				dt.setMonth(endMonth-4);
-				beginMonth = dt.getMonth();
+				beginMonth = dt.getMonth() + 1;
 				beginDay = dt.getDate();
 			}
 	
@@ -126,43 +132,47 @@
 			return beginDate+","+endDate;
 		}
 
-		function fn_confirm_and_modify(order_id, selectElement){
-		    var selectedText = selectElement.options[selectElement.selectedIndex].text;
+		function fn_change_delivery_state(order_id, member_id, selectElement){
+			var selectedValue = selectElement.value; // 선택된 option의 value (예: "finished")
+		    var selectedText = selectElement.options[selectElement.selectedIndex].text; // 선택된 option의 텍스트 (예: "구매확정")
+		    var originalIndex = selectElement.dataset.originalIndex;
+		    
 		    var confirmMessage = "'" + selectedText + "'(으)로 배송상태를 변경하시겠습니까?";
+		    
+		    if (selectedValue === 'finished') {
+		        confirmMessage += "\n\n※ '구매확정' 처리 시 회원에게 포인트가 적립됩니다.";
+		    }
+
 		    var result = confirm(confirmMessage);
+		    
 		    if (result) {
-		        fn_modify_order_state(order_id, selectElement.id);
+				$.ajax({
+					type : "post",
+					async : false,
+					url : "${contextPath}/admin/order/modifyDeliveryState.do",
+					data : {
+						order_id:order_id,
+						member_id: member_id,
+						delivery_state:selectedValue
+					},
+					success : function(data, textStatus) {
+						if(data.trim()=='mod_success'){
+							alert("배송 정보를 수정했습니다.");
+							location.reload();
+						}else if(data.trim()=='failed'){
+							alert("다시 시도해 주세요.");
+							selectElement.selectedIndex = originalIndex;
+						}					
+					},
+					error : function(data, textStatus) {
+						alert("에러가 발생했습니다."+data);
+						selectElement.selectedIndex = originalIndex;
+					}
+				});	
 		    } else {
 		        alert("변경이 취소되었습니다.");
+		        selectElement.selectedIndex = originalIndex;
 		    }
-		}
-		
-		function fn_modify_order_state(order_id,select_id){
-			var s_delivery_state=document.getElementById(select_id);
-		    var index = s_delivery_state.selectedIndex;
-		    var value = s_delivery_state[index].value;
-			 
-			$.ajax({
-				type : "post",
-				async : false,
-				url : "${contextPath}/admin/order/modifyDeliveryState.do",
-				data : {
-					order_id:order_id,
-					"delivery_state":value
-				},
-				success : function(data, textStatus) {
-					if(data.trim()=='mod_success'){
-						alert("배송 정보를 수정했습니다.");
-						location.href="${contextPath}//admin/order/adminOrderMain.do";
-					}else if(data.trim()=='failed'){
-						alert("다시 시도해 주세요.");	
-					}
-					
-				},
-				error : function(data, textStatus) {
-					alert("에러가 발생했습니다."+data);
-				}
-			});	
 		}
 
 		function fn_enable_detail_search(r_search){
@@ -279,7 +289,7 @@
 				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
 				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-				<li><a href="#">회계관리</a></li>
+				<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
 				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
 				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
@@ -532,8 +542,16 @@
 					    				</c:forEach> 
 									</td>
 									<td width=10%>
-								 		<select name="s_delivery_state${i.index }"  id="s_delivery_state${i.index }" onchange="fn_confirm_and_modify('${item.order_id}', this)">
-								 			<c:choose>
+									 	<select name="s_delivery_state" 
+											onchange="fn_change_delivery_state('${item.order_id}', '${item.member_id}', this)"
+											data-original-index="${
+												item.delivery_state == 'delivery_prepared' ? 0 :
+												item.delivery_state == 'delivering' ? 1 :
+												item.delivery_state == 'finished_delivering' ? 2 :
+												item.delivery_state == 'finished' ? 3 :
+												item.delivery_state == 'cancel_order' ? 4 : 5
+											}">
+											<c:choose>
 								   				<c:when test="${item.delivery_state=='delivery_prepared' }">
 								     				<option value="delivery_prepared" selected>배송준비중</option>
 								     				<option value="delivering">배송중</option>
@@ -559,27 +577,12 @@
 											     	<option value="returning_goods">반품</option>
 											    </c:when>
 											    <c:when test="${item.delivery_state=='finished' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											    	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering">배송완료</option>
 											     	<option value="finished" selected>구매확정</option>
-											     	<option value="cancel_order">주문취소</option>
-											     	<option value="returning_goods">반품</option>
 											    </c:when>
 											   	<c:when test="${item.delivery_state=='cancel_order' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											     	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished">구매확정</option>
 											     	<option value="cancel_order" selected>주문취소</option>
-											     	<option value="returning_goods">반품</option>
 											   	</c:when>
 											   	<c:when test="${item.delivery_state=='returning_goods' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											     	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished">구매확정</option>
-											    	<option value="cancel_order" >주문취소</option>
 											     	<option value="returning_goods" selected>반품</option>
 											    </c:when>
 											</c:choose>
@@ -592,19 +595,21 @@
 					</c:forEach>
 				</c:otherwise>
   			</c:choose>	
-         	<tr>
-			    <td colspan=8 class="fixed">
-			        <c:forEach var="page" begin="1" end="${totalPage}" step="1">
-			            <c:if test="${section >1 && page==1 }">
-			                <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp;&nbsp;</a>
-			            </c:if>
-			            <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 + page } </a>
-			            <c:if test="${page == totalPage}">
-			                <a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
-			            </c:if> 
-			        </c:forEach> 
+         	<!-- 수정된 페이지네이션 블록 -->
+			<tr>
+			    <td colspan="8" class="fixed">
+			        <c:forEach var="page" begin="1" end="${totalPage}">
+			            <c:choose>
+			                <c:when test="${page == pageNum}">
+			                    <b>[${page}]</b>
+			                </c:when>
+			                <c:otherwise>
+			                    <a href="${contextPath}/admin/order/adminOrderMain.do?pageNum=${page}&section=${section}">${page}</a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:forEach>
 			    </td>
-			</tr>		   
+			</tr>	   
 		</tbody>
 	</table>
   	</form> 

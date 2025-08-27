@@ -22,4 +22,11 @@ public interface AdminGoodsService {
     public void restoreGoods(int goods_num) throws Exception;
     public int updateGoodsStatus(GoodsVO goodsVO) throws Exception;
 	public List<ImageFileVO> listGoodsImages(int goods_num) throws Exception;
+
+	
+	    
+	    // 조건에 맞는 전체 상품 개수를 가져오는 메소드
+	    public int countNewGoods(Map<String,Object> condMap) throws Exception;
+
+
 }

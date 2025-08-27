@@ -5,9 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<%-- ======================================================== --%>
-<%--                1. 기존 JavaScript 코드                    --%>
-<%-- ======================================================== --%>
 <script type="text/javascript">
 	var loopSearch = true;
 	function keywordSearch() {

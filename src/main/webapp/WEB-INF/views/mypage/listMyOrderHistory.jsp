@@ -55,44 +55,49 @@
 	        }
 	    }
 		
-	    function exchange_finish_order(selectElement) {
-		    const selectedValue = selectElement.value;
-		    const order_id = selectElement.dataset.orderId;
+	    function exchange_finish_order(selectElement, order_id, member_id) {
+	    	const selectedValue = selectElement.value;
 
 		    let message = "";
 		    let actionUrl = "";
 
 		    if (selectedValue === "finished") {
-		    	message = "구매를 확정하시겠습니까?";
+		    	message = "구매를 확정하시겠습니까?\n확정 후에는 포인트가 적립되며, 반품이 어려울 수 있습니다.";
 		      	actionUrl = "${contextPath}/mypage/confirmPurchase.do";
-		    }else if (selectedValue === "returning_goods") {
+		    } else if (selectedValue === "returning_goods") {
 		      	message = "반품을 진행하시겠습니까?";
 		      	actionUrl = "${contextPath}/mypage/returnOrder.do";
-		    }else {
-		      	return; // "배송완료" 선택 시는 아무 동작 안 함
+		    } else {
+		      	return; // "배송완료"를 다시 선택하면 아무 동작 안 함
 		    }
 		    
 		    const answer = confirm(message);
-		    if (answer === true) {
+		    if (confirm(message)) {
 		      	const formObj = document.createElement("form");
 		      	const i_order_id = document.createElement("input");
+
+		      	const i_member_id = document.createElement("input");
+		      	
 		      	const i_state = document.createElement("input");
 
 		      	i_order_id.name = "order_id";
 		      	i_order_id.value = order_id;
+				
+				i_member_id.name = "member_id";
+				i_member_id.value = member_id;
 
 		      	i_state.name = "delivery_state";
 		      	i_state.value = selectedValue;
 
 		      	formObj.appendChild(i_order_id);
+				formObj.appendChild(i_member_id);
 		      	formObj.appendChild(i_state);
 
-		      	document.body.appendChild(formObj);
+		      	document.body.appendChild(formObj); 
 		      	formObj.method = "post";
 		      	formObj.action = actionUrl;
 		      	formObj.submit();
 		    } else {
-		      	// 사용자가 취소하면 다시 원래 옵션으로 되돌리기
 		      	selectElement.value = "finished_delivering";
 		    }
 		}
@@ -239,6 +244,7 @@
 	 					<c:set var="pre_order_id" value="" />
 						<c:set var="orderTotalAmount" value="0" />
 						<c:set var="orderTotalQty" value="0" />	
+<<<<<<< HEAD
 						<c:set var="pre_order_id" value="0" />
 						<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
 						    <tr>
@@ -331,6 +337,125 @@
 						</c:forEach>
 						
      					 
+=======
+     					<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
+     					    <c:if test="${item.order_id != pre_order_id and not empty pre_order_id}">
+                    			<%-- 이전 주문의 합계를 출력 --%>
+                    			<tr style="background:#e0e0e0">
+                        			<td colspan="3" align="right"><strong>주문 합계</strong></td>
+                        			<td><strong><fmt:formatNumber value="${currentOrderAmount}" type="number" />원 / ${currentOrderQty}개</strong></td>
+                        			<td colspan="4"></td>
+                    			</tr>
+                    			<%-- 다음 주문을 위해 합계 변수 초기화 --%>
+                   	 			<c:set var="currentOrderAmount" value="0" />
+                    			<c:set var="currentOrderQty" value="0" />
+                			</c:if>
+        					<c:choose>
+          						<c:when test="${item.order_id != pre_order_id }">   
+            						<tr>       
+										<td>${item.order_id}</td>
+										<td><strong>${item.order_time }</strong></td>
+										<td><strong>
+					   						<c:forEach var="item2" items="${myOrderHistList}" varStatus="j">
+				          						<c:if test="${item.order_id ==item2.order_id}" >
+				            						<a href="${contextPath}/goods/goodsDetail.do?goods_num=${item2.goods_num }">${item2.goods_name }</a><br>
+				         						</c:if>   
+					 						</c:forEach>
+					 					</strong></td>
+										<td><strong>
+									    	<c:forEach var="item2" items="${myOrderHistList}" varStatus="j">
+									         	<c:if test="${item.order_id ==item2.order_id}" >
+									            	${item.goods_sales_price*item.goods_qty }원/${item.goods_qty }개<br>
+									            	<c:set var="totalAmount" value="${totalAmount + (item.goods_sales_price * item.goods_qty)}" />
+													<c:set var="totalQty" value="${totalQty + item.goods_qty}" />
+									         	</c:if>   
+										 	</c:forEach>
+				   						</strong></td>
+										<td><strong>
+				    						<c:choose>
+					    						<c:when test="${item.delivery_state=='delivery_prepared' }">배송준비중</c:when>
+					    						<c:when test="${item.delivery_state=='delivering' }">배송중</c:when>
+											    <c:when test="${item.delivery_state=='finished_delivering' }">배송완료</c:when>
+											    <c:when test="${item.delivery_state=='finished' }">구매확정</c:when>
+											    <c:when test="${item.delivery_state=='cancel_order' }">주문취소</c:when>
+											    <c:when test="${item.delivery_state=='returning_goods' }">반품</c:when>
+				  							</c:choose>
+				  						</strong></td>
+										<td><strong>${item.receiver_name }</strong></td>
+										<td>
+				    						<c:choose>
+				    							<c:when test="${item.delivery_state=='finished' }">
+				    								<c:choose>
+						         						<c:when test="${item.hasReview}">
+						            						<a href="${contextPath}/mypage/myReview.do?goods_num=${item.goods_num}">
+						                						<strong>리뷰보기</strong>
+						            						</a>
+						        						</c:when>
+						        					<c:otherwise>
+						            					<a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_id}&goods_name=${item.goods_name}">
+						                					<strong>리뷰쓰기</strong>
+						            					</a>
+						        					</c:otherwise>
+						       					</c:choose>
+						  					</c:when>
+											<c:otherwise>
+												<strong>리뷰쓰기</strong>
+											</c:otherwise>
+									    </c:choose>
+									</td>
+									<td>
+								    	<c:choose>
+								   			<c:when test="${item.delivery_state=='delivery_prepared'}">
+												<button type="button" class="btn btn-sm btn-danger" 
+												        onclick="cancelOrder(this)"
+												        data-order-id="${item.order_id}"
+												        data-imp-uid="${item.imp_uid}"
+												        data-payment-id="${item.paymentId}"
+												        data-amount="${item.payment_amount}"
+												        data-used-points="${item.used_point}">
+												    주문취소
+												</button>
+								  		 	</c:when>
+								   			<c:when test="${item.delivery_state=='finished_delivering'}">
+												<select onchange="exchange_finish_order(this, '${item.order_id}', '${item.member_id}')">
+													<option value="finished_delivering" selected>배송완료</option>
+													<option value="finished">구매확정</option>
+													<option value="returning_goods">반품</option>
+												</select>
+											</c:when>
+											<c:when test="${item.delivery_state=='finished'}">
+										 		구매확정
+											</c:when>
+											<c:when test="${item.delivery_state=='delivering' }">
+										  		배송중
+											</c:when>
+											<c:when test="${item.delivery_state=='cancel_order' }">
+										  		주문취소
+											</c:when>
+											<c:when test="${item.delivery_state=='returning_goods' }">
+										  		반품
+											</c:when>
+											<c:when test="${item.delivery_state=='returning_goods_success' }">
+										  		반품완료
+											</c:when>
+								  		</c:choose>
+								    </td>
+								</tr>
+							</c:when>
+						</c:choose>
+		                <c:set var="currentOrderAmount" value="${currentOrderAmount + (item.goods_sales_price * item.goods_qty)}" />
+		                <c:set var="currentOrderQty" value="${currentOrderQty + item.goods_qty}" />
+		                <c:set var="pre_order_id" value="${item.order_id}" />
+
+		                <c:if test="${i.last}">
+		                    <tr style="background:#e0e0e0">
+		                        <td colspan="3" align="right"><strong>주문 합계</strong></td>
+		                        <td><strong><fmt:formatNumber value="${currentOrderAmount}" type="number" />원 / ${currentOrderQty}개</strong></td>
+		                        <td colspan="4"></td>
+		                    </tr>
+		                </c:if>
+					</c:forEach>
+>>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
 				</c:otherwise>
 			</c:choose>			   
 		</tbody>

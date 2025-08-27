@@ -155,4 +155,22 @@ public class MyPageServiceImpl implements MyPageService{
 	public void removePet(int pet_id) throws Exception {
 		myPageDAO.deletePet(pet_id);
 	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void confirmPurchase(Map<String, String> orderMap) throws Exception {
+		// 1. DAO를 시켜서 주문 상태를 'finished'로 변경합니다.
+		myPageDAO.updateOrderStateToFinished(orderMap);
+		
+		// 2. DAO를 시켜서 적립할 총 포인트를 계산합니다.
+		int totalRewardPoint = myPageDAO.selectTotalRewardPoint(orderMap.get("order_id"));
+		
+		// 3. 적립할 포인트가 0보다 크면, 회원 정보를 업데이트합니다.
+		if (totalRewardPoint > 0) {
+			orderMap.put("totalRewardPoint", String.valueOf(totalRewardPoint));
+			myPageDAO.updateMemberPoint(orderMap);
+		}
+	}
+
+	
 }

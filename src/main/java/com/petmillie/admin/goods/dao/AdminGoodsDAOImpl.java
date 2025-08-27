@@ -17,6 +17,7 @@ import com.petmillie.order.vo.OrderVO;
 public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 	@Autowired
 	private SqlSession sqlSession;
+	private static final String NAMESPACE = "mapper.admin.goods";
 	
 	@Override
 	public int insertNewGoods(Map newGoodsMap) throws DataAccessException {
@@ -104,4 +105,13 @@ public class AdminGoodsDAOImpl  implements AdminGoodsDAO{
 	public int updateGoodsStatus(GoodsVO goodsVO) throws Exception {
 		return sqlSession.update("mapper.admin.goods.updateGoodsStatus", goodsVO);
 	}
+	
+	 @Override
+	    public int selectNewGoodsTotalCount(Map<String, Object> condMap) throws Exception {
+	        // condMap을 파라미터로 넘겨 조건에 맞는 전체 상품 개수를 조회
+	        return sqlSession.selectOne(NAMESPACE + ".selectNewGoodsTotalCount", condMap);
+	    }
+	
+	
+	
 }

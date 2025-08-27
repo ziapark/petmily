@@ -203,17 +203,23 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	//구매확정
 	@RequestMapping(value="/confirmPurchase.do" ,method = RequestMethod.POST)
-	public ModelAndView confirmPurchase(@RequestParam String order_id) {
-		ModelAndView mav = new ModelAndView();
-		try {
-			myPageService.updateDeliveryState(order_id, "finished");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String confirmPurchase(@RequestParam("order_id") String order_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		HttpSession session = request.getSession();
+		MemberVO memberVO = (MemberVO)session.getAttribute("memberInfo");
+		String member_id = memberVO.getMember_id();
 
-		mav.addObject("message", "주문이 확정 되었습니다.");
-		mav.setViewName("redirect:/mypage/listMyOrderHistory.do");
-		return mav;
+		Map<String, String> orderMap = new HashMap<>();
+		orderMap.put("order_id", order_id);
+		orderMap.put("member_id", member_id);
+		
+		// 서비스를 호출하여 주문 상태 변경 및 포인트 적립을 처리합니다.
+		myPageService.confirmPurchase(orderMap);
+		
+	    memberVO = memberService.login(memberVO.getMember_id(), memberVO.getMember_pw());
+	    session.setAttribute("memberInfo", memberVO);
+		
+		return "redirect:/mypage/listMyOrderHistory.do";
 	}
 	
 	//반품

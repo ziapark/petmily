@@ -11,6 +11,10 @@
 	<meta charset="utf-8">
 	<title>펫밀리</title>
 	<style>
+	
+
+
+
 	    table {width: 100%;border-collapse: collapse;background-color: #fff;}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;text-align: left;}
 	    table th {background-color: #f2f2f2;}
@@ -27,7 +31,10 @@
 	    /* 판매 상태 표시를 위한 스타일 */
 	    .status-deleted {color: #dc3545;font-weight: bold;}
 	    .status-active {color: #28a745;}
+
 	</style>
+	
+
 	<script>
 		function search_goods_list(fixedSearchPeriod) {
 			var formObj = document.createElement("form");
@@ -309,20 +316,32 @@
                     </c:forEach>
                 </c:otherwise>
             </c:choose>
-            <tr>
-			    <td colspan="6" class="fixed">
-			        <c:forEach var="page" begin="1" end="${totalPages}">
-			            <c:choose>
-			                <c:when test="${page == pageNum}">
-			                    <b>[${page}]</b>
-			                </c:when>
-			                <c:otherwise>
-			                    <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${page}&section=${section}">${page}</a>
-			                </c:otherwise>
-			            </c:choose>
-			        </c:forEach>
-			    </td>
-			</tr>
+   <tr>
+    <td colspan="6" class="fixed" style="text-align: center;">
+        <c:if test="${pageInfo.currentPageNum > 1}">
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=1">&laquo;</a>
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.currentPageNum - 1}">&lt;</a>
+        </c:if>
+
+        <c:forEach begin="1" end="${pageInfo.totalPageCount}" var="i">
+            <c:choose>
+                <c:when test="${i == pageInfo.currentPageNum}">
+                    <strong>${i}</strong>
+                </c:when>
+                <c:otherwise>
+                    <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${i}">${i}</a>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+
+        <c:if test="${pageInfo.currentPageNum < pageInfo.totalPageCount}">
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.currentPageNum + 1}">&gt;</a>
+            <a href="${contextPath}/business/businessGoodsMain.do?pageNum=${pageInfo.totalPageCount}">&raquo;</a>
+        </c:if>
+    </td>
+</tr>
+
+
         </TBODY>
     </TABLE>
     <form action="${contextPath}/business/addNewGoodsForm.do" style="width:100%; text-align:right;">

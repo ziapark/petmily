@@ -10,6 +10,32 @@
 	    table { width: 100%; border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;}
 	    table th {background-color: #f2f2f2;}
+	    
+	    /* --- 페이지네이션 스타일 시작 --- */
+	    .fixed a {
+	        display: inline-block;
+	        padding: 5px 10px;
+	        margin: 0 2px;
+	        border: 1px solid #ddd;
+	        border-radius: 3px;
+	        text-decoration: none;
+	        color: #007bff;
+	    }
+	    .fixed a:hover {
+	        background-color: #e9ecef;
+	    }
+	    .fixed strong {
+			display: inline-block;
+			padding: 5px 10px;
+			margin: 0 2px;
+			border: 1px solid #007bff;
+			border-radius: 3px;
+			background-color: #007bff;
+			color: white;
+			font-weight: bold;
+	    }
+	    /* --- 페이지네이션 스타일 끝 --- */
+	    
 	</style>
 	<meta charset="utf-8">
 	<c:choose>
@@ -592,20 +618,32 @@
 					</c:forEach>
 				</c:otherwise>
   			</c:choose>	
-         	<tr>
-             	<td colspan=8 class="fixed">
-                 	<c:forEach   var="page" begin="1" end="10" step="1" >
-		         		<c:if test="${section >1 && page==1 }">
-		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section-1}&pageNum=${(section-1)*10 +1 }">&nbsp;&nbsp;</a>
-		         		</c:if>
-		          		<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section}&pageNum=${page}">${(section-1)*10 +page } </a>
-		         		<c:if test="${page ==10 }">
-		          			<a href="${contextPath}/admin/order/adminOrderMain.do?chapter=${section+1}&pageNum=${section*10+1}">&nbsp; next</a>
-		         		</c:if> 
-	      			</c:forEach> 
-           		</td>
-        	</tr>  		   
-		</tbody>
+			
+			<tr>
+			    <td colspan="4" class="fixed" style="text-align: center;">
+			        <c:if test="${pageInfo.currentPageNum > 1}">
+			            <a href="${contextPath}/business/businessOrderMain.do?pageNum=1">&laquo;</a>
+			            <a href="${contextPath}/business/businessOrderMain.do?pageNum=${pageInfo.currentPageNum - 1}">&lt;</a>
+			        </c:if>
+			
+			        <c:forEach begin="1" end="${pageInfo.totalPageCount}" var="i">
+			            <c:choose>
+			                <c:when test="${i == pageInfo.currentPageNum}">
+			                    <strong>${i}</strong>
+			                </c:when>
+			                <c:otherwise>
+			                    <a href="${contextPath}/business/businessOrderMain.do?pageNum=${i}">${i}</a>
+			                </c:otherwise>
+			            </c:choose>
+			        </c:forEach>
+			
+			        <c:if test="${pageInfo.currentPageNum < pageInfo.totalPageCount}">
+			            <a href="${contextPath}/business/businessOrderMain.do?pageNum=${pageInfo.currentPageNum + 1}">&gt;</a>
+			            <a href="${contextPath}/business/businessOrderMain.do?pageNum=${pageInfo.totalPageCount}">&raquo;</a>
+			        </c:if>
+			    </td>
+			</tr>
+			</tbody>
 	</table>
   	</form> 
   	</div>  	
