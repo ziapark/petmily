@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -19,6 +20,8 @@ public class FileDownloadController {
 	private static String CURR_IMAGE_REPO_PATH = "C:\\petrepo\\goods"; // 상품 전용 경로
 	private static String CURR_ROOM_REPO_PATH = "C:\\petrepo\\room";
 	private static String CURR_REVIEW_REPO_PATH = "C:\\petrepo\\goodsreivew";
+	private static String CURR_PENSION_REPO_PATH = "C:\\petrepo\\pension"; //펜션사진 전용 경로 
+	
 	
 	@RequestMapping("/download.do")
 	protected void download(@RequestParam("fileName") String fileName,
@@ -151,32 +154,64 @@ public class FileDownloadController {
 		}
 	}
 	
-	@RequestMapping("/room/image.do")
-	public void roomImage(@RequestParam("fileimage") String image, @RequestParam("room_id") String room_id, HttpServletResponse response) throws Exception{
-		String filePath = CURR_ROOM_REPO_PATH + "\\" + image;
-		 System.out.println("요청 이미지 파일 경로: " + filePath);
-		File file = new File(filePath);
-		if(!file.exists()) {
-			  System.out.println("파일 없음!");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
+	// ▼▼▼▼▼ [수정] 이 메소드의 파라미터를 수정했습니다. ▼▼▼▼▼
+		@RequestMapping("/pension/image.do")
+		public void pensionImage(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception{
+			String filePath = CURR_PENSION_REPO_PATH + "\\" + fileName;
+			 System.out.println("요청된 펜션 이미지 파일 경로: " + filePath);
+			File file = new File(filePath);
+			if(!file.exists()) {
+				  System.out.println("파일을 찾을 수 없습니다: " + filePath);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+			String contentType="application/octet-stream";
+		    if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+		        contentType = "image/jpeg";
+		    } else if (fileName.endsWith(".png")) {
+		        contentType = "image/png";
+		    }
+		    response.setContentType(contentType);
+		    
+		    try(FileInputStream in = new FileInputStream(file);
+		    	OutputStream out = response.getOutputStream()) {
+		    	byte[] buffer = new byte[1024 * 8];
+		    	int count;
+		    	while ((count = in.read(buffer)) != -1) {
+		    		out.write(buffer, 0, count);
+		    	}
+		    }
 		}
-		String contentType="application/octet-stream";
-	    if (image.endsWith(".jpg") || image.endsWith(".jpeg")) {
-	        contentType = "image/jpeg";
-	    } else if (image.endsWith(".png")) {
-	        contentType = "image/png";
-	    }
-	    response.setContentType(contentType);
-	    
-	    try(FileInputStream in = new FileInputStream(file);
-	    	OutputStream out = response.getOutputStream()) {
-	    	byte[] buffer = new byte[1024 * 8];
-	    	int count;
-	    	while ((count = in.read(buffer)) != -1) {
-	    		out.write(buffer, 0, count);
-	    	}
-	    }
-	}
+		
 
+	
+	
+	
+	
+	
+	
+	 public String uploadPensionImage(MultipartFile mainImage) throws Exception {
+	        String originalFileName = null;
+	        if (mainImage != null && !mainImage.isEmpty()) {
+	            originalFileName = mainImage.getOriginalFilename();
+	            File repository = new File(CURR_PENSION_REPO_PATH);
+	            if (!repository.exists()) {
+	                repository.mkdirs();
+	            }
+	            File dest = new File(repository, originalFileName);
+	            mainImage.transferTo(dest);
+	            originalFileName = dest.getName();
+	        }
+	        return originalFileName;
+	    }
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
 }

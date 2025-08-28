@@ -35,6 +35,7 @@ import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
 import com.petmillie.common.base.BaseController;
+import com.petmillie.common.file.FileDownloadController;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.member.vo.MemberVO;
@@ -53,6 +54,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	private PensionVO pensionVO;
 	@Autowired
 	private RoomVO roomVO;
+	@Autowired
+    private FileDownloadController fileDownloadController;
 	
 	@Override
 	@RequestMapping(value = "/busilogin.do", method = RequestMethod.POST)
@@ -328,55 +331,65 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return "redirect:/main/main.do";
 	}
 
-	@Override
-	@RequestMapping(value="addpension.do" , method= {RequestMethod.POST,RequestMethod.GET})
-	public ResponseEntity addpension(@ModelAttribute("PensionVO") PensionVO pensionVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		response.setContentType("text/html; charset=UTF-8");
-		request.setCharacterEncoding("utf-8");
+	@RequestMapping(value="/addpension.do" , method= {RequestMethod.POST}) // GET 방식은 파일 업로드에 부적합하므로 POST만 사용
+    // ▼▼▼ 5. 파라미터 수정: 이미지 파일을 받기 위해 @RequestParam("mainImage") MultipartFile 추가
+    public ResponseEntity addpension(@ModelAttribute("pensionVO") PensionVO pensionVO,
+                                     @RequestParam("mainImage") MultipartFile mainImage, 
+                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
+        // 기존 코드와 동일 (인코딩 설정)
+        response.setContentType("text/html; charset=UTF-8");
+        request.setCharacterEncoding("utf-8");
+        String message = null;
+        ResponseEntity resEntity = null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-		String message = null;
-		ResponseEntity resEntity = null;
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+        try {
+            // ▼▼▼ 6. 파일 업로드 로직 호출 및 파일명 설정
+            // FileDownloadController에 파일 저장을 요청하고, 저장된 파일명을 받아옵니다.
+            String fileName = fileDownloadController.uploadPensionImage(mainImage);
+            // PensionVO 객체에 DB에 저장할 파일명을 설정합니다.
+            pensionVO.setFileName(fileName); 
 
-		try {
-			HttpSession session = request.getSession();
-			String business_id_to_check = pensionVO.getBusiness_id();
+            // --- 이 아래는 기존 코드와 거의 동일합니다 ---
+            HttpSession session = request.getSession();
+            String business_id_to_check = pensionVO.getBusiness_id();
 
-			// 사업자가 직접 등록하는 경우, 세션에서 ID를 가져옵니다.
-			if (business_id_to_check == null || business_id_to_check.isEmpty()) {
-				BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
-				if (loginBusinessVO == null) {
-					message = "<script>alert('로그인 정보가 만료되었습니다.'); location.href='"+request.getContextPath()+"/business/loginForm.do';</script>";
-					return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-				}
-				business_id_to_check = loginBusinessVO.getBusiness_id();
-				pensionVO.setBusiness_id(business_id_to_check);
-			}
+            if (business_id_to_check == null || business_id_to_check.isEmpty()) {
+                BusinessVO loginBusinessVO = (BusinessVO) session.getAttribute("businessInfo");
+                if (loginBusinessVO == null) {
+                    message = "<script>alert('로그인 정보가 만료되었습니다.'); location.href='"+request.getContextPath()+"/business/loginForm.do';</script>";
+                    return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+                }
+                business_id_to_check = loginBusinessVO.getBusiness_id();
+                pensionVO.setBusiness_id(business_id_to_check);
+            }
 
-			// ▼▼▼▼▼ 핵심 수정: 펜션 등록 전 중복 확인 ▼▼▼▼▼
-			PensionVO existingPension = businessService.pension(business_id_to_check);
-			if (existingPension != null) {
-				message = "<script>alert('이미 등록된 펜션이 있습니다. 펜션은 하나만 등록할 수 있습니다.');history.back();</script>";
-				return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-			}
-			// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+            PensionVO existingPension = businessService.pension(business_id_to_check);
+            if (existingPension != null) {
+                message = "<script>alert('이미 등록된 펜션이 있습니다. 펜션은 하나만 등록할 수 있습니다.');history.back();</script>";
+                return new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+            }
+            
+            // DB에 펜션 정보와 파일명을 함께 저장
+            businessService.addpension(pensionVO);
 
-			businessService.addpension(pensionVO);
+            String redirectUrl = (session.getAttribute("adminInfo") != null)
+                                ? request.getContextPath() + "/admin/pension/adminPensionList.do"
+                                : request.getContextPath() + "/business/mypension.do";
 
-			String redirectUrl = (session.getAttribute("adminInfo") != null)
-								? request.getContextPath() + "/admin/pension/adminPensionList.do" // 관리자용 경로 (예시)
-								: request.getContextPath() + "/business/mypension.do"; // 사업자용 경로
+            message = "<script>alert('등록 성공'); location.href='" + redirectUrl + "';</script>";
 
-			message = "<script>alert('등록 성공'); location.href='" + redirectUrl + "';</script>";
+        } catch (Exception e) {
+            message = "<script>alert('등록 실패'); location.href='" + request.getContextPath() + "/business/addpensionForm.do';</script>";
+            e.printStackTrace();
+        }
+        resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+        return resEntity;
+    }
 
-		} catch (Exception e) {
-			message = "<script>alert('등록 실패'); location.href='" + request.getContextPath() + "/business/addpensionForm.do';</script>";
-			e.printStackTrace();
-		}
-		resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-		return resEntity;
-	}
+	
 	@RequestMapping(value="addroom.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String addpension2(RoomVO roomVO, 
 	                          @RequestParam(value="file", required = false) MultipartFile fileimage, 

@@ -7,6 +7,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
@@ -19,19 +21,20 @@
         </div>
     </div>
     
-		<div class="row seller_menu">
-			<ul>	
-				<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
-				<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
-				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
-				<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
-				<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
-				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
-				<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
-				<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
-			</ul>
-		</div>
-<form name="frm_mod_business" action="${contextPath}/business/addpension.do" method="post">
+	<div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
+			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
+			<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
+			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+			<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+			<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
+
+<form name="frm_mod_business" action="${contextPath}/business/addpension.do" method="post" enctype="multipart/form-data">
 	<input type="hidden" name="business_id" id="business_id" value="${sessionScope.businessInfo.business_id}"/>
 	<div id="">
 		<table class="table table-bordered align-middle">
@@ -88,7 +91,14 @@
 		        <input type="text" class="form-control" id="description" name="description">
 		      </td>
 		    </tr>
-		  </tbody>
+		    
+		    <tr>
+              <td class="fw-bold">대표 이미지</td>
+              <td colspan="2">
+                <input type="file" class="form-control" name="mainImage">
+              </td>
+            </tr>
+            </tbody>
 		</table>
 
 		</div>
@@ -97,8 +107,8 @@
 		<table align=center>
 		<tr>
 			<td >
-				<input name="btn_cancel_business" type="submit"  value="등록하기">
-				<input name="btn_cancel_business" type="reset" value="다시 입력">
+				<input class="btn btn-primary" type="submit" value="등록하기">
+				<input class="btn btn-secondary" type="reset" value="다시 입력">
 			</td>
 		</tr>
 	</table>
