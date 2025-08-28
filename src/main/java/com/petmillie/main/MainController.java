@@ -26,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.goods.service.GoodsService;
 import com.petmillie.goods.vo.GoodsVO;
+import com.petmillie.mypage.service.MyPageService;
+import com.petmillie.mypage.vo.LikeGoodsVO;
 import com.petmillie.weather.service.WeatherService;
 import com.petmillie.weather.vo.WeatherProductRecommendation;
 import com.petmillie.weather.vo.WeatherSummaryVO;
@@ -40,7 +42,8 @@ public class MainController extends BaseController {
     private GoodsService goodsService;
     @Autowired
     private WeatherService weatherService;
-
+    @Autowired
+    private MyPageService myPageService;
     @RequestMapping(value = "/main/main.do", method = {RequestMethod.POST, RequestMethod.GET})
     public ModelAndView main(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
@@ -199,7 +202,14 @@ public class MainController extends BaseController {
         WeatherProductRecommendation rec = weatherService.getRecommendationFromDB(currentWeather);
         mav.addObject("weatherRecommendation", rec);
 
-      
+        
+        List<LikeGoodsVO> wishlist = myPageService.selectBestWish(3);
+        
+        for(LikeGoodsVO w : wishlist) {
+            System.out.println("관심상품 파일명" + w.getGoods_fileName());
+        }
+        
+        mav.addObject("wishlist", wishlist);
         return mav;
     }
 

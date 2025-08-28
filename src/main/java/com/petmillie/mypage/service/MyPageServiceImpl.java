@@ -172,5 +172,11 @@ public class MyPageServiceImpl implements MyPageService{
 		}
 	}
 
+	@Override
+	public List<LikeGoodsVO> selectBestWish(int limit) throws Exception {
+		
+		return myPageDAO.selectBestWish(limit);
+	}
+
 	
 }

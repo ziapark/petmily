@@ -76,6 +76,7 @@
 		<result property="goods_name" column="goods_name"/>
 		<result property="goods_sales_price" column="goods_sales_price"/>
 		<result property="goods_fileName" column="goods_fileName"/>
+	 	<result property="like_count" column="like_count"/>
 	</resultMap>
 
 	<!-- 반려동물 resultMap 정의 -->
@@ -376,5 +377,24 @@
 	        WHERE member_id = #{member_id}
 	    ]]>
 	</update>
-
+	
+	<!-- 베스트 관심상품리스트 -->
+	<select id="selectBestWish" resultMap="likeGoodsResult" parameterType="int">
+	    <![CDATA[
+			SELECT g.goods_num,
+			       g.goods_name,
+			       g.goods_sales_price,
+			       IFNULL(MAX(gi.fileName), '') AS goods_fileName,
+			       COUNT(lg.member_id) AS like_count
+			FROM likes_goods lg
+			JOIN goods g ON lg.goods_num = g.goods_num
+			LEFT JOIN goods_image gi 
+			  ON g.goods_num = gi.goods_num 
+			  AND gi.fileType = 'main'
+			GROUP BY g.goods_num, g.goods_name, g.goods_sales_price
+			ORDER BY like_count DESC
+			LIMIT #{limit}
+	    ]]>
+	</select>
+	
 </mapper>

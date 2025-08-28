@@ -64,9 +64,9 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 		String viewName=(String)request.getAttribute("viewName");
 		HttpSession session=request.getSession();
 		ModelAndView mav=new ModelAndView("/common/layout");
-		mav.addObject("title", "제품상세");
+		mav.addObject("title", "펫밀리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
-		
+		System.out.println("제품상세진입");
 		goodsVO = goodsService.goodsDetail(goods_num);
 		List<ImageFileVO> goodsImageList = goodsService.goodsDetailImage(goods_num);
 		mav.addObject("goodsVO", goodsVO);
@@ -82,7 +82,7 @@ public class GoodsControllerImpl extends BaseController implements GoodsControll
 	public ModelAndView goodsList(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    ModelAndView mav = new ModelAndView("/common/layout");
 
-	    mav.addObject("title", "전체 상품");
+	    mav.addObject("title", "펫밀리");
 	    mav.addObject("body", "/WEB-INF/views/goods/goodsList.jsp");
 
 	    // 서비스 계층에서 List<GoodsVO> 직접 가져오기

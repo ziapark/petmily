@@ -7,7 +7,14 @@ public class LikeGoodsVO {
 	private String goods_name;
 	private String goods_sales_price;
 	private String goods_fileName;
+	private int like_count;   
 	
+	public int getLike_count() {
+		return like_count;
+	}
+	public void setLike_count(int like_count) {
+		this.like_count = like_count;
+	}
 	public int getLike_goods_id() {
 		return like_goods_id;
 	}

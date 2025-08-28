@@ -59,7 +59,7 @@
 	<!-- 날씨정보 start -->
 	<div class="weather_wrap">
 		<div class="weather_api_box container">
-			
+			<h3 style="margin:30px 0 40px 0">날씨맞춤 상품추천</h3>
 			<div class="row weather_box_wrap">	
 				<div class="">
 						<!--카카오맵 <div id="map" style="height:300px;">위치 정보를 불러오는 중...</div> -->
@@ -92,29 +92,47 @@
 		</div>
 		<div class="weather_goods container">
 			<div class="row">
-				<h3>${weatherRecommendation.weatherCondition} - ${weatherRecommendation.comment}</h3>
+				<h3 style="font-size: 1.0rem;">${weatherRecommendation.weatherCondition} - ${weatherRecommendation.comment}</h3>
 				<ul>
 		  			<c:forEach var="goods" items="${weatherRecommendation.goodsList}">
 		    		<li class="goods_item">
-		      		<a href="/goods/detail?goods_num=${goods.goods_num}">
+		      		<a href="${contextPath}/goods/goodsDetail.do?goods_num=${goods.goods_num}">
 		        		<img src="${contextPath}/download.do?goods_num=${goods.goods_num}&fileName=${goods.fileName}" alt="${goods.goods_name}" width="120">		        
 		      		</a>
 		      		<p>${goods.goods_name}</p>
 		      		<p style="text-align:right;">${goods.goods_sales_price} 원</p>
-		    </li>
-		  </c:forEach>
-		</ul>
-	</div>
-	</div>
+				    </li>
+				  </c:forEach>
+				</ul>
+			</div>
+		</div>
 </div>
 <!-- 날씨정보 end -->
 
 <div class="clear"></div>
 
-<!-- 베스트리뷰 상품 -->
-
-
+	<!-- 베스트 관심 상품 start-->
+	
+ 	<div class="best_wishlist container">
+		<div class="row">
+			<h3>베스트 관심상품</h3>
+			<p class="h34">관심상품으로 가장 많이 선택된 인기순 BEST 상품입니다.</p>
+			<ul>
+			<c:forEach var="wish" items="${wishlist}">
+				<li class="wish_item">
+					<a href="${contextPath}/goods/goodsDetail.do?goods_num=${wish.goods_num}">
+						<img src="${contextPath}/download.do?goods_num=${wish.goods_num}&fileName=${wish.goods_fileName}" alt="${wish.goods_name}" width="120">
+					</a>
+					<p>${wish.goods_name}</p>
+		      		<p style="text-align:right;">${wish.goods_sales_price} 원</p>
+				</li>
+			</c:forEach>
+			</ul>
+		</div>
+	</div>
  
+ 	<!-- 베스트 관심 상품 end -->
+ 	
 </div>
 
 <!-- 메인하단 본문영역 end -->

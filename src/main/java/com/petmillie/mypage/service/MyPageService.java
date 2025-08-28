@@ -33,9 +33,8 @@ public interface MyPageService{
 	public PetVO findPetInfo(int pet_id) throws Exception;
 	public void modifyPet(PetVO petVO) throws Exception;
 	public void removePet(int pet_id) throws Exception;
-<<<<<<< HEAD
-	
-=======
+
 	public void confirmPurchase(Map<String, String> orderMap) throws Exception;
->>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
+	public List<LikeGoodsVO> selectBestWish(int limit) throws Exception;
+
 }
