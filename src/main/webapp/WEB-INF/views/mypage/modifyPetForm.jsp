@@ -27,6 +27,7 @@
         }
         .form-group input[type="text"],
         .form-group input[type="date"],
+        .form-group input[type="file"], /* 파일 인풋 스타일 추가 */
         .form-group select {
             width: 100%;
             padding: 10px;
@@ -39,6 +40,15 @@
         }
         .gender-options input {
             margin-right: 5px;
+        }
+        /* 현재 프로필 사진 스타일 */
+        .current-pet-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
         }
         .btn-submit {
             background-color: #007bff;
@@ -85,10 +95,30 @@
         <div class="mypage_content">
             <h3 style="text-align:left;">반려동물 정보 수정</h3>
             <div class="form-section">
-                <form action="${contextPath}/mypage/modifyPet.do" method="post">
-                    <!-- 수정할 반려동물의 ID를 hidden 필드로 전달 -->
-                    <input type="hidden" name="pet_id" value="${petVO.pet_id}">
+                <%-- ▼▼▼ 1. form 태그에 enctype="multipart/form-data" 추가 ▼▼▼ --%>
+                <form action="${contextPath}/mypage/modifyPet.do" method="post" enctype="multipart/form-data">
                     
+                    <input type="hidden" name="pet_id" value="${petVO.pet_id}">
+                    <input type="hidden" name="originalFileName" value="${petVO.pet_image}">
+                    
+                    <%-- ▼▼▼ 2. 프로필 사진 표시 및 변경을 위한 UI 추가 ▼▼▼ --%>
+                    <div class="form-group">
+                        <label>프로필 사진</label>
+                        <div>
+                            <c:choose>
+                                <c:when test="${not empty petVO.pet_image}">
+                                    <img src="${contextPath}/mypet/image.do?pet_image=${petVO.pet_image}" class="current-pet-image" alt="현재 프로필 사진">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${contextPath}/resources/image/default_pet_profile.png" class="current-pet-image" alt="기본 프로필 사진">
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <label for="pet_image" style="font-weight: normal; margin-top: 10px; color: #555;">사진 변경 (선택)</label>
+                        <input type="file" id="pet_image" name="pet_image" accept="image/*">
+                        <p style="font-size: 12px; color: #888; margin-top: 5px;">※ 사진을 변경하지 않으려면 파일을 선택하지 마세요.</p>
+                    </div>
+
                     <div class="form-group">
                         <label for="pet_name">이름</label>
                         <input type="text" id="pet_name" name="pet_name" value="${petVO.pet_name}" required>

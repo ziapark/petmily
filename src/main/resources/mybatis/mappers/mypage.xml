@@ -81,17 +81,18 @@
 
 	<!-- 반려동물 resultMap 정의 -->
 	<resultMap id="petResult" type="com.petmillie.mypage.vo.PetVO">
-		<result property="pet_id" column="pet_id"/>
-		<result property="member_id" column="member_id"/>
-		<result property="pet_name" column="pet_name"/>
-		<result property="pet_birth_date" column="pet_birth_date"/>
-		<result property="pet_species" column="pet_species"/>
-		<result property="pet_breed" column="pet_breed"/>
-		<result property="pet_gender" column="pet_gender"/>
-		<result property="pet_favorite_toy" column="pet_favorite_toy"/>
-		<result property="pet_favorite_snack" column="pet_favorite_snack"/>
-		<result property="reg_date" column="reg_date"/>
-	</resultMap>
+    <result property="pet_id" column="pet_id"/>
+    <result property="member_id" column="member_id"/>
+    <result property="pet_name" column="pet_name"/>
+    <result property="pet_birth_date" column="pet_birth_date"/>
+    <result property="pet_species" column="pet_species"/>
+    <result property="pet_breed" column="pet_breed"/>
+    <result property="pet_gender" column="pet_gender"/>
+    <result property="pet_favorite_toy" column="pet_favorite_toy"/>
+    <result property="pet_favorite_snack" column="pet_favorite_snack"/>
+    <result property="pet_image" column="pet_image"/>
+     <result property="reg_date" column="reg_date"/>
+</resultMap>
 
 	<resultMap id="orderResult" type="com.petmillie.order.vo.OrderVO">
 		<result property="order_num" column="order_num"/>
@@ -333,18 +334,19 @@
 	</select>
 
 	<update id="updatePet" parameterType="com.petmillie.mypage.vo.PetVO">
-		<![CDATA[
-			UPDATE pet
-			SET pet_name = #{pet_name},
-				pet_birth_date = #{pet_birth_date},
-				pet_species = #{pet_species},
-				pet_breed = #{pet_breed},
-				pet_gender = #{pet_gender},
-				pet_favorite_toy = #{pet_favorite_toy},
-				pet_favorite_snack = #{pet_favorite_snack}
-			WHERE pet_id = #{pet_id}
-		]]>
-	</update>
+    <![CDATA[
+        UPDATE pet
+        SET pet_name = #{pet_name},
+            pet_birth_date = #{pet_birth_date},
+            pet_species = #{pet_species},
+            pet_breed = #{pet_breed},
+            pet_gender = #{pet_gender},
+            pet_favorite_toy = #{pet_favorite_toy},
+            pet_favorite_snack = #{pet_favorite_snack},
+            pet_image = #{pet_image} 
+        WHERE pet_id = #{pet_id}
+    ]]>
+</update>
 
 	<delete id="deletePet" parameterType="int">
 		<![CDATA[
