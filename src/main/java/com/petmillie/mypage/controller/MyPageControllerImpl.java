@@ -571,30 +571,38 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
     }
     
     
-        
-
-      
-
-        
 
         // 3. 기존 addPet 메소드를 아래 코드로 완전히 교체합니다.
         @Override
         @RequestMapping(value="/addPet.do", method=RequestMethod.POST)
-        public ModelAndView addPet(@ModelAttribute("petVO") PetVO petVO,
-                                   @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
-                                   HttpServletRequest request) throws Exception {
+        public ModelAndView addPet(@ModelAttribute PetVO petVO,
+        							@RequestParam("uploadFile") MultipartFile file,
+        							HttpServletRequest request) throws Exception {
             
             HttpSession session = request.getSession();
             MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
             if (memberInfo == null) {
                 return new ModelAndView("redirect:/member/loginForm.do");
             }
-            
+            System.out.println("안녕???");
             // 파일 업로드 처리
-            String savedFileName = fileDownloadController.uploadPetImage(pet_image);
+    	    // **C드라이브에 저장할 경로 설정** 
+    	    String saveDir = "C:\\petrepo\\mypet";
+    	    File uploadPath = new File(saveDir);
+    	    if (!uploadPath.exists()) uploadPath.mkdirs();
+
+    	    if (!file.isEmpty()) {
+    	        String originalFileName = file.getOriginalFilename();
+    	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+    	        file.transferTo(new File(saveDir + "\\" + savedFileName));
+    	        petVO.setPet_image(savedFileName); // pet_image에 저장
+    	    } else {
+    	        petVO.setPet_image(null);
+    	    }
             
-            // VO에 파일명과 회원ID 설정
-            petVO.setPet_image(savedFileName); 
+            
+            //String savedFileName = fileDownloadController.uploadPetImage(file);
+            
             petVO.setMember_id(memberInfo.getMember_id());
             
             // DB에 저장

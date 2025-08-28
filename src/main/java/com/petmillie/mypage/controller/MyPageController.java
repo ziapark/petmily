@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,10 +43,9 @@ public interface MyPageController {
 	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView addPetForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
-    // ▼▼▼ [수정] 이 메소드의 파라미터만 수정했습니다 ▼▼▼
-	public ModelAndView addPet(@ModelAttribute("petVO") PetVO petVO,
-                               @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
-                               HttpServletRequest request) throws Exception;
+	public ModelAndView addPet(@ModelAttribute PetVO petVO,
+			@RequestParam("pet_image") MultipartFile file,
+			HttpServletRequest request) throws Exception;
     
 	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 

@@ -44,9 +44,9 @@
                     	</div>
 
                         ▼▼▼ 2. 사진 첨부 입력란 추가 ▼▼▼
-                        <div class="form-group">
-                            <label for="pet_image">프로필 사진</label>
-                            <input type="file" id="pet_image" name="pet_image">
+                 		<div class="form-group">
+                            <label for="uploadFile">프로필 사진</label>
+                            <input type="file" id="uploadFile" name="uploadFile">
                         </div>
 
                     	<div class="form-group">
