@@ -244,6 +244,100 @@
 	 					<c:set var="pre_order_id" value="" />
 						<c:set var="orderTotalAmount" value="0" />
 						<c:set var="orderTotalQty" value="0" />	
+<<<<<<< HEAD
+						<c:set var="pre_order_id" value="0" />
+						<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
+						    <tr>
+						        <c:if test="${item.firstRow}">
+						            <td rowspan="${item.rowspanCount}">${item.order_id}</td>
+						            <td rowspan="${item.rowspanCount}">${item.order_time}</td>
+						        </c:if>
+						
+						        <!-- 상품명 -->
+						        <td>
+						            <a href="${contextPath}/goods/goodsDetail.do?goods_num=${item.goods_num}">
+						                ${item.goods_name}
+						            </a>
+						        </td>
+						
+						        <!-- 금액/수량 -->
+						        <td>${item.goods_sales_price * item.goods_qty}원 / ${item.goods_qty}개</td>
+						
+						        <!-- 주문상태 -->
+						        <td>
+						            <c:choose>
+						                <c:when test="${item.delivery_state=='delivery_prepared'}">배송준비중</c:when>
+						                <c:when test="${item.delivery_state=='delivering'}">배송중</c:when>
+						                <c:when test="${item.delivery_state=='finished_delivering'}">배송완료</c:when>
+						                <c:when test="${item.delivery_state=='finished'}">구매확정</c:when>
+						                <c:when test="${item.delivery_state=='cancel_order'}">주문취소</c:when>
+						                <c:when test="${item.delivery_state=='returning_goods'}">반품</c:when>
+						            </c:choose>
+						        </td>
+						
+						        <!-- 수령자 -->
+						        <td>${item.receiver_name}</td>
+						
+						        <!-- 리뷰 버튼 (상품 단위로 출력) -->
+						        <td>
+						            <c:choose>
+						                <c:when test="${item.delivery_state=='finished'}">
+						                    <c:choose>
+						                        <c:when test="${item.hasReview eq 'Y'}">
+						                            <a href="${contextPath}/mypage/myReview.do?goods_num=${item.goods_num}"
+						                            class="btn btn-sm btn-outline-success">
+						                                리뷰보기
+						                            </a>
+						                        </c:when>
+						                        <c:otherwise>
+						                            <a href="${contextPath}/mypage/writeReviewForm.do?order_num=${item.order_id}&goods_num=${item.goods_num}&goods_name=${item.goods_name}"
+						                            class="btn btn-sm btn-outline-primary">
+						                                리뷰쓰기
+						                            </a>
+						                        </c:otherwise>
+						                    </c:choose>
+						                </c:when>
+						                
+						            </c:choose>
+						        </td>
+						
+						        <!-- 주문취소/구매확정/반품 버튼도 상품 단위로 -->
+						        <td>
+						            <c:choose>
+						                <c:when test="${item.delivery_state=='delivery_prepared'}">
+						                    <button type="button" onclick="cancelOrder(this)"
+						                        data-order-id="${item.order_id}"
+						                        data-payment-id="${item.paymentId}"
+						                        data-amount="${item.payment_amount}"
+						                        data-used-points="${item.used_point}"
+						                        class="btn btn-sm btn-outline-secondary">
+						                        주문취소
+						                    </button>
+						                </c:when>
+						                <c:when test="${item.delivery_state=='finished_delivering'}">
+						                    <select onchange="exchange_finish_order(this)" data-order-id="${item.order_id}">
+						                        <option value="finished_delivering" selected>배송완료</option>
+						                        <option value="finished">구매확정</option>
+						                        <option value="returning_goods">반품</option>
+						                    </select>
+						                </c:when>
+						                <c:when test="${item.delivery_state=='finished'}">구매확정</c:when>
+						            </c:choose>
+						        </td>
+						    </tr>
+							<!-- 합계 출력 -->
+						    <c:if test="${item.lastRow}">
+						        <tr style="background:#e0e0e0">
+						            <td colspan="3" align="right"><strong>주문 합계</strong></td>
+						            <td><strong><fmt:formatNumber value="${item.orderTotalAmount}" type="number" />원 / ${item.orderTotalQty}개</strong></td>
+						            <td colspan="4"></td>
+						        </tr>
+						    </c:if>
+						    <c:set var="pre_order_id" value="${item.order_id}" />
+						</c:forEach>
+						
+     					 
+=======
      					<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
      					    <c:if test="${item.order_id != pre_order_id and not empty pre_order_id}">
                     			<%-- 이전 주문의 합계를 출력 --%>
@@ -361,11 +455,30 @@
 		                    </tr>
 		                </c:if>
 					</c:forEach>
+>>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
 				</c:otherwise>
 			</c:choose>			   
 		</tbody>
 	</table>
 	<div class="clear"></div>
+	<!-- 페이지네이션 -->
+	<c:if test="${totalPage > 1}">
+	    <div style="text-align:center; margin-top:20px;">
+	        <c:forEach var="i" begin="1" end="${totalPage}">
+	            <c:choose>
+	                <c:when test="${i == currentPage}">
+	                    <strong>${i}</strong>
+	                </c:when>
+	                <c:otherwise>
+	                    <a href="${contextPath}/mypage/listMyOrderHistory.do?page=${i}&fixedSearchPeriod=${param.fixedSearchPeriod}">
+	                        ${i}
+	                    </a>
+	                </c:otherwise>
+	            </c:choose>
+	            &nbsp;
+	        </c:forEach>
+	    </div>
+	</c:if>
 </div>
 </body>
 </html>

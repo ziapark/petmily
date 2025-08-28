@@ -29,6 +29,11 @@ public class OrderVO {
 	
 	private String goods_delivery_price;
 	
+	private int rowspanCount;   // 해당 order_id의 상품 개수
+	private boolean firstRow;   // 해당 order_id의 첫 번째 상품인지 여부
+	private boolean lastRow;
+	private int orderTotalAmount;
+	private int orderTotalQty;
 	//결제 정보
 	private int payment_num;
 	private String imp_uid;
@@ -232,6 +237,36 @@ public class OrderVO {
 	}
 	public void setReward_point(int reward_point) {
 		this.reward_point = reward_point;
+	}
+	public int getRowspanCount() {
+		return rowspanCount;
+	}
+	public void setRowspanCount(int rowspanCount) {
+		this.rowspanCount = rowspanCount;
+	}
+	public boolean isFirstRow() {
+		return firstRow;
+	}
+	public void setFirstRow(boolean firstRow) {
+		this.firstRow = firstRow;
+	}
+	public boolean isLastRow() {
+		return lastRow;
+	}
+	public void setLastRow(boolean lastRow) {
+		this.lastRow = lastRow;
+	}
+	public int getOrderTotalAmount() {
+		return orderTotalAmount;
+	}
+	public void setOrderTotalAmount(int orderTotalAmount) {
+		this.orderTotalAmount = orderTotalAmount;
+	}
+	public int getOrderTotalQty() {
+		return orderTotalQty;
+	}
+	public void setOrderTotalQty(int orderTotalQty) {
+		this.orderTotalQty = orderTotalQty;
 	}
 	
 }

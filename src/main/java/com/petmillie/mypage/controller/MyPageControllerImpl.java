@@ -2,8 +2,10 @@ package com.petmillie.mypage.controller;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +23,15 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.common.base.BaseController;
+import com.petmillie.goods.service.GoodsService;
+import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
 import com.petmillie.mypage.vo.GoodsReviewVO;
 import com.petmillie.mypage.vo.LikeGoodsVO;
 import com.petmillie.mypage.vo.PetVO;
+import com.petmillie.order.service.OrderService;
 import com.petmillie.order.vo.OrderVO;
 
 @Controller("myPageController")
@@ -43,6 +45,10 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	private MemberVO memberVO;	
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private GoodsService goodsService;
 	
 	@Override
 	@RequestMapping(value="/myPageMain.do" ,method = RequestMethod.GET)
@@ -68,7 +74,6 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    params.put("limit", 10);
 
 	    List<OrderVO> myOrderList = myPageService.listMyOrderGoods(params);
-
 	    
 	    mav.addObject("message", message);
 	    mav.addObject("myOrderList", myOrderList);
@@ -92,19 +97,23 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	
 	@Override
 	@RequestMapping(value="/listMyOrderHistory.do", method = RequestMethod.GET)
-	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap,
+	        @RequestParam(value="page", defaultValue="1") int page,
+	        HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 	    HttpSession session = request.getSession();
 	    session.setAttribute("side_menu", "my_page");
-	    
+
 	    String viewName = (String) request.getAttribute("viewName");
 	    ModelAndView mav = new ModelAndView("/common/layout");
-	    
+
 	    mav.addObject("title", "마이페이지 - 주문 내역 조회");
 	    mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
 	    memberVO = (MemberVO) session.getAttribute("memberInfo");
 	    String member_id = memberVO.getMember_id();
 
+	    // 검색 기간 계산
 	    String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
 	    String[] tempDate = calcSearchPeriod(fixedSearchPeriod).split(",");
 	    String beginDate = tempDate[0];
@@ -112,10 +121,8 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    dateMap.put("beginDate", beginDate);
 	    dateMap.put("endDate", endDate);
 	    dateMap.put("member_id", member_id);
-	    dateMap.put("offset", "0");    // ✅ null 아니어야 함
-	    dateMap.put("limit", "10");    // ✅ null 아니어야 함
 
-	    // 날짜 정보 추가
+	    // 날짜 정보 JSP 전달
 	    String[] beginDateArr = beginDate.split("-");
 	    String[] endDateArr = endDate.split("-");
 	    mav.addObject("beginYear", beginDateArr[0]);
@@ -125,10 +132,72 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	    mav.addObject("endMonth", endDateArr[1]);
 	    mav.addObject("endDay", endDateArr[2]);
 
+	    // 페이지네이션 설정
+	    int limit = 10;
+	    int offset = (page - 1) * limit;
+	    dateMap.put("offset", String.valueOf(offset));
+	    dateMap.put("limit", String.valueOf(limit));
+
+	    // 전체 주문 수
+	//     int totalCount = myPageService.countMyOrderHistory(dateMap);
+
 	    // 주문 내역 조회
 	    List<OrderVO> myOrderHistList = myPageService.listMyOrderHistory(dateMap);
+
+	    // order_id별 rowspan, 합계 계산
+	    Map<Integer, Integer> countMap = new HashMap<>();
+	    Map<Integer, Integer> totalAmountMap = new HashMap<>();
+	    Map<Integer, Integer> totalQtyMap = new HashMap<>();
+
+	    for (OrderVO order : myOrderHistList) {
+	        int orderId = order.getOrder_id();
+	        int goodsPrice = order.getGoods_sales_price();
+	        int goodsQty = Integer.parseInt(order.getGoods_qty());
+
+	        // rowspan count
+	        countMap.put(orderId, countMap.getOrDefault(orderId, 0) + 1);
+
+	        // 주문별 합계 금액 & 수량
+	        int amount = goodsPrice * goodsQty;
+	        totalAmountMap.put(orderId, totalAmountMap.getOrDefault(orderId, 0) + amount);
+	        totalQtyMap.put(orderId, totalQtyMap.getOrDefault(orderId, 0) + goodsQty);
+	    }
+
+	    // 첫 Row 여부 + 마지막 Row 여부 + 합계 세팅
+	    Map<Integer, Integer> remainCountMap = new HashMap<>(countMap);
+	    Set<Integer> seen = new HashSet<>();
+
+	    for (OrderVO order : myOrderHistList) {
+	        int orderId = order.getOrder_id();
+	        int count = remainCountMap.get(orderId);
+
+	        // rowspan
+	        order.setRowspanCount(countMap.get(orderId));
+
+	        // 첫 row
+	        if (!seen.contains(orderId)) {
+	            order.setFirstRow(true);
+	            seen.add(orderId);
+	        } else {
+	            order.setFirstRow(false);
+	        }
+
+	        // 합계 값 세팅
+	        order.setOrderTotalAmount(totalAmountMap.get(orderId));
+	        order.setOrderTotalQty(totalQtyMap.get(orderId));
+
+	        // 마지막 row 여부
+	        remainCountMap.put(orderId, count - 1);
+	        order.setLastRow(count - 1 == 0);
+	    }
+
 	    mav.addObject("myOrderHistList", myOrderHistList);
-	    
+
+	    // 페이지네이션 정보
+	  //  int totalPage = (int) Math.ceil((double) totalCount / limit);
+	    mav.addObject("currentPage", page);
+	  //  mav.addObject("totalPage", totalPage);
+
 	    return mav;
 	}
 	
@@ -237,14 +306,15 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 
 		int order_num = orderVO.getOrder_num();
+		int goods_num = orderVO.getGoods_num();
 		String goods_name = orderVO.getGoods_name();
 		
 		HttpSession session = request.getSession();
 		MemberVO memberVO =(MemberVO) session.getAttribute("memberInfo");
-		String order_name = memberVO.getMember_id();
+		
 
 		mav.addObject("order_num", order_num);
-		mav.addObject("order_name", order_name);
+		mav.addObject("goods_num", goods_num);
 		mav.addObject("goods_name", goods_name);
 		
 	    return mav;

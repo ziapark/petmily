@@ -36,8 +36,12 @@ public interface MyPageDAO {
 	public PetVO selectPet(int pet_id) throws Exception;
 	public int updatePet(PetVO petVO) throws Exception;
 	public int deletePet(int pet_id) throws Exception;
+<<<<<<< HEAD
+	public void updateHasReview(GoodsReviewVO goodsReviewVO) throws Exception;
+=======
 	public void updateOrderStateToFinished(Map<String, String> orderMap) throws Exception;
 	public int selectTotalRewardPoint(String order_id) throws Exception;
 	public void updateMemberPoint(Map<String, String> pointMap) throws Exception;
 
+>>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
 }

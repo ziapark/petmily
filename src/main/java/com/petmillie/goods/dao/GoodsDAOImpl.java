@@ -70,4 +70,10 @@ public class GoodsDAOImpl implements GoodsDAO{
     public List<GoodsReviewVO> goodsReview(int goods_num) throws DataAccessException{
     	return sqlSession.selectList("mapper.goods.goodsReview", goods_num);
     }
+
+	@Override
+	public List<GoodsVO> getGoodsListByOrder(int order_num) throws DataAccessException {
+		System.out.println("주문한 상품리스트 DAO 진입: " + order_num);
+		return sqlSession.selectList("mapper.goods.getGoodsListByOrder", order_num);
+	}
 }
