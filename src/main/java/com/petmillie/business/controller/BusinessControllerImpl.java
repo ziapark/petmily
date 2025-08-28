@@ -530,32 +530,34 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	}
 
 	@Override
-	@RequestMapping(value="/modifypension.do", method={RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView modifypension(HttpServletRequest request,	HttpServletResponse response) throws Exception {
-		String p_name = request.getParameter("p_name");
-		String tel1 = request.getParameter("tel1");
-		String tel2 = request.getParameter("tel2");
-		String tel3 = request.getParameter("tel3");
-		String room_count = request.getParameter("room_count");
-		String facilities = request.getParameter("facilities");
-		String description = request.getParameter("description");
-		
-		PensionVO pensionVO = new PensionVO();
-		pensionVO.setP_name(p_name);
-		pensionVO.setTel1(tel1);
-		pensionVO.setTel2(tel2);
-		pensionVO.setTel3(tel3);
-		pensionVO.setRoom_count(room_count);
-		pensionVO.setFacilities(facilities);
-		pensionVO.setDescription(description);
-		int result = businessService.updatepension(pensionVO);
-		HttpSession session = request.getSession();
-		//리
-		request.getSession().setAttribute("message", "수정이 완료 되었습니다");
-		System.out.println("세션에 message 넣음: " + session.getAttribute("message"));
-		ModelAndView mav = new ModelAndView("redirect:/business/mypension.do");
-		return mav;
-	}
+    @RequestMapping(value="/modifypension.do", method={RequestMethod.POST})
+    public ModelAndView modifypension(@ModelAttribute("pensionVO") PensionVO pensionVO,
+                                      @RequestParam("mainImage") MultipartFile mainImage,
+                                      @RequestParam("originalFileName") String originalFileName,
+                                      HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
+        // 1. 새 이미지 파일이 첨부되었는지 확인
+        if (mainImage != null && !mainImage.isEmpty()) {
+            // 새 파일이 있으면 업로드하고, 새로운 파일명을 받아옵니다.
+            String newFileName = fileDownloadController.uploadPensionImage(mainImage);
+            // pensionVO에 새로운 파일명을 설정합니다.
+            pensionVO.setFileName(newFileName);
+        } else {
+            // 새 파일이 없으면, 기존 파일명을 그대로 사용합니다.
+            pensionVO.setFileName(originalFileName);
+        }
+        
+        // 2. Service를 호출하여 DB 정보 업데이트 (텍스트 정보 + 파일명)
+        businessService.updatepension(pensionVO);
+        
+        // 3. 수정 완료 후 마이페이지로 리다이렉트
+        ModelAndView mav = new ModelAndView("redirect:/business/mypension.do");
+        
+        // 수정 완료 메시지를 전달하고 싶으면 RedirectAttributes를 사용하는 것이 더 좋습니다.
+        // request.getSession().setAttribute("message", "수정이 완료 되었습니다");
+        
+        return mav;
+    }
 
 	@Override
 	@RequestMapping(value="/removepension.do", method={RequestMethod.POST,RequestMethod.GET})

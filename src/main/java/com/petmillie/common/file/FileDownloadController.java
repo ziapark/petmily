@@ -21,6 +21,7 @@ public class FileDownloadController {
 	private static String CURR_ROOM_REPO_PATH = "C:\\petrepo\\room";
 	private static String CURR_REVIEW_REPO_PATH = "C:\\petrepo\\goodsreivew";
 	private static String CURR_PENSION_REPO_PATH = "C:\\petrepo\\pension"; //펜션사진 전용 경로 
+	private static String CURR_MYPET_REPO_PATH = "C:\\petrepo\\mypet"; //나의 반려동물 전용 경로 
 	
 	
 	@RequestMapping("/download.do")
@@ -185,9 +186,7 @@ public class FileDownloadController {
 		
 
 	
-	
-	
-	
+
 	
 	
 	 public String uploadPensionImage(MultipartFile mainImage) throws Exception {
@@ -207,10 +206,7 @@ public class FileDownloadController {
 	
 	
 	
-	
-	
 
-	
 	
 	
 	

@@ -340,7 +340,8 @@
 				checkout_time = #{checkout_time},
 				room_count = #{room_count},
 				facilities = #{facilities}, 
-				description = #{description}
+				description = #{description},
+				fileName= #{fileName}
 			where p_num = #{p_num}
 			]]>
 		</update>
