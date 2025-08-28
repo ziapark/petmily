@@ -80,13 +80,11 @@ public class FileDownloadController {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 
-<<<<<<< HEAD
+
 		out.close();
-		System.out.println("[🔚 디버그] 썸네일 요청 처리 종료");
-=======
-	    out.close();
+	
+
 	 
->>>>>>> 72bb0ebeb4add253749066e3672c88fde24f5c7f
 	}
 
 	// 게시판 이미지 출력
@@ -193,8 +191,8 @@ public class FileDownloadController {
 
 	// --- 반려동물 관련 메소드 ---
 		@RequestMapping("/mypet/image.do")
-		public void mypetImage(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception {
-			String filePath = CURR_MYPET_REPO_PATH + "\\" + fileName;
+		public void mypetImage(@RequestParam("pet_image") String pet_image, HttpServletResponse response) throws Exception {
+			String filePath = CURR_MYPET_REPO_PATH + "\\" + pet_image;
 			System.out.println("요청된 반려동물 이미지 파일 경로: " + filePath);
 			File file = new File(filePath);
 			if (!file.exists()) {
@@ -203,14 +201,14 @@ public class FileDownloadController {
 				return;
 			}
 			String contentType = "application/octet-stream";
-			if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+			if (pet_image.endsWith(".jpg") || pet_image.endsWith(".jpeg")) {
 				contentType = "image/jpeg";
-			} else if (fileName.endsWith(".png")) {
+			} else if (pet_image.endsWith(".png")) {
 				contentType = "image/png";
 			}
 			response.setContentType(contentType);
 
-			// ▼▼▼ [수정] while문 안의 잘못된 중괄호를 제거했습니다 ▼▼▼
+			
 			try (FileInputStream in = new FileInputStream(file);
 				 OutputStream out = response.getOutputStream()) {
 				byte[] buffer = new byte[1024 * 8];
