@@ -43,6 +43,9 @@
 		});
 	</script>
 	<title><jsp:include page="${title}" /></title>
+	<style>
+	.ChatButtonContainer__Container-ch-front__sc-qgvnh9-0.cgHhTF {width:100px !important; height:100px !important;}
+	</style>
 </head>
 <body> 
 	<div>		
