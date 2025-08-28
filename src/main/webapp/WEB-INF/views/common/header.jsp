@@ -304,6 +304,9 @@
 					<li><a href="${contextPath}/leisure/leisure.do">
 						<spring:message code="submenu.culture"/>
 					</a></li>
+					<li><a href="${contextPath}/medi/hptAndPms.do">
+						<spring:message code="submenu.hptAndPms"/>
+					</a></li>
 				</ul>
 				<ul class="submenu">
 					<li><a href="${contextPath}/board/boardList.do?board_type=notice">
