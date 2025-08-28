@@ -205,9 +205,10 @@ public class MainController extends BaseController {
         
         List<LikeGoodsVO> wishlist = myPageService.selectBestWish(3);
         
-        for(LikeGoodsVO w : wishlist) {
-            System.out.println("관심상품 파일명" + w.getGoods_fileName());
-        }
+		/*
+		 * for(LikeGoodsVO w : wishlist) { System.out.println("관심상품 파일명" +
+		 * w.getGoods_fileName()); }
+		 */
         
         mav.addObject("wishlist", wishlist);
         return mav;
