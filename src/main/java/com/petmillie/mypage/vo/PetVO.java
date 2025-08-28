@@ -1,7 +1,9 @@
 package com.petmillie.mypage.vo;
 
 import java.sql.Date;
+import org.springframework.stereotype.Component;
 
+@Component("petVO")
 public class PetVO {
 	private int pet_id;
 	private String member_id;
@@ -12,9 +14,11 @@ public class PetVO {
 	private String pet_gender;
 	private String pet_favorite_toy;
 	private String pet_favorite_snack;
-	private String fileName;
+	private String pet_image; // [수정] DB 컬럼명과 일치시킴
 	private Date reg_date;
-	
+
+	// --- Getters and Setters ---
+
 	public int getPet_id() {
 		return pet_id;
 	}
@@ -87,12 +91,13 @@ public class PetVO {
 		this.pet_favorite_snack = pet_favorite_snack;
 	}
 
-	public String getFileName() {
-		return fileName;
+	// [수정] 자바 규칙에 맞게 Getter/Setter 이름 변경
+	public String getPet_image() {
+		return pet_image;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setPet_image(String pet_image) {
+		this.pet_image = pet_image;
 	}
 
 	public Date getReg_date() {

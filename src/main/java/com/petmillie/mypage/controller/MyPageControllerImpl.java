@@ -1,6 +1,8 @@
 package com.petmillie.mypage.controller;
 
 import java.io.File;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,8 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petmillie.common.base.BaseController;
+import com.petmillie.common.file.FileDownloadController;
 import com.petmillie.goods.service.GoodsService;
-import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.member.service.MemberService;
 import com.petmillie.member.vo.MemberVO;
 import com.petmillie.mypage.service.MyPageService;
@@ -49,7 +54,22 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	private OrderService orderService;
 	@Autowired
 	private GoodsService goodsService;
-	
+	  
+    
+        @Autowired
+        private FileDownloadController fileDownloadController;
+        
+        // ▼▼▼ 2. 400 에러 방지를 위한 날짜 변환 코드(@InitBinder) 추가 ▼▼▼
+        @InitBinder
+        public void initBinder(WebDataBinder binder) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        }
+        
+        
+        
+        
+    
 	@Override
 	@RequestMapping(value="/myPageMain.do" ,method = RequestMethod.GET)
 	public ModelAndView myPageMain(@RequestParam Map<String, String> dateMap, @RequestParam(required = false,value="message") String message,
@@ -550,23 +570,38 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
         return mav;
     }
     
-	// ✅ 반려동물 등록 처리 메서드
-    @RequestMapping(value="/addPet.do", method=RequestMethod.POST)
-    public ModelAndView addPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+    
         
-        if (memberInfo == null) {
-            return new ModelAndView("redirect:/member/loginForm.do");
+
+      
+
+        
+
+        // 3. 기존 addPet 메소드를 아래 코드로 완전히 교체합니다.
+        @Override
+        @RequestMapping(value="/addPet.do", method=RequestMethod.POST)
+        public ModelAndView addPet(@ModelAttribute("petVO") PetVO petVO,
+                                   @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
+                                   HttpServletRequest request) throws Exception {
+            
+            HttpSession session = request.getSession();
+            MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+            if (memberInfo == null) {
+                return new ModelAndView("redirect:/member/loginForm.do");
+            }
+            
+            // 파일 업로드 처리
+            String savedFileName = fileDownloadController.uploadPetImage(pet_image);
+            
+            // VO에 파일명과 회원ID 설정
+            petVO.setPet_image(savedFileName); 
+            petVO.setMember_id(memberInfo.getMember_id());
+            
+            // DB에 저장
+            myPageService.addPet(petVO);
+            
+            return new ModelAndView("redirect:/mypage/myPetInfo.do");
         }
-        
-        petVO.setMember_id(memberInfo.getMember_id());
-        
-        myPageService.addPet(petVO);
-        
-        ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
-        return mav;
-    }
 
 	// ✅ 반려동물 수정 폼 페이지로 이동하는 메서드
 	@RequestMapping(value="/modifyPetForm.do", method=RequestMethod.GET)
@@ -589,20 +624,38 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 
-	// ✅ 반려동물 수정 처리 메서드
+	// ✅ 반려동물 수정 처리 메서드 (수정됨)
+	@Override
 	@RequestMapping(value="/modifyPet.do", method=RequestMethod.POST)
-	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session = request.getSession();
-		MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	public ModelAndView modifyPet(@ModelAttribute("petVO") PetVO petVO,
+	                              @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
+	                              @RequestParam("originalFileName") String originalFileName,
+	                              HttpServletRequest request) throws Exception {
+	    
+	    HttpSession session = request.getSession();
+	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 
-		if (memberInfo == null) {
-			return new ModelAndView("redirect:/member/loginForm.do");
-		}
-		
-		myPageService.modifyPet(petVO);
-		
-		ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
-		return mav;
+	    if (memberInfo == null) {
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    
+	    // 새 이미지 파일이 첨부되었는지 확인합니다.
+	    if (pet_image != null && !pet_image.isEmpty()) {
+	        // 새 파일이 있으면 업로드하고, 새로운 파일명을 받아옵니다.
+	        String newFileName = fileDownloadController.uploadPetImage(pet_image);
+	        // petVO에 새로운 파일명을 설정합니다.
+	        petVO.setPet_image(newFileName);
+	    } else {
+	        // 새 파일이 없으면, 기존 파일명을 그대로 사용합니다.
+	        petVO.setPet_image(originalFileName);
+	    }
+	    
+	    // Service를 호출하여 DB 정보 업데이트 (텍스트 정보 + 파일명)
+	    myPageService.modifyPet(petVO);
+	    
+	    // 수정 완료 후 내 반려동물 정보 페이지로 리다이렉트
+	    ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
+	    return mav;
 	}
 
 	// ✅ 반려동물 삭제 처리 메서드

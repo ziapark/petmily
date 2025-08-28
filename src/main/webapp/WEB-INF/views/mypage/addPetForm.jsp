@@ -13,11 +13,11 @@
         .form-section {background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto;}
         .form-group {margin-bottom: 20px;}
         .form-group label {display: block; margin-bottom: 8px; font-weight: bold;}
-        .form-group input[type="text"],.form-group input[type="date"],.form-group select {width: 100%;padding: 10px;border: 1px solid #ddd;order-radius: 4px;}
-        .gender-options {display: flex;gap: 20px;}
+        .form-group input[type="text"], .form-group input[type="date"], .form-group input[type="file"], .form-group select {width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;}
+        .gender-options {display: flex; gap: 20px;}
         .gender-options input {margin-right: 5px;}
-        .btn-submit {background-color: #4CAF50;color: white;padding: 12px 20px;border: none;border-radius: 4px;cursor: pointer;width: 100%;font-size: 16px;}
-        .btn-cancel {background-color: #f44336;color: white;padding: 12px 20px;border: none;border-radius: 4px;cursor: pointer;width: 100%;font-size: 16px;margin-top: 10px;}
+        .btn-submit {background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px;}
+        .btn-cancel {background-color: #f44336; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px;}
     </style>
 </head>
 <body>
@@ -36,11 +36,19 @@
         	<div class="mypage_content">
             	<h3 style="text-align:left;">반려동물 등록</h3>
             	<div class="form-section">
-                	<form action="${contextPath}/mypage/addPet.do" method="post">
+                 
+                	<form action="${contextPath}/mypage/addPet.do" method="post" enctype="multipart/form-data">
                     	<div class="form-group">
                         	<label for="pet_name">반려동물 이름</label>
                         	<input type="text" id="pet_name" name="pet_name" placeholder="반려동물 이름을 입력하세요" required>
                     	</div>
+
+                        ▼▼▼ 2. 사진 첨부 입력란 추가 ▼▼▼
+                        <div class="form-group">
+                            <label for="pet_image">프로필 사진</label>
+                            <input type="file" id="pet_image" name="pet_image">
+                        </div>
+
                     	<div class="form-group">
                         	<label for="pet_birth_date">출생일</label>
                         	<input type="date" id="pet_birth_date" name="pet_birth_date" required>

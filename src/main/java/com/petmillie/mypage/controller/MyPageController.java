@@ -41,9 +41,20 @@ public interface MyPageController {
 
 	public ModelAndView myPetInfo(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView addPetForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView addPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+    // ▼▼▼ [수정] 이 메소드의 파라미터만 수정했습니다 ▼▼▼
+	public ModelAndView addPet(@ModelAttribute("petVO") PetVO petVO,
+                               @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
+                               HttpServletRequest request) throws Exception;
+    
 	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+
+	// ▼▼▼ [수정] 이 메소드의 파라미터만 수정했습니다 ▼▼▼
+	public ModelAndView modifyPet(@ModelAttribute("petVO") PetVO petVO,
+                                  @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
+                                  @RequestParam("originalFileName") String originalFileName,
+                                  HttpServletRequest request) throws Exception;
+
 	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String confirmPurchase(@RequestParam("order_id") String order_id,
             HttpServletRequest request, HttpServletResponse response) throws Exception;	
