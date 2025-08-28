@@ -88,7 +88,7 @@ public class FileDownloadController {
 	    }
 
 	    out.close();
-	    System.out.println("[🔚 디버그] 썸네일 요청 처리 종료");
+	 
 	}
 	
 	
