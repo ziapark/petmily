@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <title>반려동물 정보 수정</title>
     <style>
+        /* 스타일은 기존과 동일 */
         .form-section {
             background-color: #fff;
             padding: 30px;
@@ -27,7 +28,7 @@
         }
         .form-group input[type="text"],
         .form-group input[type="date"],
-        .form-group input[type="file"], /* 파일 인풋 스타일 추가 */
+        .form-group input[type="file"], 
         .form-group select {
             width: 100%;
             padding: 10px;
@@ -41,7 +42,6 @@
         .gender-options input {
             margin-right: 5px;
         }
-        /* 현재 프로필 사진 스타일 */
         .current-pet-image {
             width: 120px;
             height: 120px;
@@ -95,67 +95,68 @@
         <div class="mypage_content">
             <h3 style="text-align:left;">반려동물 정보 수정</h3>
             <div class="form-section">
-                <%-- ▼▼▼ 1. form 태그에 enctype="multipart/form-data" 추가 ▼▼▼ --%>
                 <form action="${contextPath}/mypage/modifyPet.do" method="post" enctype="multipart/form-data">
-                    
-                    <input type="hidden" name="pet_id" value="${petVO.pet_id}">
-                    <input type="hidden" name="originalFileName" value="${petVO.pet_image}">
-                    
-                    <%-- ▼▼▼ 2. 프로필 사진 표시 및 변경을 위한 UI 추가 ▼▼▼ --%>
-                    <div class="form-group">
-                        <label>프로필 사진</label>
-                        <div>
-                            <c:choose>
-                                <c:when test="${not empty petVO.pet_image}">
-                                    <img src="${contextPath}/mypet/image.do?pet_image=${petVO.pet_image}" class="current-pet-image" alt="현재 프로필 사진">
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="${contextPath}/resources/image/default_pet_profile.png" class="current-pet-image" alt="기본 프로필 사진">
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                        <label for="pet_image" style="font-weight: normal; margin-top: 10px; color: #555;">사진 변경 (선택)</label>
-                        <input type="file" id="pet_image" name="pet_image" accept="image/*">
-                        <p style="font-size: 12px; color: #888; margin-top: 5px;">※ 사진을 변경하지 않으려면 파일을 선택하지 마세요.</p>
-                    </div>
+
+                    <!-- petVO와 바인딩 되는 필드들 -->
+                    <input type="hidden" name="pet_id" value="${petVO.pet_id}" />
+                    <input type="hidden" name="originalFileName" value="${petVO.pet_image}" />
+
+<!--                     <div class="form-group"> -->
+<!--                         <label>프로필 사진</label> -->
+<!--                         <div> -->
+<%--                             <c:choose> --%>
+<%--                                 <c:when test="${not empty petVO.pet_image}"> --%>
+<%--                                     <img src="${contextPath}/mypet/image.do?pet_image=${petVO.pet_image}" class="current-pet-image" alt="현재 프로필 사진" /> --%>
+<%--                                 </c:when> --%>
+<%--                                 <c:otherwise> --%>
+<%--                                     <img src="${contextPath}/resources/image/default_pet_profile.png" class="current-pet-image" alt="기본 프로필 사진" /> --%>
+<%--                                 </c:otherwise> --%>
+<%--                             </c:choose> --%>
+<!--                         </div> -->
+<!--                         <label for="pet_image" style="font-weight: normal; margin-top: 10px; color: #555;">사진 변경 (선택)</label> -->
+<!--                         <input type="file" id="pet_image" name="pet_image" accept="image/*" /> -->
+<!--                         <p style="font-size: 12px; color: #888; margin-top: 5px;">※ 사진을 변경하지 않으려면 파일을 선택하지 마세요.</p> -->
+<!--                     </div> -->
 
                     <div class="form-group">
                         <label for="pet_name">이름</label>
-                        <input type="text" id="pet_name" name="pet_name" value="${petVO.pet_name}" required>
+                        <input type="text" id="pet_name" name="pet_name" value="${petVO.pet_name}" required />
                     </div>
                     <div class="form-group">
                         <label for="pet_birth_date">생년월일</label>
-                        <input type="date" id="pet_birth_date" name="pet_birth_date" value="${petVO.pet_birth_date}" required>
+                        <input type="date" id="pet_birth_date" name="pet_birth_date" value="${petVO.pet_birth_date}" required />
                     </div>
                     <div class="form-group">
                         <label for="pet_species">종</label>
-                        <input type="text" id="pet_species" name="pet_species" value="${petVO.pet_species}" required>
+                        <input type="text" id="pet_species" name="pet_species" value="${petVO.pet_species}" required />
                     </div>
                     <div class="form-group">
                         <label for="pet_breed">품종</label>
-                        <input type="text" id="pet_breed" name="pet_breed" value="${petVO.pet_breed}">
+                        <input type="text" id="pet_breed" name="pet_breed" value="${petVO.pet_breed}" />
                     </div>
                     <div class="form-group">
                         <label for="pet_gender">성별</label>
                         <div class="gender-options">
                             <label>
-                                <input type="radio" name="pet_gender" value="수컷" <c:if test="${petVO.pet_gender == '수컷'}">checked</c:if> required> 수컷
+                                <input type="radio" name="pet_gender" value="수컷" <c:if test="${petVO.pet_gender == '수컷'}">checked</c:if> required /> 수컷
                             </label>
                             <label>
-                                <input type="radio" name="pet_gender" value="암컷" <c:if test="${petVO.pet_gender == '암컷'}">checked</c:if> required> 암컷
+                                <input type="radio" name="pet_gender" value="암컷" <c:if test="${petVO.pet_gender == '암컷'}">checked</c:if> required /> 암컷
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="pet_favorite_toy">좋아하는 장난감</label>
-                        <input type="text" id="pet_favorite_toy" name="pet_favorite_toy" value="${petVO.pet_favorite_toy}">
+                        <input type="text" id="pet_favorite_toy" name="pet_favorite_toy" value="${petVO.pet_favorite_toy}" />
                     </div>
                     <div class="form-group">
                         <label for="pet_favorite_snack">좋아하는 간식</label>
-                        <input type="text" id="pet_favorite_snack" name="pet_favorite_snack" value="${petVO.pet_favorite_snack}">
+                        <input type="text" id="pet_favorite_snack" name="pet_favorite_snack" value="${petVO.pet_favorite_snack}" />
                     </div>
+
                     <button type="submit" class="btn-submit">수정하기</button>
                     <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+
                 </form>
             </div>
         </div>

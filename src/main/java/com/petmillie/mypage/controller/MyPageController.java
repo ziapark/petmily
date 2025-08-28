@@ -47,14 +47,9 @@ public interface MyPageController {
 			@RequestParam("pet_image") MultipartFile file,
 			HttpServletRequest request) throws Exception;
     
-	 public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id,
-             HttpServletRequest request,
-             HttpServletResponse response) throws Exception;
+	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-	 public ModelAndView modifyPet(@ModelAttribute("petVO") PetVO petVO,
-             @RequestParam(value = "pet_image", required = false) MultipartFile pet_image,
-             @RequestParam(value = "originalFileName", required = false) String originalFileName,
-             HttpServletRequest request) throws Exception;
 	 
 	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String confirmPurchase(@RequestParam("order_id") String order_id,
