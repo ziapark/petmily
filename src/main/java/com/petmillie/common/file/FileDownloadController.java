@@ -3,6 +3,7 @@ package com.petmillie.common.file;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -219,20 +220,26 @@ public class FileDownloadController {
 			}
 		}
 
-		public String uploadPetImage(MultipartFile petImage) throws Exception {
-			String originalFileName = null;
-			if (petImage != null && !petImage.isEmpty()) {
-				originalFileName = petImage.getOriginalFilename();
-				File repository = new File(CURR_MYPET_REPO_PATH);
-				if (!repository.exists()) {
-					repository.mkdirs();
-				}
-				File dest = new File(repository, originalFileName);
-				petImage.transferTo(dest);
-				originalFileName = dest.getName();
-			}
-			return originalFileName;
-		}
+		 public String uploadPetImage(MultipartFile petImage) throws Exception {
+		        String savedFileName = null; // 반환할 파일 이름 (UUID가 포함된)
+		        if (petImage != null && !petImage.isEmpty()) {
+		            String originalFileName = petImage.getOriginalFilename();
+		            
+		            // 저장소 폴더가 없으면 생성
+		            File repository = new File(CURR_MYPET_REPO_PATH);
+		            if (!repository.exists()) {
+		                repository.mkdirs();
+		            }
+		            
+		            // UUID를 사용해 고유한 파일 이름 생성 (addPet 로직과 동일하게)
+		            savedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+		            
+		            // 새 파일 이름으로 파일 저장
+		            File dest = new File(repository, savedFileName);
+		            petImage.transferTo(dest);
+		        }
+		        return savedFileName; // UUID가 포함된 새로운 파일 이름을 반환
+		    }
 	}
 
 
