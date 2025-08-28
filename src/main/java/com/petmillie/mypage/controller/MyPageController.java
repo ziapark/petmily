@@ -48,7 +48,10 @@ public interface MyPageController {
 			HttpServletRequest request) throws Exception;
     
 	public ModelAndView modifyPetForm(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	 public ModelAndView modifyPet(@ModelAttribute PetVO petVO,
+             @RequestParam("uploadFile") MultipartFile uploadFile,
+             @RequestParam(value="originalFileName", required=false) String originalFileName,
+             HttpServletRequest request, HttpServletResponse response) throws Exception;
 
 	 
 	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception;

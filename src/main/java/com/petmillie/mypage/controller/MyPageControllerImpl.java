@@ -632,21 +632,42 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 
-	// ✅ 반려동물 수정 처리 메서드
-		@RequestMapping(value="/modifyPet.do", method=RequestMethod.POST)
-		public ModelAndView modifyPet(@ModelAttribute PetVO petVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
-			HttpSession session = request.getSession();
-			MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+	 @Override
+	    @RequestMapping(value="/modifyPet.do", method=RequestMethod.POST)
+	    public ModelAndView modifyPet(@ModelAttribute PetVO petVO,
+	                                 @RequestParam("uploadFile") MultipartFile uploadFile,
+	                                 @RequestParam(value="originalFileName", required=false) String originalFileName,
+	                                 HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-			if (memberInfo == null) {
-				return new ModelAndView("redirect:/member/loginForm.do");
-			}
-			
-			myPageService.modifyPet(petVO);
-			
-			ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
-			return mav;
-		}
+	        HttpSession session = request.getSession();
+	        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+
+	        if (memberInfo == null) {
+	            return new ModelAndView("redirect:/member/loginForm.do");
+	        }
+
+	        try {
+	            if (!uploadFile.isEmpty()) {
+	                String saveDir = "C:\\petrepo\\mypet";
+	                File uploadPath = new File(saveDir);
+	                if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	                String originalName = uploadFile.getOriginalFilename();
+	                String savedFileName = UUID.randomUUID().toString() + "_" + originalName;
+	                uploadFile.transferTo(new File(saveDir + "\\" + savedFileName));
+	                petVO.setPet_image(savedFileName);
+	            } else {
+	                petVO.setPet_image(originalFileName);
+	            }
+
+	            myPageService.modifyPet(petVO);
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return new ModelAndView("redirect:/mypage/myPetInfo.do");
+	    }
 
 
 	
