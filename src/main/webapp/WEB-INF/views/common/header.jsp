@@ -78,6 +78,7 @@
   ChannelIO('boot', {
     "pluginKey": "7e377132-dddb-467c-812d-213f0cb2f1ff"
   });
+  
 </script>
 
 <body>
@@ -318,5 +319,6 @@
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

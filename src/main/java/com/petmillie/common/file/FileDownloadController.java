@@ -80,8 +80,13 @@ public class FileDownloadController {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 
+<<<<<<< HEAD
 		out.close();
 		System.out.println("[🔚 디버그] 썸네일 요청 처리 종료");
+=======
+	    out.close();
+	 
+>>>>>>> 72bb0ebeb4add253749066e3672c88fde24f5c7f
 	}
 
 	// 게시판 이미지 출력

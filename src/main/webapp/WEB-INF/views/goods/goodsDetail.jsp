@@ -214,12 +214,12 @@
     </div>
 
 	<div id="goods_image">
-    	<figure>
-        	<c:forEach var="image" items="${goodsImageList}" varStatus="status">
-            	<c:if test="${status.index == 0}">
-                	<img alt="${goodsVO.goods_name}" src="${contextPath}/goods/thumbnails.do?goods_num=${goodsVO.goods_num}&fileName=${image.fileName}">
-            	</c:if>
-        	</c:forEach>
+   		<figure>
+       	<c:forEach var="image" items="${goodsImageList}" varStatus="status">
+           	<c:if test="${status.index == 0}">
+               	<img alt="${goodsVO.goods_name}" src="${contextPath}/download.do?goods_num=${goodsVO.goods_num}&fileName=${image.fileName}">
+           	</c:if>
+       	</c:forEach>
     	</figure>
 	</div>
 

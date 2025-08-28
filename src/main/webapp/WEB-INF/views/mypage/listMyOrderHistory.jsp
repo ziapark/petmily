@@ -230,7 +230,7 @@
 					<td>주문상태</td>
 					<td>수령자</td>
 					<td>리뷰</td>
-					<td>주문취소</td>
+					<td>주문상태</td>
 				</tr>
    				<c:choose>
      				<c:when test="${empty myOrderHistList }">			
@@ -244,7 +244,6 @@
 	 					<c:set var="pre_order_id" value="" />
 						<c:set var="orderTotalAmount" value="0" />
 						<c:set var="orderTotalQty" value="0" />	
-<<<<<<< HEAD
 						<c:set var="pre_order_id" value="0" />
 						<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
 						    <tr>
@@ -335,9 +334,7 @@
 						    </c:if>
 						    <c:set var="pre_order_id" value="${item.order_id}" />
 						</c:forEach>
-						
-     					 
-=======
+		
      					<c:forEach var="item" items="${myOrderHistList}" varStatus="i">
      					    <c:if test="${item.order_id != pre_order_id and not empty pre_order_id}">
                     			<%-- 이전 주문의 합계를 출력 --%>
@@ -406,7 +403,7 @@
 									<td>
 								    	<c:choose>
 								   			<c:when test="${item.delivery_state=='delivery_prepared'}">
-												<button type="button" class="btn btn-sm btn-danger" 
+												<button type="button" class="btn btn-sm btn-outline-secondary" 
 												        onclick="cancelOrder(this)"
 												        data-order-id="${item.order_id}"
 												        data-imp-uid="${item.imp_uid}"
@@ -455,7 +452,7 @@
 		                    </tr>
 		                </c:if>
 					</c:forEach>
->>>>>>> 4a81421c1e714d6a8f16070a2f3edf6d38342fbb
+
 				</c:otherwise>
 			</c:choose>			   
 		</tbody>
