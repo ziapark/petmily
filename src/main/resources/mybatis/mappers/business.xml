@@ -316,9 +316,9 @@
 		<insert id="insertpension" parameterType="pensionVO" useGeneratedKeys="true" keyProperty="p_num">
 			<![CDATA[
 				insert into pension(
-				business_id, p_name, tel1, tel2, tel3, checkin_time, checkout_time, room_count, facilities, description)
+				business_id, p_name, tel1, tel2, tel3, checkin_time, checkout_time, room_count, facilities, description,fileName)
 				values(
-				#{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{checkin_time}, #{checkout_time}, #{room_count}, #{facilities}, #{description})
+				#{business_id}, #{p_name}, #{tel1}, #{tel2}, #{tel3}, #{checkin_time}, #{checkout_time}, #{room_count}, #{facilities}, #{description}, #{fileName})
 			]]>
 		</insert>
 		

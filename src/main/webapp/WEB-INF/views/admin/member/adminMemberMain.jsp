@@ -402,25 +402,6 @@ function fn_detail_search(){
 		</div>
 	</div>
 
-	<div class="row mt-4">
-		<div class="col-md-12 d-flex justify-content-center">
-			<nav>
-				<ul class="pagination">
-					<c:if test="${not empty member_list}">
-						<c:if test="${chapter > 1}">
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter-1}&pageNum=${(chapter-1)*10 + 1 }">Previous</a></li>
-						</c:if>
-						<c:forEach var="page" begin="1" end="10" step="1">
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter}&pageNum=${page}">${(chapter1)*10 + page }</a></li>
-						</c:forEach>
-						<c:if test="${page == 10}">
-							<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/admin/member/adminMemberMain.do?chapter=${chapter+1}&pageNum=${chapter*10+1}">Next</a></li>
-						</c:if>
-					</c:if>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
+	
 </body>
 </html>

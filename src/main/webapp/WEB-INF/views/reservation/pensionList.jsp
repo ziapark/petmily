@@ -63,10 +63,10 @@
     <div class="pension-container">
         <c:if test="${not empty pensionList}">
             <c:forEach var="pension" items="${pensionList}">
-                <%-- 파라미터 이름을 'pensionId'에서 'p_num'으로 수정했습니다. --%>
                 <a href="${contextPath}/reservation/pensionDetail.do?p_num=${pension.p_num}" class="pension-card">
                     
-                    <img src="${contextPath}/thumbnails.do?goods_id=${pension.p_num}" alt="${pension.p_name} 이미지" 
+                    <%-- ▼▼▼▼▼ [수정] 이 부분만 수정했습니다. ▼▼▼▼▼ --%>
+                    <img src="${contextPath}/pension/image.do?fileName=${pension.fileName}&business_id=${pension.business_id}" alt="${pension.p_name} 이미지" 
                          onerror="this.onerror=null; this.src='${contextPath}/resources/image/default_pension.png';">
                     
                     <div class="card-body pension_card_body">

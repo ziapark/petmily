@@ -26,6 +26,12 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	public ArrayList<MemberVO> listMember(HashMap condMap) throws Exception{
 		return adminMemberDAO.listMember(condMap);
 	}
+	
+	// 모든 회원을 조회하기 위해 새로 추가한 메서드
+	@Override
+	public ArrayList<MemberVO> listAllMembers(HashMap condMap) throws Exception {
+		return adminMemberDAO.listAllMembers(condMap);
+	}
 
 	public ArrayList<BusinessVO> listSellerMember(HashMap condMap) throws Exception{
 		return adminMemberDAO.listSellerMember(condMap);
@@ -35,10 +41,8 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 		 return adminMemberDAO.memberDetail(member_id);
 	}
 	
-	public void  modifyMemberInfo(HashMap memberMap) throws Exception{
+	public void modifyMemberInfo(HashMap memberMap) throws Exception{
 		 String member_id=(String)memberMap.get("member_id");
 		 adminMemberDAO.modifyMemberInfo(memberMap);
 	}
-
-
 }
