@@ -632,40 +632,46 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		return mav;
 	}
 
-	// ✅ 반려동물 수정 처리 메서드 (수정됨)
 	@Override
-	@RequestMapping(value="/modifyPet.do", method=RequestMethod.POST)
+	@RequestMapping(value = "/modifyPet.do", method = RequestMethod.POST)
 	public ModelAndView modifyPet(@ModelAttribute("petVO") PetVO petVO,
-	                              @RequestParam(value="pet_image", required=false) MultipartFile pet_image,
-	                              @RequestParam("originalFileName") String originalFileName,
+	                              @RequestParam(value = "uploadImage", required = false) MultipartFile uploadImage,
+	                              @RequestParam(value = "originalFileName", required = false) String originalFileName,
 	                              HttpServletRequest request) throws Exception {
-	    
+
 	    HttpSession session = request.getSession();
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
-
 	    if (memberInfo == null) {
 	        return new ModelAndView("redirect:/member/loginForm.do");
 	    }
-	    
-	    // 새 이미지 파일이 첨부되었는지 확인합니다.
-	    if (pet_image != null && !pet_image.isEmpty()) {
-	        // 새 파일이 있으면 업로드하고, 새로운 파일명을 받아옵니다.
-	        String newFileName = fileDownloadController.uploadPetImage(pet_image);
-	        // petVO에 새로운 파일명을 설정합니다.
-	        petVO.setPet_image(newFileName);
+
+	    String saveDir = "C:\\petrepo\\mypet";
+	    File uploadPath = new File(saveDir);
+	    if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	    if (uploadImage != null && !uploadImage.isEmpty()) {
+	        String originalFileNameUploaded = uploadImage.getOriginalFilename();
+	        String savedFileName = UUID.randomUUID().toString() + "_" + originalFileNameUploaded;
+	        uploadImage.transferTo(new File(saveDir + "\\" + savedFileName));
+	        petVO.setPet_image(savedFileName);
+
+	        // 기존 이미지 삭제
+	        if (originalFileName != null && !originalFileName.isEmpty()) {
+	            File oldFile = new File(saveDir + "\\" + originalFileName);
+	            if (oldFile.exists()) oldFile.delete();
+	        }
 	    } else {
-	        // 새 파일이 없으면, 기존 파일명을 그대로 사용합니다.
+	        // 새 이미지 없으면 기존 이미지 유지
 	        petVO.setPet_image(originalFileName);
 	    }
-	    
-	    // Service를 호출하여 DB 정보 업데이트 (텍스트 정보 + 파일명)
+
+	    petVO.setMember_id(memberInfo.getMember_id());
 	    myPageService.modifyPet(petVO);
-	    
-	    // 수정 완료 후 내 반려동물 정보 페이지로 리다이렉트
-	    ModelAndView mav = new ModelAndView("redirect:/mypage/myPetInfo.do");
-	    return mav;
+
+	    return new ModelAndView("redirect:/mypage/myPetInfo.do");
 	}
 
+	
 	// ✅ 반려동물 삭제 처리 메서드
 	@RequestMapping(value="/removePet.do", method=RequestMethod.GET)
 	public ModelAndView removePet(@RequestParam("pet_id") int pet_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
