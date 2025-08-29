@@ -26,9 +26,9 @@
 			<br>
 			<br> <a href="${contextPath}/member/findIdForm.do">아이디 찾기</a>| <a
 				href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> | <a
-				href="${contextPath}/business/businessForm.do">사업자 회원가입</a> | <a
-				href="#">고객 센터</a>
-		</div>
+				href="${contextPath}/business/businessForm.do">사업자 회원가입</a> 
+
+</div>
 	</div>
 </body>
 </html>

@@ -31,17 +31,17 @@
             color: white;
             border: none;
             cursor: pointer;
-             margin-bottom: 10px;
+            margin-bottom: 10px;
         }
         
-          /* 버튼들을 담을 div 스타일 추가 */
+        /* 버튼들을 담을 div 스타일 추가 */
         .find_id_wrap .other_btns {
             display: flex;
             justify-content: space-between; /* 버튼들을 양쪽으로 정렬 */
         }
         /* 추가된 버튼들 공통 스타일 */
         .find_id_wrap .btn-secondary {
-            width: 49%; /* 버튼 너비 조정 */
+            width: 32%; /* 버튼 너비 조정 */
             padding: 10px;
             background-color: #6c757d;
             color: white;
@@ -52,7 +52,6 @@
             display: inline-block;
             border-radius: 3px;
         }
-        
     </style>
 </head>
 <body>
@@ -66,17 +65,13 @@
             </div>
             <input type="submit" value="아이디 찾기" class="btn-submit">
         </form>
- <%-- [추가] 뒤로가기, 아이디 찾기 버튼 --%>
+
         <div class="other_btns">
-        <button type="button" onclick="history.back()"  class="btn-secondary">로그인하기</button>
-           
+            <a href="${contextPath}/member/loginForm.do" class="btn-secondary">일반 로그인</a>
+            <a href="${contextPath}/business/loginForm.do" class="btn-secondary">사업자 로그인</a>
             <a href="${contextPath}/member/findPwForm.do" class="btn-secondary">비밀번호 찾기</a>
         </div>
-<%--         <c:if test="${not empty message}"> --%>
-<!--             <script> -->
-<%-- //                 alert("${message}"); --%>
-<!--             </script> -->
-<%--         </c:if> --%>
+        
     </div>
 </body>
 </html>

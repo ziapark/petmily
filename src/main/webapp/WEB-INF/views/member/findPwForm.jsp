@@ -66,9 +66,9 @@
             <input type="submit" value="비밀번호 찾기" class="btn-submit">
         </form>
 
-        <%-- [추가] 뒤로가기, 아이디 찾기 버튼 --%>
-        <div class="other_btns">
-          <button type="button" onclick="history.back()"  class="btn-secondary">로그인하기</button>
+       <div class="other_btns">
+            <a href="${contextPath}/member/loginForm.do" class="btn-secondary">일반 로그인</a>
+            <a href="${contextPath}/business/loginForm.do" class="btn-secondary">사업자 로그인</a>
             <a href="${contextPath}/member/findIdForm.do" class="btn-secondary">아이디 찾기</a>
         </div>
 
