@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.business.vo.Room_image;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.vo.OrderVO;
 import com.petmillie.reservation.vo.ReservationVO;
@@ -100,8 +101,13 @@ public class BusinessDAOImpl implements BusinessDAO {
 		sqlSession.update("mapper.business.updateMyroom", roomMap);
 	}
 
+    @Override
+    public void updateRoomImage(Map<String, Object> imageFileMap) throws Exception {
+        sqlSession.update("mapper.business.updateRoomImage", imageFileMap);
+    }
+    
 	@Override
-	public RoomVO roomDetailInfo(String room_id) throws DataAccessException {
+	public RoomVO roomDetailInfo(int room_id) throws DataAccessException {
 		RoomVO DetailInfo = (RoomVO)sqlSession.selectOne("mapper.business.roomDetailInfo", room_id);
 		return DetailInfo;
 	}
@@ -198,4 +204,13 @@ public class BusinessDAOImpl implements BusinessDAO {
 	    return sqlSession.selectOne("mapper.business.selectGoodsCount", condMap);
 	}
 
+    @Override
+    public void insertNewRoomAndGetId(RoomVO roomVO) throws Exception {
+        sqlSession.insert("mapper.business.insertNewRoomAndGetId", roomVO);
+    }
+
+    @Override
+    public void insertRoomImages(List<Room_image> imageFileList) throws Exception {
+        sqlSession.insert("mapper.business.insertRoomImages", imageFileList);
+    }
 }

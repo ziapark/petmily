@@ -1,5 +1,6 @@
 package com.petmillie.business.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,15 +33,19 @@ public interface BusinessController {
             @RequestParam("mainImage") MultipartFile mainImage,
             @RequestParam("originalFileName") String originalFileName,
             HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView roomdetailInfo(String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView roomdetailInfo(int room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ResponseEntity modifyroom(String attribute, String value, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String removepension(String p_num, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String removeroom(@RequestParam String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	String addpension2(RoomVO roomVO, MultipartFile fileimage, HttpServletRequest request, HttpServletResponse response,
-			Model model, RedirectAttributes redirectAttributes) throws Exception;
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 	public String restoreroom(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView deleteForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String deleteMember (@RequestParam("seller_id") String seller_id, HttpSession session, RedirectAttributes redirectAttributes) throws Exception;
 	public ModelAndView businessOrderMain(@RequestParam Map<String, String> dateMap, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String addpension2(RoomVO roomVO, 
+			  @RequestParam(value="files", required = false) List<MultipartFile> files, 
+            HttpServletRequest request, 
+            HttpServletResponse response, 
+            Model model, 
+            RedirectAttributes redirectAttributes) throws Exception;
 }

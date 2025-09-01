@@ -112,9 +112,20 @@
 			<result property="amenities" column="amenities"/>
 			<result property="reg_date" column="reg_date"/>
 			<result property="room_status" column="room_status"/>
-			<result property="fileimage" column="fileimage"/>
+			<result property="image_id" column="image_id"/>
+			<result property="fileName" column="fileName"/>
+			<result property="reg_id" column="reg_id"/>
+			<result property="reg_day" column="reg_day"/>
 		</resultMap>
 
+		<resultMap id="roomImageResult" type="room_image">
+			<result property="image_id" column="image_id"/>
+			<result property="room_id" column="room_id"/>
+			<result property="fileName" column="fileName"/>
+			<result property="reg_id" column="reg_id"/>
+			<result property="reg_day" column="reg_day"/>
+		</resultMap>
+		
 		<resultMap id="adminPensionResult" type="com.petmillie.business.vo.PensionVO">
 		    <result property="p_num" column="p_num"/>
 		    <result property="business_id" column="business_id"/>
@@ -162,16 +173,6 @@
 		    ]]>
 		</select>
 	    
-<!-- 	    <select id="selectGoodsCount" resultType="int" parameterType="java.util.Map"> -->
-<!-- 	        <![CDATA[ -->
-<!-- 	            SELECT COUNT(*) -->
-<!-- 	            FROM goods -->
-<!-- 	            WHERE seller_id = #{seller_id} -->
-<!-- 	        ]]> -->
-<!-- 	        <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> -->
-<!-- 	            AND DATE(goods_credate) BETWEEN #{beginDate} AND #{endDate} -->
-<!-- 	        </if> -->
-<!-- 	    </select> -->
 	
 	    <select id="selectNewGoodsList" resultMap="goodsResult" parameterType="java.util.Map">
 			<![CDATA[
@@ -363,15 +364,34 @@
 
 		<select id="selectroomList" parameterType="String" resultMap="roomResult">
 		    <![CDATA[
-		    select * from room 
-		    where p_num = #{p_num} 
+		        SELECT 
+		            r.*, 
+		            ri.fileName AS fileName
+		        FROM 
+		            room r
+		        LEFT JOIN 
+		            room_image ri ON r.room_id = ri.room_id
+		        WHERE 
+		            r.p_num = #{p_num}
+		        GROUP BY 
+		            r.room_id
 		    ]]>
 		</select>
 		
-		<select id="roomDetailInfo" parameterType="roomVO" resultType="roomVO">
-			<![CDATA[
-				select * from room where room_id = #{room_id}
-			]]>
+		<select id="roomDetailInfo" parameterType="int" resultType="com.petmillie.business.vo.RoomVO">
+		    <![CDATA[
+		        SELECT
+		            r.*,
+		            MIN(ri.fileName) AS fileName
+		        FROM
+		            room r
+		        LEFT JOIN
+		            room_image ri ON r.room_id = ri.room_id
+		        WHERE
+		            r.room_id = #{room_id}
+		        GROUP BY
+		            r.room_id
+		    ]]>
 		</select>
 		
 		<update id="updateMyroom" parameterType="java.util.HashMap">
@@ -408,6 +428,14 @@
 			where room_id=#{room_id}
 		</update>
 		
+		<update id="updateRoomImage" parameterType="java.util.Map">
+		    <![CDATA[
+		        UPDATE room_image
+		        SET fileName = #{fileName}
+		        WHERE room_id = #{room_id}
+		    ]]>
+		</update>
+
 		<update id="removeroom" parameterType="int">
 		    <![CDATA[
 		        UPDATE room 
@@ -475,10 +503,7 @@
 		    SET pension_status = #{pension_status}
 		    WHERE p_num = #{p_num}
 		</update>
-		
-		
-	
-		
+			
 		<select id="selectGoodsCount" resultType="int" parameterType="java.util.Map">
 	        <![CDATA[
 	            SELECT COUNT(*)
@@ -490,4 +515,35 @@
 	        </if>
 	    </select>
 		
+		<insert id="insertNewRoomAndGetId" parameterType="com.petmillie.business.vo.RoomVO" useGeneratedKeys="true" keyProperty="room_id">
+	        INSERT INTO room (
+	            p_num, 
+	            room_name, 
+	            room_type, 
+	            price, 
+	            max_capacity, 
+	            bed_type, 
+	            room_size, 
+	            room_description, 
+	            amenities
+	        ) VALUES (
+	            #{p_num}, 
+	            #{room_name}, 
+	            #{room_type}, 
+	            #{price}, 
+	            #{max_capacity}, 
+	            #{bed_type}, 
+	            #{room_size}, 
+	            #{room_description}, 
+	            #{amenities}
+	        )
+    	</insert>
+
+	    <insert id="insertRoomImages" parameterType="java.util.List">
+	        INSERT INTO room_image (room_id, fileName)
+	        VALUES
+	        <foreach collection="list" item="image" separator=",">
+	            (#{image.room_id}, #{image.fileName})
+	        </foreach>
+	    </insert>
 	</mapper>

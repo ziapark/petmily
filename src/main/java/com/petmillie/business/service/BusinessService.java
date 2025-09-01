@@ -6,6 +6,7 @@ import java.util.Map;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.business.vo.Room_image;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.order.vo.OrderVO;
 
@@ -24,7 +25,7 @@ public interface BusinessService {
 	public PensionVO pension(String business_id)throws Exception;
 	public List roomList(String p_num);
 	public RoomVO modifyroom(Map roomMap)throws Exception;
-	public RoomVO roomDetailInfo(String room_id) throws Exception;
+	public RoomVO roomDetailInfo(int room_id) throws Exception;
 	public int removeroom(int id) throws Exception;
 	public int updatepension(PensionVO pensionVO) throws Exception;
 	public int removepension(int id) throws Exception;
@@ -43,8 +44,10 @@ public interface BusinessService {
 
 	// [추가] 관리자가 펜션의 승인 상태를 변경
 	public void updatePensionStatus(Map<String, Object> pensionMap) throws Exception;
-	
+	public void modifyRoomImage(Map<String, Object> imageFileMap) throws Exception;
 	public int getGoodsCount(Map<String, Object> condMap) throws Exception;
 	public int getNewOrderCount(Map<String, Object> condMap) throws Exception;
+    public int addNewRoomAndGetId(RoomVO roomVO) throws Exception;
+    public void addRoomImages(List<Room_image> imageFileList) throws Exception;
 
 }

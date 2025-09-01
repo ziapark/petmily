@@ -6,16 +6,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<script>
-$(document).ready(function() {
-    $('form').on('submit', function(e) {
-        console.log("폼 제출됨");  // 콘솔에서 이거 보이면 form 태그 문제는 아님
-    });
-});
-</script>
+	<meta charset="utf-8">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script>
+	$(document).ready(function() {
+	    $('form').on('submit', function(e) {
+	        console.log("폼 제출됨");  // 콘솔에서 이거 보이면 form 태그 문제는 아님
+	    });
+	});
+	</script>
 </head>
 <body>
 <div class="container text-center mt-3 mb-3">
@@ -24,9 +24,6 @@ $(document).ready(function() {
 			<h2 class="fw-bold">객실등록</h2>
 		</div>
 	</div>
-	<c:if test="${not empty message}">
-	  <script>alert("${message}");</script>
-	</c:if>
 	<form action="${contextPath}/business/addroom.do" method="post" enctype="multipart/form-data">	
 		<input type="hidden" name="p_num" id="p_num" value="${pensionInfo.p_num}" />
 
@@ -90,8 +87,8 @@ $(document).ready(function() {
 	        </tr>
 	
 	        <tr>
-	            <th scope="row">메인 이미지</th>
-	            <td><input type="file" class="form-control" name="file" required></td>
+	            <th scope="row">객실 이미지</th>
+	            <td><input type="file" class="form-control" name="files" multiple required></td>
 	        </tr>
 	    </tbody>
 	</table>

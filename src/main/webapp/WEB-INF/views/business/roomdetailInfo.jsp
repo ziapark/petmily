@@ -6,8 +6,6 @@
 <head>
 <meta charset="utf-8">
 <title>객실 수정</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
     /* 추가적인 스타일링 */
     body {
@@ -23,6 +21,7 @@
 // 기존 JavaScript 코드는 그대로 사용합니다.
 function fn_modify_business_info(attribute, element){
     var value = $(element).closest('.input-group').find('input, select').val();
+    var room_id = $('#room_id').val();
     
     // AJAX 요청
     $.ajax({
@@ -30,6 +29,7 @@ function fn_modify_business_info(attribute, element){
         async : false,
         url : "${contextPath}/business/modifyroom.do",
         data : {
+        	room_id : room_id,
             attribute : attribute,
             value : value
         },
@@ -46,6 +46,44 @@ function fn_modify_business_info(attribute, element){
         }
     });
 }
+
+function fn_modify_room_image() {
+    var formData = new FormData();
+    var fileInput = $('#file')[0]; // 파일 input 요소를 가져옵니다.
+
+    // 사용자가 파일을 선택했는지 확인
+    if (fileInput.files.length === 0) {
+        alert("수정할 이미지 파일을 선택해주세요.");
+        return;
+    }
+
+    var room_id = $('#room_id').val();
+    var file = fileInput.files[0];
+
+    // FormData에 데이터 추가 (key, value)
+    formData.append("room_id", room_id);
+    formData.append("file", file); // 실제 파일 데이터를 추가
+
+    $.ajax({
+        type: "post",
+        url: "${contextPath}/business/modifyRoomImage.do", // 이미지 수정 전용 URL
+        data: formData,
+        processData: false, // FormData를 사용할 때 반드시 false로 설정
+        contentType: false, // FormData를 사용할 때 반드시 false로 설정
+        success: function(data) {
+            if (data.trim() === 'mod_success') {
+                alert("이미지를 수정했습니다.");
+                location.reload(); // 페이지를 새로고침하여 변경된 이미지 확인
+            } else {
+                alert("이미지 수정에 실패했습니다.");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("에러가 발생했습니다.");
+        }
+    });
+}
+
 </script>
 </head>
 <body>
@@ -59,6 +97,7 @@ function fn_modify_business_info(attribute, element){
                 </div>
                 <div class="card-body p-4">
                     <form name="frm_mod_room" onsubmit="return false;">
+                        <input type="hidden" id="room_id" name="room_id" value="${roomInfo.room_id}" />
                         
                         <div class="mb-3">
                             <label for="room_name" class="form-label">객실 이름</label>
@@ -132,11 +171,20 @@ function fn_modify_business_info(attribute, element){
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="amenities" class="form-label">객실 이미지</label>
+                            <img src="${contextPath}/roomImage.do?fileName=${roomInfo.fileName}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="file" name="file">
+                                <button class="btn btn-outline-primary" type="button" onclick="fn_modify_room_image()">수정</button>
+                            </div>
+                        </div>
+                        
                        <div class="d-grid mt-4">
-    <button type="button" class="btn btn-secondary" onclick="history.back()">
-        펜션 관리페이지로 가기
-    </button>
-</div>
+						    <button type="button" class="btn btn-secondary" onclick="history.back()">
+						        펜션 관리페이지로 가기
+						    </button>
+						</div>
                     </form>
                 </div>
             </div>

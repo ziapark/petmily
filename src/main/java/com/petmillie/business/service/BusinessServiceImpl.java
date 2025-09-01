@@ -12,6 +12,7 @@ import com.petmillie.business.dao.BusinessDAO;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.business.vo.Room_image;
 import com.petmillie.goods.vo.GoodsVO;
 import com.petmillie.goods.vo.ImageFileVO;
 import com.petmillie.order.vo.OrderVO;
@@ -91,13 +92,18 @@ public class BusinessServiceImpl implements BusinessService {
 
 	@Override
 	public RoomVO modifyroom(Map roomMap) throws Exception {
-		String room_id = (String) roomMap.get("room_id");
+		int room_id = (int) roomMap.get("room_id");
 		businessDAO.modifyroom(roomMap);
 		return businessDAO.roomDetailInfo(room_id);
 	}
 
+    @Override
+    public void modifyRoomImage(Map<String, Object> imageFileMap) throws Exception {
+        businessDAO.updateRoomImage(imageFileMap);
+    }
+    
 	@Override
-	public RoomVO roomDetailInfo(String room_id) throws Exception {
+	public RoomVO roomDetailInfo(int room_id) throws Exception {
 		return businessDAO.roomDetailInfo(room_id);
 	}
 
@@ -195,4 +201,15 @@ public class BusinessServiceImpl implements BusinessService {
 	public int getNewOrderCount(Map<String, Object> condMap) throws Exception {
 	    return businessDAO.selectNewOrderCount(condMap);
 	}
+	
+    @Override
+    public int addNewRoomAndGetId(RoomVO roomVO) throws Exception {
+        businessDAO.insertNewRoomAndGetId(roomVO);
+        return roomVO.getRoom_id(); // Mapper에서 keyProperty로 설정한 필드에 ID가 담겨있습니다.
+    }
+
+    @Override
+    public void addRoomImages(List<Room_image> imageFileList) throws Exception {
+        businessDAO.insertRoomImages(imageFileList);
+    }
 }

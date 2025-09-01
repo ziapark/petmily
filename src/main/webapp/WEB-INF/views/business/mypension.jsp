@@ -5,10 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<%
-  String msg = (String) session.getAttribute("message");
-  System.out.println("세션 message 값 = " + msg);
-%>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -229,7 +226,7 @@ function submitdelete(room_id) {
       <div class="card h-100 shadow-sm">
         <div class="row g-0">
           <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
-            <img src="http://localhost:8090/petupload/room/${room.fileimage}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
+            <img src="${contextPath}/roomImage.do?fileName=${room.fileName}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
           </div>
 
           <div class="col-md-8">
@@ -258,7 +255,6 @@ function submitdelete(room_id) {
               <p class="card-text left"><strong>설명:</strong> ${room.room_description}</p>
               <p class="card-text left"><strong>편의시설:</strong> ${room.amenities}</p>
             </div>
-
             <div class="card-footer bg-white border-top-0 d-flex justify-content-end gap-2">
               <c:choose>
                 <c:when test="${room.room_status == '삭제됨'}">

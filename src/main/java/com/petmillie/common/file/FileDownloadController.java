@@ -57,6 +57,40 @@ public class FileDownloadController {
 		out.close();
 	}
 
+	@RequestMapping("/roomImage.do")
+	protected void download(@RequestParam("fileName") String fileName,
+			HttpServletResponse response) throws Exception {
+		OutputStream out = response.getOutputStream();
+		String filePath = CURR_ROOM_REPO_PATH + "\\" + fileName;
+		File image = new File(filePath);
+
+		response.setHeader("Cache-Control", "no-cache");
+
+		String contentType = "application/octet-stream"; // 기본값 설정
+		String lowerFileName = fileName.toLowerCase(); // 확장자 비교를 위해 소문자로 변경
+
+		if (lowerFileName.endsWith(".png")) {
+			contentType = "image/png";
+		} else if (lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".jpeg")) {
+			contentType = "image/jpeg";
+		} else if (lowerFileName.endsWith(".gif")) {
+			contentType = "image/gif";
+		}
+
+		response.setContentType(contentType);
+
+		FileInputStream in = new FileInputStream(image);
+		byte[] buffer = new byte[1024 * 8];
+		while (true) {
+			int count = in.read(buffer);
+			if (count == -1)
+				break;
+			out.write(buffer, 0, count);
+		}
+		in.close();
+		out.close();
+	}
+	
 	// 상품 상세 이미지 출력
 	@RequestMapping("/goods/thumbnails.do")
 	protected void thumbnails(@RequestParam("fileName") String fileName, @RequestParam("goods_num") int goods_num,
@@ -147,7 +181,6 @@ public class FileDownloadController {
 		}
 	}
 
-	// ▼▼▼▼▼ [수정] 이 메소드의 파라미터를 수정했습니다. ▼▼▼▼▼
 	@RequestMapping("/pension/image.do")
 	public void pensionImage(@RequestParam("fileName") String fileName, HttpServletResponse response) throws Exception {
 		String filePath = CURR_PENSION_REPO_PATH + "\\" + fileName;

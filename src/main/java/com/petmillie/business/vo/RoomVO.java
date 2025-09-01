@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component("RoomVO")
 public class RoomVO {
-	private String room_id;
+	private int room_id;
 	private String p_num;
 	private String room_name;
 	private String room_type;
@@ -17,15 +17,11 @@ public class RoomVO {
 	private String reg_date;
 	private String room_status;
 
-	private String fileimage;
+	private int image_id;
+	private String fileName;
+	private String reg_id;
+	private String reg_day;
 
-	public String getFileimage() {
-	    return fileimage;
-	}
-
-	public void setFileimage(String fileimage) {
-	    this.fileimage = fileimage;
-	}
 	public int getPrice() {
 		return price;
 	}
@@ -38,10 +34,10 @@ public class RoomVO {
 	public void setRoom_status(String room_status) {
 		this.room_status = room_status;
 	}
-	public String getRoom_id() {
+	public int getRoom_id() {
 		return room_id;
 	}
-	public void setRoom_id(String room_id) {
+	public void setRoom_id(int room_id) {
 		this.room_id = room_id;
 	}
 	public String getP_num() {
@@ -99,6 +95,30 @@ public class RoomVO {
 	}
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
+	}
+	public int getImage_id() {
+		return image_id;
+	}
+	public void setImage_id(int image_id) {
+		this.image_id = image_id;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getReg_id() {
+		return reg_id;
+	}
+	public void setReg_id(String reg_id) {
+		this.reg_id = reg_id;
+	}
+	public String getReg_day() {
+		return reg_day;
+	}
+	public void setReg_day(String reg_day) {
+		this.reg_day = reg_day;
 	}
 
 	

@@ -34,6 +34,7 @@ import com.petmillie.business.service.BusinessService;
 import com.petmillie.business.vo.BusinessVO;
 import com.petmillie.business.vo.PensionVO;
 import com.petmillie.business.vo.RoomVO;
+import com.petmillie.business.vo.Room_image;
 import com.petmillie.common.base.BaseController;
 import com.petmillie.common.file.FileDownloadController;
 import com.petmillie.goods.vo.GoodsVO;
@@ -46,6 +47,7 @@ import com.petmillie.order.vo.OrderVO;
 public class BusinessControllerImpl extends BaseController implements BusinessController {
 	private static final String CURR_IMAGE_GOODS_REPO_PATH = "C:\\petrepo\\goods";
 	private static final String CURR_IMAGE_PENSION_REPO_PATH = "C:\\petrepo\\pension";
+	private static final String PENSION_IMAGE_REPO = "C:\\petrepo\\room";
 	@Autowired
 	private BusinessService businessService;
 	@Autowired
@@ -392,46 +394,55 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@RequestMapping(value="addroom.do" , method= {RequestMethod.POST,RequestMethod.GET})
 	public String addpension2(RoomVO roomVO, 
-	                          @RequestParam(value="file", required = false) MultipartFile fileimage, 
+							  @RequestParam(value="files", required = false) List<MultipartFile> files, 
 	                          HttpServletRequest request, 
 	                          HttpServletResponse response, 
 	                          Model model, 
 	                          RedirectAttributes redirectAttributes) throws Exception {
-
-	    System.out.println("addroom.do 컨트롤러 진입");
 	    response.setContentType("text/html; charset=UTF-8");
 	    request.setCharacterEncoding("utf-8"); 
-	    System.out.println("객실명 : " + roomVO.getRoom_name());
 
-	    if (fileimage == null || fileimage.isEmpty()) {
-	        redirectAttributes.addFlashAttribute("message", "이미지를 반드시 선택해주세요.");
-	        return "redirect:/business/addroomForm.do";
+	    if (files == null || files.isEmpty() || files.get(0).isEmpty()) {
+	        redirectAttributes.addFlashAttribute("message", "이미지를 1장 이상 반드시 선택해주세요.");
+	        redirectAttributes.addAttribute("p_num", roomVO.getP_num()); 
+	        return "redirect:/business/addRoomForm.do";
 	    }
 
 	    try {
-	        String saveDir = "C:\\petupload\\room";
-	        File uploadPath = new File(saveDir);
+	    	int newRoomId = businessService.addNewRoomAndGetId(roomVO);
+	    	
+	        List<Room_image> imageFileList = new ArrayList<>();
+	        File uploadPath = new File(PENSION_IMAGE_REPO);
+	        if (!uploadPath.exists()) uploadPath.mkdirs();
+	        
+	        String saveDir = "C:\\petrepo\\room";
+	        uploadPath = new File(saveDir);
 	        if (!uploadPath.exists()) uploadPath.mkdirs();
 
-	        String originalFileName = fileimage.getOriginalFilename();
-	        String uuid = UUID.randomUUID().toString();
-	        String extension = "";
+	        for (MultipartFile file : files) {
+	            // 파일 이름 고유하게 만들기
+	            String originalFileName = file.getOriginalFilename();
+	            String uuid = UUID.randomUUID().toString();
+	            String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+	            String savedFileName = uuid + extension;
 
-	        int dotIndex = originalFileName.lastIndexOf(".");
-	        if (dotIndex != -1) {
-	            extension = originalFileName.substring(dotIndex);
+	            // 서버에 파일 저장
+	            File saveFile = new File(uploadPath, savedFileName);
+	            file.transferTo(saveFile);
+
+	            Room_image imageVO = new Room_image();
+	            imageVO.setRoom_id(newRoomId); // 방금 만든 객실 ID와 연결
+	            imageVO.setFileName(savedFileName); // 서버에 저장된 파일 이름
+	            imageFileList.add(imageVO);
 	        }
+	        
+	        businessService.addRoomImages(imageFileList);
 
-	        String savedFileName = uuid + extension;
-
-	        File saveFile = new File(uploadPath, savedFileName);
-	        fileimage.transferTo(saveFile);
-	        businessService.addpension2(roomVO);
-
-	        HttpSession session = request.getSession();
-	        session.setAttribute("message", "등록이 완료 되었습니다");
+	        redirectAttributes.addFlashAttribute("message", "객실 등록이 완료되었습니다.");
+	        // mypension.do 로 p_num을 보내줘야 해당 펜션의 객실 목록을 볼 수 있습니다.
+	        redirectAttributes.addAttribute("p_num", roomVO.getP_num()); 
 	        return "redirect:/business/mypension.do";
-
+	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        HttpSession session = request.getSession();
@@ -443,7 +454,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@Override
 	@RequestMapping(value="/roomdetailInfo.do" ,method = {RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView roomdetailInfo(@RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView roomdetailInfo(@RequestParam("room_id") int room_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		String viewName=(String)request.getAttribute("viewName");
 		System.out.println("room_id : " +room_id);
@@ -471,7 +482,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		Map<String,String> roomMap=new HashMap<String,String>();
 		HttpSession session=request.getSession();
 		roomVO = (RoomVO)session.getAttribute("roomInfo");
-		String room_id=roomVO.getRoom_id();
+		int room_id = roomVO.getRoom_id();
 			if(attribute.equals("room_name")){
 				roomMap.put("room_name",value);
 		}else if(attribute.equals("price")){
@@ -492,7 +503,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 			roomMap.put(attribute,value);	
 		}
 			
-			roomMap.put("room_id", room_id);
+			String roomIdStr = String.valueOf(room_id);
+			roomMap.put("room_id", roomIdStr);
 			
 			roomVO = (RoomVO)businessService.modifyroom(roomMap);
 			session.removeAttribute("roomInfo");
@@ -506,6 +518,53 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 			return resEntity;
 	}
 
+	@RequestMapping(value="/modifyRoomImage.do", method=RequestMethod.POST)
+	public ResponseEntity<String> modifyRoomImage(@RequestParam("room_id") int room_id,
+	                                                @RequestParam("file") MultipartFile file,
+	                                                HttpServletRequest request) throws Exception {
+
+	    // 1. 새로운 이미지 파일을 서버에 저장하는 로직
+	    String originalFileName = file.getOriginalFilename();
+	    
+	    // 중복을 피하기 위해 고유한 파일 이름 생성 (UUID 사용)
+	    String uuid = UUID.randomUUID().toString();
+	    String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+	    String savedFileName = uuid + extension;
+
+	    // 파일 저장 경로 설정 (기존에 사용하시던 경로)
+	    String saveDir = "C:\\petrepo\\room";
+	    File uploadPath = new File(saveDir);
+	    if (!uploadPath.exists()) {
+	        uploadPath.mkdirs();
+	    }
+	    
+	    // 파일을 실제로 저장
+	    File saveFile = new File(uploadPath, savedFileName);
+	    file.transferTo(saveFile);
+
+
+	    // 2. 데이터베이스에 저장할 정보를 Map에 담기
+	    Map<String, Object> imageFileMap = new HashMap<>();
+	    imageFileMap.put("room_id", room_id);
+	    imageFileMap.put("fileName", savedFileName); // DB에는 새로 저장된 파일 이름을 업데이트
+
+	    // 3. Service 계층에 DB 업데이트 요청
+	    try {
+	        businessService.modifyRoomImage(imageFileMap);
+	        // TODO: 기존에 있던 이미지 파일은 서버에서 삭제해주는 로직을 추가하면 더 좋습니다.
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        // 만약 DB 업데이트 실패 시, 방금 업로드한 파일도 삭제해주는 것이 좋습니다.
+	        saveFile.delete();
+	        return new ResponseEntity<>("mod_failed", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+
+	    // 4. 성공 응답 반환
+	    return new ResponseEntity<>("mod_success", HttpStatus.OK);
+	}
+	
+	
 	@Override
 	@RequestMapping(value="/removeroom.do", method={RequestMethod.POST,RequestMethod.GET})
 	@ResponseBody
