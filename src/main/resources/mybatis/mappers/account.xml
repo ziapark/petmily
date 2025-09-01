@@ -75,7 +75,10 @@
                    ELSE 0 
                  END), 0) as netSales,
 			COUNT(DISTINCT p.order_id) as orderCount,
-			b.commission_rate as commission_rate
+			b.commission_rate as commission_rate,
+			b.bank_name,
+			b.bank_account,
+			b.bank_holder
 		FROM
 			business b
 		LEFT JOIN
@@ -84,11 +87,13 @@
 		    userorder u ON g.goods_num = u.goods_num
 		LEFT JOIN
 		    payment p ON u.order_id = p.order_id
-		WHERE
-			b.seller_id = #{seller_id}
-			<if test="selectedMonth != null and selectedMonth != ''">
+		    <if test="selectedMonth != null and selectedMonth != ''">
 		        AND DATE_FORMAT(p.payment_time, '%Y-%m') = #{selectedMonth}
 		    </if>
+		WHERE
+			b.seller_id = #{seller_id}
+		GROUP BY
+			b.seller_id
 	</select>
 
 	<!-- 일별 매출 데이터 조회 (차트용) -->

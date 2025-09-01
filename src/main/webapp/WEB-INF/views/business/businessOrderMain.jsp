@@ -10,8 +10,6 @@
 	    table { width: 100%; border-collapse: collapse;background-color: #fff;box-shadow: 0 0 10px rgba(0,0,0,0.1);}
 	    table td, table th {border: 1px solid #ddd;padding: 8px;}
 	    table th {background-color: #f2f2f2;}
-	    
-	    /* --- 페이지네이션 스타일 시작 --- */
 	    .fixed a {
 	        display: inline-block;
 	        padding: 5px 10px;
@@ -34,7 +32,6 @@
 			color: white;
 			font-weight: bold;
 	    }
-	    /* --- 페이지네이션 스타일 끝 --- */
 	    
 	</style>
 	<meta charset="utf-8">
@@ -152,43 +149,50 @@
 			return beginDate+","+endDate;
 		}
 
-		function fn_confirm_and_modify(order_id, selectElement){
-		    var selectedText = selectElement.options[selectElement.selectedIndex].text;
+		function fn_change_delivery_state(order_id, member_id, selectElement){
+		    var selectedValue = selectElement.value; // 선택된 option의 value (예: "finished")
+		    var selectedText = selectElement.options[selectElement.selectedIndex].text; // 선택된 option의 텍스트 (예: "구매확정")
+		    // data-original-index 속성에서 원래 선택되어 있던 index를 가져옵니다.
+		    var originalIndex = selectElement.dataset.originalIndex; 
+		    
 		    var confirmMessage = "'" + selectedText + "'(으)로 배송상태를 변경하시겠습니까?";
-		    var result = confirm(confirmMessage);
-		    if (result) {
-		        fn_modify_order_state(order_id, selectElement.id);
-		    } else {
-		        alert("변경이 취소되었습니다.");
+		    
+		    // '구매확정'을 선택한 경우에만 특별 안내 메시지를 추가합니다.
+		    if (selectedValue === 'finished') {
+		        confirmMessage += "\n\n※ '구매확정' 처리 시 회원에게 포인트가 적립됩니다.";
 		    }
-		}
-		
-		function fn_modify_order_state(order_id,select_id){
-			var s_delivery_state=document.getElementById(select_id);
-		    var index = s_delivery_state.selectedIndex;
-		    var value = s_delivery_state[index].value;
-			 
-			$.ajax({
-				type : "post",
-				async : false,
-				url : "${contextPath}/admin/order/modifyDeliveryState.do",
-				data : {
-					order_id:order_id,
-					"delivery_state":value
-				},
-				success : function(data, textStatus) {
-					if(data.trim()=='mod_success'){
-						alert("배송 정보를 수정했습니다.");
-						location.href="${contextPath}//admin/order/adminOrderMain.do";
-					}else if(data.trim()=='failed'){
-						alert("다시 시도해 주세요.");	
-					}
-					
-				},
-				error : function(data, textStatus) {
-					alert("에러가 발생했습니다."+data);
-				}
-			});	
+
+		    var result = confirm(confirmMessage);
+		    
+		    // 사용자가 '확인'을 눌렀을 때
+		    if (result) {
+		        $.ajax({
+		            type : "post",
+		            // async: false는 사용하지 않는 것이 좋습니다.
+		            url : "${contextPath}/admin/order/modifyDeliveryState.do",
+		            data : {
+		                order_id: order_id,
+		                member_id: member_id, // member_id를 함께 보냅니다.
+		                delivery_state: selectedValue
+		            },
+		            success : function(data, textStatus) {
+		                if(data.trim() === 'mod_success'){
+		                    alert("배송 정보를 수정했습니다.");
+		                    location.reload(); // 페이지 새로고침
+		                } else {
+		                    alert("다시 시도해 주세요.");
+		                    selectElement.selectedIndex = originalIndex; // 실패 시 원래 상태로 복원
+		                }					
+		            },
+		            error : function(data, textStatus) {
+		                alert("에러가 발생했습니다.");
+		                selectElement.selectedIndex = originalIndex; // 에러 발생 시 원래 상태로 복원
+		            }
+		        });	
+		    } else { // 사용자가 '취소'를 눌렀을 때
+		        alert("변경이 취소되었습니다.");
+		        selectElement.selectedIndex = originalIndex; // 원래 상태로 복원
+		    }
 		}
 
 		function fn_enable_detail_search(r_search){
@@ -306,8 +310,9 @@
 				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
 				<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
 				<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
-				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+				<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+				<li><a href="${contextPath}/account/accountDetail.do?seller_id=${businessInfo.seller_id}">회계관리</a></li>
 				<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
 			</ul>
 		</div>
@@ -558,8 +563,16 @@
 					    				</c:forEach> 
 									</td>
 									<td width=10%>
-								 		<select name="s_delivery_state${i.index }"  id="s_delivery_state${i.index }" onchange="fn_confirm_and_modify('${item.order_id}', this)">
-								 			<c:choose>
+								 		<select name="s_delivery_state" 
+											onchange="fn_change_delivery_state('${item.order_id}', '${item.member_id}', this)"
+											data-original-index="${
+												item.delivery_state == 'delivery_prepared' ? 0 :
+												item.delivery_state == 'delivering' ? 1 :
+												item.delivery_state == 'finished_delivering' ? 2 :
+												item.delivery_state == 'finished' ? 3 :
+												item.delivery_state == 'cancel_order' ? 4 : 5
+											}">
+											<c:choose>
 								   				<c:when test="${item.delivery_state=='delivery_prepared' }">
 								     				<option value="delivery_prepared" selected>배송준비중</option>
 								     				<option value="delivering">배송중</option>
@@ -585,27 +598,12 @@
 											     	<option value="returning_goods">반품</option>
 											    </c:when>
 											    <c:when test="${item.delivery_state=='finished' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											    	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering">배송완료</option>
 											     	<option value="finished" selected>구매확정</option>
-											     	<option value="cancel_order">주문취소</option>
-											     	<option value="returning_goods">반품</option>
 											    </c:when>
 											   	<c:when test="${item.delivery_state=='cancel_order' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											     	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished">구매확정</option>
 											     	<option value="cancel_order" selected>주문취소</option>
-											     	<option value="returning_goods">반품</option>
 											   	</c:when>
 											   	<c:when test="${item.delivery_state=='returning_goods' }">
-											    	<option value="delivery_prepared" >배송준비중</option>
-											     	<option value="delivering"  >배송중</option>
-											     	<option value="finished_delivering" >배송완료</option>
-											     	<option value="finished">구매확정</option>
-											    	<option value="cancel_order" >주문취소</option>
 											     	<option value="returning_goods" selected>반품</option>
 											    </c:when>
 											</c:choose>
