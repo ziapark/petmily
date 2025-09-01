@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component("RoomVO")
 public class RoomVO {
 	private int room_id;
-	private String p_num;
+	private int p_num;
 	private String room_name;
 	private String room_type;
 	private int price;
@@ -40,10 +40,10 @@ public class RoomVO {
 	public void setRoom_id(int room_id) {
 		this.room_id = room_id;
 	}
-	public String getP_num() {
+	public int getP_num() {
 		return p_num;
 	}
-	public void setP_num(String p_num) {
+	public void setP_num(int p_num) {
 		this.p_num = p_num;
 	}
 	public String getRoom_name() {

@@ -169,9 +169,19 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		return mav;
 	}
 	
+	@RequestMapping("/addroomForm.do")
+	public ModelAndView addroomForm(@RequestParam(value="p_num", required = false) int p_num, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String viewName = (String) request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView("/common/layout");
+		mav.addObject("title", "메인페이지");
+		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		mav.addObject("p_num", p_num);
+		return mav;
+	}
+	
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
-	public ModelAndView myPageMain(@RequestParam(value="business_id", required = false) String business_id,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
+	public ModelAndView myPageMain(@RequestParam(value="business_id", required = false) String business_id, HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav=new ModelAndView("/common/layout");
 		mav.addObject("title", "마이페이지");
@@ -377,7 +387,7 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	    if (files == null || files.isEmpty() || files.get(0).isEmpty()) {
 	        redirectAttributes.addFlashAttribute("message", "이미지를 1장 이상 반드시 선택해주세요.");
 	        redirectAttributes.addAttribute("p_num", roomVO.getP_num()); 
-	        return "redirect:/business/addRoomForm.do";
+	        return "redirect:/business/addroomForm.do";
 	    }
 
 	    try {

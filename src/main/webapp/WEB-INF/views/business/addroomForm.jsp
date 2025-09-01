@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<form action="${contextPath}/business/addroom.do" method="post" enctype="multipart/form-data">	
-		<input type="hidden" name="p_num" id="p_num" value="${pensionInfo.p_num}" />
+		<input type="hidden" name="p_num" id="p_num" value="${p_num}" />
 
 	<table class="table table-bordered">
 	    <tbody>
