@@ -34,7 +34,7 @@
 		    <div class="alert alert-light fw-bold" style="text-align:left; font-size: 1.2em;">${vo.subject}</div>
 	    </div>
     	<div class="row">
-    		<div class="contents_box" style="text-align:left;">
+    		<div class="contents_box" style="text-align:left; white-space: pre-line;">
     			<c:if test="${not empty vo.file_name}">
 				  <div class="imgbox">
 				    <img src="${contextPath}/board/image.do?fileName=${vo.file_name}&comu_id=${vo.comu_id}" />
