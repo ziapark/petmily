@@ -449,14 +449,12 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@Override
 	@RequestMapping(value="/modifyroom.do" , method= {RequestMethod.POST,RequestMethod.GET})
-	public ResponseEntity modifyroom(@RequestParam("attribute") String attribute,@RequestParam("value") String value, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ResponseEntity modifyroom(@RequestParam("attribute") String attribute, @RequestParam("value") String value, @RequestParam("room_id") String room_id, HttpServletRequest request,
+		HttpServletResponse response) throws Exception {
+		
 		Map<String,String> roomMap=new HashMap<String,String>();
-		HttpSession session=request.getSession();
-		roomVO = (RoomVO)session.getAttribute("roomInfo");
-		int room_id = roomVO.getRoom_id();
-			if(attribute.equals("room_name")){
-				roomMap.put("room_name",value);
+		if(attribute.equals("room_name")){
+			roomMap.put("room_name",value);
 		}else if(attribute.equals("price")){
 			roomMap.put("price",value);
 		}else if(attribute.equals("room_type")){
@@ -475,19 +473,16 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 			roomMap.put(attribute,value);	
 		}
 			
-			String roomIdStr = String.valueOf(room_id);
-			roomMap.put("room_id", roomIdStr);
-			
-			roomVO = (RoomVO)businessService.modifyroom(roomMap);
-			session.removeAttribute("roomInfo");
-			session.setAttribute("roomInfo", roomVO);
-			
-			String message = null;
-			ResponseEntity resEntity = null;
-			HttpHeaders responseHeaders = new HttpHeaders();
-			message  = "mod_success";
-			resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-			return resEntity;
+		roomMap.put("room_id", room_id);
+		
+		roomVO = (RoomVO)businessService.modifyroom(roomMap);
+		
+		String message = null;
+		ResponseEntity resEntity = null;
+		HttpHeaders responseHeaders = new HttpHeaders();
+		message  = "mod_success";
+		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
+		return resEntity;
 	}
 
 	@RequestMapping(value="/modifyRoomImage.do", method=RequestMethod.POST)

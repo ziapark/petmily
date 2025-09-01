@@ -34,7 +34,7 @@ public interface BusinessController {
             @RequestParam("originalFileName") String originalFileName,
             HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView roomdetailInfo(int room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ResponseEntity modifyroom(String attribute, String value, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ResponseEntity modifyroom(String attribute, String value, @RequestParam("room_id") String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String removepension(String p_num, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String removeroom(@RequestParam String room_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ResponseEntity addNewGoods(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;

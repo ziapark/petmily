@@ -92,7 +92,7 @@ public class BusinessServiceImpl implements BusinessService {
 
 	@Override
 	public RoomVO modifyroom(Map roomMap) throws Exception {
-		int room_id = (int) roomMap.get("room_id");
+		int room_id = Integer.parseInt((String) roomMap.get("room_id"));
 		businessDAO.modifyroom(roomMap);
 		return businessDAO.roomDetailInfo(room_id);
 	}

@@ -10,7 +10,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="css/common.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
 /* 전체적인 컨테이너 및 폰트 스타일 */
@@ -106,113 +105,14 @@ body {
 				<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
 				<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
 				<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
-				<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
+				<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+				<li><a href="${contextPath}/account/accountDetail.do?seller_id=${businessInfo.seller_id}">회계관리</a></li>
 				<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
 			</ul>
 		</div>
 	<div class="clear"></div>
 	 <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
-<<<<<<< HEAD
-
-<div class="col">
-      <div class="pd">
-<c:if test="${not empty pensionList}">
-  <p class="card-text mb-0 bd"><strong>업체명:</strong> ${pensionList.business_name}</p>
-  <p class="card-text mb-0 bd"><strong>업체유형:</strong> ${pensionList.business_type}</p>
-  <p class="card-text mb-0 bd"><strong>대표자명:</strong> ${pensionList.owner_name}</p>
-  <p class="card-text mb-0 bd"><strong>우편번호:</strong> ${pensionList.zipcode}</p>
-  <p class="card-text mb-0 bd"><strong>도로명 주소:</strong> ${pensionList.roadAddress}</p>
-  <p class="card-text mb-0 bd"><strong>지번 주소:</strong> ${pensionList.jibunAddress}</p>
-  <p class="card-text mb-0 bd"><strong>나머지 주소:</strong> ${pensionList.namujiAddress}</p>
-  <br>
-</c:if>
-
-<c:if test="${empty pensionList}">
-  <p>등록된 업체 정보가 없습니다.</p>
-  <br>
-</c:if>
- </div>
-</div>
-<c:choose>
-  <c:when test="${not empty pensionInfo}">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-body">
-        <input type="hidden" name="p_num" value="${pensionInfo.p_num}" />
-        <h5 class="card-title text-success">펜션 정보</h5>
-        <p class="card-text mb-1"><strong>펜션 등록번호:</strong> ${pensionInfo.business_id}</p>
-        <p class="card-text mb-1"><strong>업체 명:</strong> ${pensionInfo.p_name}</p>
-        <p class="card-text mb-1">
-          <strong>업체 전화번호:</strong> ${pensionInfo.tel1}-${pensionInfo.tel2}-${pensionInfo.tel3}
-        </p>
-        <p class="card-text mb-1"><strong>객실 수:</strong> ${pensionInfo.room_count}</p>
-        <p class="card-text mb-1"><strong>시설 정보:</strong> ${pensionInfo.facilities}</p>
-        <p class="card-text"><strong>설명:</strong> ${pensionInfo.description}</p>
-        <p class="card-text"><strong>펜션승인상태:</strong> ${pensionInfo.pension_status}</p>
-
-        <div class="d-flex justify-content-end gap-2 mt-3">
-          <a href="${contextPath}/business/pensiondetail.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-primary btn-sm">
-            업체수정
-          </a>
-          <button type="button" class="btn btn-outline-danger btn-sm" onclick="pensiondelete(${pensionInfo.p_num})">
-            업체삭제
-          </button>
-          <a href="${contextPath}/business/addroomForm.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-success btn-sm">
-            객실추가
-          </a>
-        </div>
-      </div>
-    </div>
-  </c:when>
-</c:choose>
-    
-
-<c:if test="${empty pensionInfo}">
-  <p>등록된 펜션 정보가 없습니다.</p>
-<a href="${contextPath}/business/addpensionForm.do"><button type="button">펜션 등록</button></a>
-  <br>
-</c:if>
-
-</div>
-<h3 class="mb-4" style="display: block; text-align:left;">등록된 객실 리스트</h3>
-
-<c:choose>
-  <c:when test="${not empty roomInfo and not empty pensionInfo}">
-    <div class="row row-cols-1 row-cols-md-2 gx-4 gy-4">
-  <c:forEach var="room" items="${roomInfo}">
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="row g-0">
-          <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
-            <img src="${contextPath}/roomImage.do?fileName=${room.fileName}" class="img-fluid rounded-start" alt="객실 이미지" style="max-height: 150px;">
-          </div>
-
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title left">${room.room_name}</h5>
-              
-              <p class="card-text mb-1 left">
-                  <strong>객실 상태:</strong> 
-                  <c:choose>
-                      <c:when test="${room.room_status == '예약가능'}">
-                          <span style="color: green; font-weight: bold;">${room.room_status}</span>
-                      </c:when>
-                      <c:when test="${room.room_status == '삭제됨'}">
-                          <span style="color: gray; font-weight: bold;">${room.room_status}</span>
-                      </c:when>
-                      <c:otherwise>
-                          <span style="color: red; font-weight: bold;">${room.room_status}</span>
-                      </c:otherwise>
-                  </c:choose>
-              </p>
-              
-              <p class="card-text mb-1 left"><strong>객실 번호:</strong> ${room.room_id}</p>
-              <p class="card-text mb-1 left"><strong>가격:</strong> <fmt:formatNumber value="${room.price}" type="currency" currencySymbol="₩"/></p>
-              <p class="card-text mb-1 left"><strong>타입:</strong> ${room.room_type} / ${room.bed_type}</p>
-              <p class="card-text mb-1 left"><strong>인원:</strong> ${room.max_capacity}명 / ${room.room_size}㎡</p>
-              <p class="card-text left"><strong>설명:</strong> ${room.room_description}</p>
-              <p class="card-text left"><strong>편의시설:</strong> ${room.amenities}</p>
-=======
         <div class="col-md-6">
             <div class="pd">
                 <c:if test="${not empty pensionList}">
@@ -230,7 +130,6 @@ body {
                     <p>등록된 업체 정보가 없습니다.</p>
                     <br>
                 </c:if>
->>>>>>> edf3fc779bde954648831d5555ba7c1b990b90c9
             </div>
         </div>
 
