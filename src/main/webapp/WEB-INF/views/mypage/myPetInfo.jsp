@@ -91,7 +91,7 @@ function fn_delete_pet(pet_id){
 			<div class="">
 				<h3 style="text-align:left;">나의 반려동물 정보</h3>
 				<p style="text-align:left; color: #666; margin-bottom: 20px;">
-    				※ 반려동물은 최대 <strong style="color: #007bff;">3마리</strong>까지 등록 가능합니다.
+    				※ 반려동물은 최대 <strong style="color: #25c58d;">3마리</strong>까지 등록 가능합니다.
 				</p>
         		<div class="pet-info-container">
             		<c:choose>
@@ -109,7 +109,7 @@ function fn_delete_pet(pet_id){
 							  <div class="row g-4">
 							    <c:forEach var="pet" items="${petList}" varStatus="status">
 							      <div class="col-md-4">
-							        <div class="card shadow-sm h-100" style="border-color:#3cdeff;">
+							        <div class="card shadow-sm h-100" style="border-color:#78e2bd;">
 							          <div class="pet-image-container text-center mt-3">
 							            <c:choose>
 							              <c:when test="${not empty pet.pet_image}">
@@ -135,7 +135,7 @@ function fn_delete_pet(pet_id){
 							            <p class="card-text mb-0"><strong>장난감:</strong> ${pet.pet_favorite_toy}</p>
 							            <p class="card-text mb-0"><strong>간식:</strong> ${pet.pet_favorite_snack}</p>
 							          </div>
-							          <div class="card-footer bg-white d-flex justify-content-between" style="border-color:#3cdeff;">
+							          <div class="card-footer bg-white d-flex justify-content-between" style="border-color:#78e2bd;">
 							            <a href="${contextPath}/mypage/modifyPetForm.do?pet_id=${pet.pet_id}" 
 							               class="btn btn-sm btn-outline-dark">수정</a>
 							            <a href="javascript:void(0)" 
