@@ -8,7 +8,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>${summary.store_name} - 상세 회계</title>
+	<title>${summary.storeName} - 상세 회계</title>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<style>
@@ -16,6 +16,7 @@
 		.section-header { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
 		.section-header h2, .section-header h5 { font-weight: bold; color: #333; }
 		.section-header h5 { margin-bottom: 0; }
+		.section-header .info-text { font-size: 0.8rem; color: #888; margin-top: 4px; }
 		.date-selector { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
 		.summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px; }
 		.summary-card { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: left; }
@@ -23,24 +24,28 @@
 		.summary-card .amount { font-size: 1.5rem; font-weight: bold; color: #333; }
 		.summary-card .amount.net-sales { color: #007bff; }
 		.summary-card .amount.estimated-settlement { color: #28a745; }
+		
+		/* [수정] details-section을 2단 그리드 레이아웃으로 변경합니다. */
 		.details-section { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+		/* [추가] 왼쪽 컬럼의 아이템들을 세로로 쌓기 위한 스타일 */
+		.left-column { display: flex; flex-direction: column; gap: 20px; }
+
 		.chart-container, .table-container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-		.chart-container { height: 400px; }
+		.chart-container { height: 400px; display: flex; flex-direction: column; }
 		.table th, .table td { vertical-align: middle; font-size: 0.9rem; }
         .table .amount-plus { color: blue; }
         .table .amount-minus { color: red; }
-        .chart-wrapper {
-			position: relative;
-			flex-grow: 1; /* 헤더를 제외한 나머지 모든 공간을 차지하도록 설정 */
-		}
+		.chart-wrapper { position: relative; flex-grow: 1; }
+		.settlement-info-table th { width: 150px; text-align: left; background-color: #fafafa; }
+		.settlement-info-table td { text-align: left; }
 	</style>
 </head>
 <body>
 	<div class="container text-center mt-3 mb-3">
 	  	<div class="row row-cols-1 mb-3">
 			<div class="col bg-light p-5 text-start">
-				<h2 class="fw-bold">${summary.store_name} 상세 회계</h2>
-				<p class="text-muted">선택된 상점의 상세 매출 현황을 확인합니다.</p>
+				<h2 class="fw-bold">${summary.business_name} 상세 회계</h2>
+				<p class="text-muted">상세 매출 현황을 확인합니다</p>
 			</div>
 		</div>
 		<%-- 관리자 공통 메뉴 부분 --%>
@@ -50,7 +55,7 @@
 				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
 				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-				<li><a href="${contextPath}/admin/accounting/main.do">회계관리</a></li>
+				<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
 				<li><a href="${contextPath}/business/admin/addPensionForm.do">펜션등록</a></li>
 				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
@@ -58,17 +63,15 @@
 		</div>
 
 		<div class="accounting-container">
-			<!-- [수정] 1. 월별 조회 섹션 -->
-			<form name="frm_search" method="get" action="${contextPath}/admin/accounting/detail.do">
+			<form name="frm_search" method="get" action="${contextPath}/account/accountDetail.do">
 				<div class="date-selector">
-					<input type="hidden" name="seller_id" value="${param.seller_id}" />
+					<input type="hidden" name="seller_id" value="${not empty param.sellerId ? param.sellerId : param.seller_id}" />
 					<input type="month" name="selectedMonth" class="form-control" style="width: 200px;" value="${selectedMonth}">
 					<button type="submit" class="btn btn-primary ms-2">조회</button>
-					<a href="${contextPath}/admin/accounting/main.do" class="btn btn-secondary ms-auto">목록으로</a>
+					<a href="${contextPath}/account/accountMain.do" class="btn btn-secondary ms-auto">목록으로</a>
 				</div>
 			</form>
 
-			<!-- [수정] 2. 핵심 요약 정보 -->
 			<div class="summary-cards">
 				<div class="summary-card">
 					<h3>총 매출</h3>
@@ -88,21 +91,43 @@
 				</div>
                 <div class="summary-card">
 					<h3>예상 정산액 (${summary.commission_rate}%)</h3>
-					<%-- 예상 정산액 계산: 순매출 * (1 - 수수료율/100) --%>
 					<c:set var="estimatedSettlement" value="${summary.netSales * (1 - (summary.commission_rate / 100))}" />
 					<p class="amount estimated-settlement"><fmt:formatNumber value="${estimatedSettlement}" pattern="#,###" />원</p>
 				</div>
 			</div>
 
-			<!-- 3. 차트 및 상세 거래 내역 -->
 			<div class="details-section">
-				<div class="chart-container">
-					<div class="section-header">
-						<h5>월별 매출 추이</h5>
-						<p class="info-text">※ 매출 추이 그래프는 '구매확정' 상태인 주문 건을 기준으로 집계됩니다.</p>
+				<div class="left-column">
+					<div class="table-container">
+						<div class="section-header">
+							<h5>정산 계좌 정보</h5>
+						</div>
+						<table class="table settlement-info-table">
+							<tbody>
+								<tr>
+									<th>은행명</th>
+									<td>${summary.bank_name}</td>
+								</tr>
+								<tr>
+									<th>계좌번호</th>
+									<td>${summary.bank_account}</td>
+								</tr>
+								<tr>
+									<th>예금주</th>
+									<td>${summary.bank_holder}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
-					<div class="chart-wrapper">
-						<canvas id="salesChart" style="height: 280px;"></canvas>
+
+					<div class="chart-container">
+						<div class="section-header">
+							<h5>월별 매출 추이</h5>
+							<p class="info-text">※ 매출 추이 그래프는 '구매확정' 및 '취소'된 주문 건을 기준으로 집계됩니다.</p>
+						</div>
+						<div class="chart-wrapper">
+							<canvas id="salesChart"></canvas>
+						</div>
 					</div>
 				</div>
 
@@ -128,20 +153,21 @@
 										<fmt:formatNumber value="${tx.amount}" pattern="#,###" />원
 									</td>
 									<td>
-										<c:choose>
-				    						<c:when test="${tx.delivery_state=='delivery_prepared' }">배송준비</c:when>
-				    						<c:when test="${tx.delivery_state=='delivering' }">배송중</c:when>
-										    <c:when test="${tx.delivery_state=='finished_delivering' }">배송완료</c:when>
-										    <c:when test="${tx.delivery_state=='finished' }">구매확정</c:when>
-										    <c:when test="${tx.delivery_state=='cancel_order' }">주문취소</c:when>
-										    <c:when test="${tx.delivery_state=='returning_goods' }">반품</c:when>
-				  						</c:choose>
+									<c:choose>
+										<c:when test="${tx.delivery_state=='delivery_prepared' }">배송준비</c:when>									
+										<c:when test="${tx.delivery_state=='delivering' }">배송중</c:when>									
+										<c:when test="${tx.delivery_state=='finished_delivering' }">배송완료</c:when>
+										<c:when test="${tx.delivery_state=='finished' }">구매확정</c:when>									
+										<c:when test="${tx.delivery_state=='cancel_order' }">주문취소</c:when>										
+										<c:when test="${tx.delivery_state=='returning_goods' }">반품</c:when>								
+									</c:choose>
 									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -152,9 +178,8 @@
 			
 			const chartLabels = [];
 			const chartData = [];
-			// 컨트롤러에서 받은 'dailySalesList' 데이터를 사용하여 차트 라벨과 데이터를 만듭니다.
 			<c:forEach var="sale" items="${dailySalesList}">
-				chartLabels.push("${sale.date}일"); // X축에 '일'을 붙여줍니다.
+				chartLabels.push("${sale.date}일");
 				chartData.push(${sale.netSales});
 			</c:forEach>
 
@@ -190,3 +215,4 @@
 	</script>
 </body>
 </html>
+
