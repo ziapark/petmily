@@ -9,7 +9,7 @@
         <c:forEach var="room" items="${roomList}">
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <img src="${contextPath}/thumbnails.do?goods_fileName=${room.fileimage}" class="card-img-top" alt="객실 이미지" style="height: 200px; object-fit: cover;">
+                    <img src="${contextPath}/roomImage.do?fileName=${room.fileName}" class="card-img-top" alt="객실 이미지" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">${room.room_name}</h5>
                         <p class="card-text mb-1">
