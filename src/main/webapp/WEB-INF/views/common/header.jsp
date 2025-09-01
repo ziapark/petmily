@@ -121,7 +121,7 @@
 							class="btn-sm btn btn-outline-dark">
 							<spring:message code="menu.admin"/>
 						</a></li>
-						<li><a href="#" class="btn-sm btn btn-outline-dark">
+						<li><a href="${contextPath}/board/boardList.do?board_type=qna" class="btn-sm btn btn-outline-dark">
 							<spring:message code="menu.cs"/>
 						</a></li>
 						<li><a href="${contextPath}/member/logout.do"
@@ -189,6 +189,7 @@
 				</c:choose>
 			</ul>
 		</div>
+
 		<div class="clear"></div>
 		<div id="search">
 		    <form name="frmSearch" action="${contextPath}/goods/searchGoods.do" method="get">
