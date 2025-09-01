@@ -194,6 +194,7 @@
 
                         <div class="room-card-body">
                             <h4>${room.room_name}</h4>
+                            <img src="${contextPath}/roomImage.do?fileName=${room.fileName}" class="card-img-top" alt="객실 이미지" style="height: 200px; object-fit: cover;">
                             <p><strong>객실유형:</strong> ${room.room_type}</p>
                             <p><strong>수용인원:</strong> 최대 ${room.max_capacity}명</p>
                             <p><strong>객실크기:</strong> ${room.room_size}</p>
