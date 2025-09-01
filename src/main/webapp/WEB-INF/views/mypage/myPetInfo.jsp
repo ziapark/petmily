@@ -73,7 +73,7 @@ function fn_delete_pet(pet_id){
 	<div class="container text-center mt-3 mb-3">
 		<div class="row row-cols-1 mb-3">
 			<div class="col bg-light p-5 text-start">
-				<h2 class="fw-bold h2h2">회원정보관리</h2>
+				<h2 class="fw-bold h2h2">나의 반려동물</h2>
 				<p class="h2p"></p>
 			</div>
 		</div>	
