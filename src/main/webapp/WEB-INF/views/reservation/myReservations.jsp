@@ -56,9 +56,9 @@
             <c:when test="${not empty myReservations}">
                 <c:forEach var="reservation" items="${myReservations}">
                     <div class="col">
-                        <div class="card shadow-sm h-100">
+                        <div class="card shadow-sm h-100" style="border-color:#78e2bd;">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">예약 번호: ${reservation.reservation_id}</h5>
+                                <h5 class="card-title" style="color:#198754;">예약 번호: ${reservation.reservation_id}</h5>
                                 <hr>
                                 <p class="card-text mb-1"><strong>펜션명:</strong> ${reservation.p_name}</p>
                                 <p class="card-text mb-1"><strong>객실명:</strong> ${reservation.room_name}</p>
