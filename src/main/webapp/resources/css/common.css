@@ -203,7 +203,12 @@ position:relative;
 
 /* 로그인 */
 
-.login_wrap {width:100%; max-width:500px; margin:0 auto;}
+.login_wrap {width:100%; max-width:500px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    box-shadow: 0px 4px 8px 1px #6c757d12;}
 .login_wrap .loginbox {text-align:center;}
 .login_wrap form , .login_wrap h3{width:75%; margin: 0 auto;}
 .login_wrap h3 {font-size:20px; margin:20px auto;}
