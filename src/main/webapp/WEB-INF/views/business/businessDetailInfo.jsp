@@ -178,6 +178,7 @@
 			<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
 			<li><a href="${contextPath}/business/mypension.do?business_id=${business_id}">펜션관리</a></li>
 			<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+			<li><a href="${contextPath}/account/accountDetail.do?seller_id=${businessInfo.seller_id}">회계관리</a></li>
 			<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
 		</ul>
 	</div>
