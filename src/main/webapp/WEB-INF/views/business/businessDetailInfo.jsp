@@ -315,11 +315,6 @@
 		  </tbody>
 		</table>
 
-<div class="text-center mt-3">
-  <input type="hidden" name="command" value="modify_my_info">
-  <button type="button" class="btn btn-secondary" name="btn_cancel_business">수정 취소</button>
-</div>
-
 	</div>
 	<input  type="hidden" name="h_phone1" value="${businessInfo.phone1}" />
 </form>	

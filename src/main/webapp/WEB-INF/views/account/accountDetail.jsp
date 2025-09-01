@@ -85,7 +85,11 @@
 					<input type="hidden" name="seller_id" value="${not empty param.sellerId ? param.sellerId : param.seller_id}" />
 					<input type="month" name="selectedMonth" class="form-control" style="width: 200px;" value="${selectedMonth}">
 					<button type="submit" class="btn btn-primary ms-2">조회</button>
-					<a href="${contextPath}/account/accountMain.do" class="btn btn-secondary ms-auto">목록으로</a>
+					<c:choose>
+						<c:when test="${isLogOn==true and memberInfo.member_id =='admin' }">
+							<a href="${contextPath}/account/accountMain.do" class="btn btn-secondary ms-auto">목록으로</a>
+						</c:when>
+					</c:choose>
 				</div>
 			</form>
 
