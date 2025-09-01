@@ -169,7 +169,7 @@ function submitdelete(room_id) {
   <p class="card-text mb-0 bd"><strong>도로명 주소:</strong> ${pensionList.roadAddress}</p>
   <p class="card-text mb-0 bd"><strong>지번 주소:</strong> ${pensionList.jibunAddress}</p>
   <p class="card-text mb-0 bd"><strong>나머지 주소:</strong> ${pensionList.namujiAddress}</p>
-  <p class="card-text mb-0 bd"><strong>승인상태:</strong> ${pensionList.approval_status}</p>
+<%--   <p class="card-text mb-0 bd"><strong>승인상태:</strong> ${pensionList.approval_status}</p> --%>
   <br>
 </c:if>
 
@@ -184,7 +184,7 @@ function submitdelete(room_id) {
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
         <input type="hidden" name="p_num" value="${pensionInfo.p_num}" />
-        <h5 class="card-title text-success">업체 정보</h5>
+        <h5 class="card-title text-success">펜션 정보</h5>
         <p class="card-text mb-1"><strong>펜션 등록번호:</strong> ${pensionInfo.business_id}</p>
         <p class="card-text mb-1"><strong>업체 명:</strong> ${pensionInfo.p_name}</p>
         <p class="card-text mb-1">
