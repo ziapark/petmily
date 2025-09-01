@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component("PensionVO")
 public class PensionVO {
-	private String p_num;
+	private int p_num;
 	private String business_id;
 	private String p_name;
 	private String tel1;
@@ -58,10 +58,10 @@ public class PensionVO {
 	private BusinessVO business;
 	
 
-	public String getP_num() {
+	public int getP_num() {
 		return p_num;
 	}
-	public void setP_num(String p_num) {
+	public void setP_num(int p_num) {
 		this.p_num = p_num;
 	}
 	public String getBusiness_id() {

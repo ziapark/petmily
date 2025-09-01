@@ -20,7 +20,7 @@ public interface BusinessDAO {
 	public int selectOverlappedID(String id) throws DataAccessException;
 	public String isBusinessNumberDuplicate(String business_number) throws DataAccessException;
 	public BusinessVO login(String seller_id, String seller_pw) throws DataAccessException;
-	public BusinessVO mypension(String business_number) throws DataAccessException;
+	public BusinessVO mypension(String business_id) throws DataAccessException;
 	
 	public BusinessVO businessDetailInfo(String business_number)throws DataAccessException;
 	public BusinessVO businessDetailInfo2(String seller_id) throws DataAccessException;
@@ -29,7 +29,7 @@ public interface BusinessDAO {
 	public void addpension(PensionVO pensionVO)throws DataAccessException;
 	public void addpension2(RoomVO roomVO)throws DataAccessException;
 	public PensionVO pensionList(String business_id)throws DataAccessException;
-	public List<RoomVO> roomList(String p_num);
+	public List<RoomVO> roomList(int p_num);
 	public void modifyroom(Map roomMap)throws DataAccessException;
 	public RoomVO roomDetailInfo(int room_id)throws DataAccessException;
 	public int removeroom(int room_id) throws DataAccessException;

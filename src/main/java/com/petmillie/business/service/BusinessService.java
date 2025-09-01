@@ -16,14 +16,14 @@ public interface BusinessService {
 	public int overlapped(String id) throws Exception;
 	public String isBusinessNumberDuplicate(String business_number) throws Exception;
 	public BusinessVO login(String seller_id, String seller_pw) throws Exception;
-	public BusinessVO mypension(String business_number) throws Exception;
+	public BusinessVO mypension(String business_id) throws Exception;
 	public BusinessVO businessDetailInfo(String business_number) throws Exception;
 	public BusinessVO businessDetailInfo2(String seller_id) throws Exception;
 	public BusinessVO modifyInfo(Map businessMap) throws Exception;
 	public void addpension(PensionVO pensionVO) throws Exception;
 	public void addpension2(RoomVO roomVO) throws Exception;
 	public PensionVO pension(String business_id)throws Exception;
-	public List roomList(String p_num);
+	public List roomList(int p_num);
 	public RoomVO modifyroom(Map roomMap)throws Exception;
 	public RoomVO roomDetailInfo(int room_id) throws Exception;
 	public int removeroom(int id) throws Exception;

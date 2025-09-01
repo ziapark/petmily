@@ -50,8 +50,8 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
 	@Override
-	public BusinessVO mypension(String business_number) throws DataAccessException {
-		BusinessVO mypension = (BusinessVO)sqlSession.selectOne("mapper.business.mypension", business_number);
+	public BusinessVO mypension(String business_id) throws DataAccessException {
+		BusinessVO mypension = (BusinessVO)sqlSession.selectOne("mapper.business.mypension", business_id);
 		return mypension;
 	}
 
@@ -91,7 +91,7 @@ public class BusinessDAOImpl implements BusinessDAO {
 	}
 
 	@Override
-	public List<RoomVO> roomList(String p_num) {
+	public List<RoomVO> roomList(int p_num) {
 		List<RoomVO> list = (List)sqlSession.selectList("mapper.business.selectroomList", p_num);
 		return list;
 	}

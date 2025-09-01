@@ -49,8 +49,8 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public BusinessVO mypension(String business_number) throws Exception {
-		return businessDAO.mypension(business_number);
+	public BusinessVO mypension(String business_id) throws Exception {
+		return businessDAO.mypension(business_id);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class BusinessServiceImpl implements BusinessService {
 	}
 
 	@Override
-	public List roomList(String p_num) {
+	public List roomList(int p_num) {
 		List<RoomVO> list = businessDAO.roomList(p_num);
 		return list;
 	}

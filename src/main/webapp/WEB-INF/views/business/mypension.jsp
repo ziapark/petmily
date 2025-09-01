@@ -166,7 +166,6 @@ function submitdelete(room_id) {
   <p class="card-text mb-0 bd"><strong>도로명 주소:</strong> ${pensionList.roadAddress}</p>
   <p class="card-text mb-0 bd"><strong>지번 주소:</strong> ${pensionList.jibunAddress}</p>
   <p class="card-text mb-0 bd"><strong>나머지 주소:</strong> ${pensionList.namujiAddress}</p>
-<%--   <p class="card-text mb-0 bd"><strong>승인상태:</strong> ${pensionList.approval_status}</p> --%>
   <br>
 </c:if>
 

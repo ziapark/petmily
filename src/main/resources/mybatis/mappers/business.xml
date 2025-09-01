@@ -237,7 +237,7 @@
 		<select id="mypension" parameterType="BusinessVO" resultType="BusinessVO">
 			<![CDATA[
 				select business_name, business_type, owner_name, zipcode, roadAddress, jibunAddress, namujiAddress, approval_status from
-				business where business_number = #{business_number}
+				business where business_id = #{business_id}
 			]]>
 		</select>
 		
@@ -327,7 +327,7 @@
 			<![CDATA[
 				select * from pension where business_id = #{business_id}
 			]]>
-		</select>	
+		</select>
 
 		<update id="updatepension" parameterType="pensionVO">
 			<![CDATA[
@@ -362,7 +362,7 @@
 		    ]]>
 		</insert>
 
-		<select id="selectroomList" parameterType="String" resultMap="roomResult">
+		<select id="selectroomList" parameterType="int" resultMap="roomResult">
 		    <![CDATA[
 		        SELECT 
 		            r.*, 

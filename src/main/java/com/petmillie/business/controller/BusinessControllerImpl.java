@@ -150,11 +150,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 		}		
 	}
 	
-	
-	
-	
-	
-	
 	@Override
 	@RequestMapping(value = "/overlapped.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -176,46 +171,23 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	
 	@Override
 	@RequestMapping(value="/mypension.do", method = RequestMethod.GET)
-	public ModelAndView myPageMain(@RequestParam(required = false,value="message") String message, @RequestParam(value="p_num", required= false) String p_num,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		HttpSession session=request.getSession();
-		// 클래스 변수가 아닌, 메서드 내의 지역 변수로 세션 정보를 받습니다.
-		BusinessVO sessionBusinessVO =(BusinessVO)session.getAttribute("businessInfo");
-
-		if (sessionBusinessVO == null || sessionBusinessVO.getBusiness_number() == null) {
-			return new ModelAndView("redirect:/business/loginForm.do");
-		}
-		
+	public ModelAndView myPageMain(@RequestParam(value="business_id", required = false) String business_id,  HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
 		ModelAndView mav=new ModelAndView("/common/layout");
 		mav.addObject("title", "마이페이지");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
 		
-		String business_number=sessionBusinessVO.getBusiness_number();
-		String business_id = sessionBusinessVO.getBusiness_id();
-		
-		BusinessVO mypension = businessService.mypension(business_number);
 		PensionVO pension = businessService.pension(business_id);
+		BusinessVO pensionList = businessService.mypension(business_id);
 		
 		List<RoomVO> list = new ArrayList<>();
-
 		if (pension != null) {
-			if (p_num == null || p_num.trim().isEmpty()) {
-				p_num = String.valueOf(pension.getP_num()); 
-			}
-			if (p_num != null && !p_num.equals("0") && !p_num.trim().isEmpty()) {
-				list = businessService.roomList(p_num);
-			}
+			list = businessService.roomList(pension.getP_num());
 		}
 
-		mav.addObject("message", message);
-		mav.addObject("pensionList", mypension);
+		mav.addObject("pensionList", pensionList);
 		mav.addObject("pensionInfo", pension);
 		mav.addObject("roomInfo", list);
-		
-		session.setAttribute("pensionInfo", pension);
-		if (pension != null) {
-			session.setAttribute("p_num", pension.getP_num());
-		}
 
 		return mav;
 	}
@@ -991,7 +963,6 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	// [추가] 1. 관리자용 전체 펜션 목록 페이지를 보여주는 메서드
 	@RequestMapping(value="/admin/pensionList.do", method=RequestMethod.GET)
 	public ModelAndView adminPensionList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    // 서비스로부터 모든 펜션 정보를 가져옵니다.
 	    List<PensionVO> allPensions = businessService.getAllPensionsWithBusinessInfo();
 	    
 	    ModelAndView mav = new ModelAndView("/common/layout");
@@ -1023,8 +994,8 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 
 	// [추가] 3. 특정 펜션의 객실 목록을 가져오는 메서드 (AJAX)
 	@RequestMapping(value="/admin/pension/getRoomList.do", method=RequestMethod.GET)
-	public ModelAndView getRoomListForAdmin(@RequestParam("p_num") String p_num) throws Exception {
-	    // AJAX 요청이므로 전체 레이아웃이 아닌, 객실 목록 조각(_roomListPartial.jsp)만 반환합니다.
+	public ModelAndView getRoomListForAdmin(@RequestParam("p_num") int p_num) throws Exception {
+
 	    ModelAndView mav = new ModelAndView("/admin/pension/_roomListPartial");
 	    
 	    List<RoomVO> roomList = businessService.roomList(p_num);

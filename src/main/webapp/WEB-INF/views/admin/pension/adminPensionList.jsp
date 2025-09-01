@@ -44,7 +44,6 @@
 				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
-	
 				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
 				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
@@ -58,10 +57,8 @@
                     <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm rounded">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">${pension.p_name}</h5>
-                            <%-- ▼▼▼▼▼ [수정] 문자열을 Date 타입으로 먼저 변환 후 포맷팅 ▼▼▼▼▼ --%>
                             <fmt:parseDate value="${pension.reg_date}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedRegDate" />
                             <small>등록일: <fmt:formatDate value="${parsedRegDate}" pattern="yyyy-MM-dd" /></small>
-                            <%-- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ --%>
                         </div>
                         <div class="pension-details mt-2">
                              <p class="mb-1">
