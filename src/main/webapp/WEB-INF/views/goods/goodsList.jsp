@@ -63,6 +63,7 @@
 	                	'Content-Type': 'application/x-www-form-urlencoded'
 	            	},
 	            	body: 'goods_num=' + encodeURIComponent(goodsNum)
+	            	+ '&cart_goods_qty=' + encodeURIComponent(1) 
 	        	})
 	        	.then(response => response.text())
 	        	.then(result => {
@@ -70,7 +71,7 @@
 	            	if (result.trim() === 'add_success') {
 	                	alert('장바구니에 담겼습니다!');
 	            	} else if (result.trim() === 'increase_success') {
-	                	alert('이미 장바구니에 있는 상품입니다. 수량이 1 증가했습니다.');
+	                	alert('이미 장바구니에 있는 상품입니다.');
 	            	} else {
 	                	alert('장바구니 추가 실패: ' + result);
 	            	}
