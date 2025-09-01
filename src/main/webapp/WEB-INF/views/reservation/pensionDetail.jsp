@@ -143,6 +143,11 @@
         font-size: 1.1rem;
         grid-column: 1 / -1;
     }
+    .full-width {
+  grid-column: 1 / -1; /* 전체 칸 차지 */
+  margin-top: 5px;
+}
+    
 </style>
 </head>
 <body>
@@ -156,17 +161,21 @@
 <div class="main-container">
     <h2 class="header-title">${pension.p_name}</h2>
 
-    <div class="card">
-        <div class="pension-details-grid">
-            <p><strong>연락처:</strong> ${pension.tel1}-${pension.tel2}-${pension.tel3}</p>
-            <p><strong>체크인:</strong> ${pension.checkin_time}</p>
-            <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
-            <p><strong>주요시설:</strong> ${pension.facilities}</p>
-            <div class="pension-description">
-                <p><strong>펜션소개:</strong> ${pension.description}</p>
-            </div>
+   <div class="card">
+    <div class="pension-details-grid">
+        <p><strong>연락처:</strong> ${pension.tel1}-${pension.tel2}-${pension.tel3}</p>
+        <p><strong>체크인:</strong> ${pension.checkin_time}</p>
+        <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
+        <p><strong>주요시설:</strong> ${pension.facilities}</p>
+       <p class="full-width"><strong>주소:</strong> ${pension.business.roadAddress}</p>
+
+
+        <!-- 펜션 소개는 전체 너비 차지 -->
+        <div class="pension-description">
+            <p><strong>펜션소개:</strong> ${pension.description}</p>
         </div>
     </div>
+</div>
     
     <%-- 카카오맵 표시 영역 (수정하지 않음) --%>
     <div class="card">
@@ -182,11 +191,7 @@
             <c:when test="${not empty roomList}">
                 <c:forEach var="room" items="${roomList}">
                     <div class="room-card">
-<!--                         <div class="room-card-image"> -->
-<%--                             <img src="${contextPath}/resources/images/room/${room.fileimage}" --%>
-<%--                                  alt="${room.room_name} 이미지" --%>
-<%--                                  onerror="this.src='${contextPath}/resources/image/default_room.png';"> --%>
-<!--                         </div> -->
+
                         <div class="room-card-body">
                             <h4>${room.room_name}</h4>
                             <p><strong>객실유형:</strong> ${room.room_type}</p>

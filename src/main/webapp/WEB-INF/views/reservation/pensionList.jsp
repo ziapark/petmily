@@ -84,6 +84,10 @@
                         <p><strong>전화번호:</strong> ${pension.tel1} - ${pension.tel2} - ${pension.tel3}</p>
                         <p><strong>체크인:</strong> ${pension.checkin_time}</p>
                         <p><strong>체크아웃:</strong> ${pension.checkout_time}</p>
+                         <p><strong>주소:</strong>${pension.business.roadAddress}</p>
+                                  
+                    
+                    
                     </div>
                 </a>
             </c:forEach>
