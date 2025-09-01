@@ -62,7 +62,7 @@
 
     <div style="text-align: center; margin-top: 2rem;">
         <a href="${contextPath}/main/main.do">쇼핑 계속하기</a>
-        <a href="${contextPath}/mypage/myPageMain.do">마이페이지로 이동</a>
+        <a href="${contextPath}/mypage/listMyOrderHistory.do">마이페이지로 이동</a>
     </div>
 </div>
 </body>

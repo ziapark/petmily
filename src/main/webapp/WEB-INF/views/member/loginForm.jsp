@@ -13,6 +13,7 @@
 <body>
 	<div class="login_wrap">	
 		<h3>회원 로그인</h3>
+		<div class="loginbox">
 		<form action="${contextPath}/member/login.do" method="post" onsubmit="return Checklogin();">	
 			<input name="member_id" type="text" size="20" class="form-control login_input" placeholder="id" required/>
 			<input name="member_pw" type="password" class="form-control login_input" placeholder="password" size="20" required/>
@@ -26,12 +27,14 @@
 				</a>
 			</div>
 		</form>
-			
+
+		<a href="${contextPath}/member/findIdForm.do">아이디 찾기</a> | 
+		<a href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a>
+		<br>
+		<br>
+		<br>
 		
-		<br><br>
-	<a href="${contextPath}/member/findIdForm.do">아이디 찾기</a>| 
-	<a href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> |
-	
+	</div>
 	</div>	
 </body>
 </html>

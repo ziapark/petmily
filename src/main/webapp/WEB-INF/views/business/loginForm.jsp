@@ -13,7 +13,7 @@
 <body>
 	<div class="login_wrap">
 		<h3>사업자 회원 로그인</h3>
-		<div id="">
+		<div class="loginbox">
 			<form action="${contextPath}/business/busilogin.do" method="post" onsubmit="return Checklogin();">
 				<input name="seller_id" type="text" size="20" class="form-control login_input" placeholder="아이디" required/>
 				<input name="seller_pw" type="password" class="form-control login_input" placeholder="비밀번호" size="20" required/>
@@ -22,13 +22,13 @@
 					<a href="${contextPath}/business/businessForm.do" class="btn btn-secondary">사업자 회원가입</a> 
 				</div>
 			</form>
-			<br>
-			<br>
-			<br> <a href="${contextPath}/member/findIdForm.do">아이디 찾기</a>| <a
-				href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> | <a
-				href="${contextPath}/business/businessForm.do">사업자 회원가입</a> 
 
-</div>
+			<a href="${contextPath}/member/findIdForm.do">아이디 찾기</a> | 
+			<a href="${contextPath}/member/findPwForm.do">비밀번호 찾기</a> 
+			<br>
+			<br>
+			<br>
+		</div>
 	</div>
 </body>
 </html>
