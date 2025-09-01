@@ -104,34 +104,51 @@ function fn_delete_pet(pet_id){
                     		</div>
                 		</c:when>
                 		<c:otherwise>
-                    		<c:forEach var="pet" items="${petList}" varStatus="status">
-								<div class="pet-card">
-									<div class="pet-image-container">
-										<c:choose>
-											<c:when test="${not empty pet.pet_image}">
-												<img src="${contextPath}/mypet/image.do?pet_image=${pet.pet_image}" alt="${pet.pet_name} 프로필 사진">
-											</c:when>
-											<c:otherwise>
-												<img src="${contextPath}/resources/image/default_pet_profile.png" alt="기본 프로필 사진">
-											</c:otherwise>
-										</c:choose>
-									</div>
-									
-									<div class="pet-info">
-										<h4>${pet.pet_name}</h4>
-										<p><strong>출생일:</strong> ${pet.pet_birth_date}</p>
-										<p><strong>반려동물 종류:</strong> ${pet.pet_species}</p>
-										<p><strong>품종:</strong> ${pet.pet_breed}</p>
-										<p><strong>성별:</strong> ${pet.pet_gender}</p>
-										<p><strong>좋아하는 장난감:</strong> ${pet.pet_favorite_toy}</p>
-										<p><strong>좋아하는 간식:</strong> ${pet.pet_favorite_snack}</p>
-										<div class="btn-container">
-											<a href="${contextPath}/mypage/modifyPetForm.do?pet_id=${pet.pet_id}" class="btn btn-warning">수정</a>
-											<a href="javascript:void(0)" onclick="fn_delete_pet('${pet.pet_id}')" class="btn btn-danger">삭제</a>
-										</div>
-									</div>
-                        		</div>
-								</c:forEach>
+                    		
+	                		<div class="container mt-4">
+							  <div class="row g-4">
+							    <c:forEach var="pet" items="${petList}" varStatus="status">
+							      <div class="col-md-4">
+							        <div class="card shadow-sm h-100" style="border-color:#3cdeff;">
+							          <div class="pet-image-container text-center mt-3">
+							            <c:choose>
+							              <c:when test="${not empty pet.pet_image}">
+							                <img src="${contextPath}/mypet/image.do?pet_image=${pet.pet_image}" 
+							                     alt="${pet.pet_name} 프로필 사진" 
+							                     class="rounded-circle img-fluid" 
+							                     style="width: 120px; height: 120px; object-fit: cover;">
+							              </c:when>
+							              <c:otherwise>
+							                <img src="${contextPath}/resources/image/default_pet_profile.png" 
+							                     alt="기본 프로필 사진" 
+							                     class="rounded-circle img-fluid" 
+							                     style="width: 120px; height: 120px; object-fit: cover;">
+							              </c:otherwise>
+							            </c:choose>
+							          </div>
+							          <div class="card-body text-center">
+							            <h5 class="card-title mb-3">${pet.pet_name}</h5>
+							            <p class="card-text mb-0"><strong>출생일:</strong> ${pet.pet_birth_date}</p>
+							            <p class="card-text mb-0"><strong>종류:</strong> ${pet.pet_species}</p>
+							            <p class="card-text mb-0"><strong>품종:</strong> ${pet.pet_breed}</p>
+							            <p class="card-text mb-0"><strong>성별:</strong> ${pet.pet_gender}</p>
+							            <p class="card-text mb-0"><strong>장난감:</strong> ${pet.pet_favorite_toy}</p>
+							            <p class="card-text mb-0"><strong>간식:</strong> ${pet.pet_favorite_snack}</p>
+							          </div>
+							          <div class="card-footer bg-white d-flex justify-content-between" style="border-color:#3cdeff;">
+							            <a href="${contextPath}/mypage/modifyPetForm.do?pet_id=${pet.pet_id}" 
+							               class="btn btn-sm btn-outline-dark">수정</a>
+							            <a href="javascript:void(0)" 
+							               onclick="fn_delete_pet('${pet.pet_id}')" 
+							               class="btn btn-sm btn-outline-danger">삭제</a>
+							          </div>
+							        </div>
+							      </div>
+							    </c:forEach>
+							  </div>
+							</div>
+	
+							
                     		<c:if test="${fn:length(petList) < 3}">
                         		<a href="${contextPath}/mypage/addPetForm.do" class="btn btn-primary">반려동물 등록하기</a>
                     		</c:if>
