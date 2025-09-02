@@ -420,10 +420,17 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        
 	        businessService.addRoomImages(imageFileList);
 
+	        HttpSession session = request.getSession();
+	        BusinessVO businessInfo = (BusinessVO) session.getAttribute("businessInfo");
+	        
+	        if (businessInfo != null) {
+	            redirectAttributes.addAttribute("business_id", businessInfo.getBusiness_id());
+	        }
+	        
 	        redirectAttributes.addFlashAttribute("message", "객실 등록이 완료되었습니다.");
 	        // mypension.do 로 p_num을 보내줘야 해당 펜션의 객실 목록을 볼 수 있습니다.
 	        redirectAttributes.addAttribute("p_num", roomVO.getP_num()); 
-	        return "redirect:/business/mypension.do?business_id=${businessInfo.business_id}";
+	        return "redirect:/business/mypension.do";
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
