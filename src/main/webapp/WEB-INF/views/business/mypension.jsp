@@ -240,10 +240,10 @@ console.log("객실 삭제 취소");
 
         <div class="d-flex justify-content-end gap-2 mt-3">
           <a href="${contextPath}/business/pensiondetail.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-primary btn-sm">
-            업체수정
+            펜션정보수정
           </a>
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="pensiondelete(${pensionInfo.p_num})">
-            업체삭제
+            펜션정보삭제
           </button>
           <a href="${contextPath}/business/addroomForm.do?p_num=${pensionInfo.p_num}" class="btn btn-outline-success btn-sm">
             객실추가
