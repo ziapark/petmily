@@ -55,4 +55,5 @@ public interface BusinessDAO {
 
     public void insertNewRoomAndGetId(RoomVO roomVO) throws Exception;
     public void insertRoomImages(List<Room_image> imageFileList) throws Exception;
+    public PensionVO pensiondetailInfo(int p_num) throws Exception;
 }

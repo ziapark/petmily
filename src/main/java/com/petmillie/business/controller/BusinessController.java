@@ -28,7 +28,7 @@ public interface BusinessController {
 	public ModelAndView businessDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception;	
 	public ResponseEntity modifyMyInfo(@RequestParam("attribute")  String attribute,@RequestParam("value")  String value, HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ResponseEntity addpension(@ModelAttribute("pensionVO") PensionVO pensionVO, @RequestParam("mainImage") MultipartFile mainImage, HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView pensiondetailInfo(String p_num, HttpServletRequest request, HttpServletRequest response) throws Exception;
+	public ModelAndView pensiondetailInfo(@RequestParam("p_num") int p_num, HttpServletRequest request, HttpServletRequest response) throws Exception;
 	public ModelAndView modifypension(@ModelAttribute("pensionVO") PensionVO pensionVO,
             @RequestParam("mainImage") MultipartFile mainImage,
             @RequestParam("originalFileName") String originalFileName,

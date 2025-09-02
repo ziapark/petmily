@@ -49,5 +49,5 @@ public interface BusinessService {
 	public int getNewOrderCount(Map<String, Object> condMap) throws Exception;
     public int addNewRoomAndGetId(RoomVO roomVO) throws Exception;
     public void addRoomImages(List<Room_image> imageFileList) throws Exception;
-
+    public PensionVO pensiondetailInfo(int p_num) throws Exception;
 }

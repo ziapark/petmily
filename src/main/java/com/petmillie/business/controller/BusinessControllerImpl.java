@@ -420,6 +420,13 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 	        
 	        businessService.addRoomImages(imageFileList);
 
+	        HttpSession session = request.getSession();
+	        BusinessVO businessInfo = (BusinessVO) session.getAttribute("businessInfo");
+	        
+	        if (businessInfo != null) {
+	            redirectAttributes.addAttribute("business_id", businessInfo.getBusiness_id());
+	        }
+	        
 	        redirectAttributes.addFlashAttribute("message", "객실 등록이 완료되었습니다.");
 	        // mypension.do 로 p_num을 보내줘야 해당 펜션의 객실 목록을 볼 수 있습니다.
 	        redirectAttributes.addAttribute("p_num", roomVO.getP_num()); 
@@ -554,14 +561,16 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 
 	@Override
 	@RequestMapping(value="/pensiondetail.do", method={RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView pensiondetailInfo(String p_num, HttpServletRequest request, HttpServletRequest response)
-			throws Exception {
-		HttpSession session = request.getSession();
+	public ModelAndView pensiondetailInfo(@RequestParam("p_num") int p_num, HttpServletRequest request, HttpServletRequest response) throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
-		System.out.println("받은 p_num : " +p_num);
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("title", "사업자정보관리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		PensionVO pensionInfo = new PensionVO();
+		pensionInfo = businessService.pensiondetailInfo(p_num);
+		mav.addObject("pensionInfo", pensionInfo);
+		
 		return mav;
 	}
 

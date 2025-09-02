@@ -5,12 +5,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>펫밀리</title>
-<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<meta charset="utf-8">
+	<title>펫밀리</title>
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <div class="container text-center mt-3 mb-3">
@@ -20,6 +18,20 @@
 		</div>
 	</div>
     
+   	<div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/business/businessDetailInfo.do">내 정보</a></li>
+			<li><a href="${contextPath}/business/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/business/businessGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/business/businessOrderMain.do">주문/배송관리</a></li>
+			<li><a href="${contextPath}/business/addpensionForm.do">펜션등록</a></li>
+			<li><a href="${contextPath}/business/mypension.do?business_id=${businessInfo.business_id}">펜션관리</a></li>
+			<li><a href="${contextPath}/reservation/reservation_check.do">예약관리</a></li>
+			<li><a href="${contextPath}/account/accountDetail.do?seller_id=${businessInfo.seller_id}">회계관리</a></li>
+			<li><a href="${contextPath}/business/deleteForm.do">회원탈퇴</a></li>
+		</ul>
+	</div>
+		
     <form action="${contextPath}/business/modifypension.do" method="post" enctype="multipart/form-data">	
         <input type="hidden" name="p_num" value="${pensionInfo.p_num}" />
 	
@@ -28,10 +40,7 @@
             <tr>
                 <th scope="row">대표 이미지</th>
                 <td>
-                    <c:if test="${not empty pensionInfo.fileName}">
-                        <img src="${contextPath}/pension/image.do?fileName=${pensionInfo.fileName}" width="200" alt="기존 이미지"><br><br>
-                    </c:if>
-                    
+                    <img src="${contextPath}/pension/image.do?fileName=${pensionInfo.fileName}" width="200" alt="기존 이미지"><br><br>  
                     <label for="mainImage" class="form-label">새 이미지로 변경 (선택)</label>
                     <input type="file" class="form-control" name="mainImage" id="mainImage">
                     

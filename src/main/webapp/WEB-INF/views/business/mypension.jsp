@@ -286,7 +286,7 @@ console.log("객실 삭제 취소");
                 </c:otherwise>
             </c:choose>
           </p>
-          <p class="card-text mb-1"><strong>가격:</strong> <fmt:formatNumber value="${room.price}" type="currency" currencySymbol="₩"/></p>
+          <p class="card-text mb-1"><strong>가격:</strong> <fmt:formatNumber value="${room.price}" pattern="#,###" />원</p>
           <p class="card-text mb-1"><strong>타입:</strong> ${room.room_type} / ${room.bed_type}</p>
           <p class="card-text mb-1"><strong>인원:</strong> ${room.max_capacity}명 / ${room.room_size}㎡</p>
           <p class="card-text mb-1 text-muted"><small><strong>설명:</strong> ${room.room_description}</small></p>

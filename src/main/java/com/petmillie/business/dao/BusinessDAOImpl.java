@@ -213,4 +213,9 @@ public class BusinessDAOImpl implements BusinessDAO {
     public void insertRoomImages(List<Room_image> imageFileList) throws Exception {
         sqlSession.insert("mapper.business.insertRoomImages", imageFileList);
     }
+    
+    @Override
+    public PensionVO pensiondetailInfo(int p_num) throws Exception {
+        return sqlSession.selectOne("mapper.business.pensiondetailInfo", p_num);
+    }
 }

@@ -546,4 +546,10 @@
 	            (#{image.room_id}, #{image.fileName})
 	        </foreach>
 	    </insert>
+	    
+	    <select id="pensiondetailInfo" resultMap="adminPensionResult" parameterType="int">
+		    <![CDATA[
+		        SELECT * FROM pension WHERE p_num = #{p_num}
+		    ]]>
+		</select>
 	</mapper>
