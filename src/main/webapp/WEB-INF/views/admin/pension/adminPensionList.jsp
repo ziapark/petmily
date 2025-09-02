@@ -11,9 +11,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
     .room-details-container {
         display: none; /* 처음에는 객실 목록 숨김 */
         margin-top: 20px;
@@ -37,15 +34,15 @@
         </div>
     </div>
 
-    <div class="row seller_menu">
+	    <div class="row seller_menu">
 			<ul>	
 				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
 				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
-				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
+				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>
+				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
+				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>								
 				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
 				<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
-				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
-				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
 			</ul>
 		</div>
 

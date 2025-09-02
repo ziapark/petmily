@@ -102,18 +102,17 @@
 			<p class="h2p"></p>
 		</div>
 	</div>	
-	    <div class="row seller_menu">
-			<ul>	
-				<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
-				<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
-				<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>							
-				<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
-				<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
-
-				<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
-				<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>	
-			</ul>
-		</div>
+    <div class="row seller_menu">
+		<ul>	
+			<li><a href="${contextPath}/admin/goods/addNewGoodsForm.do">상품등록</a></li>
+			<li><a href="${contextPath}/admin/goods/adminGoodsMain.do">상품관리</a></li>
+			<li><a href="${contextPath}/admin/order/adminOrderMain.do">주문/배송관리</a></li>
+			<li><a href="${contextPath}/business/admin/pensionList.do">펜션관리</a></li>
+			<li><a href="${contextPath}/reservation/adminPensionCheck.do">예약관리</a></li>								
+			<li><a href="${contextPath}/admin/member/adminMemberMain.do">회원관리</a></li>
+			<li><a href="${contextPath}/account/accountMain.do">회계관리</a></li>
+		</ul>
+	</div>
 	<form class="add_new_goods_form" action="${contextPath}/admin/goods/addNewGoods.do" method="post"enctype="multipart/form-data">
 		<input type="hidden" name="goods_status" value="판매중">
 		<table>
