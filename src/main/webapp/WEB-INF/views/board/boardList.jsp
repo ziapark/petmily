@@ -32,16 +32,18 @@
 <title>펫밀리</title>
 <script type="text/javascript">
 	function checkForm() {	
-	var sessionId = "${sessionScope.memberInfo.member_id}"; 
-  
-    if (sessionId == null || sessionId == "") {
-        alert("로그인 해주세요.");
-        return false;
-    }
-    var board_type = document.getElementById("board_type").value;
-    location.href = "${contextPath}/board/writeForm.do?id=" + sessionId + "&board_type=" + board_type;
+		var sessionId = "${sessionScope.memberInfo.member_id}"; 
+	  
+	    if (sessionId == null || sessionId == "") {
+	        alert("로그인 해주세요.");
+	        return false;
+	    }
+	    
+	    
+	    var board_type = document.getElementById("board_type").value;
+	    location.href = "${contextPath}/board/writeForm.do?id=" + sessionId + "&board_type=" + board_type;
 
-}
+	}
 	
 	$(document).ready(function() {
 	    var boardType = $(".h2h2").text().trim();
@@ -60,6 +62,7 @@
 	        $(".h2p").text("고양이 자유게시판입니다.");
 	    }
 	});
+	
 </script>
 </head>
 <body>
@@ -126,8 +129,9 @@
 		</div>
 		
 		<div class="py-3" align="right">							
-			<a href="#" onclick="checkForm(); return false;" class="btn btn-primary">글쓰기</a>				
-		</div>			
+			<a href="#" onclick="checkForm(); return false;" class="btn btn-primary">글쓰기</a>
+		</div>
+					
 		<!-- 검색 전용 폼 -->
 		<form action="${contextPath}/board/boardList.do" method="get" class="d-flex justify-content-start align-items-center gap-2">
 			<input type="hidden" id="board_type" value="${param.board_type}">
