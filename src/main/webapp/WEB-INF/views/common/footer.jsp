@@ -5,15 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 <div class="footer_ct">
-<ul>
-	<li><a href="#">회사소개</a></li>
-	<li><a href="#">이용약관</a></li>
-	<li><a href="#">개인정보취급방침</a></li>
-	<li><a href="#">제휴/도서홍보</a></li>
-	<li><a href="#">광고센터</a></li>
-	<li><a href="#">고객만족센터</a></li>
-	<li class="no_line"><a href="#">찾아오시는길</a></li>
-</ul>
+
 <div class="clear" style="margin-bottom: 15px;"></div>
 
 <a href="${contextPath}/main/main.do" class="footer_logo">
