@@ -212,4 +212,9 @@ public class BusinessServiceImpl implements BusinessService {
     public void addRoomImages(List<Room_image> imageFileList) throws Exception {
         businessDAO.insertRoomImages(imageFileList);
     }
+    
+	@Override
+	public PensionVO pensiondetailInfo(int p_num) throws Exception {
+	    return businessDAO.pensiondetailInfo(p_num);
+	}
 }

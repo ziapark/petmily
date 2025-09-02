@@ -554,14 +554,16 @@ public class BusinessControllerImpl extends BaseController implements BusinessCo
 
 	@Override
 	@RequestMapping(value="/pensiondetail.do", method={RequestMethod.POST,RequestMethod.GET})
-	public ModelAndView pensiondetailInfo(String p_num, HttpServletRequest request, HttpServletRequest response)
-			throws Exception {
-		HttpSession session = request.getSession();
+	public ModelAndView pensiondetailInfo(@RequestParam("p_num") int p_num, HttpServletRequest request, HttpServletRequest response) throws Exception {
 		String viewName=(String)request.getAttribute("viewName");
-		System.out.println("받은 p_num : " +p_num);
 		ModelAndView mav = new ModelAndView("/common/layout");
 		mav.addObject("title", "사업자정보관리");
 		mav.addObject("body", "/WEB-INF/views" + viewName + ".jsp");
+		
+		PensionVO pensionInfo = new PensionVO();
+		pensionInfo = businessService.pensiondetailInfo(p_num);
+		mav.addObject("pensionInfo", pensionInfo);
+		
 		return mav;
 	}
 
