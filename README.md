@@ -25,3 +25,9 @@ Spring MVC와 MySQL 기반의 반려동물 쇼핑몰 웹 애플리케이션입�
 - 장바구니 및 결제
 - 날씨 API 기반 상품 추천
 - 공공데이터 API 기반 전국 동물병원/약국 정보 제공
+
+## 🚀 실행 방법
+```bash
+git clone https://github.com/ziapark/petmily.git
+cd petmily
+mvn clean package
